@@ -1,0 +1,16 @@
+<phpunit>
+  <testsuites>
+    <testsuite name="CSSParser Tests">
+      <file>CSS/Rule/CharsetTest.php</file>
+      <file>CSS/Rule/NSTest.php</file>
+      <file>CSS/Rule/ImportTest.php</file>
+      <file>CSS/Rule/FontFaceTest.php</file>
+      <file>CSS/StyleDeclarationTest.php</file>
+			<file>CSS/StyleDeclaration/ExpandShorthandsTest.php</file>
+    </testsuite>
+    <testsuite name="CSSParser Bugs">
+      <directory>bugs</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
+

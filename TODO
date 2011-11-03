@@ -1,0 +1,21 @@
+PHPDOC !!!
+TEST SUITE !!!
+
+CSSOM:
+  Selectors:
+    - Tests
+  shorthands:
+    - expand:
+      liststyle tests
+    - create:
+      implement / tests
+  setCssText() methods
+  CSSList extends ArrayObject ? or implements Iterator/ArrayAccess ????
+  StyleSheetList (http://dev.w3.org/csswg/cssom/#the-stylesheetlist-sequence):
+    resolving imports
+  URL:
+    absolutize urls
+
+Parser:
+  Charset handling
+  CSS\Parser::parseInlineStyleDeclaration()
