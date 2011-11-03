@@ -106,6 +106,11 @@ abstract class CSSList implements \ArrayAccess
     array_splice($this->items, $oldItem, 1, $newItems);
   }
 
+  public function resetKeys()
+  {
+    $this->items = array_values($this->items);
+  }
+
   public function __clone()
   {
     $this->items = array_map(function($item)

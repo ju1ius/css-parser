@@ -6,7 +6,7 @@ $loader->addNamespace('CSS');
 $loader->register();
 
 $css = 'p{
-  background: url(foo) 40% 25% / 10em 1em round;
+  background: url(foo) 40% 25% / 10em 1em round, red 10% 2px / contain round;
 }'; 
 //$css = 'p{
   //background: red;
@@ -18,15 +18,15 @@ $parser = new CSS\Parser(array());
 $styleSheet = $parser->parseStyleSheet($css);
 $rule = $styleSheet->getFirstRule();
 $styleDeclaration = $rule->getStyleDeclaration();
-//$styleDeclaration->expandBackgroundShorthands();
+$styleDeclaration->expandBackgroundShorthands();
 
-//var_dump($styleSheet->getCssText(array(
-  //'indent_level' => 0,
-  //'indent_char' => '  ',
-  //'color_mode' => 'rgb'	
-//)));
+var_dump($styleSheet->getCssText(array(
+  'indent_level' => 0,
+  'indent_char' => '  ',
+  'color_mode' => 'rgb'	
+)));
 
 //var_dump($result->getRuleList()->getAllValues());
 
 
-var_dump($styleDeclaration);
+//var_dump($styleDeclaration);

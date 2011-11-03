@@ -808,6 +808,7 @@ class Parser
       $list->append($value);
       $value = $list;
     }
+    if($name === 'background') $this->_fixBackgroundShorthand($value);
     $property->setValueList($value);
     if($this->_comes('!'))
     {
@@ -827,6 +828,48 @@ class Parser
       $this->_consume(';');
     }
     return $property;
+  }
+
+  public function _fixBackgroundShorthand(PropertyValueList $oValueList)
+  {
+    if($oValueList->getLength() < 2) return;
+    if($oValueList->getSeparator() === ',') {
+      // we have multiple layers
+      foreach($oValueList->getItems() as $layer) {
+        if($layer instanceof PropertyValueList) $this->_fixBackgroundLayer($layer);
+      }
+    } else {
+      // we have only one value or a space separated list of values
+      $this->_fixBackgroundLayer($oValueList);
+    }
+  }
+  public function _fixBackgroundLayer(PropertyValueList $oValueList)
+  {
+    foreach($oValueList->getItems() as $i => $mValue) {
+      if($mValue instanceof PropertyValueList && $mValue->getSeparator() === '/') {
+        $before = $oValueList[$i-1];
+        if($before && (in_array($before, array('left','center','right','top','bottom')) || $before instanceof Value\Dimension)) {
+          $leftList = new PropertyValueList(
+            array($before, $mValue->getFirst()),
+            ' '
+          );
+          $mValue->replace(0, $leftList);
+          //$oValueList->remove($before);
+          unset($oValueList[$i-1]);
+        }
+        $after = $oValueList[$i+1];
+        if($after && (in_array($after, array('auto','cover','contain')) || $after instanceof Value\Dimension)) {
+          $rightList = new PropertyValueList(
+            array($mValue->getLast(), $after),
+            ' '
+          );
+          $mValue->replace(1, $rightList);
+          //$oValueList->remove($after);
+          unset($oValueList[$i+1]);
+        }
+      }
+    }
+    $oValueList->resetKeys();
   }
 
   private function _parseValue($listDelimiters)
