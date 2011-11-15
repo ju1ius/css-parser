@@ -2,6 +2,7 @@
 namespace CSS\StyleDeclaration;
 
 use CSS\Serializable;
+use CSS\Util\Object;
 use CSS\StyleDeclaration;
 use CSS\PropertyValueList;
 use CSS\Property;
@@ -67,7 +68,7 @@ class ExpandShorthands
 			);    
 			$aValues = $oProperty->getValueList()->getItems();
       foreach($aValues as $mValue) { 
-				$mValue = self::_getClonedValue($mValue);
+				$mValue = Object::getClone($mValue);
 				if(in_array($mValue, array('normal', 'inherit'))) {
 					foreach(array('font-style', 'font-weight', 'font-variant') as $sProperty) {
 						if(!isset($aFontProperties[$sProperty])) {
@@ -119,7 +120,7 @@ class ExpandShorthands
 			foreach($aProperties as $iPos => $oProperty) {
 				$aValues = $oProperty->getValueList()->getItems();
 				foreach ($aValues as $mValue) {
-          $mValue = self::_getClonedValue($mValue);
+          $mValue = Object::getClone($mValue);
 					if($mValue instanceof Value\Dimension) {
 						$sNewPropertyName = $sBorderProperty."-width";
 					} else if($mValue instanceof Value\Color) {
@@ -160,34 +161,34 @@ class ExpandShorthands
 				switch(count($aValues)) {
 					case 1:
             $result = array(
-              'top'    => self::_getClonedValue($aValues[0]),
-              'right'  => self::_getClonedValue($aValues[0]),
-              'bottom' => self::_getClonedValue($aValues[0]),
-              'left'   => self::_getClonedValue($aValues[0]),
+              'top'    => Object::getClone($aValues[0]),
+              'right'  => Object::getClone($aValues[0]),
+              'bottom' => Object::getClone($aValues[0]),
+              'left'   => Object::getClone($aValues[0]),
             );
 						break;
 					case 2:
             $result = array(
-              'top'    => self::_getClonedValue($aValues[0]),
-              'right'  => self::_getClonedValue($aValues[1]),
-              'bottom' => self::_getClonedValue($aValues[0]),
-              'left'   => self::_getClonedValue($aValues[1]),
+              'top'    => Object::getClone($aValues[0]),
+              'right'  => Object::getClone($aValues[1]),
+              'bottom' => Object::getClone($aValues[0]),
+              'left'   => Object::getClone($aValues[1]),
             );
 						break;
 					case 3:
             $result = array(
-              'top'    => self::_getClonedValue($aValues[0]),
-              'right'  => self::_getClonedValue($aValues[1]),
-              'bottom' => self::_getClonedValue($aValues[2]),
-              'left'   => self::_getClonedValue($aValues[1]),
+              'top'    => Object::getClone($aValues[0]),
+              'right'  => Object::getClone($aValues[1]),
+              'bottom' => Object::getClone($aValues[2]),
+              'left'   => Object::getClone($aValues[1]),
             );
 						break;
 					case 4:
             $result = array(
-              'top'    => self::_getClonedValue($aValues[0]),
-              'right'  => self::_getClonedValue($aValues[1]),
-              'bottom' => self::_getClonedValue($aValues[2]),
-              'left'   => self::_getClonedValue($aValues[3]),
+              'top'    => Object::getClone($aValues[0]),
+              'right'  => Object::getClone($aValues[1]),
+              'bottom' => Object::getClone($aValues[2]),
+              'left'   => Object::getClone($aValues[3]),
             );
 						break;
 				}
@@ -228,7 +229,7 @@ class ExpandShorthands
 				return;
 			}
       foreach($aValues as $mValue) {
-        $mValue = self::_getClonedValue($mValue);
+        $mValue = Object::getClone($mValue);
 				if($mValue instanceof Value\Url) {
 					$aListProperties['list-style-image'] = $mValue;
 				} else if(in_array($mValue, $aListStyleTypes)) {
@@ -243,18 +244,6 @@ class ExpandShorthands
       $this->styleDeclaration->remove($oProperty);
 		}
 	}
-
-  private static function _getClonedValue($mValue)
-  {
-    if($mValue instanceof Serializable) return clone $mValue;
-    if(is_string($mValue)) return mb_strtolower($mValue);
-    if(is_array($mValue)) {
-      foreach($mValue as $k => $v) {
-        $mValue[$k] = self::_getClonedValue($v);
-      }
-    }
-    return $mValue;
-  }
 
   private static function _getBackgroundDefaults()
   {
@@ -336,7 +325,7 @@ class ExpandShorthands
       $iNumBgPos = 0;
       $iNumBoxValues = 0;
       foreach($aValues as $mValue) {
-        $mValue = self::_getClonedValue($mValue);
+        $mValue = Object::getClone($mValue);
         if ($mValue instanceof Value\URL || $mValue instanceof Value\Func) {
           $aBgProperties['background-image'] = $mValue;
         } else if ($mValue instanceof PropertyValueList) {

@@ -7,6 +7,7 @@
       <file>CSS/Rule/FontFaceTest.php</file>
       <file>CSS/StyleDeclarationTest.php</file>
 			<file>CSS/StyleDeclaration/ExpandShorthandsTest.php</file>
+			<file>CSS/StyleDeclaration/CreateShorthandsTest.php</file>
     </testsuite>
     <testsuite name="CSSParser Bugs">
       <directory>bugs</directory>

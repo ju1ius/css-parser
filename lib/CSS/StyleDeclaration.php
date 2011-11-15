@@ -367,10 +367,10 @@ class StyleDeclaration implements Serializable
    * (margin, padding, border-color, border-style and border-width) 
    * and converts them into shorthand CSS properties.
    **/
-  public function createDimensionsShorthand()
+  public function createDimensionsShorthands()
   {
     $creator = new StyleDeclaration\CreateShorthands($this);
-    $creator->createDimensionsShorthand();
+    $creator->createDimensionsShorthands();
   }
 
   /**

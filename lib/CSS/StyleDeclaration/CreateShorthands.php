@@ -1,4 +1,13 @@
 <?php
+namespace CSS\StyleDeclaration;
+
+use CSS\Serializable;
+use CSS\Util\Object;
+use CSS\StyleDeclaration;
+use CSS\PropertyValueList;
+use CSS\Property;
+use CSS\Value;
+
 
 class CreateShorthands
 {
@@ -20,7 +29,7 @@ class CreateShorthands
   public function createShorthands()
   {
     $this->createBackgroundShorthand();
-    $this->createDimensionsShorthand();
+    $this->createDimensionsShorthands();
     // border must be shortened after dimensions 
     $this->createBorderShorthand();
     $this->createFontShorthand();
@@ -63,7 +72,7 @@ class CreateShorthands
    * (margin, padding, border-color, border-style and border-width) 
    * and converts them into shorthand CSS properties.
    **/
-  public function createDimensionsShorthand()
+  public function createDimensionsShorthands()
   {
     $aPositions = array('top', 'right', 'bottom', 'left');
     $aExpansions = array(
@@ -92,12 +101,12 @@ class CreateShorthands
       foreach($aPositions as $sPosition) {
         $oProperty = $aFoldable[sprintf($sExpanded, $sPosition)];
         $aPropertyValues = $oProperty->getValueList()->getItems();
-        $aValues[$sPosition] = $aPropertyValues;
+        $aValues[$sPosition] = Object::getClone($aPropertyValues[0]);
       }
       $oNewValueList = new PropertyValueList(array(), ' ');
-      if($aValues['left'][0]->getCssText() === $aValues['right'][0]->getCssText()) {
-        if($aValues['top'][0]->getCssText() === $aValues['bottom'][0]->getCssText()) {
-          if($aValues['top'][0]->getCssText() === $aValues['left'][0]->getCssText()) {
+      if($aValues['left']->getCssText() === $aValues['right']->getCssText()) {
+        if($aValues['top']->getCssText() === $aValues['bottom']->getCssText()) {
+          if($aValues['top']->getCssText() === $aValues['left']->getCssText()) {
             // All 4 sides are equal
             $oNewValueList->append($aValues['top']);
           } else {
@@ -118,10 +127,7 @@ class CreateShorthands
         $oNewValueList->append($aValues['bottom']);
         $oNewValueList->append($aValues['right']);
       }
-      $oNewProperty = new Property(
-        $sProperty,
-        new PropertyValueList($oNewValueList)
-      );
+      $oNewProperty = new Property($sProperty, $oNewValueList);
       $oNewProperty->setIsImportant(!!$iImportantCount);
       $this->styleDeclaration->append($oNewProperty);
       foreach ($aPositions as $sPosition)
@@ -193,7 +199,7 @@ class CreateShorthands
     foreach($aProperties as $sProperty) {
       $aProperties = $this->styleDeclaration->getProperties($sProperty);
       foreach($aProperties as $iPos => $oProperty) {
-        $aValues = $oProperty->getValue()->getItems();
+        $aValues = $oProperty->getValueList()->getItems();
         $sDest = $oProperty->getIsImportant() ? 'important' : 'normal';
         $aOldRules[$sDest][] = $iPos;
         foreach($aValues as $mValue) {
@@ -213,10 +219,7 @@ class CreateShorthands
 
   private function _mergeValues($sShorthand, $aValues, $aOldRules, $bImportant) {
     $this->styleDeclaration->remove($aOldRules);
-    $oNewValueList = new PropertyValueList();
-    foreach($aValues as $mValue) {
-      $oNewValueList->append($mValue);  
-    }
+    $oNewValueList = new PropertyValueList($aValues, ' ');
     $oNewProperty = new Property($sShorthand, $oNewValueList);
     $oNewProperty->setIsImportant($bImportant);
     $this->styleDeclaration->append($oNewProperty);
@@ -243,8 +246,8 @@ class CreateShorthands
         if($iPos !== $aRule['position']) $this->styleDeclaration->remove($iPos);
       }
       if($aLastExistingShorthand) {
-        $bRuleIsImportant = $aRule['rule']->getIsImportant();
-        $bShorthandIsImportant = $aLastExistingShorthand['rule']->getIsImportant();
+        $bRuleIsImportant = $aRule['property']->getIsImportant();
+        $bShorthandIsImportant = $aLastExistingShorthand['property']->getIsImportant();
         $iRulePosition = $aRule['position'];
         $iShorthandPosition = $aLastExistingShorthand['position'];
         // IF property comes before shorthand AND they have the same importance,
@@ -259,8 +262,8 @@ class CreateShorthands
     if($aLastExistingShorthand) {
       // Now that we made sure that there is no duplicate shorthand
       // we can expand the corresponding rule as expanding doesn't create duplicates.
-      $sExpandMethod = 'expand'.str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))).'Shorthand';
-      $this->$sExpandMethod();
+      $sExpandMethod = 'expand'.str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))).'Shorthands';
+      $this->styleDeclaration->$sExpandMethod();
     }
     return true;
   }
@@ -310,9 +313,8 @@ class CreateShorthands
     if($iNumShorthands) {
       // Now that we made sure that there is no duplicate shorthand
       // we can expand the corresponding property as expanding doesn't create duplicates.
-      $expander = new ExpandShorthands($this->styleDeclaration);
       $sExpandMethod = 'expand'.str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))).'Shorthands';
-      $expander->$sExpandMethod();
+      $this->styleDeclaration->$sExpandMethod();
     }
     return true;
   }
