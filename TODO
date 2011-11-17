@@ -5,10 +5,12 @@ CSSOM:
   Selectors:
     - Tests
   shorthands:
-    - expand:
+    expand:
+      expand if more than one background shorthand ?
       liststyle tests
-    - create:
-      implement / tests
+    create:
+      liststyle tests
+      background-size syntax in background shorthand ?
   setCssText() methods
   CSSList extends ArrayObject ? or implements Iterator/ArrayAccess ????
   StyleSheetList (http://dev.w3.org/csswg/cssom/#the-stylesheetlist-sequence):
@@ -19,3 +21,4 @@ CSSOM:
 Parser:
   Charset handling
   CSS\Parser::parseInlineStyleDeclaration()
+  background-size syntax in background shorthand

@@ -42,7 +42,9 @@ class ExpandShorthands
   public function expandBackgroundShorthands()
   {
     $aProperties = $this->styleDeclaration->getProperties('background');
-    if(empty($aProperties)) return;
+    // don't expand if several shorthands are present,
+    // as it is generally done on purpose, ie for vendor specific values.
+    if(count($aProperties) !== 1) return;
     foreach($aProperties as $iPos => $oProperty) {
       $this->_expandBackgroundShorthand($iPos, $oProperty);
     }

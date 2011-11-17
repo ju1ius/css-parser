@@ -58,19 +58,39 @@ function concat_implode($rules)
   }, $rules));
 }
 
+function find_standard($needle, $haystack)
+{
+  foreach($haystack as $item) {
+    if($item == $needle) return true;
+  }
+  return false;
+}
+
+function find_strict($needle, $haystack)
+{
+  foreach($haystack as $item) {
+    if($item === $needle) return true;
+  }
+  return false;
+}
+$haystack = range(0, 1000);
+$needle = 500;
+
 $timer = new Benchmark_Timer();
 $nb_iterations = 1000000;
 $timer->start();
 
 for($i=0; $i < $nb_iterations; $i++)
 {
-  concat_foreach($objects);
+  //concat_foreach($objects);
+  if($needle == 500) continue;
 }
 $timer->setMarker('concat_foreach');
 
 for($i=0; $i < $nb_iterations; $i++)
 {
-  concat_implode($objects);
+  //concat_implode($objects);
+  if($needle === 500) continue;
 }
 $timer->setMarker('concat_implode');
 

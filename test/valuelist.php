@@ -9,11 +9,17 @@ $loader->register();
   //background: url(foo) 40% 25% / 10em 1em round, red 10% 2px / contain round;
 //}'; 
 $css = 'p{
-  margin-top: 1em;
-  margin-right: 1em;
-  margin-bottom: 1em;
-  margin-left: 1em;
-}'; 
+  background-image: url(flower.png), url(ball.png), url(grass.png);
+  background-position: center center, 20% 80%, top left, bottom right;
+  background-origin: border-box, content-box;
+  background-repeat: no-repeat;
+}';
+//$css = 'p{
+  //margin-top: 1em;
+  //margin-right: 1em;
+  //margin-bottom: 1em;
+  //margin-left: 1em;
+//}'; 
 //var_dump(substr($css, 419, 100));
 
 $parser = new CSS\Parser(array());
@@ -21,7 +27,7 @@ $parser = new CSS\Parser(array());
 $styleSheet = $parser->parseStyleSheet($css);
 $rule = $styleSheet->getFirstRule();
 $styleDeclaration = $rule->getStyleDeclaration();
-$styleDeclaration->createDimensionsShorthands();
+$styleDeclaration->createBackgroundShorthand();
 
 var_dump($styleSheet->getCssText(array(
   'indent_level' => 0,

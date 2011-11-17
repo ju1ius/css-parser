@@ -36,15 +36,80 @@ class CreateShorthands
 		$this->createListStyleShorthand();
   }
 
+  /**
+   *
+   * @todo Handle background-color
+   *
+   **/
   public function createBackgroundShorthand()
   {
     $aProperties = array(
-      'background-image', 'background-position', 'background-size',
+      'background-image', 'background-position',
+      // <bg-position> [ / <bg-size> ]? syntax not yet supported as of Firefox 7
+      /* 'background-size', */
       'background-repeat', 'background-attachment',
-      'background-origin', 'background-clip',
-      'background-color' 
+      'background-origin', 'background-clip'
     );
-		$this->_createShorthandProperties($aProperties, 'background', true);
+    $oBgImageProperty = $this->styleDeclaration->getAppliedProperty('background-image');
+    $oBgColorProperty = $this->styleDeclaration->getAppliedProperty('background-color');
+    // we need at least a background-image or a background-color
+    if(!$oBgImageProperty && !$oBgColorProperty) return;
+    // get the number of layers from background-image property
+    $iNumLayers = 1;
+    if($oBgImageProperty) {
+      $oBgImageValueList = $oBgImageProperty->getValueList();
+      if($oBgImageValueList->getSeparator() === ',') {
+        $iNumLayers = $oBgImageValueList->getLength();
+      }
+    }
+    if($iNumLayers === 1) {
+      $aProperties[] = 'background-color';
+      $this->_createShorthandProperties($aProperties, 'background', true);
+      return;
+    }
+    $bCanProceed = $this->_safeCleanup($aProperties, 'background');
+    if(!$bCanProceed) return;
+    // Now we collapse the rules
+    $aNewValues = array('normal' => array(), 'important' => array());
+    $aOldProperties = array('normal' => array(), 'important' => array());
+    foreach($aProperties as $sProperty) {
+      $oProperty = $this->styleDeclaration->getAppliedProperty($sProperty);
+      if(!$oProperty) continue;
+      $sDest = $oProperty->getIsImportant() ? 'important' : 'normal';
+      $oValueList = $oProperty->getValueList();
+      if($oValueList->getSeparator() === ',') {
+        $aPropertyLayers = $oValueList->getItems();
+      } else {
+        $aPropertyLayers = array($oValueList->getItems());
+      }
+      $aOldProperties[$sDest][] = $oProperty;
+      // compute missing layers
+      while(count($aPropertyLayers) < $iNumLayers) {
+        $aPropertyLayers = array_merge($aPropertyLayers, Object::getClone($aPropertyLayers));
+      }
+      // drop extra layers
+      $aPropertyLayers = array_slice($aPropertyLayers, 0, $iNumLayers);
+      //
+      foreach($aPropertyLayers as $i => $mValue) {
+        $aNewValues[$sDest][$i][$sProperty] = Object::getClone($mValue);
+      }
+    }
+    if($oBgColorProperty) {
+      $sDest = $oBgColorProperty->getIsImportant() ? 'important' : 'normal';
+      $aOldProperties[$sDest][] = $oBgColorProperty;
+      $aNewValues[$sDest][$iNumLayers-1]['background-color'] = Object::getClone(
+        $oBgColorProperty->getValueList()->getFirst()
+      );
+      
+    }
+    $iImportantCount = count($aNewValues['important']);
+    $iNormalCount = count($aNewValues['normal']);
+    // Merge important values only if no normal values are present
+    if($iNormalCount) {
+      $this->_mergeLayers('background', $aNewValues['normal'], $aOldProperties['normal'], false);
+    } else if($iImportantCount) {
+      $this->_mergeLayers('background', $aNewValues['important'], $aOldProperties['important'], true);
+    }
 	}
 
   public function createListStyleShorthand()
@@ -156,7 +221,7 @@ class CreateShorthands
 			if(!$oProperty) continue;
 			$aValues = $oProperty->getValueList()->getItems();
 			if($aValues[0] !== 'normal') {
-				$oNewValueList->append($aValues[0]);
+				$oNewValueList->append(Object::getClone($aValues[0]));
 			}
     }
     // Get the font-size value
@@ -167,18 +232,22 @@ class CreateShorthands
       $aLHValues = $oLHProperty->getValueList()->getItems();
       if($aLHValues[0] !== 'normal') {
         $val = new PropertyValueList(
-          array($aFSValues[0], $aLHValues[0]),
+          array(
+            Object::getClone($aFSValues[0]),
+            Object::getClone($aLHValues[0])
+          ),
           '/'
         );
         $oNewValueList->append($val);
       }
     } else {
-      $oNewValueList->append($aFSValues[0]);
+      $oNewValueList->append(Object::getClone($aFSValues[0]));
     }
 		// Font-Family
-    $aFFValues = $oFFProperty->getValueList()->getItems();
-		$oFFValue = new PropertyValueList($aFFValues, ',');
-    $oNewValueList->append($oFFValue);
+    //$aFFValues = $oFFProperty->getValueList()->getItems();
+		//$oFFValue = new PropertyValueList($aFFValues, ',');
+    //$oNewValueList->append($oFFValue);
+    $oNewValueList->append(Object::getClone($oFFProperty->getValueList()));
 
     $oNewProperty = new Property('font', $oNewValueList);
     $this->styleDeclaration->append($oNewProperty);
@@ -195,15 +264,15 @@ class CreateShorthands
     if(!$bCanProceed) return;
     // Now we collapse the rules
     $aNewValues = array('normal' => array(), 'important' => array());
-    $aOldRules = array('normal' => array(), 'important' => array());
+    $aOldProperties = array('normal' => array(), 'important' => array());
     foreach($aProperties as $sProperty) {
       $aProperties = $this->styleDeclaration->getProperties($sProperty);
       foreach($aProperties as $iPos => $oProperty) {
         $aValues = $oProperty->getValueList()->getItems();
         $sDest = $oProperty->getIsImportant() ? 'important' : 'normal';
-        $aOldRules[$sDest][] = $iPos;
+        $aOldProperties[$sDest][] = $iPos;
         foreach($aValues as $mValue) {
-          $aNewValues[$sDest][] = $mValue;
+          $aNewValues[$sDest][] = Object::getClone($mValue);
         }
       }
     }
@@ -211,14 +280,28 @@ class CreateShorthands
     $iNormalCount = count($aNewValues['normal']);
     // Merge important values only if no normal values are present
     if($iNormalCount) {
-      $this->_mergeValues($sShorthand, $aNewValues['normal'], $aOldRules['normal'], false);
+      $this->_mergeValues($sShorthand, $aNewValues['normal'], $aOldProperties['normal'], false);
     } else if($iImportantCount) {
-      $this->_mergeValues($sShorthand, $aNewValues['important'], $aOldRules['important'], true);
+      $this->_mergeValues($sShorthand, $aNewValues['important'], $aOldProperties['important'], true);
     }
-	}
+  }
 
-  private function _mergeValues($sShorthand, $aValues, $aOldRules, $bImportant) {
-    $this->styleDeclaration->remove($aOldRules);
+  private function _mergeLayers($sShorthand, $aLayers, $aOldProperties, $bImportant)
+  {
+    $this->styleDeclaration->remove($aOldProperties);
+    $oNewValueList = new PropertyValueList(array(), ',');
+    foreach($aLayers as $aValues) {
+      $oLayerValueList = new PropertyValueList($aValues, ' ');
+      $oNewValueList->append($oLayerValueList);
+    }
+    $oNewProperty = new Property($sShorthand, $oNewValueList);
+    $oNewProperty->setIsImportant($bImportant);
+    $this->styleDeclaration->append($oNewProperty);
+  }
+
+  private function _mergeValues($sShorthand, $aValues, $aOldProperties, $bImportant)
+  {
+    $this->styleDeclaration->remove($aOldProperties);
     $oNewValueList = new PropertyValueList($aValues, ' ');
     $oNewProperty = new Property($sShorthand, $oNewValueList);
     $oNewProperty->setIsImportant($bImportant);

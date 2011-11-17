@@ -3,9 +3,17 @@ require_once __DIR__.'/../../CSSParser_TestCase.php';
 
 class CreateShorthandsTest extends CSSParser_TestCase
 {
-  public function testCreateBackgroundShorthand()
+  /**
+   * @dataProvider testCreateBackgroundShorthandProvider
+   **/
+  public function testCreateBackgroundShorthand($input, $expected)
   {
-    $this->markTestIncomplete();
+    $parser = $this->createParser();
+    $styleSheet = $parser->parseStyleSheet($input);
+    $rule = $styleSheet->getFirstRule();
+    $styleDeclaration = $rule->getStyleDeclaration();
+    $styleDeclaration->createBackgroundShorthand();
+    $this->assertEquals($expected, $styleSheet->getCssText());
   }
   public function testCreateBackgroundShorthandProvider()
   {
@@ -18,25 +26,35 @@ class CreateShorthandsTest extends CSSParser_TestCase
       ),
       array(
         'p{ background-color: rgb(255,0,0); background-image: url(foobar.png); }',
-        'p{ background: rgb(255,0,0) url("foobar.png"); }'
+        'p{ background: url("foobar.png") rgb(255,0,0); }'
       ),
       array(
         'p{ background-color: rgb(255,0,0); background-image: url(foobar.png); background-repeat: no-repeat; }',
-        'p{ background: rgb(255,0,0) url("foobar.png") no-repeat; }'
+        'p{ background: url("foobar.png") no-repeat rgb(255,0,0); }'
       ),
       array(
         'p{ background-color: rgb(255,0,0); background-image: url(foobar.png); background-repeat: no-repeat; }',
-        'p{ background: rgb(255,0,0) url("foobar.png") no-repeat; }'
+        'p{ background: url("foobar.png") no-repeat rgb(255,0,0); }'
       ),
       array(
         'p{ background-color: rgb(255,0,0); background-image: url(foobar.png); background-repeat: no-repeat; background-position: center; }',
-        'p{ background: rgb(255,0,0) url("foobar.png") no-repeat center; }'
+        'p{ background: url("foobar.png") center no-repeat rgb(255,0,0); }'
       ),
       array(
         'p{ background-color: rgb(255,0,0); background-image: url(foobar.png); background-repeat: no-repeat; background-position: top left; }',
-        'p{ background: rgb(255,0,0) url("foobar.png") no-repeat top left; }'
+        'p{ background: url("foobar.png") top left no-repeat rgb(255,0,0); }'
       ),
-      // TODO: Multiple Layers
+      // Multiple Layers
+      array(
+        'p{
+  background-image: url(flower.png), url(ball.png), url(grass.png);
+  background-position: center center, 20% 80%, top left, bottom right;
+  background-origin: border-box, content-box;
+  background-repeat: no-repeat;
+  background-color: red;
+}',
+        'p{ background: url("flower.png") center center no-repeat border-box,url("ball.png") 20% 80% no-repeat content-box,url("grass.png") top left no-repeat border-box rgb(255,0,0); }'
+      )
     );
   }
 
