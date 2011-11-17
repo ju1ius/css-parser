@@ -4,6 +4,11 @@ namespace CSS\Rule;
 use CSS\Rule;
 use CSS\Value\String;
 
+/**
+ * Represents an @charset rule
+ * @package CSS
+ * @subpackage Rule
+ **/
 class Charset extends Rule
 {
   public function __construct(String $encoding)

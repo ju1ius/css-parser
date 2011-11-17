@@ -1,6 +1,10 @@
 <?php
 namespace CSS;
 
+/**
+ * Manages a list of CSS values
+ * @package CSS
+ **/
 class ValueList extends CSSList implements Serializable
 {
   protected $separator;

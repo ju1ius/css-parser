@@ -16,6 +16,6 @@ while [[ $1 = -* ]]; do
   esac
 done
 
-pushd $DIR >/dev/null
+pushd $DIR/../test >/dev/null
 phpunit $VERBOSE --configuration testsuite.xml
 popd >/dev/null

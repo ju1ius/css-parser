@@ -2,6 +2,11 @@
 namespace CSS\Value;
 use CSS\ValueList;
 
+/**
+ * Represents a CSS Function, like linear-gradient(), attr(), counter()...
+ * @package CSS
+ * @subpackage Value
+ **/
 class Func extends ValueList
 {
 	private $name;

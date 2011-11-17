@@ -3,6 +3,10 @@ namespace CSS\Util;
 
 use CSS\Serializable;
 
+/**
+ * @package CSS
+ * @subpackage Util
+ **/
 class Object
 {
   public static function getClone($value)

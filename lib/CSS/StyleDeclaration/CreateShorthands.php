@@ -9,6 +9,12 @@ use CSS\Property;
 use CSS\Value;
 
 
+/**
+ * Utility class to create shorthand properties from a StyleDeclaration
+ *
+ * @package CSS
+ * @subpackage StyleDeclaration
+ **/
 class CreateShorthands
 {
   private $styleDeclaration;
@@ -24,7 +30,7 @@ class CreateShorthands
   }
 
   /**
-   * Create shorthand declarations (e.g. +margin+ or +font+) whenever possible.
+   * Create shorthand properties (e.g. `margin` or `font`) whenever possible.
    **/
   public function createShorthands()
   {

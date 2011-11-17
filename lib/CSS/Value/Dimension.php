@@ -1,6 +1,10 @@
 <?php
 namespace CSS\Value;
 
+/**
+ * @package CSS
+ * @subpackage Value
+ **/
 class Dimension extends PrimitiveValue
 {
   private $value;

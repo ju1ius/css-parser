@@ -4,6 +4,13 @@ namespace CSS\Rule;
 use CSS\Rule;
 use CSS\Value\URL;
 
+/**
+ * Represents an @namespace rule
+ * It's called NS because namespace is a PHP reserved word
+ *
+ * @package CSS
+ * @subpackage Rule
+ **/
 class NS extends Rule
 {
   private $uri;

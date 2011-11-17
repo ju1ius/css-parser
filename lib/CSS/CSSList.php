@@ -1,6 +1,10 @@
 <?php
 namespace CSS;
 
+/**
+ * General purpose list class
+ * @package CSS
+ **/
 abstract class CSSList implements \ArrayAccess
 {
   protected $items;

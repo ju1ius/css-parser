@@ -1,6 +1,10 @@
 <?php
 namespace CSS;
 
+/**
+ * Represents a CSS rule
+ * @package CSS
+ **/
 abstract class Rule implements Serializable
 {
   private $parentStyleSheet;

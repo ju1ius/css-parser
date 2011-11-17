@@ -1,6 +1,10 @@
 <?php
 namespace CSS;
 
+/**
+ * Represents a CSS StyleSheet
+ * @package CSS
+ **/
 class StyleSheet implements Serializable
 {
   private $href;

@@ -3,6 +3,10 @@ namespace CSS;
 
 use CSS\XPath;
 
+/**
+ * Manages a list of CSS selectors
+ * @package CSS
+ **/
 class SelectorList extends CSSList implements Serializable, XPathable
 {
 

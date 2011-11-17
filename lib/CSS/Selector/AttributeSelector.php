@@ -5,6 +5,17 @@ use CSS\Exception\ParseException;
 use CSS\Selector;
 use CSS\XPath;
 
+/**
+ * Represents an attribute selector
+ *
+ * This component is a port of the Python lxml library,
+ * which is copyright Infrae and distributed under the BSD license.
+ *
+ * @package CSS
+ * @subpackage Selector
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author ju1ius http://github.com/ju1ius
+ **/
 class AttributeSelector extends Selector
 {
   protected $selector;

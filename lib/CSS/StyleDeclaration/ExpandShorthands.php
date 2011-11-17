@@ -10,6 +10,9 @@ use CSS\Value;
 
 /**
  * Expands shorthand properties to their longhand form in a StyleDeclaration
+ *
+ * @package CSS
+ * @subpackage StyleDeclaration
  **/
 class ExpandShorthands
 {

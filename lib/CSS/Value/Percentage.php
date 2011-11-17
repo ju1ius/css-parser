@@ -1,6 +1,10 @@
 <?php
 namespace CSS\Value;
 
+/**
+ * @package CSS
+ * @subpackage Value
+ **/
 class Percentage extends Dimension
 {
   public function __construct($value)

@@ -1,6 +1,10 @@
 <?php
 namespace CSS;
 
+/**
+ * Represents a CSS property
+ * @package CSS
+ **/
 class Property implements Serializable
 {
   private $name;

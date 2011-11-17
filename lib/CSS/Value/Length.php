@@ -1,6 +1,10 @@
 <?php
 namespace CSS\Value;
 
+/**
+ * @package CSS
+ * @subpackage Value
+ **/
 class Length extends Dimension
 {
   static $UNITS = array(

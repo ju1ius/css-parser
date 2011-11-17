@@ -1,6 +1,10 @@
 <?php
 namespace CSS\Value;
 
+/**
+ * @package CSS
+ * @subpackage Value
+ **/
 class String extends PrimitiveValue
 {
   private $string;

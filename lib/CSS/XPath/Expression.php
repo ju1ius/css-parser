@@ -9,6 +9,8 @@ use CSS\Selector\ElementSelector;
  * This component is a port of the Python lxml library,
  * which is copyright Infrae and distributed under the BSD license.
  *
+ * @package CSS
+ * @subpackage XPath
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class Expression

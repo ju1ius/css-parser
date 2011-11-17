@@ -5,6 +5,11 @@ use CSS\Rule;
 use CSS\StyleDeclaration;
 use CSS\Value\Percentage;
 
+/**
+ * Represents an @keyframe rule
+ * @package CSS
+ * @subpackage Rule
+ **/
 class Keyframe extends Rule
 {
   private $selectors;

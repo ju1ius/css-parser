@@ -1,4 +1,5 @@
 lib/vendor/*
+doc/*
 test/benchmark.php
 test/test.php
 test/valuelist.php

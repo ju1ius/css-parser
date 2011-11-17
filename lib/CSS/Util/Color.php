@@ -1,6 +1,10 @@
 <?php
 namespace CSS\Util;
 
+/**
+ * @package CSS
+ * @subpackage Util
+ **/
 class Color
 {
   static $X11_COLORS_MAP = array(

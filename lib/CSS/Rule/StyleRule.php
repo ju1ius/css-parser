@@ -5,6 +5,12 @@ use CSS\Rule;
 use Css\SelectorList;
 use Css\StyleDeclaration;
 
+/**
+ * Represents a CSS style rule
+ *
+ * @package CSS
+ * @subpackage Rule
+ **/
 class StyleRule extends Rule
 {
   private $selectorList;

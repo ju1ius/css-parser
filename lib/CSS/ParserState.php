@@ -3,6 +3,7 @@ namespace CSS;
 
 /**
  * A Bitmask storing the CSS\Parser's states
+ * @package CSS
  **/
 class ParserState
 {

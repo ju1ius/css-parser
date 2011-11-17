@@ -1,6 +1,10 @@
 <?php
 namespace CSS\Value;
 
+/**
+ * @package CSS
+ * @subpackage Value
+ **/
 class Frequency extends Dimension
 {
   static $UNITS = array(

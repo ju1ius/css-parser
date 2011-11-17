@@ -4,6 +4,17 @@ namespace CSS\Selector;
 use CSS\Selector;
 use CSS\Xpath;
 
+/**
+ * Represents a class selector
+ *
+ * This component is a port of the Python lxml library,
+ * which is copyright Infrae and distributed under the BSD license.
+ *
+ * @package CSS
+ * @subpackage Selector
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author ju1ius http://github.com/ju1ius
+ **/
 class ClassSelector extends Selector
 {
   private $selector;

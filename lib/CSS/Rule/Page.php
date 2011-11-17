@@ -4,6 +4,11 @@ namespace CSS\Rule;
 use CSS\Rule;
 use Css\StyleDeclaration;
 
+/**
+ * Represents an @page rule
+ * @package CSS
+ * @subpackage Rule
+ **/
 class Page extends Rule
 {
   private $selectors;

@@ -6,6 +6,11 @@ use CSS\Value\URL;
 use CSS\MediaList;
 use CSS\StyleSheet;
 
+/**
+ * Represents an @import rule
+ * @package CSS
+ * @subpackage Rule
+ **/
 class Import extends Rule
 {
   private $href;

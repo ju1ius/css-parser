@@ -2,6 +2,10 @@
 namespace CSS\Value;
 use CSS\Value;
 
+/**
+ * @package CSS
+ * @subpackage Value
+ **/
 abstract class PrimitiveValue extends Value
 {
   const

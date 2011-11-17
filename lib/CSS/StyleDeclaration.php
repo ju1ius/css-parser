@@ -1,6 +1,10 @@
 <?php
 namespace CSS;
 
+/**
+ * Represents a CSS style declaration
+ * @package CSS
+ **/
 class StyleDeclaration implements Serializable
 {
   private $properties;

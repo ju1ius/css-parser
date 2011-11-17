@@ -5,6 +5,11 @@ use CSS\Rule;
 use CSS\RuleList;
 use CSS\MediaList;
 
+/**
+ * Represents an @media rule
+ * @package CSS
+ * @subpackage Rule
+ **/
 class Media extends Rule
 {
   private $mediaList;

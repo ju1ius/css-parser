@@ -3,6 +3,10 @@ namespace CSS\Util;
 
 define('OS_WIN32', defined('OS_WINDOWS') ? OS_WINDOWS : !strncasecmp(PHP_OS, 'win', 3));
 
+/**
+ * @package CSS
+ * @subpackage Util
+ **/
 class URL
 {
 

@@ -2,6 +2,12 @@
 namespace CSS\Rule;
 use CSS\Rule;
 
+/**
+ * Represents an unknown @ rule (unused)
+ *
+ * @package CSS
+ * @subpackage Rule
+ **/
 class AtRule extends Rule
 {
   private $name;

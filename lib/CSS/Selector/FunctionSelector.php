@@ -5,6 +5,17 @@ use CSS\Exception\ParseException;
 use CSS\Selector;
 use CSS\XPath;
 
+/**
+ * Represents a "selector:name(expr)" selector
+ *
+ * This component is a port of the Python lxml library,
+ * which is copyright Infrae and distributed under the BSD license.
+ *
+ * @package CSS
+ * @subpackage Selector
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author ju1ius http://github.com/ju1ius
+ **/
 class FunctionSelector extends Selector
 {
   static protected $unsupported = array('target', 'lang', 'enabled', 'disabled');

@@ -4,6 +4,11 @@ namespace CSS\Rule;
 use CSS\Rule;
 use CSS\StyleDeclaration;
 
+/**
+ * Represents an @font-face rule
+ * @package CSS
+ * @subpackage Rule
+ **/
 class FontFace extends Rule
 {
   private $styleDeclaration;

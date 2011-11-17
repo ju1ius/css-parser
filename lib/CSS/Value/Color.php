@@ -3,6 +3,10 @@ namespace CSS\Value;
 
 use CSS\Util;
 
+/**
+ * @package CSS
+ * @subpackage Value
+ **/
 class Color extends PrimitiveValue
 {
   private $channels = array(

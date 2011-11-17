@@ -1,6 +1,10 @@
 <?php
 namespace CSS\Util;
 
+/**
+ * @package CSS
+ * @subpackage Util
+ **/
 class Charset
 {
   static private $CHARSET_DETECTION_MAP = array(

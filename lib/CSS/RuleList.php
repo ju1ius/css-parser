@@ -1,6 +1,10 @@
 <?php
 namespace CSS;
 
+/**
+ * Manages a list of CSS\Rule objects
+ * @package CSS
+ **/
 class RuleList extends CSSList implements Serializable
 {
 

@@ -5,6 +5,11 @@ use CSS\Rule;
 use CSS\RuleList;
 use CSS\Value\String;
 
+/**
+ * Represents an @keyframes rule
+ * @package CSS
+ * @subpackage Rule
+ **/
 class Keyframes extends Rule
 {
   private $vendorPrefix;

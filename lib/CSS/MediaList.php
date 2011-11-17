@@ -3,6 +3,10 @@ namespace CSS;
 
 use CSS\Value\String;
 
+/**
+ * A list of medias used in media queries
+ * @package CSS
+ **/
 class MediaList extends ValueList
 {
   public function __construct($medias=array())
