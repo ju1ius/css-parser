@@ -3,7 +3,10 @@ namespace CSS;
 use CSS\Exception\ParseException;
 /**
  * CSS\Parser class parses CSS from text into a data structure.
+ *
  * @package CSS
+ * @author Raphael Schweikert http://sabberworm.com
+ * @author ju1ius http://github.com/ju1ius
  **/
 class Parser
 {
