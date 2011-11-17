@@ -1,1 +1,5 @@
-lib/vendor
+lib/vendor/*
+test/benchmark.php
+test/test.php
+test/valuelist.php
+test/dump.php

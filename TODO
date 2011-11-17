@@ -7,6 +7,7 @@ CSSOM:
   shorthands:
     expand:
       expand if more than one background shorthand ?
+      do we need background default values ?
       liststyle tests
     create:
       liststyle tests
