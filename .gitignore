@@ -1,6 +1,5 @@
 lib/vendor/*
 doc/*
 benchmark/*
-test/test.php
+test/quicktest.php
 test/valuelist.php
-test/dump.php
