@@ -118,6 +118,9 @@ class CreateShorthandsTest extends CSSParser_TestCase
   {
     return array(
       array(
+        'p{ margin: 1em; }', 'p{ margin: 1em; }'
+      ),
+      array(
         'p{ font-size: 12px; font-family: serif }',
         'p{ font: 12px serif; }'
       ),
@@ -138,7 +141,8 @@ class CreateShorthandsTest extends CSSParser_TestCase
         'p{ font: italic small-caps bold 12px/1.6 serif; }'
       ),
       array(
-        'p{ margin: 1em; }', 'p{ margin: 1em; }'
+        'p{ font-style: normal; font-variant: normal; font-weight: bold; font-size: 12px; line-height: normal; font-family: serif; }',
+        'p{ font: bold 12px serif; }'  
       )
     );
   }

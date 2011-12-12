@@ -1,7 +1,7 @@
 #! /bin/bash
 
 DIR=$(dirname $(readlink -f $0))
-VERBOSE=""
+VERBOSE="-p"
 
 while [[ $1 = -* ]]; do
   case "$1" in
@@ -24,8 +24,8 @@ then
 fi
 rm -r doc/*
 
-docblox -d lib/CSS -t doc \
+docblox $VERBOSE -d lib/CSS -t doc \
   --defaultpackagename CSS --sourcecode \
-  --title "CSSParser Documentation"
+  --title "CSSParser Documentation" --template default
 
 popd >/dev/null

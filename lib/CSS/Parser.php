@@ -540,7 +540,7 @@ class Parser
     }
   }
 
-  public function _parseKeyframeRule()
+  private function _parseKeyframeRule()
   {
     $styleDeclaration = new StyleDeclaration();
     $selectors = array_map(function($selector)
@@ -569,7 +569,7 @@ class Parser
     return $rule;
   }
 
-  public function _parseStyleRule()
+  private function _parseStyleRule()
   {
     $styleDeclaration = new StyleDeclaration();
     $selectors = $this->_parseSelectorList();
@@ -833,7 +833,7 @@ class Parser
     return $property;
   }
 
-  public function _fixBackgroundShorthand(PropertyValueList $oValueList)
+  private function _fixBackgroundShorthand(PropertyValueList $oValueList)
   {
     if($oValueList->getLength() < 2) return;
     if($oValueList->getSeparator() === ',') {
@@ -846,7 +846,7 @@ class Parser
       $this->_fixBackgroundLayer($oValueList);
     }
   }
-  public function _fixBackgroundLayer(PropertyValueList $oValueList)
+  private function _fixBackgroundLayer(PropertyValueList $oValueList)
   {
     foreach($oValueList->getItems() as $i => $mValue) {
       if($mValue instanceof PropertyValueList && $mValue->getSeparator() === '/') {

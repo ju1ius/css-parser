@@ -194,9 +194,9 @@ class CreateShorthands
       } else {
         // No sides are equal 
         $oNewValueList->append($aValues['top']);
-        $oNewValueList->append($aValues['left']);
-        $oNewValueList->append($aValues['bottom']);
         $oNewValueList->append($aValues['right']);
+        $oNewValueList->append($aValues['bottom']);
+        $oNewValueList->append($aValues['left']);
       }
       $oNewProperty = new Property($sProperty, $oNewValueList);
       $oNewProperty->setIsImportant(!!$iImportantCount);
@@ -236,7 +236,7 @@ class CreateShorthands
 		$oLHProperty = $this->styleDeclaration->getAppliedProperty('line-height');
     if($oLHProperty) {
       $aLHValues = $oLHProperty->getValueList()->getItems();
-      if($aLHValues[0] !== 'normal') {
+      if('normal' !== $aLHValues[0]) {
         $val = new PropertyValueList(
           array(
             Object::getClone($aFSValues[0]),
@@ -245,6 +245,8 @@ class CreateShorthands
           '/'
         );
         $oNewValueList->append($val);
+      } else {
+        $oNewValueList->append(Object::getClone($aFSValues[0]));
       }
     } else {
       $oNewValueList->append(Object::getClone($aFSValues[0]));

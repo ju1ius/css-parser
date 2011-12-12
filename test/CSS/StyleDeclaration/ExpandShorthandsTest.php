@@ -85,7 +85,7 @@ class ExpandShorthandsTest extends CSSParser_TestCase
         'body{ margin: 1em; }'
       ),
       array(
-        'body {font: 12px serif;}',
+        'body{ font: 12px serif; }',
         'body{ font-style: normal; font-variant: normal; font-weight: normal; font-size: 12px; line-height: normal; font-family: serif; }'
       ),
       array(

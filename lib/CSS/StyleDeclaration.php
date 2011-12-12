@@ -226,6 +226,18 @@ class StyleDeclaration implements Serializable
     }
   }
 
+  public function getAppliedProperties()
+  {
+    $aProperties = array();
+    foreach($this->properties as $property) {
+      $aProperties[$property->getName()] = null;
+    }
+    foreach($aProperties as $name => $dummy) {
+      $aProperties[$name] = $this->getAppliedProperty($name);
+    }
+    return $aProperties;
+  }
+
   /**
    * Returns the last property matching name, taking !important declaration into account.
    *

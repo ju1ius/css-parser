@@ -2,8 +2,9 @@
 namespace CSS\Rule;
 
 use CSS\Rule;
-use Css\SelectorList;
-use Css\StyleDeclaration;
+use CSS\SelectorList;
+use CSS\StyleDeclaration;
+use CSS\Property;
 
 /**
  * Represents a CSS style rule
@@ -51,6 +52,85 @@ class StyleRule extends Rule
       $styleDeclaration->setParentStyleSheet($parentStyleSheet);
     }
     $this->styleDeclaration = $styleDeclaration;
+  }
+
+  /**
+   * Merge multiple CSS RuleSets by cascading according to the CSS 3 cascading rules 
+   * (http://www.w3.org/TR/REC-CSS2/cascade.html#cascading-order).
+   * 
+   * Cascading:
+   * If a CSS\StyleRule object has its +specificity+ defined, that specificity is 
+   * used in the cascade calculations.  
+   * 
+   * If no specificity is explicitly set and the CSS\StyleRule has *one* selector, 
+   * the specificity is calculated using that selector.
+   * 
+   * If no selectors or multiple selectors are present, the specificity is 
+   * treated as 0.
+   * 
+   *
+   * @param  array $rules An array of CSS\StyleRule objects
+   * @return CSS\StyleRule The merged CSS\StyleRule
+   * 
+   **/
+  public static function merge(Array $rules)
+  {
+    if(1 === count($rules)) {
+      if(!$rules[0] instanceof StyleRule) {
+        throw new \InvalidArgumentException('You must provide an array of CSS\StyleRule objects');
+      }
+      return clone $rules[0];
+    }
+    // Internal storage of CSS properties that we will keep
+    $aProperties = array();
+    foreach($rules as $rule)
+    {
+      if(!$rule instanceof StyleRule) {
+        throw new \InvalidArgumentException('You must provide an array of CSS\StyleRule objects');
+      }
+      $styleDeclaration = $rule->getStyleDeclaration();
+      $selectorList = $rule->getSelectorList();
+      $specificity = 0;
+      //
+      $styleDeclaration->expandShorthands();
+      if(1 === $selectorList->getLength()) {
+        $specificity = $selectorList[0]->getSpecificity();
+      }
+      //
+      foreach($styleDeclaration->getAppliedProperties() as $name => $property)
+      {
+        // Add the property to the list to be folded per
+        // http://www.w3.org/TR/css3-cascade/#cascading
+        $override = false;
+        $isImportant = $property->getIsImportant();
+        if(isset($aProperties[$name])) {
+          $oldProp = $aProperties[$name];
+          // properties have same weight so we consider specificity
+          if($isImportant === $oldProp['property']->getIsImportant()) {
+            if($specificity >= $oldProp['specificity']) $override = true;
+          } else if($isImportant) {
+            $override = true;
+          }
+        } else {
+          $override = true;
+        }
+        if($override) {
+          $aProperties[$name] = array(
+            'property' => clone $property,
+            'specificity' => $specificity
+          );
+        }
+      }
+    }
+    $merged = new StyleDeclaration();
+    foreach($aProperties as $name => $details) {
+      $merged->append($details['property']);
+    }
+    $merged->createShorthands();
+    return new StyleRule(
+      new SelectorList(),
+      $merged
+    );
   }
 
   public function getCssText($options=array())
