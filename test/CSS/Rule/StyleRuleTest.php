@@ -14,7 +14,7 @@ class StyleRuleTest extends CSSParser_TestCase
       $styleSheet = $parser->parseStyleSheet($input);
       $rules[] = $styleSheet->getFirstRule();
     }
-    $merged = CSS\Rule\StyleRule::merge($rules);
+    $merged = ju1ius\CSS\Rule\StyleRule::merge($rules);
     $this->assertEquals($expected, $merged->getCssText());
   }
   public function testMergeProvider()

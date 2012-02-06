@@ -26,7 +26,7 @@ class CharsetTest extends CSSParser_TestCase
   }
 
   /**
-   * @expectedException CSS\Exception\ParseException
+   * @expectedException ju1ius\CSS\Exception\ParseException
    **/
   public function testOnlyOneCharsetAllowed()
   {

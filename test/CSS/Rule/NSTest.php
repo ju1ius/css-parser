@@ -28,7 +28,7 @@ class NSTest extends CSSParser_TestCase
   }
 
   /**
-   * @expectedException CSS\Exception\ParseException
+   * @expectedException ju1ius\CSS\Exception\ParseException
    * @dataProvider testAllowedOnlyAfterCharsetAndImportsProvider
    **/
   public function testAllowedOnlyAfterCharsetAndImports($input)

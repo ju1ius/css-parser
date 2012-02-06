@@ -1,7 +1,9 @@
 PHPDOC !!!
 TEST SUITE !!!
+README
 
 CSSOM:
+  DOMDocument extensions
   Selectors:
     - Tests
   shorthands:
@@ -23,3 +25,4 @@ Parser:
   Charset handling
   CSS\Parser::parseInlineStyleDeclaration()
   background-size syntax in background shorthand
+  border-radius
