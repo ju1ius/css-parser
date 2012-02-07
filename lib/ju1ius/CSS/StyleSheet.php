@@ -7,16 +7,19 @@ namespace ju1ius\CSS;
  **/
 class StyleSheet implements Serializable
 {
-  private $href;
-  private $mediaList;
-  private $ruleList;
+  private
+    $href,
+    $mediaList,
+    $ruleList,
+    $charset;
 
-  public function __construct(RuleList $ruleList=null)
+  public function __construct(RuleList $ruleList=null, $charset="utf-8")
   {
-    if($ruleList == null)
+    if($ruleList === null)
     {
       $this->ruleList = new RuleList(); 
     }
+    $this->charset = $charset;
   }
 
   public function getHref()
@@ -26,6 +29,11 @@ class StyleSheet implements Serializable
   public function setHref($href)
   {
     $this->href = $href;
+  }
+
+  public function getCharset()
+  {
+    return $this->charset;
   }
 
   public function getMediaList()

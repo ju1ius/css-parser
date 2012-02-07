@@ -9,6 +9,9 @@
 			<file>CSS/StyleDeclaration/ExpandShorthandsTest.php</file>
 			<file>CSS/StyleDeclaration/CreateShorthandsTest.php</file>
       <file>CSS/Rule/StyleRuleTest.php</file>
+      <file>CSS/Iterator/ValueIteratorTest.php</file>
+      <file>CSS/Resolver/UrlResolverTest.php</file>
+      <file>CSS/Resolver/ImportResolverTest.php</file>
     </testsuite>
     <testsuite name="CSSParser Bugs">
       <directory>bugs</directory>

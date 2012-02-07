@@ -1,9 +1,10 @@
 <?php
 namespace ju1ius\CSS;
+
 use ju1ius\CSS\Exception\ParseException;
 
 /**
- * ju1ius\CSS\Parser class parses CSS from text into a data structure.
+ * Parses CSS text into a data structure.
  *
  * @package CSS
  * @author Raphael Schweikert http://sabberworm.com
@@ -11,66 +12,22 @@ use ju1ius\CSS\Exception\ParseException;
  **/
 class Parser
 {
-  /**
-   * User options
-   **/
-  protected $options = array(
-    'input_encoding'  => null,
-    'output_encoding' => null
-  );
 
   /**
    * Parser internal pointers
    **/
-  private $text;
-  private $currentPosition;
-  private $length;
-  private $loadedFiles = array();
-  private $state;
+  private
+    $text,
+    $currentPosition,
+    $length,
+    $state;
 
-  /**
-   * Data for resolving imports
-   **/
-  const IMPORT_FILE    = 'file';
-  const IMPORT_URL     = 'url';
-  const IMPORT_NONE    = 'none';
-  private $importMode = 'none';
-
-  /**
-   * flags
-   **/
-  private $bIsAbsBaseUrl;
+  private
+    $options = array();
 
   /**
    * @param array $options An array of options
    * 
-   * Valid options are:
-   * <ul>
-   *   <li>
-   *     <b>input_encoding:</b>
-   *     Force the input to be read with this encoding.
-   *     This also force encoding for all imported stylesheets if resolve_imports is set to true.
-   *     If not specified, the input encoding will be detected according to:
-   *     http://www.w3.org/TR/CSS2/syndata.html#charset
-   *   </li>
-   *   <li>
-   *     <b>output_encoding:</b>
-   *     Converts the output to given encoding.
-   *   </li>
-   *   <li>
-   *     <b>resolve_imports:</b>
-   *     Recursively import embedded stylesheets.
-   *   </li>
-   *   <li>
-   *     <b>absolute_urls:</b>
-   *     Make all urls absolute.
-   *   </li>
-   *   <li>
-   *     <b>base_url:</b>
-   *     The base url to use for absolute urls and resolving imports.
-   *     If not specified, will be computed from the file path or url.
-   *   </li>
-   * </ul>
    **/
   public function __construct(array $options=array())
   {
@@ -116,7 +73,7 @@ class Parser
   /**
    * Merge given options with the current options
    *
-   * @param array $aOptions The options to merge
+   * @param array $options The options to merge
    *
    * @return CSSParser The current CSSParser instance
    **/
@@ -130,7 +87,7 @@ class Parser
    * @todo Access should be private, since calling this method
    *       from the outside world could lead to unpredicable results.
    **/
-  public function setCharset($charset)
+  private function setCharset($charset)
   {
     $this->charset = $charset;
     $this->length = mb_strlen($this->text, $this->charset);
@@ -142,106 +99,25 @@ class Parser
   }
 
   /**
-   * Returns an array of all the loaded stylesheets.
+   * Accepts a StyleSheetInfo object as returned by StyleSheetLoader and returns the parsed StyleSheet
    *
-   * @return array The loaded stylesheets
+   * @param ju1ius\CSS\StyleSheetInfo $info
+   *
+   * @return ju1ius\CSS\StyleSheet
    **/
-  public function getLoadedFiles()
+  public function parse(StyleSheetInfo $info)
   {
-    return $this->loadedFiles;
-  }
-
-  /**
-   * Parses a local stylesheet into a CSSDocument object.
-   *
-   * @param string $path        Path to a file to load
-   * @param array  $loadedFiles An array of files to exclude
-   *
-   * @return CSSDocument the resulting CSSDocument
-   **/
-  public function parseFile($path, $loadedFiles=array())
-  {
-    if(!$this->getOption('base_url'))
-    {
-      $this->setOption('base_url', dirname($path));
-    }
-    if($this->getOption('absolute_urls') && !Util\URL::isAbsUrl($this->getOption('base_url')))
-    {
-      $this->setOption('base_url', realpath($this->getOption('base_url')));
-    }
-    $this->sImportMode = self::IMPORT_FILE;
-    $path = realpath($path);
-    $loadedFiles[] = $path;
-    $this->loadedFiles = array_merge($this->loadedFiles, $loadedFiles);
-    $css = file_get_contents($path);
-    return $this->parseString($css);
-  }
-
-  /**
-   * Parses a remote stylesheet into a CSSDocument object.
-   *
-   * @param string $path        URL of a file to load
-   * @param array  $loadedFiles An array of files to exclude
-   *
-   * @return CSSDocument the resulting CSSDocument
-   **/
-  public function parseURL($path, $loadedFiles=array())
-  {
-    if(!$this->getOption('base_url'))
-    {
-      $this->setOption('base_url', Util\URL::dirname($path));
-    }
-    $this->sImportMode = self::IMPORT_URL;
-    $loadedFiles[] =$path;
-    $this->loadedFiles = array_merge($this->loadedFiles, $loadedFiles);
-    $results = Util\URL::loadURL($path);
-    $response = $results['response'];
-    // charset from Content-Type HTTP header
-    // TODO: what do we do if the header returns a wrong charset ?
-    if($results['charset'])
-    {
-      return $this->parseString($response, $results['charset']);
-    }
-    return $this->parseString($response);
-  }
-
-  /**
-   * Parses a string into a CSSDocument object.
-   *
-   * @param string $string  A CSS String
-   * @param array  $charset An optional charset to use (overridden by the "input_encoding" option).
-   *
-   * @return CSSDocument the resulting CSSDocument
-   **/
-
-  public function parseString($text, $charset=null)
-  {
-    $this->bIsAbsBaseUrl = Util\URL::isAbsUrl($this->getOption('base_url'));
-    if($this->getOption('input_encoding'))
-    {
-      // The input encoding has been overriden by user.
-      $charset = $this->getOption('input_encoding');
-    }
-    if(!$charset)
-    {
-      // detect charset from BOM and/or @charset rule
-      $charset = Util\Charset::detectCharset($text);
-      // Or defaults to utf-8
-      if(!$charset) $charset = 'UTF-8';
-    }
-    $text = Util\Charset::removeBOM($text);
-    if($this->getOption('output_encoding'))
-    {
-      $text = Util\Charset::convert($text, $charset, $this->getOption('output_encoding'));
-      $charset = $this->getOption('output_encoding');
-    }
-    return $this->parseStyleSheet($text, $charset);
+    $styleSheet = $this->parseStyleSheet(
+      $info->getContent(), $info->getCharset()
+    );
+    $styleSheet->setHref($info->getUrl());
+    return $styleSheet;
   }
 
   public function parseStyleSheet($text, $charset = "utf-8")
   {
     $this->_init($text, $charset);
-    $result = new StyleSheet();
+    $result = new StyleSheet(null, $charset);
     $this->_parseStyleSheet($result);
     return $result;
   }
@@ -283,88 +159,6 @@ class Parser
     $this->currentPosition = 0;
     $this->setCharset($charset);
     $this->state = new ParserState();
-  }
-
-  /**
-   * Post processes the parsed CSSDocument object.
-   *
-   * Handles removal of ignored values and resolving of @import rules.
-   *
-   * @todo Should CSSIgnoredValue exist ?
-   *       Another solution would be to add values only if they are not === null,
-   *       i.e. in CSSList::append(), CSSRule::addValue() etc...
-   **/
-  private function _postParse($oDoc)
-  {
-    $aCharsets = array();
-    $aImports = array();
-    $aContents = $oDoc->getContents();
-    foreach($aContents as $i => $oItem)
-    {
-      if($oItem instanceof CSSIgnoredValue)
-      {
-        unset($aContents[$i]);
-      }
-      else if($oItem instanceof CSSCharset)
-      {
-        $aCharsets[] = $oItem;
-        unset($aContents[$i]);
-      }
-      else if($oItem instanceof CSSImport)
-      {
-        $aImports[] = $oItem;
-        unset($aContents[$i]);
-      }
-    }
-    $aImportedItems = array();
-    $aImportOptions = array_merge($this->getOptions(), array(
-      'output_encoding' => $this->charset,
-      'base_url'        => null
-    ));
-    foreach($aImports as $rule)
-    {
-      if($this->getOption('resolve_imports'))
-      {
-        $parser = new CSSParser($aImportOptions);
-        $path = $rule->getLocation()->getURL()->getString();
-        $isAbsUrl = Util\URL::isAbsUrl($path);
-        if($this->sImportMode == self::IMPORT_URL || $isAbsUrl)
-        {
-          if(!in_array($path, $this->loadedFiles))
-          {          
-            $ruleedDoc = $parser->parseURL($path, $this->loadedFiles);
-            $this->loadedFiles = $parser->getLoadedFiles();
-            $aImportedContents = $ruleedDoc->getContents();
-          }
-        }
-        else if($this->sImportMode == self::IMPORT_FILE)
-        {
-          $path = realpath($path);
-          if(!in_array($path, $this->loadedFiles))
-          {
-            $ruleedDoc = $parser->parseFile($path, $this->loadedFiles);
-            $this->loadedFiles = $parser->getLoadedFiles();
-            $aImportedContents = $ruleedDoc->getContents();
-          }
-        }
-        if($rule->getMediaQuery() !== null)
-        {
-          $sMediaQuery = $rule->getMediaQuery();
-          $oMediaQuery = new CSSMediaQuery();
-          $oMediaQuery->setQuery($sMediaQuery);
-          $oMediaQuery->setContents($aImportedContents);
-          $aImportedContents = array($oMediaQuery); 
-        }
-      }
-      else
-      {
-        $aImportedContents = array($rule);
-      }
-      $aImportedItems = array_merge($aImportedItems, $aImportedContents);
-    }
-    $aContents = array_merge($aImportedItems, $aContents);
-    if(isset($aCharsets[0])) array_unshift($aContents, $aCharsets[0]);
-    $oDoc->setContents($aContents);
   }
 
   private function _parseStyleSheet(StyleSheet $styleSheet)
@@ -624,7 +418,7 @@ class Parser
         $combinator = ' ';
       }
       $this->_consumeWhiteSpace();
-      echo $this->_peek() . "\n";
+      //echo $this->_peek() . "\n";
       $nextSelector = $this->_parseSimpleSelector();
       $result = new Selector\CombinedSelector($result, $combinator, $nextSelector);
     }
@@ -1062,20 +856,6 @@ class Parser
     }
     $this->_consumeWhiteSpace();
     $value = $this->_parseStringValue();
-    if($this->getOption('absolute_urls') || $this->getOption('resolve_imports'))
-    {
-      $url = $value->getString(); 
-      // resolve only if:
-      // (url is not absolute) OR IF (url is absolute path AND base_url is absolute)
-      $isAbsPath = Util\URL::isAbsPath($url);
-      $isAbsUrl = Util\URL::isAbsUrl($url);
-      if( (!$isAbsUrl && !$isAbsPath)
-        || ($isAbsPath && $this->bIsAbsBaseUrl))
-      {
-        $url = Util\URL::joinPaths($this->getOption('base_url'), $url);
-        $value = new Value\String($url);
-      }
-    }
     $result = new Value\URL($value);
     if($useUrl)
     {
@@ -1172,6 +952,9 @@ class Parser
   /**
    * Parses a single character.
    *
+   * @param bool $isForIdentifier true if the character is part of an identifier
+   *
+   * @return string the parsed character
    **/
   private function _parseCharacter($isForIdentifier)
   {

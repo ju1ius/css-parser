@@ -56,7 +56,7 @@ class Media extends Rule
 		}
 		return $indent . '@media ' . $this->mediaList->getCssText()
 			. '{' . $nl
-			. parent::getCssText($options)
+			. $this->ruleList->getCssText($options)
 			. $nl . $indent . '}';
   }
   

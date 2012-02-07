@@ -6,6 +6,7 @@ define('OS_WIN32', defined('OS_WINDOWS') ? OS_WINDOWS : !strncasecmp(PHP_OS, 'wi
 /**
  * @package CSS
  * @subpackage Util
+ * @todo implement multi_curl loading
  **/
 class URL
 {
@@ -26,15 +27,20 @@ class URL
     //curl_setopt($curl, CURLOPT_HEADER, true);
     curl_setopt($curl, CURLOPT_ENCODING, 'deflate,gzip');
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($curl, CURLOPT_USERAGENT, 'cssparser v0.1');
+    curl_setopt($curl, CURLOPT_USERAGENT, 'ju1ius/CSSParser v0.1');
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
     $response = curl_exec($curl);
+    if(false === $response) {
+      throw new \RuntimeException(curl_error($curl));
+    };
     $infos = curl_getinfo($curl);
+
     curl_close($curl);
-    if(false === $response) return false;
+
     $results = array(
       'charset' => null,
-      'response' => $response  
+      'body' => $response  
     );
     if($infos['content_type'])
     {
@@ -64,9 +70,16 @@ class URL
     $head = array_shift($args);
     $head = rtrim($head, DIRECTORY_SEPARATOR);
     $output = array($head);
-    foreach ($args as $arg)
+    foreach ($args as $idx => $arg)
     {
-      $output[] = trim($arg, DIRECTORY_SEPARATOR);
+      $path = trim($arg, DIRECTORY_SEPARATOR);
+      if($path === ".") {
+        continue;
+      } else if($path === ".." && $idx > 0) {
+        // TODO: here we should remove $output[$idx+1-1]
+        // and continue;
+      }
+      $output[] = $path;
     }
     return implode(DIRECTORY_SEPARATOR, $output);
   }

@@ -40,6 +40,11 @@ abstract class CSSList implements \ArrayAccess
     return count($this->items);
   }
 
+  public function isEmpty()
+  {
+    return count($this->items) === 0;
+  }
+
   public function getItems()
   {
     return $this->items;
