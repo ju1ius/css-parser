@@ -2,15 +2,28 @@
 namespace ju1ius\CSS\Value;
 
 /**
+ * Represents a dimension (an object that has a value and a unit)
+ *
  * @package CSS
  * @subpackage Value
  **/
 class Dimension extends PrimitiveValue
 {
-  private $value;
-  private $unit;
+  private
+    $value,
+    $unit;
+
+  public static $VALID_UNITS = array();
+
   public function __construct($value, $unit=null)
   {
+    if(!empty(self::$VALID_UNITS) && !in_array($unit, self::$VALID_UNITS))
+    {
+      throw new \InvalidArgumentException(
+        sprintf("%s is not a valid %s unit", get_class($this), $unit)  
+      );
+    }
+
     $this->value = (float) $value;
     $this->unit = $unit;
   }
@@ -35,7 +48,7 @@ class Dimension extends PrimitiveValue
 
   public function getCssText($options=array())
   {
-    return $this->value . ($this->unit ? $this->unit : '');
+    return $this->value . ($this->unit ? : '');
   }
 
   public function __toString()

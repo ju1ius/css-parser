@@ -1,4 +1,4 @@
-<phpunit>
+<phpunit colors="true" verbose="true">
   <testsuites>
     <testsuite name="CSSParser Tests">
       <file>CSS/Rule/CharsetTest.php</file>

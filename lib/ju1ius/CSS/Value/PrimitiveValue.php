@@ -22,7 +22,8 @@ abstract class PrimitiveValue extends Value
     URL        = 10,
     ATTR       = 11,
     RECT       = 12,
-    CALC       = 13;
+    CALC       = 13,
+    RESOLUTION = 14;
 
   const
     UNIT_EM   = 'em',
@@ -41,5 +42,7 @@ abstract class PrimitiveValue extends Value
     UNIT_MS   = 'ms',
     UNIT_S    = 's',
     UNIT_HZ   = 'Hz',
-    UNIT_KHZ  = 'kHz';
+    UNIT_KHZ  = 'kHz',
+    UNIT_DPI  = 'dpi',
+    UNIT_DPCM = 'dpcm';
 }

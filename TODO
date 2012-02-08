@@ -4,6 +4,9 @@ README
 
 CSSOM:
   DOMDocument extensions
+  MediaQueries:
+    Level 3 support
+    http://www.w3.org/TR/css3-mediaqueries/#syntax 
   Selectors:
     - Tests
   shorthands:

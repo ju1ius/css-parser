@@ -1,21 +1,7 @@
 #! /bin/bash
 
-DIR=$(dirname $(readlink -f $0))
-VERBOSE=""
+__DIR__=$(dirname $(readlink -f $0))
 
-while [[ $1 = -* ]]; do
-  case "$1" in
-    -v|--verbose)
-      VERBOSE="--verbose"
-      shift 1
-    ;;
-    *)
-      echo "Error: Unknown option: $1" >&2
-      exit 1
-    ;;
-  esac
-done
-
-pushd $DIR/../test >/dev/null
-phpunit $VERBOSE --configuration testsuite.xml
+pushd $__DIR__/../test >/dev/null
+phpunit --configuration testsuite.xml
 popd >/dev/null

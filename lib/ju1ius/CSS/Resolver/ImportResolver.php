@@ -48,7 +48,6 @@ class ImportResolver
           continue;
         } else {
           $imported_files[] = $url;
-          var_dump($imported_files);
         }
         if(Util\URL::isAbsUrl($url)) {
           $info = $loader->loadUrl($url);

@@ -42,8 +42,4 @@ class ImportTest extends CSSParser_TestCase
     );
   }
 
-  public function testLoadExternalStylesheet()
-  {
-    $this->marktestIncomplete('Import resolving not yet implemented');
-  }
 }

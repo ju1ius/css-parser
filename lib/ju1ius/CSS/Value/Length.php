@@ -7,7 +7,7 @@ namespace ju1ius\CSS\Value;
  **/
 class Length extends Dimension
 {
-  static $UNITS = array(
+  public static $VALID_UNITS = array(
     PrimitiveValue::UNIT_EM,   
     PrimitiveValue::UNIT_REM,
     PrimitiveValue::UNIT_EX,
@@ -18,16 +18,6 @@ class Length extends Dimension
     PrimitiveValue::UNIT_PT,
     PrimitiveValue::UNIT_PC,
   );
-  public function __construct($value, $unit)
-  {
-    if(!in_array($unit, self::$UNITS))
-    {
-      throw new \InvalidArgumentException(
-        sprintf("%s is not a valid CSS Length unit", $unit)  
-      );
-    }
-    parent::__construct($value, $unit);
-  }
 
   public function isRelative()
   {

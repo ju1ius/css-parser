@@ -25,7 +25,7 @@ class ImportResolverTest extends CSSParser_TestCase
     return array(
       array(
         __DIR__."/../../files/CSS/Resolver/import.css",
-        ""
+        '@charset "utf-8";@media screen,print{ h1{ padding: 4px; } }p{ color: rgb(255,0,0); }body{ background: rgb(0,0,0); color: rgb(255,255,255); }'
       )
     );
   }

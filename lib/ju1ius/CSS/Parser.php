@@ -1,7 +1,10 @@
 <?php
+
 namespace ju1ius\CSS;
 
+use ju1ius\CSS\AbstractParser;
 use ju1ius\CSS\Exception\ParseException;
+use ju1ius\CSS\MediaQuery;
 
 /**
  * Parses CSS text into a data structure.
@@ -10,94 +13,8 @@ use ju1ius\CSS\Exception\ParseException;
  * @author Raphael Schweikert http://sabberworm.com
  * @author ju1ius http://github.com/ju1ius
  **/
-class Parser
+class Parser extends AbstractParser
 {
-
-  /**
-   * Parser internal pointers
-   **/
-  private
-    $text,
-    $currentPosition,
-    $length,
-    $state;
-
-  private
-    $options = array();
-
-  /**
-   * @param array $options An array of options
-   * 
-   **/
-  public function __construct(array $options=array())
-  {
-    $this->setOptions($options);
-  }
-
-  /**
-   * Gets an option value.
-   *
-   * @param  string $name    The option name
-   * @param  mixed  $default The default value (null by default)
-   *
-   * @return mixed  The option value or the default value
-   */
-  public function getOption($name, $default=null)
-  {
-    return isset($this->options[$name]) ? $this->options[$name] : $default;
-  }
-  /**
-   * Sets an option value.
-   *
-   * @param  string $name  The option name
-   * @param  mixed  $value The default value
-   *
-   * @return ju1ius\CSS\Parser The current CSS\Parser instance
-   */
-  public function setOption($name, $value)
-  {
-    $this->options[$name] = $value;
-    return $this;
-  }
-
-  /**
-   * Returns the options of the current instance.
-   *
-   * @return array The current instance's options
-   **/
-  public function getOptions()
-  {
-    return $this->options;
-  }
-
-  /**
-   * Merge given options with the current options
-   *
-   * @param array $options The options to merge
-   *
-   * @return CSSParser The current CSSParser instance
-   **/
-  public function setOptions(array $options) 
-  {
-    $this->options = array_merge($this->options, $options);
-    return $this;
-  }
-
-  /**
-   * @todo Access should be private, since calling this method
-   *       from the outside world could lead to unpredicable results.
-   **/
-  private function setCharset($charset)
-  {
-    $this->charset = $charset;
-    $this->length = mb_strlen($this->text, $this->charset);
-  }
-
-  public function getCharset()
-  {
-    return $this->charset;
-  }
-
   /**
    * Accepts a StyleSheetInfo object as returned by StyleSheetLoader and returns the parsed StyleSheet
    *
@@ -145,20 +62,6 @@ class Parser
       return $result->getFirst();
     }
     return $result;
-  }
-
-  /**
-   * Initializes the parser according to the input string and charset
-   *
-   * @param string $text
-   * @param string $charset
-   **/
-  private function _init($text, $charset=null)
-  {
-    $this->text = $text;
-    $this->currentPosition = 0;
-    $this->setCharset($charset);
-    $this->state = new ParserState();
   }
 
   private function _parseStyleSheet(StyleSheet $styleSheet)
@@ -275,24 +178,18 @@ class Parser
     }
     else if($identifier === 'media')
     {
-      $mediaList = new MediaList();
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
-      $mediaQuery = trim($this->_consumeUntil('{'));
-      $mediums = explode(',', $mediaQuery);
-      foreach($mediums as $medium)
-      {
-        $mediaList->append(new Value\String(trim($medium)));
-      }
+      $media_list = $this->_parseMediaList();
       $this->_consume('{');
       $this->_consumeWhiteSpace();
-      $ruleList = $this->_parseRuleList(new RuleList());
-      return new Rule\Media($mediaList, $ruleList);
+      $rule_list = new RuleList();
+      $this->_parseRuleList($rule_list);
+      return new Rule\Media($media_list, $rule_list);
     }
     else if($identifier === 'font-face')
     {
       $styleDeclaration = new StyleDeclaration();
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
-      //Unknown other at rule (font-face or such)
       $this->_consume('{');
       $this->_consumeWhiteSpace();
       $this->_parseStyleDeclaration($styleDeclaration);
@@ -333,6 +230,69 @@ class Parser
     {
       throw new ParseException(sprintf("Unknown rule @%s", $identifier));
     }
+  }
+
+  private function _parseMediaList()
+  {
+    $media_queries = array();
+    while(!$this->_comes('{'))
+    {
+      $this->state->enter(ParserState::IN_MEDIA_QUERY);
+      $media_queries[] = $this->_parseMediaQuery(); 
+      $this->state->leave(ParserState::IN_MEDIA_QUERY);
+      if($this->_comes(','))
+      {
+        $this->_consume(',');
+        $this->_consumeWhiteSpace();
+        continue;
+      }
+    }
+    return new MediaList($media_queries);
+  }
+
+  private function _parseMediaQuery()
+  {
+    $restrictor = '';
+    $media_type = '';
+    $expressions = array();
+
+    if($this->_comes('not') || $this->_comes('only')) {
+      $restrictor = $this->_parseIdentifier();
+      $this->_consumeWhiteSpace();
+    }
+    if(!$this->_comes('(')) {
+      $media_type = $this->_parseIdentifier();
+      $this->_consumeWhiteSpace();
+      if($this->_comes('and')) {
+        $this->_consume('and');
+        $this->_consumeWhiteSpace();
+      }
+    }
+    while(true){
+      if($this->_comes(',') || $this->_comes('{')) break;
+      $expressions[] = $this->_parseMediaQueryExpression();
+    }
+    return new MediaQuery($restrictor, $media_type, $expressions);
+  }
+  private function _parseMediaQueryExpression()
+  {
+    $value = null;
+    $this->_consume('(');
+    $media_feature = $this->_parseIdentifier();
+    $this->_consumeWhiteSpace();
+    if($this->_comes(':')) {
+      $this->_consume(':');
+      $this->_consumeWhiteSpace();
+      $value = $this->_parsePrimitiveValue(true);
+      $this->_consumeWhiteSpace();
+    }
+    $this->_consume(')');
+    $this->_consumeWhiteSpace();
+    if($this->_comes('and')) {
+      $this->_consume('and');
+      $this->_consumeWhiteSpace();
+    }
+    return new MediaQuery\Expression($media_feature, $value);
   }
 
   private function _parseKeyframeRule()
@@ -740,13 +700,13 @@ class Parser
     return array(' ', ',', '/');
   }
 
-  private function _parsePrimitiveValue()
+  private function _parsePrimitiveValue($allow_ratios=false)
   {
     $value = null;
     $this->_consumeWhiteSpace();
     if(is_numeric($this->_peek()) || (($this->_comes('-') || $this->_comes('.')) && is_numeric($this->_peek(1, 1))))
     {
-      $value = $this->_parseNumericValue();
+      $value = $this->_parseNumericValue(false, $allow_ratios);
     }
     else if($this->_comes('#') || $this->_comes('rgb') || $this->_comes('hsl'))
     {
@@ -772,43 +732,45 @@ class Parser
     return $value;
   }
 
-  private function _parseNumericValue($isForColor = false)
+  private function _parseNumericValue($isForColor = false, $allow_ratios=false)
   {
     $value = '';
-    if($this->_comes('-'))
-    {
+    if($this->_comes('-')) {
       $value .= $this->_consume('-');
     }
-    while(is_numeric($this->_peek()) || $this->_comes('.'))
-    {
-      if($this->_comes('.'))
-      {
+    while(is_numeric($this->_peek()) || $this->_comes('.')){
+      if($this->_comes('.')) {
         $value .= $this->_consume('.');
-      }
-      else
-      {
+      } else {
         $value .= $this->_consume(1);
       }
     }
+    if($allow_ratios && $this->_comes('/')) {
+      $this->_consume('/');
+      $numerator = $value;
+      $denominator = '';
+      while(is_numeric($this->_peek())) {
+        $denominator .= $this->_consume(1);
+      }
+      return new Value\Ratio($numerator, $denominator);
+    }
     $value = floatval($value);
-    if($this->_comes('%'))
-    {
+    if($this->_comes('%')) {
       $this->_consume('%');
       return new Value\Percentage($value);
-    }
-    else
-    {
+    } else {
       $classes = array(
-        "ju1ius\CSS\Value\Length",
-        "ju1ius\CSS\Value\Angle",
-        "ju1ius\CSS\Value\Frequency",
-        "ju1ius\CSS\Value\Time"
+        'ju1ius\CSS\Value\Length',
+        'ju1ius\CSS\Value\Angle',
+        'ju1ius\CSS\Value\Frequency',
+        'ju1ius\CSS\Value\Time',
+        'ju1ius\CSS\Value\Resolution'
       );
-      foreach($classes as $class)
-      {
-        foreach($class::$UNITS as $unit)
-        {
-          if($this->_comes($unit)) return new $class($value, $this->_consume($unit));
+      foreach($classes as $class) {
+        foreach($class::$VALID_UNITS as $unit) {
+          if($this->_comes($unit)) {
+            return new $class($value, $this->_consume($unit));
+          }
         }
       }
     }
@@ -1017,167 +979,4 @@ class Parser
     return null;
   }
 
-  /**
-   * Checks if a given string is found after the current position.
-   *
-   * @param string $string The string to search for.
-   * @param int    $offset The offset at which it should be found.
-   *
-   * @return bool
-   **/
-  private function _comes($string, $offset = 0)
-  {
-    if($this->_isEnd())
-    {
-      return false;
-    }
-    return $this->_peek($string, $offset) == $string;
-  }
-
-  /**
-   * Returns a peek at the input after the current position.
-   *
-   * @param int|string $length The peek length. If string will be the length of the string.
-   * @param int|string $offset The offset at which to start the peek. If string will be the length of the string.
-   *
-   * @return string
-   **/
-  private function _peek($length = 1, $offset = 0)
-  {
-    if($this->_isEnd())
-    {
-      return '';
-    }
-    if(is_string($length))
-    {
-      $length = mb_strlen($length, $this->charset);
-    }
-    if(is_string($offset))
-    {
-      $offset = mb_strlen($offset, $this->charset);
-    }
-    return mb_substr($this->text, $this->currentPosition + $offset, $length, $this->charset);
-  }
-
-  /**
-   * Consumes the input string
-   *
-   * @param string|int $value If string tries to consume the given string,
-   *                          if int consumes the given number of characters.
-   *
-   * @return string The consumed input.
-   **/
-  private function _consume($value = 1)
-  {
-    if(is_string($value))
-    {
-      $length = mb_strlen($value, $this->charset);
-      if(mb_substr($this->text, $this->currentPosition, $length, $this->charset) !== $value)
-      {
-        throw new ParseException(sprintf(
-          'Expected "%s", got "%s"',
-          $value, $this->_peek(5)
-        ));
-      }
-      $this->currentPosition += mb_strlen($value, $this->charset);
-      return $value;
-    }
-    else
-    {
-      if($this->currentPosition + $value > $this->length)
-      {
-        throw new ParseException(sprintf(
-          "Tried to consume %d chars, exceeded file end", $value
-        ));
-      }
-      $result = mb_substr($this->text, $this->currentPosition, $value, $this->charset);
-      $this->currentPosition += $value;
-      return $result;
-    }
-  }
-
-  /**
-   * Consumes a given regular expression.
-   *
-   * @param string $pattern A regex pattern.
-   *
-   * @return string The consumed expression.
-   **/
-  private function _consumeExpression($pattern)
-  {
-    if(preg_match($pattern, $this->_inputLeft(), $matches, PREG_OFFSET_CAPTURE) === 1)
-    {
-      return $this->_consume($matches[0][0]);
-    }
-    throw new ParseException(sprintf(
-      'Expected pattern "%s" not found, got: "%s"',
-      $pattern, $this->_peek(5)
-    ));
-  }
-
-  /**
-   * Consumes whitespace and comments.
-   **/
-  private function _consumeWhiteSpace()
-  {
-    do {
-      while(preg_match('/\\s/isSu', $this->_peek()) === 1)
-      {
-        $this->_consume(1);
-      }
-    } while($this->_consumeComment());
-  }
-
-  private function _consumeComment()
-  {
-    if($this->_comes('/*'))
-    {
-      $this->_consumeUntil('*/');
-      $this->_consume('*/');
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Checks for the end of input
-   *
-   * @return bool
-   **/
-  private function _isEnd()
-  {
-    return $this->currentPosition >= $this->length;
-  }
-
-  /**
-   * Consumes input until the given string is found.
-   *
-   * @param string $end The string until which we consume input.
-   *
-   * @return string The consumed input
-   **/
-  private function _consumeUntil($end)
-  {
-    $endPos = mb_strpos($this->text, $end, $this->currentPosition, $this->charset);
-    if($endPos === false)
-    {
-      throw new ParseException(sprintf(
-        'Required "%s" not found, got "%s"',
-        $end, $this->_peek(5)
-      ));
-    }
-    return $this->_consume($endPos - $this->currentPosition);
-  }
-
-  /**
-   * Returns the input string from current position to end
-   *
-   * @return string
-   **/
-  private function _inputLeft()
-  {
-    return mb_substr($this->text, $this->currentPosition, $this->length, $this->charset);
-  }
 }
-
-
