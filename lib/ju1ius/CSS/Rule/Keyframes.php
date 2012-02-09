@@ -13,7 +13,6 @@ use ju1ius\CSS\Value\String;
 class Keyframes extends Rule
 {
   private
-    $vendor_prefix,
     $rule_list,
     $name;
 
@@ -25,15 +24,6 @@ class Keyframes extends Rule
     }
     $this->name = $name;
     $this->rule_list = $rule_list;
-  }
-
-  public function getVendorPrefix()
-  {
-    return $this->vendor_prefix;
-  }
-  public function setVendorPrefix($vendor_prefix)
-  {
-    $this->vendor_prefix = $vendor_prefix;
   }
 
   public function getName()

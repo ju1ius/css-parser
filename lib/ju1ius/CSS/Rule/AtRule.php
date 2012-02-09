@@ -35,6 +35,15 @@ class AtRule extends Rule
     $this->style_declaration = $style_declaration;
   }
 
+  public function getVendorPrefix()
+  {
+    return $this->vendor_prefix;
+  }
+  public function setVendorPrefix($vendor_prefix)
+  {
+    $this->vendor_prefix = $vendor_prefix;
+  }
+
   public function getCssText($options=array())
   {
 		$indent = '';
@@ -44,9 +53,10 @@ class AtRule extends Rule
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$options['indent_level']++;
 			$nl = "\n";
-		}
+    }
+    $prefix = $this->vendor_prefix ? $this->vendor_prefix . '-' : '';
     $declarations = $this->style_declaration ? $this->style_declaration->getCssText($options) : '';
-    return $indent . '@' . $this->name . '{'
+    return $indent . '@' . $prefix . $this->name . '{'
       . $nl . $declarations
       . $nl . $indent . '}';
   }
