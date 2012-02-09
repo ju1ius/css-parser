@@ -9,15 +9,15 @@ class StyleSheet implements Serializable
 {
   private
     $href,
-    $mediaList,
-    $ruleList,
+    $media_list,
+    $rule_list,
     $charset;
 
-  public function __construct(RuleList $ruleList=null, $charset="utf-8")
+  public function __construct(RuleList $rule_list=null, $charset="utf-8")
   {
-    if($ruleList === null)
+    if($rule_list === null)
     {
-      $this->ruleList = new RuleList(); 
+      $this->rule_list = new RuleList(); 
     }
     $this->charset = $charset;
   }
@@ -36,51 +36,53 @@ class StyleSheet implements Serializable
     return $this->charset;
   }
 
-  public function getMediaList()
+  public function getMediaQueryList()
   {
-    return $this->mediaList;
+    return $this->media_list;
   }
-  public function setMediaList(MediaList $mediaList)
+  public function setMediaQueryList(MediaQueryList $media_list)
   {
-    $this->mediaList = $mediaList;
+    $this->media_list = $media_list;
   }
 
   public function getRuleList()
   {
-    return $this->ruleList;
+    return $this->rule_list;
   }
-  public function setRuleList(RuleList $ruleList)
+  public function setRuleList(RuleList $rule_list)
   {
-    $this->ruleList = $ruleList;
+    $this->rule_list = $rule_list;
   }
 
   public function getCssText($options=array())
   {
-    return $this->ruleList->getCssText($options);
+    return $this->rule_list->getCssText($options);
   }
 
   public function getFirstRule()
   {
-    return $this->ruleList->getFirst();
+    return $this->rule_list->getFirst();
   }
 
   public function getLastRule()
   {
-    return $this->ruleList->getLast();
+    return $this->rule_list->getLast();
   }
 
+  /*
   public function __call($method, $args)
   {
-    if(method_exists($this->ruleList, $method))
+    if(method_exists($this->rule_list, $method))
     {
-      return call_user_func_array(array($this->ruleList, $method), $args);
+      return call_user_func_array(array($this->rule_list, $method), $args);
     }
   }
+   */
 
   public function __clone()
   {
-    $this->mediaList = clone $this->mediaList;
-    $this->ruleList = clone $this->ruleList;
+    $this->media_list = clone $this->media_list;
+    $this->rule_list = clone $this->rule_list;
   }
 
 }

@@ -3,7 +3,7 @@ namespace ju1ius\CSS\Rule;
 
 use ju1ius\CSS\Rule;
 use ju1ius\CSS\Value\URL;
-use ju1ius\CSS\MediaList;
+use ju1ius\CSS\MediaQueryList;
 use ju1ius\CSS\StyleSheet;
 
 /**
@@ -14,13 +14,13 @@ use ju1ius\CSS\StyleSheet;
 class Import extends Rule
 {
   private $href;
-  private $mediaList;
+  private $media_list;
 	private $styleSheet;
 
-  public function __construct(URL $href, MediaList $mediaList=null)
+  public function __construct(URL $href, MediaQueryList $media_list=null)
   {
     $this->href = $href;
-    $this->mediaList = $mediaList;
+    $this->media_list = $media_list;
   }
 
   public function getHref()
@@ -32,18 +32,18 @@ class Import extends Rule
     $this->href = $url;
   }
 
-  public function getMediaList()
+  public function getMediaQueryList()
   {
-    return $this->mediaList;
+    return $this->media_list;
   }
-  public function setMediaList(MediaList $mediaList)
+  public function setMediaQueryList(MediaQueryList $media_list)
   {
-    $this->mediaList = $mediaList;
+    $this->media_list = $media_list;
   }
 
   public function getCssText($options=array())
   {
-    $mediaText = $this->mediaList->getCssText();
+    $mediaText = $this->media_list->getCssText();
     return "@import " . $this->href->getCssText()
       . ($mediaText ? ' '.$mediaText : '')
       .';';
@@ -71,6 +71,6 @@ class Import extends Rule
   public function __clone()
   {
     $this->href = clone $this->href;
-    $this->mediaList = clone $this->mediaList;
+    $this->media_list = clone $this->media_list;
   }
 }

@@ -12,4 +12,12 @@ class String
     }
     return false;
   }
+
+  public static function compare_ci($str1, $str2, $charset=null)
+  {
+    $charset = $charset ? : Charset::getDefault();
+    $str1 = mb_strtolower($str1, $charset);
+    $str2 = mb_strtolower($str2, $charset);
+    return $str1 == $str2;
+  }
 }

@@ -7,7 +7,7 @@ use ju1ius\CSS\Value\String;
  * Represents a list of media queries
  * @package CSS
  **/
-class MediaList extends ValueList
+class MediaQueryList extends ValueList
 {
   public function __construct($media_queries=array())
   {

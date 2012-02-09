@@ -30,10 +30,8 @@ class ImportResolver
     if(empty($imported_files)) {
       $imported_files[] = $this->stylesheet->getHref();
     }
-    $main_charset = mb_strtolower(
-      $this->stylesheet->getCharset(),
-      $this->stylesheet->getCharset()
-    );
+    $main_charset = $this->stylesheet->getCharset();
+    $main_charset = mb_strtolower($main_charset, $main_charset);
     $loader = new StyleSheetLoader();
     $parser = new Parser();
 
@@ -73,7 +71,8 @@ class ImportResolver
         foreach($rule_list->getItems() as $sub_rule) {
           if($sub_rule instanceof Rule\Charset) {
             $stylesheet->getRuleList()->remove($sub_rule);
-            break; //TODO: is this needed ?
+            // Only one charset is allowed, so we can
+            break;
           }
         }
         $rule_list->resetKeys();
@@ -83,9 +82,9 @@ class ImportResolver
         $resolver->resolve($imported_files);
 
         // Wrap into media query if needed
-        if($rule->getMediaList() !== null && !$rule->getMediaList()->isEmpty()) {
+        if($rule->getMediaQueryList() !== null && !$rule->getMediaQueryList()->isEmpty()) {
           $media_query = new Rule\Media(
-            $rule->getMediaList(),
+            $rule->getMediaQueryList(),
             $rule_list
           );
           $this->stylesheet->getRuleList()->replace($rule, $media_query);

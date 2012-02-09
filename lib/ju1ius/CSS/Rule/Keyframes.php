@@ -12,27 +12,28 @@ use ju1ius\CSS\Value\String;
  **/
 class Keyframes extends Rule
 {
-  private $vendorPrefix;
-  private $ruleList;
-  private $name;
+  private
+    $vendor_prefix,
+    $rule_list,
+    $name;
 
-  public function __construct(String $name, RuleList $ruleList=null)
+  public function __construct(String $name, RuleList $rule_list=null)
   {
-    if($ruleList === null)
+    if($rule_list === null)
     {
-      $ruleList = new RuleList();
+      $rule_list = new RuleList();
     }
     $this->name = $name;
-    $this->ruleList = $ruleList;
+    $this->rule_list = $rule_list;
   }
 
   public function getVendorPrefix()
   {
-    return $this->vendorPrefix;
+    return $this->vendor_prefix;
   }
-  public function setVendorPrefix($vendorPrefix)
+  public function setVendorPrefix($vendor_prefix)
   {
-    $this->vendorPrefix = $vendorPrefix;
+    $this->vendor_prefix = $vendor_prefix;
   }
 
   public function getName()
@@ -46,11 +47,11 @@ class Keyframes extends Rule
 
   public function getRuleList()
   {
-    return $this->ruleList;
+    return $this->rule_list;
   }
-  public function setRuleList(RuleList $ruleList)
+  public function setRuleList(RuleList $rule_list)
   {
-    $this->ruleList = $ruleList;
+    $this->rule_list = $rule_list;
   }
 
   public function getCssText($options=array())
@@ -63,24 +64,26 @@ class Keyframes extends Rule
 			$options['indent_level']++;
 			$nl = "\n";
 		}
-    $prefix = $this->vendorPrefix ? $this->vendorPrefix.'-' : '';
+    $prefix = $this->vendor_prefix ? $this->vendor_prefix.'-' : '';
     return '@' . $prefix . 'keyframes ' . $this->name->getCssText()
       . '{' . $nl
-      . $indent . $this->ruleList->getCssText($options)
+      . $indent . $this->rule_list->getCssText($options)
       . $nl . $indent . '}';
   }
-
+  
+  /*
   public function __call($method, $args)
   {
-    if(method_exists($this->ruleList, $method))
+    if(method_exists($this->rule_list, $method))
     {
-      return call_user_func_array(array($this->ruleList, $method), $args);
+      return call_user_func_array(array($this->rule_list, $method), $args);
     }
   }
+   */
 
   public function __clone()
   {
-    $this->ruleList = clone $this->ruleList;
+    $this->rule_list = clone $this->rule_list;
   }
 
 }

@@ -65,7 +65,7 @@ class CreateShorthands
     if($oBgImageProperty) {
       $oBgImageValueList = $oBgImageProperty->getValueList();
       if($oBgImageValueList->getSeparator() === ',') {
-        $iNumLayers = $oBgImageValueList->getLength();
+        $iNumLayers = count($oBgImageValueList);
       }
     }
     if($iNumLayers === 1) {

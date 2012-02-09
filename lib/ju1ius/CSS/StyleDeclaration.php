@@ -94,7 +94,7 @@ class StyleDeclaration implements Serializable
 	}
 
 	/**
-	 * Replaces a property by another property or an array of rules.
+	 * Replaces a property by another property or an array of properties.
 	 *
 	 * @param ju1ius\CSS\Property       $oldProp  The ju1ius\CSS\Property to replace
 	 * @param ju1ius\CSS\Property|array $newProp  A ju1ius\CSS\Property or an array of rules to add
@@ -122,27 +122,17 @@ class StyleDeclaration implements Serializable
   public function remove($search, $wildcard=false)
   {
     if(!is_array($search)) $search = array($search);
-    foreach($search as $property)
-    {
-      if(is_int($property))
-      {
+    foreach($search as $property) {
+      if(is_int($property)) {
         unset($this->properties[$property]);
-      }
-      else if($property instanceof Property)
-      {
+      } else if($property instanceof Property) {
         $index = array_search($property, $this->properties);
         unset($this->properties[$index]);
-      }
-      else 
-      {
-        foreach($this->properties as $pos => $prop)
-        {
-          if($wildcard)
-          {
+      } else {
+        foreach($this->properties as $pos => $prop) {
+          if($wildcard) {
             if(strpos($prop->getName(), $property) === 0) unset($this->properties[$pos]);
-          }
-          else
-          {
+          } else {
             if($prop->getName() === $property) unset($this->properties[$pos]);
           }
         }
@@ -181,14 +171,10 @@ class StyleDeclaration implements Serializable
 		if(!$property) return $this->properties;
 		if($property instanceof Property) $property = $property->getName();
 		$result = array();
-    foreach($this->properties as $pos => $prop)
-    {
-      if($wildcard)
-      {
+    foreach($this->properties as $pos => $prop) {
+      if($wildcard) {
 				if(strpos($prop->getName(), $property) === 0) $result[$pos] = $prop;
-      }
-      else
-      {
+      } else {
 				if($prop->getName() === $property) $result[$pos] = $prop;
 			}
 		}
@@ -205,8 +191,7 @@ class StyleDeclaration implements Serializable
   public function getFirst($property=null)
   {
     if(!$property && isset($this->properties[0])) return $this->properties[0];
-    foreach($this->properties as $prop)
-    {
+    foreach($this->properties as $prop) {
 			if($prop->getName() === $property) return $prop;
     }
   }
@@ -220,8 +205,7 @@ class StyleDeclaration implements Serializable
    **/
   public function getLast($property=null) {
     if(!$property && count($this->properties)) return $this->properties[count($this->properties)-1];
-    foreach(array_reverse($this->properties) as $prop)
-    {
+    foreach(array_reverse($this->properties) as $prop) {
 			if($prop->getName() === $property) return $prop;
     }
   }
@@ -252,28 +236,20 @@ class StyleDeclaration implements Serializable
   {
     $lastImportantProp = array();
     $lastProp = array();
-    foreach($this->properties as $pos => $prop)
-    {
-      if($prop->getName() === $property)
-      {
-        if($prop->getIsImportant())
-        {
+    foreach($this->properties as $pos => $prop) {
+      if($prop->getName() === $property) {
+        if($prop->getIsImportant()) {
           $lastImportantProp['position'] = $pos;
           $lastImportantProp['property'] = $prop;
-        }
-        else
-        {
+        } else {
           $lastProp['position'] = $pos;
           $lastProp['property'] = $prop;
         }
       }
     }
-    if($lastImportantProp)
-    {
+    if($lastImportantProp) {
       return $withPosition ? $lastImportantProp : $lastImportantProp['property'];
-    }
-    else if($lastProp)
-    {
+    } else if($lastProp) {
       return $withPosition ? $lastProp : $lastProp['property'];
     }
   }
@@ -404,8 +380,7 @@ class StyleDeclaration implements Serializable
 	{
 		$indent = '';
 		$nl = ' ';
-		if(isset($options['indent_level']))
-		{
+		if(isset($options['indent_level'])) {
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$nl = "\n";
 		}

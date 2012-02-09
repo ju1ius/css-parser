@@ -165,7 +165,7 @@ class Color
    **/
   static function namedColor2rgb($color)
   {
-    $color = mb_strtolower($color);
+    $color = mb_strtolower($color, Charset::getDefault());
     if($color === 'transparent') {
       return array('r'=>0, 'g'=>0, 'b'=>0, 'a'=>0);
     }

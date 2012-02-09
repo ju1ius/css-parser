@@ -3,7 +3,7 @@ namespace ju1ius\CSS\Rule;
 
 use ju1ius\CSS\Rule;
 use ju1ius\CSS\RuleList;
-use ju1ius\CSS\MediaList;
+use ju1ius\CSS\MediaQueryList;
 
 /**
  * Represents an @media rule
@@ -12,36 +12,36 @@ use ju1ius\CSS\MediaList;
  **/
 class Media extends Rule
 {
-  private $mediaList;
-  private $ruleList;
+  private $media_list;
+  private $rule_list;
   private $parentStyleSheet;
 
-  public function __construct(MediaList $mediaList, RuleList $ruleList=null)
+  public function __construct(MediaQueryList $media_list, RuleList $rule_list=null)
   {
-    if($ruleList === null)
+    if($rule_list === null)
     {
-      $ruleList = new RuleList();
+      $rule_list = new RuleList();
     }
-    $this->mediaList = $mediaList;
-    $this->ruleList = $ruleList;
+    $this->media_list = $media_list;
+    $this->rule_list = $rule_list;
   }
 
-  public function getMediaList()
+  public function getMediaQueryList()
   {
-    return $this->mediaList;
+    return $this->media_list;
   }
-  public function setMediaList(MediaList $mediaList)
+  public function setMediaQueryList(MediaQueryList $media_list)
   {
-    $this->mediaList = $mediaList;
+    $this->media_list = $media_list;
   }
 
   public function getRuleList()
   {
-    return $this->ruleList;
+    return $this->rule_list;
   }
-  public function setRuleList(RuleList $ruleList)
+  public function setRuleList(RuleList $rule_list)
   {
-    $this->ruleList = $ruleList;
+    $this->rule_list = $rule_list;
   }
 
   public function getCssText($options=array())
@@ -54,24 +54,26 @@ class Media extends Rule
 			$options['indent_level']++;
 			$nl = "\n";
 		}
-		return $indent . '@media ' . $this->mediaList->getCssText()
+		return $indent . '@media ' . $this->media_list->getCssText()
 			. '{' . $nl
-			. $this->ruleList->getCssText($options)
+			. $this->rule_list->getCssText($options)
 			. $nl . $indent . '}';
   }
-  
+
+  /*
   public function __call($method, $args)
   {
-    if(method_exists($this->ruleList, $method))
+    if(method_exists($this->rule_list, $method))
     {
-      return call_user_func_array(array($this->ruleList, $method), $args);
+      return call_user_func_array(array($this->rule_list, $method), $args);
     }
   }
+   */
 
   public function __clone()
   {
-    $this->mediaList = clone $this->mediaList;
-    $this->ruleList = clone $this->ruleList;
+    $this->media_list = clone $this->media_list;
+    $this->rule_list = clone $this->rule_list;
   }
 
 }

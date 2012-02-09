@@ -10,13 +10,15 @@ use ju1ius\CSS\Rule;
  **/
 class AtRule extends Rule
 {
-  private $name;
-  private $styleDeclaration;
+  private
+    $name,
+    $style_declaration,
+    $vendor_prefix;
 
-  public function __construct($name, StyleDeclaration $styleDeclaration=null)
+  public function __construct($name, StyleDeclaration $style_declaration=null)
   {
     $this->name = $name;
-    $this->styleDeclaration = $styleDeclaration;
+    $this->style_declaration = $style_declaration;
   }
 
   public function getName()
@@ -26,11 +28,11 @@ class AtRule extends Rule
 
   public function getStyleDeclaration()
   {
-    return $this->styleDeclaration;
+    return $this->style_declaration;
   }
-  public function setStyleDeclaration(StyleDeclaration $styleDeclaration)
+  public function setStyleDeclaration(StyleDeclaration $style_declaration)
   {
-    $this->styleDeclaration = $styleDeclaration;
+    $this->style_declaration = $style_declaration;
   }
 
   public function getCssText($options=array())
@@ -43,7 +45,7 @@ class AtRule extends Rule
 			$options['indent_level']++;
 			$nl = "\n";
 		}
-    $declarations = $this->styleDeclaration ? $this->styleDeclaration->getCssText($options) : '';
+    $declarations = $this->style_declaration ? $this->style_declaration->getCssText($options) : '';
     return $indent . '@' . $this->name . '{'
       . $nl . $declarations
       . $nl . $indent . '}';

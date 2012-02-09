@@ -93,7 +93,7 @@ class StyleRule extends Rule
       $specificity = 0;
       //
       $styleDeclaration->expandShorthands();
-      if(1 === $selectorList->getLength()) {
+      if(1 === count($selectorList)) {
         $specificity = $selectorList[0]->getSpecificity();
       }
       //

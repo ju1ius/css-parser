@@ -5,6 +5,7 @@ namespace ju1ius\CSS;
 use ju1ius\CSS\AbstractParser;
 use ju1ius\CSS\Exception\ParseException;
 use ju1ius\CSS\MediaQuery;
+use ju1ius\CSS\Util\Charset;
 
 /**
  * Parses CSS text into a data structure.
@@ -31,7 +32,7 @@ class Parser extends AbstractParser
     return $styleSheet;
   }
 
-  public function parseStyleSheet($text, $charset = "utf-8")
+  public function parseStyleSheet($text, $charset = 'utf-8')
   {
     $this->_init($text, $charset);
     $result = new StyleSheet(null, $charset);
@@ -39,13 +40,13 @@ class Parser extends AbstractParser
     return $result;
   }
 
-  public function parseStyleRule($text, $charset="utf-8")
+  public function parseStyleRule($text, $charset='utf-8')
   {
     $this->_init($text, $charset);
     return $this->_parseStyleRule();
   }
 
-  public function parseStyleDeclaration($text, $charset="utf-8")
+  public function parseStyleDeclaration($text, $charset='utf-8')
   {
     $this->_init($text, $charset);
     $result = new StyleDeclaration();
@@ -53,15 +54,21 @@ class Parser extends AbstractParser
     return $result;
   }
 
-  public function parseSelector($text, $charset="utf-8")
+  public function parseSelector($text, $charset='utf-8')
   {
     $this->_init($text, $charset);
-    $result = $this->_parseSelectorList();
-    if(count($result->getItems()) === 0)
-    {
-      return $result->getFirst();
+    $selector_list = $this->_parseSelectorList();
+    if(count($selector_list) === 0) {
+      return $selector_list->getFirst();
     }
-    return $result;
+    return $selector_list;
+  }
+
+  public function parseMediaQuery($text, $charset='utf-8')
+  {
+    $this->_init($text, $charset);
+    $media_list = $this->_parseMediaQueryList();
+    return $media_list;
   }
 
   private function _parseStyleSheet(StyleSheet $styleSheet)
@@ -72,102 +79,99 @@ class Parser extends AbstractParser
 
   private function _parseRuleList(RuleList $ruleList, $isRoot = false)
   {
-    while(!$this->_isEnd())
-    {
-      if($this->_comes('@'))
-      {
+    while(!$this->_isEnd()) {
+      if($this->_comes('@')) {
+
         $this->state->enter(ParserState::IN_ATRULE);
         $ruleList->append($this->_parseAtRule());
         $this->state->leave(ParserState::IN_ATRULE);
-      }
-      else if($this->_comes('}'))
-      {
+
+      } else if($this->_comes('}')) {
+
         $this->_consume('}');
-        if($isRoot)
-        {
-          throw new ParseException("Unopened {");
-        }
-        else
-        {
+        if($isRoot) {
+          throw new ParseException('Unopened {');
+        } else {
           return;
         }
-      }
-      else if($this->state->in(ParserState::IN_KEYFRAMESRULE))
-      {
+
+      } else if($this->state->in(ParserState::IN_KEYFRAMESRULE)) {
+
         $ruleList->append($this->_parseKeyframeRule());
-      }
-      else
-      {
+
+      } else {
+
         $this->state->enter(
           ParserState::IN_STYLERULE | ParserState::AFTER_CHARSET
           | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES
         );
         $ruleList->append($this->_parseStyleRule());
         $this->state->leave(ParserState::IN_STYLERULE);
+
       }
       $this->_consumeWhiteSpace();
     }
-    if(!$isRoot)
-    {
-      throw new ParseException("Unexpected end of StyleSheet");
+    if(!$isRoot) {
+      throw new ParseException('Unexpected end of StyleSheet');
     }
   }
 
   private function _parseAtRule()
   {
     $this->_consume('@');
+
+    // Handle vendor prefixes
+    $vendor_prefix = null;
+    if($this->_comes('-')){
+      $vendor_prefix = $this->_consume(1);
+      $vendor_prefix .= $this->_consumeUntil('-');
+      $this->_consume('-');
+    }
+
     $identifier = $this->_parseIdentifier();
     $this->_consumeWhiteSpace();
-    if($identifier === 'charset')
-    {
-      if($this->state->in(ParserState::AFTER_CHARSET))
-      {
-        throw new ParseException("Only one @charset rule is allowed");
+
+    if($identifier === 'charset') {
+
+      if($this->state->in(ParserState::AFTER_CHARSET)) {
+        throw new ParseException('Only one @charset rule is allowed');
       }
       $charset = $this->_parseStringValue();
       $this->_consumeWhiteSpace();
       $this->_consume(';');
       $this->state->enter(ParserState::AFTER_CHARSET);
       return new Rule\Charset($charset);
-    }
-    else if($identifier === 'import')
-    {
-      if($this->state->in(ParserState::AFTER_IMPORTS))
-      {
+
+    } else if($identifier === 'import') {
+
+      if($this->state->in(ParserState::AFTER_IMPORTS)) {
         throw new ParseException(
-          "@import rules must follow all @charset rules and precede all other at-rules and rule sets"
+          '@import rules must follow all @charset rules and precede all other at-rules and rule sets'
         );
       }
-      $mediaList = new MediaList();
       $this->state->enter(ParserState::AFTER_CHARSET);
       $url = $this->_parseURLValue();
       $this->_consumeWhiteSpace();
-      if(!$this->_comes(';'))
-      {
-        $mediaQuery = trim($this->_consumeUntil(';'));
-        foreach(explode(',', $mediaQuery) as $medium)
-        {
-          $mediaList->append(new Value\String(trim($medium)));
-        }
+      $media_list = null;
+      if(!$this->_comes(';') || !$this->_isEnd()) {
+        $media_list = $this->_parseMediaQueryList();
       }
       $this->_consume(';');
-      return new Rule\Import($url, $mediaList);
-    }
-    else if($identifier === 'namespace')
-    {
-      if($this->state->in(ParserState::AFTER_NAMESPACES))
-      {
+
+      if(!$media_list) $media_list = new MediaQueryList();
+      return new Rule\Import($url, $media_list);
+
+    } else if($identifier === 'namespace') {
+
+      if($this->state->in(ParserState::AFTER_NAMESPACES)) {
         throw new ParseException(
-          "@namespace rules must follow all @import and @charset rules and precede all other at-rules and rule sets"
+          '@namespace rules must follow all @import and @charset rules and precede all other at-rules and rule sets'
         );
       }
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS);
-      if($this->_comes('"') || $this->_comes("'") || $this->_comes(('url')))
-      {
+      if($this->_comes('"') || $this->_comes("'") || $this->_comes(('url'))) {
         $rule = new Rule\NS($this->_parseURLValue()); 
-      }
-      else
-      {
+      } else {
         $prefix = $this->_parseIdentifier();
         $this->_consumeWhiteSpace();
         $rule = new Rule\NS($this->_parseURLValue(), $prefix);
@@ -175,28 +179,28 @@ class Parser extends AbstractParser
       $this->_consumeWhiteSpace();
       $this->_consume(';');
       return $rule;
-    }
-    else if($identifier === 'media')
-    {
+
+    } else if($identifier === 'media') {
+
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
-      $media_list = $this->_parseMediaList();
+      $media_list = $this->_parseMediaQueryList();
       $this->_consume('{');
       $this->_consumeWhiteSpace();
       $rule_list = new RuleList();
       $this->_parseRuleList($rule_list);
       return new Rule\Media($media_list, $rule_list);
-    }
-    else if($identifier === 'font-face')
-    {
+
+    } else if($identifier === 'font-face') {
+
       $styleDeclaration = new StyleDeclaration();
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
       $this->_consume('{');
       $this->_consumeWhiteSpace();
       $this->_parseStyleDeclaration($styleDeclaration);
       return new Rule\FontFace($styleDeclaration);
-    }
-    else if($identifier === 'page')
-    {
+
+    } else if($identifier === 'page') {
+
       $styleDeclaration = new StyleDeclaration();
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
       $selectors = $this->_parseSelectors();
@@ -206,15 +210,12 @@ class Parser extends AbstractParser
       $this->_parseStyleDeclaration($styleDeclaration);
       $this->state->leave(ParserState::IN_DECLARATION);
       return new Rule\Page($selectors, $styleDeclaration);
-    }
-    else if($identifier === 'keyframes')
-    {
-      if($this->_comes("'") || $this->_comes('"'))
-      {
+
+    } else if($identifier === 'keyframes') {
+
+      if($this->_comes("'") || $this->_comes('"')) {
         $name = $this->_parseStringValue();
-      }
-      else
-      {
+      } else {
         $name = new Value\String($this->_parseIdentifier());
       }
       $this->_consumeWhiteSpace();
@@ -224,30 +225,31 @@ class Parser extends AbstractParser
       $ruleList = new RuleList();
       $this->_parseRuleList($ruleList);
       $this->state->leave(ParserState::IN_KEYFRAMESRULE);
-      return new Rule\Keyframes($name, $ruleList);
-    }
-    else
-    {
-      throw new ParseException(sprintf("Unknown rule @%s", $identifier));
+      $rule = new Rule\Keyframes($name, $ruleList);
+      if($vendor_prefix) {
+        $rule->setVendorPrefix($vendor_prefix);
+      }
+      return $rule;
+
+    } else {
+      throw new ParseException(sprintf('Unknown rule @%s', $identifier));
     }
   }
 
-  private function _parseMediaList()
+  private function _parseMediaQueryList()
   {
     $media_queries = array();
-    while(!$this->_comes('{'))
-    {
+    while(!$this->_comes('{') && !$this->_comes(';') && !$this->_isEnd()) {
       $this->state->enter(ParserState::IN_MEDIA_QUERY);
       $media_queries[] = $this->_parseMediaQuery(); 
       $this->state->leave(ParserState::IN_MEDIA_QUERY);
-      if($this->_comes(','))
-      {
+      if($this->_comes(',')) {
         $this->_consume(',');
         $this->_consumeWhiteSpace();
         continue;
       }
     }
-    return new MediaList($media_queries);
+    return new MediaQueryList($media_queries);
   }
 
   private function _parseMediaQuery()
@@ -268,8 +270,11 @@ class Parser extends AbstractParser
         $this->_consumeWhiteSpace();
       }
     }
-    while(true){
-      if($this->_comes(',') || $this->_comes('{')) break;
+    $this->_consumeWhiteSpace();
+    while(true) {
+      if($this->_comes(',') || $this->_comes('{') || $this->_comes(';') || $this->_isEnd()) {
+        break;
+      }
       $expressions[] = $this->_parseMediaQueryExpression();
     }
     return new MediaQuery($restrictor, $media_type, $expressions);
@@ -301,16 +306,11 @@ class Parser extends AbstractParser
     $selectors = array_map(function($selector)
     {
       $selector = trim($selector);
-      if($selector === 'from')
-      {
+      if($selector === 'from') {
         return new Value\Percentage(0);
-      }
-      else if($selector === 'to')
-      {
+      } else if($selector === 'to') {
         return new Value\Percentage(100);
-      }
-      else
-      {
+      } else {
         return new Value\Percentage(substr($selector, 0, strpos($selector, '%')));
       }
     }, explode(',', trim($this->_consumeUntil('{'))));
@@ -341,44 +341,33 @@ class Parser extends AbstractParser
   {
     $selectors = array();
     $this->_consumeWhiteSpace();
-    while(!($this->_comes('{')))
-    {
+    while(!($this->_comes('{'))) {
       $this->state->enter(ParserState::IN_SELECTOR);
       $selectors[] = $this->_parseSelector();
       $this->state->leave(ParserState::IN_SELECTOR);
-      if($this->_comes(','))
-      {
+      if($this->_comes(',')) {
         $this->_consume(',');
         $this->_consumeWhiteSpace();
         continue;
       }
     }
     return new SelectorList($selectors);
-    //return array_map(function($selector)
-    //{
-      //return new Selector($selector);
-    //}, explode(',', trim($this->_consumeUntil('{'))));
   }
 
   private function _parseSelector()
   {
     $result = $this->_parseSimpleSelector();
-    while(true)
-    {
+    while(true) {
       $this->_consumeWhiteSpace();
       if($this->_comes(',') || $this->_comes('{')) break;
       $peek = $this->_peek();
-      if(in_array($peek, array('+', '>', '~')))
-      {
+      if(in_array($peek, array('+', '>', '~'))) {
         $combinator = $peek;
         $this->_consume($peek);
-      }
-      else
-      {
+      } else {
         $combinator = ' ';
       }
       $this->_consumeWhiteSpace();
-      //echo $this->_peek() . "\n";
       $nextSelector = $this->_parseSimpleSelector();
       $result = new Selector\CombinedSelector($result, $combinator, $nextSelector);
     }
@@ -393,39 +382,32 @@ class Parser extends AbstractParser
   private function _parseSimpleSelector()
   {
     $namespace = $element = '*';
-    if($this->_comes('*'))
-    {
+    if($this->_comes('*')) {
       $this->_consume('*');
-      if($this->_comes('|'))
-      {
+      if($this->_comes('|')) {
         $this->_consume('|');
-        if($this->_comes('*'))
-        {
+        if($this->_comes('*')) {
           $this->_consume('*');
-        }
-        else
-        {
+        } else {
           $element = $this->_parseIdentifier();
         }
       }
-    }
-    else if(!($this->_comes('#')||$this->_comes('.')||$this->_comes('[')||$this->_comes(':')))
-    {
+    } else if(!(
+      $this->_comes('#') || $this->_comes('.') || $this->_comes('[') || $this->_comes(':')
+    )){
       $element = $this->_parseIdentifier();
-      if($this->_comes('|'))
-      {
+      if($this->_comes('|')) {
         $namespace = $element;
         $this->_consume('|');
         $element = $this->_parseIdentifier();
-      }    
+      }    // code...
     }
     $result = new Selector\ElementSelector($namespace, $element);
 
     $hasHash = false;
-    while(true)
-    {
-      if($this->_comes('#'))
-      {
+    while(true) {
+      if($this->_comes('#')) {
+
         // You can't have 2 hashes
         if($hasHash) break;
         $this->_consume('#');
@@ -433,57 +415,53 @@ class Parser extends AbstractParser
         $result = new Selector\IDSelector($result, $id);
         $hasHash = true;
         continue;
-      }
-      else if($this->_comes('.'))
-      {
+
+      } else if($this->_comes('.')) {
+
         $this->_consume('.');
         $class = $this->_parseIdentifier();
         $result = new Selector\ClassSelector($result, $class);
         continue;
-      }
-      else if($this->_comes('['))
-      {
+
+      } else if($this->_comes('[')) {
+
         $this->_consume('[');
         $result = $this->_parseAttrib($result);
         $this->_consume(']');
         continue;
-      }
-      else if($this->_comes(':'))
-      {
+
+      } else if($this->_comes(':')) {
+
         $this->_consume(':');
         $type = ':';
-        if($this->_comes(':'))
-        {
+        if($this->_comes(':')) {
           $this->_consume(':');
           $type = '::';
         }
         $ident = $this->_parseIdentifier();
-        if($this->_comes('('))
-        {
+        if($this->_comes('(')) {
           $this->_consume('(');
           $this->_consumeWhiteSpace();
           // You can't nest negations
-          if(mb_strtolower($iden) === 'not' && !$this->state->in(ParserState::IN_NEGATION))
-          {
+          if(mb_strtolower($ident, $this->charset) === 'not'
+            && !$this->state->in(ParserState::IN_NEGATION)
+          ) {
             $this->state->enter(ParserState::IN_NEGATION);
             $expr = $this->_parseSimpleSelector();
             $this->state->leave(ParserState::IN_NEGATION);
-          }
-          else
-          {
+          } else {
             $expr = $this->_consumeUntil(')');
           }
           $this->_consume(')');
           $result = new Selector\FunctionSelector($result, $type, $ident, $expr);
-        }
-        else
-        {
+        } else {
+
           $result = new Selector\PseudoSelector($result, $type, $ident);
+
         }
         continue;
-      }
-      else
-      {
+
+      } else {
         break;
       }
     }
@@ -505,36 +483,27 @@ class Parser extends AbstractParser
     $this->_consumeWhiteSpace();
     $namespace = '*';
     $attrib = $this->_parseIdentifier();
-    if($this->_comes('|'))
-    {
+    if($this->_comes('|')) {
       $namespace = $attrib;
       $this->_consume('|');
       $attrib = $this->_parseIdentifier();
     }
     $this->_consumeWhiteSpace();
-    if($this->_comes(']'))
-    {
+    if($this->_comes(']')) {
       return new Selector\AttributeSelector($selector, $namespace, $attrib, 'exists', null);
     }
-    if($this->_comes('='))
-    {
+    if($this->_comes('=')) {
       $operator = $this->_consume('=');
-    }
-    else
-    {
+    } else {
       $operator = $this->_consume(2);
-      if(!in_array($operator, array('^=', '$=', '*=', '~=', '|=', '!=')))
-      {
-        throw new ParseException(sprintf("Operator expected, got '%s'", $operator));
+      if(!in_array($operator, array('^=', '$=', '*=', '~=', '|=', '!='))) {
+        throw new ParseException(sprintf('Operator expected, got "%s"', $operator));
       }
     }
     $this->_consumeWhiteSpace();
-    if($this->_comes("'") || $this->_comes('"'))
-    {
+    if($this->_comes("'") || $this->_comes('"')) {
       $value = $this->_parseStringValue();
-    }
-    else
-    {
+    } else {
       $value = $this->_parseIdentifier();
     }
     $this->_consumeWhiteSpace();
@@ -543,14 +512,15 @@ class Parser extends AbstractParser
 
   private function _parseStyleDeclaration($styleDeclaration)
   {
-    while(!$this->_comes('}'))
-    {
+    while(!$this->_comes('}') && !$this->_isEnd()) {
       $this->state->enter(ParserState::IN_PROPERTY);
       $styleDeclaration->append($this->_parseProperty());
       $this->state->leave(ParserState::IN_PROPERTY);
       $this->_consumeWhiteSpace();
     }
-    $this->_consume('}');
+    if(!$this->_isEnd()) {
+      $this->_consume('}');
+    }
   }
 
   private function _parseProperty()
@@ -560,29 +530,25 @@ class Parser extends AbstractParser
     $this->_consume(':');
     $property = new Property($name);
     $value = $this->_parseValue(self::_listDelimiterForProperty($name));
-    if(!$value instanceof PropertyValueList)
-    {
+    if(!$value instanceof PropertyValueList) {
       $list = new PropertyValueList();
       $list->append($value);
       $value = $list;
     }
     if($name === 'background') $this->_fixBackgroundShorthand($value);
     $property->setValueList($value);
-    if($this->_comes('!'))
-    {
+    if($this->_comes('!')) {
       $this->_consume('!');
       $this->_consumeWhiteSpace();
       $importantMarker = $this->_consume(strlen('important'));
-      if(mb_convert_case($importantMarker, MB_CASE_LOWER) !== 'important')
-      {
+      if(mb_convert_case($importantMarker, MB_CASE_LOWER) !== 'important') {
         throw new ParseException(sprintf(
           '"!" was followed by "%s". Expected "important"', $importantMarker
         ));
       }
       $property->setIsImportant(true);
     }
-    if($this->_comes(';'))
-    {
+    if($this->_comes(';')) {
       $this->_consume(';');
     }
     return $property;
@@ -590,7 +556,7 @@ class Parser extends AbstractParser
 
   private function _fixBackgroundShorthand(PropertyValueList $oValueList)
   {
-    if($oValueList->getLength() < 2) return;
+    if(count($oValueList) < 2) return;
     if($oValueList->getSeparator() === ',') {
       // we have multiple layers
       foreach($oValueList->getItems() as $layer) {
@@ -634,23 +600,20 @@ class Parser extends AbstractParser
   {
     $stack = array();
     $this->_consumeWhiteSpace();
-    while(!($this->_comes('}') || $this->_comes(';') || $this->_comes('!') || $this->_comes(')')))
-    {
-      if(count($stack) > 0)
-      {
+    while(!(
+      $this->_comes('}') || $this->_comes(';') || $this->_comes('!') || $this->_comes(')')
+    )){
+      if(count($stack) > 0) {
         $foundDelimiter = false;
-        foreach($listDelimiters as $delimiter)
-        {
-          if($this->_comes($delimiter))
-          {
+        foreach($listDelimiters as $delimiter) {
+          if($this->_comes($delimiter)) {
             $stack[] = $this->_consume($delimiter);
             $this->_consumeWhiteSpace();
             $foundDelimiter = true;
             break;
           }
         }
-        if(!$foundDelimiter)
-        {
+        if(!$foundDelimiter) {
           // Whitespace was the list delimiter
           $stack[] = ' ';
         }
@@ -658,27 +621,21 @@ class Parser extends AbstractParser
       $stack[] = $this->_parsePrimitiveValue();
       $this->_consumeWhiteSpace();
     }
-    foreach($listDelimiters as $delimiter)
-    {
-      if(count($stack) === 1)
-      {
+    foreach($listDelimiters as $delimiter) {
+      if(count($stack) === 1) {
         return $stack[0];
       }
       $startPos = null;
-      while(($startPos = array_search($delimiter, $stack, true)) !== false)
-      {
+      while(($startPos = array_search($delimiter, $stack, true)) !== false) {
         $length = 2; //Number of elements to be joined
-        for($i = $startPos + 2; $i < count($stack); $i += 2)
-        {
-          if($delimiter !== $stack[$i])
-          {
+        for($i = $startPos + 2; $i < count($stack); $i += 2) {
+          if($delimiter !== $stack[$i]) {
             break;
           }
           $length++;
         }
         $valueList = new PropertyValueList(array(), $delimiter);
-        for($i = $startPos - 1; $i - $startPos + 1 < $length * 2; $i += 2)
-        {
+        for($i = $startPos - 1; $i - $startPos + 1 < $length * 2; $i += 2) {
           $valueList->append($stack[$i]);
         }
         array_splice($stack, $startPos - 1, $length * 2 - 1, array($valueList));
@@ -689,12 +646,9 @@ class Parser extends AbstractParser
 
   private static function _listDelimiterForProperty($propertyName)
   {
-    if(preg_match('/^font(?:$|-family)/iSu', $propertyName))
-    {
+    if(preg_match('/^font(?:$|-family)/iSu', $propertyName)) {
       return array(',', '/', ' ');
-    }
-    else if (preg_match('/^background$/iSu', $propertyName))
-    {
+    } else if (preg_match('/^background$/iSu', $propertyName)) {
       return array('/', ' ', ',');
     }
     return array(' ', ',', '/');
@@ -704,28 +658,22 @@ class Parser extends AbstractParser
   {
     $value = null;
     $this->_consumeWhiteSpace();
-    if(is_numeric($this->_peek()) || (($this->_comes('-') || $this->_comes('.')) && is_numeric($this->_peek(1, 1))))
-    {
+    if(is_numeric($this->_peek())
+      || (
+        ($this->_comes('-') || $this->_comes('.'))
+        && is_numeric($this->_peek(1, 1))
+      )
+    ){
       $value = $this->_parseNumericValue(false, $allow_ratios);
-    }
-    else if($this->_comes('#') || $this->_comes('rgb') || $this->_comes('hsl'))
-    {
+    } else if($this->_comes('#') || $this->_comes('rgb') || $this->_comes('hsl')) {
       $value = $this->_parseColorValue();
-    }
-    else if($this->_comes('url'))
-    {
+    } else if($this->_comes('url')) {
       $value = $this->_parseURLValue();
-    }
-    else if($this->_comes("'") || $this->_comes('"'))
-    {
+    } else if($this->_comes("'") || $this->_comes('"')) {
       $value = $this->_parseStringValue();
-    }
-    else if($this->_comes('U+'))
-    {
+    } else if($this->_comes('U+')) {
       $value = $this->_parseUnicodeRange();  
-    }
-    else
-    {
+    } else {
       $value = $this->_parseIdentifier(true, true);
     }
     $this->_consumeWhiteSpace();
@@ -745,6 +693,7 @@ class Parser extends AbstractParser
         $value .= $this->_consume(1);
       }
     }
+    // FIXME: we should allow whitespace between Ratio operands
     if($allow_ratios && $this->_comes('/')) {
       $this->_consume('/');
       $numerator = $value;
@@ -779,26 +728,21 @@ class Parser extends AbstractParser
 
   private function _parseColorValue()
   {
-    if($this->_comes('#'))
-    {
+    if($this->_comes('#')) {
       $this->_consume('#');
       $value = $this->_parseIdentifier();
       return new Value\Color($value);
-    }
-    else
-    {
+    } else {
       $colors = array();
       $colorMode = $this->_parseIdentifier();
       $this->_consumeWhiteSpace();
       $this->_consume('(');
-      $length = strlen($colorMode);
-      for($i = 0; $i < $length; $i++) 
-      {
+      $length = mb_strlen($colorMode, $this->charset);
+      for($i = 0; $i < $length; $i++) {
         $this->_consumeWhiteSpace();
         $colors[$colorMode[$i]] = $this->_parseNumericValue(true);
         $this->_consumeWhiteSpace();
-        if($i < ($length - 1))
-        {
+        if($i < ($length - 1)) {
           $this->_consume(',');
         }
       }
@@ -810,8 +754,7 @@ class Parser extends AbstractParser
   private function _parseURLValue()
   {
     $useUrl = $this->_comes('url');
-    if($useUrl)
-    {
+    if($useUrl) {
       $this->_consume('url');
       $this->_consumeWhiteSpace();
       $this->_consume('(');
@@ -819,8 +762,7 @@ class Parser extends AbstractParser
     $this->_consumeWhiteSpace();
     $value = $this->_parseStringValue();
     $result = new Value\URL($value);
-    if($useUrl)
-    {
+    if($useUrl) {
       $this->_consumeWhiteSpace();
       $this->_consume(')');
     }
@@ -834,31 +776,26 @@ class Parser extends AbstractParser
     return new Value\UnicodeRange($value);
   }
 
-  private function _parseIdentifier($allowFunctions = false, $allowColors = false)
+  private function _parseIdentifier($allowFunctions=false, $allowColors=false)
   {
     $result = $this->_parseCharacter(true);
-    if($result === null)
-    {
+    if($result === null) {
       throw new ParseException(
         sprintf('Identifier expected, got "%s"', $this->_peek(50))
       );
     }
     $char;
-    while(($char = $this->_parseCharacter(true)) !== null)
-    {
+    while(($char = $this->_parseCharacter(true)) !== null) {
       $result .= $char;
     }
-    if($allowColors)
-    {
+    if($allowColors) {
       // is it a color name ?
-      if($rgb = Util\Color::namedColor2rgb($result))
-      {
+      if($rgb = Util\Color::namedColor2rgb($result)) {
         $color = new Value\Color();
         return $color->fromRGB($rgb);
       }
     }
-    if($allowFunctions && $this->_comes('('))
-    {
+    if($allowFunctions && $this->_comes('(')) {
       $this->_consume('(');
       $args = $this->_parseValue(array('=', ','));
       $result = new Value\Func($result, $args);
@@ -871,35 +808,25 @@ class Parser extends AbstractParser
   {
     $firstChar = $this->_peek();
     $quoteChar = null;
-    if($firstChar === "'")
-    {
+    if($firstChar === "'") {
       $quoteChar = "'";
-    }
-    else if($firstChar === '"')
-    {
+    } else if($firstChar === '"') {
       $quoteChar = '"';
     }
-    if($quoteChar !== null)
-    {
+    if($quoteChar !== null) {
       $this->_consume($quoteChar);
     }
     $result = "";
     $content = null;
-    if($quoteChar === null)
-    {
+    if($quoteChar === null) {
       //Unquoted strings end in whitespace or with braces, brackets, parentheses
-      while(!preg_match('/[\\s{}()<>\\[\\]]/isu', $this->_peek()))
-      {
+      while(!preg_match('/[\\s{}()<>\\[\\]]/isu', $this->_peek())) {
         $result .= $this->_parseCharacter(false);
       }
-    }
-    else
-    {
-      while(!$this->_comes($quoteChar))
-      {
+    } else {
+      while(!$this->_comes($quoteChar)) {
         $content = $this->_parseCharacter(false);
-        if($content === null)
-        {
+        if($content === null) {
           throw new ParseException(sprintf(
             'Non-well-formed quoted string "%s"', $this->_peek(3)
           ));
@@ -909,74 +836,6 @@ class Parser extends AbstractParser
       $this->_consume($quoteChar);
     }
     return new Value\String($result);
-  }
-
-  /**
-   * Parses a single character.
-   *
-   * @param bool $isForIdentifier true if the character is part of an identifier
-   *
-   * @return string the parsed character
-   **/
-  private function _parseCharacter($isForIdentifier)
-  {
-    if($this->_peek() === '\\')
-    {
-      $this->_consume('\\');
-      if($this->_comes('\n') || $this->_comes('\r'))
-      {
-        return '';
-      }
-      if(preg_match('/[0-9a-fA-F]/Su', $this->_peek()) === 0)
-      {
-        return $this->_consume(1);
-      }
-      $sUnicode = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/u');
-      if(mb_strlen($sUnicode, $this->charset) < 6)
-      {
-        //Consume whitespace after incomplete unicode escape
-        if(preg_match('/\\s/isSu', $this->_peek()))
-        {
-          if($this->_comes('\r\n'))
-          {
-            $this->_consume(2);
-          }
-          else
-          {
-            $this->_consume(1);
-          }
-        }
-      }
-      $iUnicode = intval($sUnicode, 16);
-      $sUtf32 = "";
-      for($i=0;$i<4;$i++)
-      {
-        $sUtf32 .= chr($iUnicode & 0xff);
-        $iUnicode = $iUnicode >> 8;
-      }
-      return Util\Charset::convert($sUtf32, 'UTF-32LE', $this->charset);
-    }
-    if($isForIdentifier)
-    {
-      if(preg_match('/\*|[a-zA-Z0-9]|-|_/u', $this->_peek()) === 1)
-      {
-        return $this->_consume(1);
-      }
-      else if(ord($this->_peek()) > 0xa1)
-      {
-        return $this->_consume(1);
-      }
-      else
-      {
-        return null;
-      }
-    }
-    else
-    {
-      return $this->_consume(1);
-    }
-    // Does not reach here
-    return null;
   }
 
 }

@@ -7,6 +7,20 @@ namespace ju1ius\CSS\Util;
  **/
 class Charset
 {
+  static private $default_encoding;
+
+  /**
+   * A global pointer to the default charset used for CSS String manipulations
+   **/
+  static public function getDefault()
+  {
+    return self::$default_encoding ? : mb_internal_encoding();
+  }
+  static public function setDefault($charset)
+  {
+    self::$default_encoding = $charset;
+  }
+
   static private $CHARSET_DETECTION_MAP = array(
     array(
       'pattern' => '#^\xEF\xBB\xBF\x40\x63\x68\x61\x72\x73\x65\x74\x20\x22([\x20-\x7F]*)\x22\x3B#',
@@ -113,27 +127,28 @@ class Charset
       'charset' => 'UTF-16LE',
       'endianness' => null
     ),
-    /**
-     * These encodings are not supported by mbstring extension.
-     **/
-    //array(
-      //'pattern' => '/^\x7C\x83\x88\x81\x99\xA2\x85\xA3\x40\x7F(YY)*\x7F\x5E/',
-      //'charset' => null,
-      //'endianness' => null,
-      //'transcoded-from' => 'EBCDIC'
-    //),
-    //array(
-      //'pattern' => '/^\xAE\x83\x88\x81\x99\xA2\x85\xA3\x40\xFC(YY)*\xFC\x5E/',
-      //'charset' => null,
-      //'endianness' => null, 
-      //'transcoded-from' => 'IBM1026'
-    //),
-    //array(
-      //'pattern' => '/^\x00\x63\x68\x61\x72\x73\x65\x74\x20\x22(YY)*\x22\x3B/',
-      //'charset' => null,
-      //'endianness' => null 
-      //'transcoded-from' => 'GSM 03.38'
-    //),
+/*
+    // The following encodings are not supported by mbstring extension.
+     
+    array(
+      'pattern' => '/^\x7C\x83\x88\x81\x99\xA2\x85\xA3\x40\x7F(YY)*\x7F\x5E/',
+      'charset' => null,
+      'endianness' => null,
+      'transcoded-from' => 'EBCDIC'
+    ),
+    array(
+      'pattern' => '/^\xAE\x83\x88\x81\x99\xA2\x85\xA3\x40\xFC(YY)*\xFC\x5E/',
+      'charset' => null,
+      'endianness' => null, 
+      'transcoded-from' => 'IBM1026'
+    ),
+    array(
+      'pattern' => '/^\x00\x63\x68\x61\x72\x73\x65\x74\x20\x22(YY)*\x22\x3B/',
+      'charset' => null,
+      'endianness' => null 
+      'transcoded-from' => 'GSM 03.38'
+    ),
+*/
   );
 
   /**

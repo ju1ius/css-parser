@@ -308,7 +308,7 @@ class ExpandShorthands
   {
     $oValueList = $oProperty->getValueList();
     // Get a normalized array
-    if($oValueList->getSeparator() === ',' && $oValueList->getLength() > 1) {
+    if($oValueList->getSeparator() === ',' && count($oValueList) > 1) {
       // we have multiple layers
       $aValueList = $oValueList->getItems();
     } else {

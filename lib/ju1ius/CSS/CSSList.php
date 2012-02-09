@@ -5,39 +5,13 @@ namespace ju1ius\CSS;
  * General purpose list class
  * @package CSS
  **/
-abstract class CSSList implements \ArrayAccess
+abstract class CSSList implements \ArrayAccess, \Countable, \Iterator
 {
   protected $items;
 
   public function __construct($items=array())
   {
     $this->items = $items;
-  }
-
-  public function offsetExists($offset)
-  {
-    return isset($this->items[$offset]);
-  }
-  public function offsetGet($offset)
-  {
-    return isset($this->items[$offset]) ? $this->items[$offset] : null;
-  }
-  public function offsetSet($offset, $value)
-  {
-    if($offset === null) {
-      $this->items[] = $value;
-    } else {
-      $this->items[$offset] = $value;
-    }
-  }
-  public function offsetUnset($offset)
-  {
-    unset($this->items[$offset]);
-  }
-
-  public function getLength()
-  {
-    return count($this->items);
   }
 
   public function isEmpty()
@@ -49,9 +23,13 @@ abstract class CSSList implements \ArrayAccess
   {
     return $this->items;
   }
-  public function setItems(Array $items)
+  public function setItems($items)
   {
-    $this->items = $items;
+    if($items instanceof CSSList) {
+      $this->items = $items->getItems();
+    } else {
+      $this->items = $items;
+    }
   }
 
   public function getFirst()
@@ -79,10 +57,9 @@ abstract class CSSList implements \ArrayAccess
 		$this->items[] = $item;
 	}
 
-  public function extend(Array $items)
+  public function extend(CSSList $items)
   {
-    foreach($items as $item)
-    {
+    foreach($items as $item) {
       $this->items[] = $item;
     }
   }
@@ -104,6 +81,12 @@ abstract class CSSList implements \ArrayAccess
     array_splice($this->items, $index, 0, $items);
   }
 
+  /**
+   * Replace an item by another or by every item in an array
+   *
+   * @param mixed $oldItem  The index or item to replace
+   * @param mixed $newItems An item or array of items to insert starting the old item position
+   **/
   public function replace($oldItem, $newItems)
   {
     if(!is_int($oldItem))
@@ -111,10 +94,19 @@ abstract class CSSList implements \ArrayAccess
       $oldItem = array_search($oldItem, $this->items);
       if($oldItem === false) return;
     }
-    if(!is_array($newItems)) $newItems = array($newItems);
+    //if($newItems instanceof CSSList) {
+      //$newItems = $newItems->getItems();
+    /*} else */
+    if(!is_array($newItems)) {
+      $newItems = array($newItems);
+    }
     array_splice($this->items, $oldItem, 1, $newItems);
   }
 
+  /**
+   * Reorder keys in the items array.
+   * Usefull if items have been unset.
+   **/
   public function resetKeys()
   {
     $this->items = array_values($this->items);
@@ -124,8 +116,55 @@ abstract class CSSList implements \ArrayAccess
   {
     $this->items = array_map(function($item)
     {
-      if($item instanceof Serializable) return clone $item;
-      return $item;
+      return Util\Object::getClone($item);
     }, $this->items);
   }
+
+  // ---------- SPL Interfaces implementation ---------- //
+
+  public function offsetExists($offset)
+  {
+    return isset($this->items[$offset]);
+  }
+  public function offsetGet($offset)
+  {
+    return isset($this->items[$offset]) ? $this->items[$offset] : null;
+  }
+  public function offsetSet($offset, $value)
+  {
+    if($offset === null) {
+      $this->items[] = $value;
+    } else {
+      $this->items[$offset] = $value;
+    }
+  }
+  public function offsetUnset($offset)
+  {
+    unset($this->items[$offset]);
+  }
+
+  public function rewind() {
+    reset($this->items);
+  }
+
+  public function current() {
+    return current($this->items);
+  }
+
+  public function key() {
+    return key($this->items);
+  }
+
+  public function next() {
+    return next($this->items);
+  }
+
+  public function valid() {
+    return $this->current() !== false;
+  }   
+
+  public function count() {
+    return count($this->items);
+  }
+
 }

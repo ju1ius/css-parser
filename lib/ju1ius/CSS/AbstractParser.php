@@ -15,7 +15,7 @@ abstract class AbstractParser
   protected
     $options = array(),
     $text,
-    $currentPosition,
+    $current_position,
     $length,
     $state;
     
@@ -80,10 +80,68 @@ abstract class AbstractParser
   protected function _init($text, $charset=null)
   {
     $this->text = $text;
-    $this->currentPosition = 0;
+    $this->current_position = 0;
     $this->charset = $charset;
     $this->length = mb_strlen($this->text, $this->charset);
     $this->state = new ParserState();
+  }
+
+  /**
+   * Parses a single character.
+   *
+   * @param bool $isForIdentifier true if the character is part of an identifier
+   *
+   * @return string the parsed character
+   **/
+  protected function _parseCharacter($isForIdentifier)
+  {
+    if($this->_peek() === '\\') {
+
+      $this->_consume('\\');
+      if($this->_comes('\n') || $this->_comes('\r')) {
+        return '';
+      }
+      if(preg_match('/[0-9a-fA-F]/Su', $this->_peek()) === 0) {
+        return $this->_consume(1);
+      }
+      $unicode_str = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/u');
+      if(mb_strlen($unicode_str, $this->charset) < 6) {
+        //Consume whitespace after incomplete unicode escape
+        if(preg_match('/\\s/isSu', $this->_peek())) {
+          if($this->_comes('\r\n')) {
+            $this->_consume(2);
+          } else {
+            $this->_consume(1);
+          }
+        }
+      }
+      $unicode_byte = intval($unicode_str, 16);
+      $utf_32_str = "";
+      for($i=0;$i<4;$i++) {
+        $utf_32_str .= chr($unicode_byte & 0xff);
+        $unicode_byte = $unicode_byte >> 8;
+      }
+      return Util\Charset::convert($utf_32_str, 'UTF-32LE', $this->charset);
+
+    }
+
+    if($isForIdentifier) {
+
+      if(preg_match('/\*|[a-zA-Z0-9]|-|_/u', $this->_peek()) === 1) {
+        return $this->_consume(1);
+      } else if(ord($this->_peek()) > 0xa1) {
+        return $this->_consume(1);
+      } else {
+        return null;
+      }
+
+    } else {
+
+      return $this->_consume(1);
+
+    }
+    // Does not reach here
+    return null;
   }
 
   /**
@@ -96,8 +154,7 @@ abstract class AbstractParser
    **/
   protected function _comes($string, $offset = 0)
   {
-    if($this->_isEnd())
-    {
+    if($this->_isEnd()) {
       return false;
     }
     return $this->_peek($string, $offset) == $string;
@@ -113,19 +170,16 @@ abstract class AbstractParser
    **/
   protected function _peek($length = 1, $offset = 0)
   {
-    if($this->_isEnd())
-    {
+    if($this->_isEnd()) {
       return '';
     }
-    if(is_string($length))
-    {
+    if(is_string($length)) {
       $length = mb_strlen($length, $this->charset);
     }
-    if(is_string($offset))
-    {
+    if(is_string($offset)) {
       $offset = mb_strlen($offset, $this->charset);
     }
-    return mb_substr($this->text, $this->currentPosition + $offset, $length, $this->charset);
+    return mb_substr($this->text, $this->current_position + $offset, $length, $this->charset);
   }
 
   /**
@@ -138,30 +192,29 @@ abstract class AbstractParser
    **/
   protected function _consume($value = 1)
   {
-    if(is_string($value))
-    {
+    if(is_string($value)) {
+
       $length = mb_strlen($value, $this->charset);
-      if(mb_substr($this->text, $this->currentPosition, $length, $this->charset) !== $value)
-      {
+      if(mb_substr($this->text, $this->current_position, $length, $this->charset) !== $value) {
         throw new ParseException(sprintf(
           'Expected "%s", got "%s"',
           $value, $this->_peek(12)
         ));
       }
-      $this->currentPosition += mb_strlen($value, $this->charset);
+      $this->current_position += mb_strlen($value, $this->charset);
       return $value;
-    }
-    else
-    {
-      if($this->currentPosition + $value > $this->length)
-      {
+
+    } else {
+
+      if($this->current_position + $value > $this->length) {
         throw new ParseException(sprintf(
-          "Tried to consume %d chars, exceeded file end", $value
+          'Tried to consume %d chars, exceeded file end', $value
         ));
       }
-      $result = mb_substr($this->text, $this->currentPosition, $value, $this->charset);
-      $this->currentPosition += $value;
+      $result = mb_substr($this->text, $this->current_position, $value, $this->charset);
+      $this->current_position += $value;
       return $result;
+
     }
   }
 
@@ -174,13 +227,12 @@ abstract class AbstractParser
    **/
   protected function _consumeExpression($pattern)
   {
-    if(preg_match($pattern, $this->_inputLeft(), $matches, PREG_OFFSET_CAPTURE) === 1)
-    {
+    if(preg_match($pattern, $this->_inputLeft(), $matches, PREG_OFFSET_CAPTURE) === 1) {
       return $this->_consume($matches[0][0]);
     }
     throw new ParseException(sprintf(
       'Expected pattern "%s" not found, got: "%s"',
-      $pattern, $this->_peek(5)
+      $pattern, $this->_peek(12)
     ));
   }
 
@@ -190,8 +242,7 @@ abstract class AbstractParser
   protected function _consumeWhiteSpace()
   {
     do {
-      while(preg_match('/\\s/isSu', $this->_peek()) === 1)
-      {
+      while(preg_match('/\\s/isSu', $this->_peek()) === 1) {
         $this->_consume(1);
       }
     } while($this->_consumeComment());
@@ -199,8 +250,7 @@ abstract class AbstractParser
 
   protected function _consumeComment()
   {
-    if($this->_comes('/*'))
-    {
+    if($this->_comes('/*')) {
       $this->_consumeUntil('*/');
       $this->_consume('*/');
       return true;
@@ -215,7 +265,7 @@ abstract class AbstractParser
    **/
   protected function _isEnd()
   {
-    return $this->currentPosition >= $this->length;
+    return $this->current_position >= $this->length;
   }
 
   /**
@@ -227,15 +277,14 @@ abstract class AbstractParser
    **/
   protected function _consumeUntil($end)
   {
-    $endPos = mb_strpos($this->text, $end, $this->currentPosition, $this->charset);
-    if($endPos === false)
-    {
+    $end_pos = mb_strpos($this->text, $end, $this->current_position, $this->charset);
+    if($end_pos === false) {
       throw new ParseException(sprintf(
         'Required "%s" not found, got "%s"',
-        $end, $this->_peek(5)
+        $end, $this->_peek(12)
       ));
     }
-    return $this->_consume($endPos - $this->currentPosition);
+    return $this->_consume($end_pos - $this->current_position);
   }
 
   /**
@@ -245,6 +294,7 @@ abstract class AbstractParser
    **/
   protected function _inputLeft()
   {
-    return mb_substr($this->text, $this->currentPosition, $this->length, $this->charset);
+    return mb_substr($this->text, $this->current_position, $this->length, $this->charset);
   }
+
 }
