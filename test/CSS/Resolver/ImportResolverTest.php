@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/../../CSSParser_TestCase.php';
 
+use ju1ius\Uri;
 use ju1ius\CSS\Resolver\ImportResolver;
 use ju1ius\CSS\StyleSheetLoader;
 use ju1ius\CSS\Value;
@@ -14,7 +15,7 @@ class ImportResolverTest extends CSSParser_TestCase
   {
     $loader = new StyleSheetLoader();
     $parser = $this->createParser();
-    $info = $loader->loadFile($file);
+    $info = $loader->loadFile(new Uri($file));
     $stylesheet = $parser->parse($info);
     $resolver = new ImportResolver($stylesheet);
     $resolver->resolve();

@@ -150,7 +150,7 @@ class Parser extends AbstractParser
         );
       }
       $this->state->enter(ParserState::AFTER_CHARSET);
-      $url = $this->_parseURLValue();
+      $url = $this->_parseUrlValue();
       $this->_consumeWhiteSpace();
       $media_list = null;
       if(!$this->_comes(';') || !$this->_isEnd()) {
@@ -170,11 +170,11 @@ class Parser extends AbstractParser
       }
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS);
       if($this->_comes('"') || $this->_comes("'") || $this->_comes(('url'))) {
-        $rule = new Rule\NS($this->_parseURLValue()); 
+        $rule = new Rule\NS($this->_parseUrlValue()); 
       } else {
         $prefix = $this->_parseIdentifier();
         $this->_consumeWhiteSpace();
-        $rule = new Rule\NS($this->_parseURLValue(), $prefix);
+        $rule = new Rule\NS($this->_parseUrlValue(), $prefix);
       }
       $this->_consumeWhiteSpace();
       $this->_consume(';');
@@ -668,7 +668,7 @@ class Parser extends AbstractParser
     } else if($this->_comes('#') || $this->_comes('rgb') || $this->_comes('hsl')) {
       $value = $this->_parseColorValue();
     } else if($this->_comes('url')) {
-      $value = $this->_parseURLValue();
+      $value = $this->_parseUrlValue();
     } else if($this->_comes("'") || $this->_comes('"')) {
       $value = $this->_parseStringValue();
     } else if($this->_comes('U+')) {
@@ -751,7 +751,7 @@ class Parser extends AbstractParser
     }
   }
 
-  private function _parseURLValue()
+  private function _parseUrlValue()
   {
     $useUrl = $this->_comes('url');
     if($useUrl) {
@@ -761,7 +761,7 @@ class Parser extends AbstractParser
     }
     $this->_consumeWhiteSpace();
     $value = $this->_parseStringValue();
-    $result = new Value\URL($value);
+    $result = new Value\Url($value);
     if($useUrl) {
       $this->_consumeWhiteSpace();
       $this->_consume(')');

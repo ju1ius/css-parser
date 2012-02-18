@@ -163,47 +163,51 @@ class ExpandShorthandsTest extends CSSParser_TestCase
       array('body {border: 1px;}', 'body{ border: 1px; }'),
       array(
         'body {background: rgb(255,0,0);}',
-        'body{ background-image: none; background-position: 0% 0%; background-size: auto auto; background-repeat: repeat; background-attachment: scroll; background-clip: border-box; background-origin: padding-box; background-color: rgb(255,0,0); }'
+        'body{ background-color: rgb(255,0,0); }'
       ),
       array(
         'body {background: rgb(255,0,0) url("foobar.png");}',
-        'body{ background-image: url("foobar.png"); background-position: 0% 0%; background-size: auto auto; background-repeat: repeat; background-attachment: scroll; background-clip: border-box; background-origin: padding-box; background-color: rgb(255,0,0); }'
+        'body{ background-image: url("foobar.png"); background-color: rgb(255,0,0); }'
       ),
       array(
         'body {background: rgb(255,0,0) url("foobar.png") no-repeat;}',
-        'body{ background-image: url("foobar.png"); background-position: 0% 0%; background-size: auto auto; background-repeat: no-repeat; background-attachment: scroll; background-clip: border-box; background-origin: padding-box; background-color: rgb(255,0,0); }'
+        'body{ background-image: url("foobar.png"); background-repeat: no-repeat; background-color: rgb(255,0,0); }'
       ),
       array(
         'body {background: rgb(255,0,0) url("foobar.png") no-repeat center;}',
-        'body{ background-image: url("foobar.png"); background-position: center center; background-size: auto auto; background-repeat: no-repeat; background-attachment: scroll; background-clip: border-box; background-origin: padding-box; background-color: rgb(255,0,0); }'
+        'body{ background-image: url("foobar.png"); background-repeat: no-repeat; background-position: center center; background-color: rgb(255,0,0); }'
       ),
       array(
         'body {background: rgb(255,0,0) url("foobar.png") no-repeat top left;}',
-        'body{ background-image: url("foobar.png"); background-position: top left; background-size: auto auto; background-repeat: no-repeat; background-attachment: scroll; background-clip: border-box; background-origin: padding-box; background-color: rgb(255,0,0); }'
+        'body{ background-image: url("foobar.png"); background-repeat: no-repeat; background-position: top left; background-color: rgb(255,0,0); }'
       ),
 			// <bg-pos> / <bg-size> syntax
 			array(
-				'p{ background: url(foo.png) 40% / 1em gray round fixed border-box; }',
-				'p{ background-image: url("foo.png"); background-position: 40% center; background-size: 1em 1em; background-repeat: round; background-attachment: fixed; background-clip: border-box; background-origin: border-box; background-color: rgb(128,128,128); }'
+				'p{ background: url(foo.png) 40% / 1em black round fixed border-box; }',
+				'p{ background-image: url("foo.png"); background-position: 40% center; background-size: 1em 1em; background-repeat: round; background-attachment: fixed; background-origin: border-box; background-clip: border-box; background-color: rgb(0,0,0); }'
 			),
 			array(
-				'p{ background: url(foo.png) 40% 12px / 1em 25% gray round fixed border-box; }',
-				'p{ background-image: url("foo.png"); background-position: 40% 12px; background-size: 1em 25%; background-repeat: round; background-attachment: fixed; background-clip: border-box; background-origin: border-box; background-color: rgb(128,128,128); }'
+				'p{ background: url(foo.png) 40% 12px / 1em 25% black round fixed border-box; }',
+				'p{ background-image: url("foo.png"); background-position: 40% 12px; background-size: 1em 25%; background-repeat: round; background-attachment: fixed; background-origin: border-box; background-clip: border-box; background-color: rgb(0,0,0); }'
 			),
       // support for functions in background-image
       array(
         'body {background: linear-gradient(#f00,#00f);}',
-        'body{ background-image: linear-gradient(rgb(255,0,0),rgb(0,0,255)); background-position: 0% 0%; background-size: auto auto; background-repeat: repeat; background-attachment: scroll; background-clip: border-box; background-origin: padding-box; background-color: rgba(0,0,0,0); }'
+        'body{ background-image: linear-gradient(rgb(255,0,0),rgb(0,0,255)); }'
 			),
 			// support for multiple layers
 			array(
 				'p{ background: url(foobar.png), url(barfoo.png) red; }',
-				'p{ background-image: url("foobar.png"),url("barfoo.png"); background-position: 0% 0%,0% 0%; background-size: auto auto,auto auto; background-repeat: repeat,repeat; background-attachment: scroll,scroll; background-clip: border-box,border-box; background-origin: padding-box,padding-box; background-color: rgb(255,0,0); }'
+				'p{ background-image: url("foobar.png"),url("barfoo.png"); background-color: rgb(255,0,0); }'
+			),
+			array(
+				'p{ background: url(foobar.png) no-repeat top left, url(barfoo.png) no-repeat bottom right red; }',
+				'p{ background-image: url("foobar.png"),url("barfoo.png"); background-repeat: no-repeat,no-repeat; background-position: top left,bottom right; background-color: rgb(255,0,0); }'
 			),
 			// color only in final layer
 			array(
 				'p{ background: blue, url(foobar.png); }',
-				'p{ background-image: none,url("foobar.png"); background-position: 0% 0%,0% 0%; background-size: auto auto,auto auto; background-repeat: repeat,repeat; background-attachment: scroll,scroll; background-clip: border-box,border-box; background-origin: padding-box,padding-box; background-color: rgba(0,0,0,0); }'
+				'p{ background-image: none,url("foobar.png"); }'
 			)
     );
   }

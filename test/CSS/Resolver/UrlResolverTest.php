@@ -48,7 +48,7 @@ class UrlResolverTest extends CSSParser_TestCase
       array(
         '@import "/css/bar.css"; p{ background: url(http://foo.com/img/foobar.png) }',
         '/srv/www/',
-        '@import url("/srv/www/css/bar.css");p{ background: url("http://foo.com/img/foobar.png"); }'
+        '@import url("/css/bar.css");p{ background: url("http://foo.com/img/foobar.png"); }'
       ),
     );
   }

@@ -4,7 +4,7 @@ namespace ju1ius\CSS\Rule;
 use ju1ius\CSS\Rule;
 use ju1ius\CSS\SelectorList;
 use ju1ius\CSS\StyleDeclaration;
-use CSS\Property;
+use ju1ius\CSS\Property;
 
 /**
  * Represents a CSS style rule

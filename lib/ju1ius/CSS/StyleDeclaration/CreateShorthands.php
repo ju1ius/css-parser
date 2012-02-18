@@ -158,15 +158,17 @@ class CreateShorthands
     foreach($aExpansions as $sProperty => $sExpanded) {
       $aFoldable = array();
 			foreach($aPositions as $sPosition) {
-				$oProperty = $this->styleDeclaration->getAppliedProperty(sprintf($sExpanded, $sPosition));
+        $oProperty = $this->styleDeclaration->getAppliedProperty(
+          sprintf($sExpanded, $sPosition)
+        );
         if(!$oProperty) continue;
         if($oProperty->getIsImportant()) $iImportantCount++;
 				$aFoldable[$oProperty->getName()] = $oProperty; 
 			}
       // All four dimensions must be present
-      if(count($aFoldable) !== 4) return;
+      if(count($aFoldable) !== 4) continue;
       // All four dimensions must have same importance
-      if($iImportantCount && $iImportantCount !== 4) return;
+      if($iImportantCount && $iImportantCount !== 4) continue;
 
       $aValues = array();
       foreach($aPositions as $sPosition) {

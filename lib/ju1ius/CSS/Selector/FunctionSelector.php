@@ -2,6 +2,7 @@
 namespace ju1ius\CSS\Selector;
 
 use CSS\Exception\ParseException;
+use CSS\Exception\UnsupportedSelectorException;
 use ju1ius\CSS\Selector;
 use ju1ius\CSS\XPath;
 
@@ -65,17 +66,21 @@ class FunctionSelector extends Selector
    * {@inheritDoc}
    * @throws ParseException When unsupported or unknown pseudo-class is found
    */
-  public function toXpath()
+  public function toXPath()
   {
     $selPath = $this->selector->toXPath();
     if (in_array($this->name, self::$unsupported))
     {
-      throw new ParseException(sprintf('The pseudo-class %s is not supported', $this->name));
+      throw new UnsupportedSelectorException(
+        sprintf('The pseudo-class %s is not supported', $this->name)
+      );
     }
     $method = '_xpath_'.str_replace('-', '_', $this->name);
     if (!method_exists($this, $method))
     {
-      throw new ParseException(sprintf('The pseudo-class %s is unknown', $this->name));
+      throw new UnsupportedSelectorException(
+        sprintf('The pseudo-class %s is unknown', $this->name)
+      );
     }
     return $this->$method($selPath, $this->expr);
   }

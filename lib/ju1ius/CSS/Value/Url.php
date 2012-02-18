@@ -5,7 +5,7 @@ namespace ju1ius\CSS\Value;
  * @package CSS
  * @subpackage Value
  **/
-class URL extends PrimitiveValue
+class Url extends PrimitiveValue
 {
   private $url;
 

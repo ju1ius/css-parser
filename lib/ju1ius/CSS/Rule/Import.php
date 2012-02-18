@@ -2,7 +2,7 @@
 namespace ju1ius\CSS\Rule;
 
 use ju1ius\CSS\Rule;
-use ju1ius\CSS\Value\URL;
+use ju1ius\CSS\Value\Url;
 use ju1ius\CSS\MediaQueryList;
 use ju1ius\CSS\StyleSheet;
 
@@ -17,7 +17,7 @@ class Import extends Rule
   private $media_list;
 	private $styleSheet;
 
-  public function __construct(URL $href, MediaQueryList $media_list=null)
+  public function __construct(Url $href, MediaQueryList $media_list=null)
   {
     $this->href = $href;
     $this->media_list = $media_list;
@@ -27,7 +27,7 @@ class Import extends Rule
   {
     return $this->href;
   }
-  public function setHref(URL $url)
+  public function setHref(Url $url)
   {
     $this->href = $url;
   }

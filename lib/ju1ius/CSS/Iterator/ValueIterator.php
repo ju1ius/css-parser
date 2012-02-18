@@ -49,7 +49,7 @@ class ValueIterator implements \Iterator
     } else if($obj instanceof Rule\Import) {
       $values[] = $obj->getHref();
     } else if($obj instanceof Rule\NS) {
-      $values[] = $obj->getURI();
+      $values[] = $obj->getUri();
     } else if(method_exists($obj, 'getStyleDeclaration')) {
       // Rule\StyleRule, Rule\AtRule, Rule\FontFace, Rule\KeyFrame, Rule\Page
       $decl = $obj->getStyleDeclaration();

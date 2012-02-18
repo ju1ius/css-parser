@@ -169,8 +169,7 @@ class Color
     if($color === 'transparent') {
       return array('r'=>0, 'g'=>0, 'b'=>0, 'a'=>0);
     }
-    if(isset(self::$X11_COLORS_MAP[$color]))
-    {
+    if(isset(self::$X11_COLORS_MAP[$color])) {
       $rgb = self::$X11_COLORS_MAP[$color];
       return $rgb;
     }
@@ -208,13 +207,11 @@ class Color
   static function hex2rgb($value)
   {
     if($value[0] == '#') $value = substr($value, 1);
-    if(strlen($value) == 3)
-    {
+    if(strlen($value) == 3) {
       $value = $value[0].$value[0].$value[1].$value[1].$value[2].$value[2]; 
     }
     //If a proper hex code, convert using bitwise operation. No overhead... faster
-    if (strlen($value) == 6)
-    {
+    if (strlen($value) == 6) {
       $decimal = hexdec($value);
       return array(
         'r' => 0xFF & ($decimal >> 0x10),
@@ -260,22 +257,19 @@ class Color
     $l = self::normalizeFraction($l);
     $a = self::constrainValue($a, 0, 1);
 
-    if($l == 1)
-    {
+    if($l == 1) {
       // white
       $aRGB = array('r' => 255, 'g' => 255, 'b' => 255);
       if($a < 1) $aRGB['a'] = $a;
       return $aRGB;
     }
-    if ($l == 0)
-    {
+    if ($l == 0) {
       // black
       $aRGB = array('r' => 0, 'g' => 0, 'b' => 0);
       if($a < 1) $aRGB['a'] = $a;
       return $aRGB;
     }
-    if($s == 0)
-    {
+    if($s == 0) {
       // Grayscale: we don't need no fancy calculation !
       $v = round(255 * $l);
       $aRGB = array('r' => $v, 'g' => $v, 'b' => $v);
@@ -297,6 +291,7 @@ class Color
       'b' => round(255 * self::hue2rgb($m1, $m2, $h - (1/3)))
     );
     if($a < 1) $aRGB['a'] = $a;
+
     return $aRGB;
   }
 
@@ -334,20 +329,16 @@ class Color
 
     $l = ($max + $min) / 2;
 
-    if($delta_max == 0) //This is a gray, no chroma...
-    {
-      //HSL results from 0 to 1
+    if($delta_max == 0) {
+      // This is a gray, no chroma...
+      // HSL results from 0 to 1
       $h = 0;
       $s = 0;
-    }
-    else //Chromatic data...
-    {
-      if($l < 0.5)
-      {
+    } else {
+      // Chromatic data...
+      if($l < 0.5) {
         $s = $delta_max / ($max + $min);
-      }
-      else
-      {
+      } else {
         $s = $delta_max / (2 - $max - $min);
       }
 
@@ -355,16 +346,11 @@ class Color
       $delta_g = ((($max - $g) / 6) + ($delta_max / 2)) / $delta_max;
       $delta_b = ((($max - $b) / 6) + ($delta_max / 2)) / $delta_max;
 
-      if($r == $max)
-      {
+      if($r == $max) {
         $h = $delta_b - $delta_g;
-      }
-      else if($g == $max)
-      {
+      } else if($g == $max) {
         $h = (1/3) + $delta_r - $delta_b;
-      }
-      else if($b == $max)
-      {
+      } else if($b == $max) {
         $h = (2/3) + $delta_g - $delta_r;
       }
       if ($h < 0) $h++;
@@ -376,6 +362,7 @@ class Color
       'l' => round($l * 100) . '%'
     );
     if($a < 1) $aHSL['a'] = $a;
+
     return $aHSL;
   }
 
@@ -389,8 +376,7 @@ class Color
   static function normalizeFraction($value, $max=100)
   {
     $i = strpos($value, '%');
-    if($i !== false)
-    {
+    if($i !== false) {
       $value = substr($value, 0, $i);
       $max = 100;
     }
@@ -409,8 +395,7 @@ class Color
   {
     $i = strpos($value, '%');
     // percentage value
-    if($i !== false)
-    {
+    if($i !== false) {
       $value = substr($value, 0, $i);
       $value = self::constrainValue($value, 0, 100);
       return round($value * 255 / 100);

@@ -237,7 +237,7 @@ class StyleDeclaration implements Serializable
     $lastImportantProp = array();
     $lastProp = array();
     foreach($this->properties as $pos => $prop) {
-      if($prop->getName() === $property) {
+      if($prop->getName() == $property) {
         if($prop->getIsImportant()) {
           $lastImportantProp['position'] = $pos;
           $lastImportantProp['property'] = $prop;

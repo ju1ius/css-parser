@@ -1,8 +1,10 @@
 <?php
 namespace ju1ius\CSS;
 
+use ju1ius\Uri;
+
 /**
- * 
+ * Handles loading of stylesheets
  */
 class StyleSheetLoader
 {
@@ -14,12 +16,24 @@ class StyleSheetLoader
     $this->setOptions($options);  
   }
 
-  public function loadFile($path)
+  public function load($url)
   {
-    $path = realpath($path);
+    $uri = Uri::parse($url);
+    if($uri->isAbsoluteUrl()) {
+      return $this->loadUrl($uri);
+    }
+    return $this->loadFile($uri);
+  }
+
+  public function loadFile($url)
+  {
+    $uri = Uri::parse($url);
+    $path = realpath($uri);
     $content = file_get_contents($path);
     if(false === $content) {
-      throw new \RuntimeException("Could not load file: $path");
+      throw new \RuntimeException(
+        sprintf('Could not load file: "%s"', $path)
+      );
     }
     $info = $this->loadString($content);
     $info->setUrl($path);
@@ -28,7 +42,8 @@ class StyleSheetLoader
 
   public function loadUrl($url, $preferFileCharset=false)
   {
-    $response = Util\URL::loadURL($url);
+    $uri = Uri::parse($url);
+    $response = self::_loadUrl($uri);
     $content = $response['body'];
     $charset = $response['charset'];
     $info = $this->loadString($content);
@@ -49,6 +64,36 @@ class StyleSheetLoader
     }
     $str = Util\Charset::removeBOM($str);
     return new StyleSheetInfo(null, $str, $charset);
+  }
+
+  static private function _loadUrl(Uri $url)
+  {
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    //curl_setopt($curl, CURLOPT_HEADER, true);
+    curl_setopt($curl, CURLOPT_ENCODING, 'deflate,gzip');
+    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($curl, CURLOPT_USERAGENT, 'ju1ius/CSSParser v0.1');
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($curl);
+    if(false === $response) {
+      throw new \RuntimeException(curl_error($curl));
+    };
+    $infos = curl_getinfo($curl);
+
+    curl_close($curl);
+
+    $results = array(
+      'charset' => null,
+      'body' => $response  
+    );
+    if($infos['content_type']) {
+      if(preg_match('/charset=([a-zA-Z0-9-]*)/', $infos['content_type'], $matches)) {
+        $results['charset'] = $matches[0];
+      }
+    }
+    return $results;
   }
 
   /**

@@ -250,22 +250,6 @@ class ExpandShorthands
 		}
 	}
 
-  private static function _getBackgroundDefaults()
-  {
-    return array(
-      'background-image'      => 'none',
-      'background-position'   => new PropertyValueList(
-        array(new Value\Percentage(0), new Value\Percentage(0)),
-        ' '
-      ),
-      'background-size'       => new PropertyValueList(array('auto', 'auto'), ' '),
-      'background-repeat'     => 'repeat',
-      'background-attachment' => 'scroll',
-      'background-clip'       => 'border-box',
-      'background-origin'     => 'padding-box',
-    );
-  }
-
   /**
    * Checks if we can add an expansion
    * We don't expand if a property exists with the same name after the new one,
@@ -318,20 +302,24 @@ class ExpandShorthands
     $iNumLayers = count($aValueList);
     $aUnfoldedResults = array();
     // background-color only allowed on final layer;
-    $color = new Value\Color('transparent');
+    $color = null;
+
     foreach($aValueList as $iLayerIndex => $aValues) {
+
       // if we have multiple layers, get the values for this layer
       if($aValues instanceof PropertyValueList) {
         $aValues = $aValues->getItems();
       } else if(!is_array($aValues)) {
         $aValues = array($aValues);
       }
-      $aBgProperties = self::_getBackgroundDefaults();
+
+      $aBgProperties = array();
       $iNumBgPos = 0;
       $iNumBoxValues = 0;
       foreach($aValues as $mValue) {
+
         $mValue = Object::getClone($mValue);
-        if ($mValue instanceof Value\URL || $mValue instanceof Value\Func) {
+        if ($mValue instanceof Value\Url || $mValue instanceof Value\Func || $mValue == "none") {
           $aBgProperties['background-image'] = $mValue;
         } else if ($mValue instanceof PropertyValueList) {
           // bg-pos bg-pos? / bg-size bg-size?
@@ -341,13 +329,14 @@ class ExpandShorthands
           } else {
             $aBgPosValues = array($oBgPosValues);
           }
-          //if($aBgPosValues[0] instanceof Serializable) $aBgPosValues[0] = clone $aBgPosValues[0];
-          $aBgProperties['background-position']->replace(0, $aBgPosValues[0]);
-          $aBgProperties['background-position']->replace(1, 'center');
+          $bgpos_valuelist = new PropertyValueList(
+            array($aBgPosValues[0], 'center'),
+            ' '
+          );
           if(count($aBgPosValues) > 1) {
-            //if($aBgPosValues[1] instanceof Serializable) $aBgPosValues[1] = clone $aBgPosValues[1];
-            $aBgProperties['background-position']->replace(1, $aBgPosValues[1]);
+            $bgpos_valuelist->replace(1, $aBgPosValues[1]);
           }
+          $aBgProperties['background-position'] = $bgpos_valuelist;
           //
           $oBgSizeValues = $mValue->getLast();
           if($oBgSizeValues instanceof PropertyValueList) {
@@ -355,20 +344,23 @@ class ExpandShorthands
           } else {
             $aBgSizeValues = array($oBgSizeValues);
           }
-          //if($aBgSizeValues[0] instanceof Serializable) $aBgSizeValues[0] = clone $aBgSizeValues[0];
-          $aBgProperties['background-size']->replace(0, $aBgSizeValues[0]);
-          $aBgProperties['background-size']->replace(1, $aBgSizeValues[0]);
+          $bgsize_valuelist = new PropertyValueList(
+            array($aBgSizeValues[0], $aBgSizeValues[0]),
+            ' '
+          );
           if(count($aBgSizeValues) > 1) {
-            //if($aBgSizeValues[1] instanceof Serializable) $aBgSizeValues[1] = clone $aBgSizeValues[1];
-            $aBgProperties['background-size']->replace(1, $aBgSizeValues[1]);
+            $bgsize_valuelist->replace(1, $aBgSizeValues[1]);
           }
+          $aBgProperties['background-size'] = $bgsize_valuelist;
+
         } else if(in_array($mValue, array('left','center','right','top','bottom'))
           || $mValue instanceof Value\Dimension
         ){
           //if($mValue instanceof Value\Dimension) $mValue = clone $mValue;
           if($iNumBgPos === 0) {
-            $aBgProperties['background-position']->replace(0, $mValue);
-            $aBgProperties['background-position']->replace(1, 'center');
+            $aBgProperties['background-position'] = new PropertyValueList(
+              array($mValue, 'center'), ' '
+            );
           } else {
             $aBgProperties['background-position']->replace(1, $mValue);
           }
@@ -385,13 +377,19 @@ class ExpandShorthands
             $aBgProperties['background-clip'] = $mValue;
           }
           $iNumBoxValues++;
-        } else if($mValue instanceof Value\Color && $iLayerIndex == $iNumLayers-1) {
-          $color = $mValue;
+        } else if($mValue instanceof Value\Color) {
+          if($iLayerIndex == $iNumLayers-1) {
+            $color = $mValue;
+          } else {
+            if(empty($aBgProperties)) $aBgProperties['background-image'] = "none";
+          }
         }
       }
       $aUnfoldedResults[] = $aBgProperties;
     }
-    $aUnfoldedResults[$iNumLayers-1]['background-color'] = $color;
+    if ($color) {
+      $aUnfoldedResults[$iNumLayers-1]['background-color'] = $color;
+    }
     $aFoldedResults = array();
     foreach($aUnfoldedResults as $i => $result) {
       foreach($result as $propname => $propval) {
@@ -410,3 +408,4 @@ class ExpandShorthands
     $this->styleDeclaration->remove($oProperty);
   }
 }
+

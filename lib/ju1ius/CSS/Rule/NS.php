@@ -2,7 +2,7 @@
 namespace ju1ius\CSS\Rule;
 
 use ju1ius\CSS\Rule;
-use ju1ius\CSS\Value\URL;
+use ju1ius\CSS\Value\Url;
 
 /**
  * Represents an @namespace rule
@@ -16,17 +16,17 @@ class NS extends Rule
   private $uri;
   private $prefix;
 
-  function __construct(URL $uri, $prefix=null)
+  function __construct(Url $uri, $prefix=null)
   {
     $this->uri = $uri;
     $this->prefix = $prefix;
   }
 
-  public function getURI()
+  public function getUri()
   {
     return $this->uri;
   }
-  public function setURI(URL $uri)
+  public function setUri(Url $uri)
   {
     $this->uri = $uri;
   }
@@ -44,7 +44,7 @@ class NS extends Rule
   {
 		return "@namespace "
 			. ($this->prefix ? $this->prefix . ' ' : '')
-			. $this->uri->getCssText()
+			. $this->uri->getCssText($options)
 			. ';';
   }
 

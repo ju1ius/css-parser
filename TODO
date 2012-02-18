@@ -4,21 +4,16 @@ README
 
 CSSOM:
   DOMDocument extensions
-  MediaQueries:
-    Level 3 support
-    http://www.w3.org/TR/css3-mediaqueries/#syntax 
   Selectors:
     - Tests
   shorthands:
     expand:
       expand if more than one background shorthand ?
-      do we need background default values ?
       liststyle tests
     create:
       liststyle tests
       background-size syntax in background shorthand ?
   setCssText() methods
-  CSSList extends ArrayObject ? or implements Iterator/ArrayAccess ????
   StyleSheetList (http://dev.w3.org/csswg/cssom/#the-stylesheetlist-sequence):
     resolving imports
   URL:

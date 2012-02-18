@@ -1,6 +1,7 @@
 <?php
 namespace ju1ius\CSS\Resolver;
 
+use ju1ius\Uri;
 use ju1ius\CSS\StyleSheet;
 use ju1ius\CSS\Iterator\ValueIterator;
 use ju1ius\CSS\Util;
@@ -17,35 +18,38 @@ class UrlResolver
   public function __construct(StyleSheet $stylesheet, $base_url=null)
   {
     $this->stylesheet = $stylesheet;
-    $this->base_url = $base_url;
-    if(!$this->base_url) {
-      $href = $this->stylesheet->getHref();
-      $this->base_url = Util\URL::dirname($this->stylesheet->getHref());
+    if(!$base_url) {
+      $href = new Uri($this->stylesheet->getHref());
+      $this->base_url = $href->dirname();
       if(!$this->base_url) {
         throw new \RuntimeException("You must provide a valid base url");
       }
+    } else if($base_url instanceof Uri){
+      $this->base_url = $base_url;
+    } else {
+      $this->base_url = new Uri($base_url);
     }
   }
 
   public function resolve()
   {
-    $it = new ValueIterator($this->stylesheet, 'ju1ius\CSS\Value\URL', true);
-    $bIsAbsBaseUrl = Util\URL::isAbsUrl($this->base_url) || Util\URL::isAbsPath($this->base_url);
+    $it = new ValueIterator($this->stylesheet, 'ju1ius\CSS\Value\Url', true);
+    $bIsAbsBaseUrl = $this->base_url->isAbsoluteUrl() || $this->base_url->isAbsolutePath();
     foreach($it as $value) {
-      $url = $value->getUrl()->getString();
-      $isAbsPath = Util\URL::isAbsPath($url);
-      $isAbsUrl = Util\URL::isAbsUrl($url);
+      $url = new Uri($value->getUrl()->getString());
+      $isAbsPath = $url->isAbsolutePath();
+      $isAbsUrl = $url->isAbsoluteUrl();
       // resolve only if:
       if(!$isAbsUrl && !$isAbsPath){
         // $url is not absolute url or absolute path
-        $url = Util\URL::joinPaths($this->base_url, $url);
-        $value->setUrl(new Value\String($url));
+        $url = $this->base_url->join($url);
+        $value->setUrl(new Value\String((string) $url));
       } else if($isAbsPath && $bIsAbsBaseUrl) {
         // $url is absolute path and base url is absolute
         // get the base domain from url
-        $base_url = preg_replace("#^(\w+://.*?)/.*#u", "$1", $this->base_url);
-        $url = Util\URL::joinPaths($base_url, $url);
-        $value->setUrl(new Value\String($url));
+        $base_url = $this->base_url->getRootUrl();
+        $url = $base_url->join($url);
+        $value->setUrl(new Value\String((string) $url));
       }
     }
   }

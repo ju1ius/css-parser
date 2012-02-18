@@ -23,7 +23,7 @@ class ValueIteratorTest extends CSSParser_TestCase
         'p{ color: white; background: url(foobar.png); }',
         array(
           new Value\Color('white'),
-          new Value\URL(new Value\String('foobar.png'))
+          new Value\Url(new Value\String('foobar.png'))
         )
       ),
       array(
@@ -33,8 +33,8 @@ class ValueIteratorTest extends CSSParser_TestCase
 p{ content: attr("data-content"); }',
         array(
           new Value\String('utf-8'),
-          new Value\URL(new Value\String('foobar.css')),
-          new Value\URL(new Value\String('foo')),
+          new Value\Url(new Value\String('foobar.css')),
+          new Value\Url(new Value\String('foo')),
           new Value\Func('attr', array(new Value\String('data-content')))
         )
       ),
@@ -49,7 +49,7 @@ p{ content: attr("data-content"); }',
   {
     $parser = $this->createParser();
     $styleSheet = $parser->parseStyleSheet($input);
-    $it = new ValueIterator($styleSheet, 'ju1ius\CSS\Value\URL');
+    $it = new ValueIterator($styleSheet, 'ju1ius\CSS\Value\Url');
     $this->assertEquals($expected, $it->getValues());
   }
   public function testGetAllUrlsProvider()
@@ -59,8 +59,8 @@ p{ content: attr("data-content"); }',
         '@import "foobar.css";
 p{ color: white; background: url(foobar.png) }',
         array(
-          new Value\URL(new Value\String('foobar.css')),
-          new Value\URL(new Value\String('foobar.png')),
+          new Value\Url(new Value\String('foobar.css')),
+          new Value\Url(new Value\String('foobar.png')),
         )
       ),
     );

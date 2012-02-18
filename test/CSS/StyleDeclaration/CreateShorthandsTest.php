@@ -92,6 +92,10 @@ class CreateShorthandsTest extends CSSParser_TestCase
         'p{ margin: 1em; }'
       ), 
       array(
+        'p{ padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; }',
+        'p{ padding: 0; }'
+      ),
+      array(
         'p{ margin-top: 1em; margin-right: 2em; margin-bottom: 1em; margin-left: 2em; }',
         'p{ margin: 1em 2em; }'
       ), 

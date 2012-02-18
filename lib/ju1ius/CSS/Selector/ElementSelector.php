@@ -2,7 +2,7 @@
 namespace ju1ius\CSS\Selector;
 
 use ju1ius\CSS\Selector;
-use ju1ius\CSS\Xpath;
+use ju1ius\CSS\XPath;
 
 /**
  * Represents an element selector

@@ -3,6 +3,7 @@ namespace ju1ius\CSS\Selector;
 
 use ju1ius\CSS\Selector;
 use ju1ius\CSS\Exception\ParseException;
+use ju1ius\CSS\Exception\UnsupportedSelectorException;
 use ju1ius\CSS\XPath;
 
 /**
@@ -71,14 +72,16 @@ class PseudoSelector extends Selector
 
     if (in_array($this->ident, self::$unsupported))
     {
-      throw new ParseException(sprintf(
+      throw new UnsupportedSelectorException(sprintf(
         'The pseudo-class %s is unsupported', $this->ident
       ));
     }
     $method = 'xpath_'.str_replace('-', '_', $this->ident);
     if (!method_exists($this, $method))
     {
-      throw new ParseException(sprintf('The pseudo-class %s is unknown', $this->ident));
+      throw new UnsupportedSelectorException(
+        sprintf('The pseudo-class %s is unknown', $this->ident)
+      );
     }
     return $this->$method($elXpath);
   }
@@ -146,7 +149,7 @@ class PseudoSelector extends Selector
   {
     if ($xpath->getElement() == '*')
     {
-      throw new ParseException('*:first-of-type is not implemented');
+      throw new UnsupportedSelectorException('*:first-of-type is not implemented');
     }
     $xpath->addStarPrefix();
     $xpath->addCondition('position() = 1');
@@ -164,7 +167,7 @@ class PseudoSelector extends Selector
   {
     if ($xpath->getElement() == '*')
     {
-      throw new ParseException('*:last-of-type is not implemented');
+      throw new UnsupportedSelectorException('*:last-of-type is not implemented');
     }
     $xpath->addStarPrefix();
     $xpath->addCondition('position() = last()');
@@ -196,7 +199,7 @@ class PseudoSelector extends Selector
   {
     if ($xpath->getElement() == '*')
     {
-      throw new ParseException('*:only-of-type is not implemented');
+      throw new UnsupportedSelectorException('*:only-of-type is not implemented');
     }
     $xpath->addCondition('last() = 1');
 

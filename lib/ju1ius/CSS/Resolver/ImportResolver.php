@@ -1,6 +1,7 @@
 <?php
 namespace ju1ius\CSS\Resolver;
 
+use ju1ius\Uri;
 use ju1ius\CSS\StyleSheet;
 use ju1ius\CSS\StyleSheetLoader;
 use ju1ius\CSS\Parser;
@@ -47,11 +48,7 @@ class ImportResolver
         } else {
           $imported_files[] = $url;
         }
-        if(Util\URL::isAbsUrl($url)) {
-          $info = $loader->loadUrl($url);
-        } else {
-          $info = $loader->loadFile($url);
-        }
+        $info = $loader->load(new Uri($url));
         // if imported file is in another charset,
         // we need to convert it
         if(mb_strtolower($info->getCharset(), $main_charset) !== $main_charset) {

@@ -160,18 +160,13 @@ class Charset
    **/
   static function detectCharset($text)
   {
-    foreach(self::$CHARSET_DETECTION_MAP as $charsetMap)
-    {
+    foreach(self::$CHARSET_DETECTION_MAP as $charsetMap) {
       $pattern = $charsetMap['pattern'];
       $matches = array();
-      if(preg_match($pattern, $text, $matches))
-      {
-        if($charsetMap['charset'])
-        {
+      if(preg_match($pattern, $text, $matches)) {
+        if($charsetMap['charset']) {
           $charset = $charsetMap['charset'];
-        }
-        else
-        {
+        } else {
           $charset = $matches[1];
         }
         return $charset;
@@ -205,53 +200,46 @@ class Charset
   static function removeBOM($text)
   {
     $len = strlen($text);
-    if($len > 3)
-    {
-      switch ($text[0])
-      {
+    if($len > 3) {
+      switch ($text[0]) {
+
         case "\xEF":
-          if(("\xBB" == $text[1]) && ("\xBF" == $text[2]))
-          {
+          if(("\xBB" == $text[1]) && ("\xBF" == $text[2])) {
             // EF BB BF  UTF-8 encoded BOM
             return substr($text, 3);
           }
           break;
+
         case "\xFE":
-          if (("\xFF" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3]))
-          {
+          if (("\xFF" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3])) {
             // FE FF 00 00  UCS-4, unusual octet order BOM (3412)
             return substr($text, 4);
-          }
-          else if ("\xFF" == $text[1])
-          {
+          } else if ("\xFF" == $text[1]) {
              // FE FF  UTF-16, big endian BOM
             return substr($text, 2);
           }
           break;
+
         case "\x00":
-          if (("\x00" == $text[1]) && ("\xFE" == $text[2]) && ("\xFF" == $text[3]))
-          {
+          if (("\x00" == $text[1]) && ("\xFE" == $text[2]) && ("\xFF" == $text[3])) {
             // 00 00 FE FF  UTF-32, big-endian BOM
             return substr($text, 4);
-          }
-          else if (("\x00" == $text[1]) && ("\xFF" == $text[2]) && ("\xFE" == $text[3]))
-          {
+          } else if (("\x00" == $text[1]) && ("\xFF" == $text[2]) && ("\xFE" == $text[3])) {
             // 00 00 FF FE  UCS-4, unusual octet order BOM (2143)
             return substr($text, 4);
           }
           break;
+
         case "\xFF":
-          if (("\xFE" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3]))
-          {
+          if (("\xFE" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3])) {
             // FF FE 00 00  UTF-32, little-endian BOM
             return substr($text, 4);
-          }
-          else if ("\xFE" == $text[1])
-          {
+          } else if ("\xFE" == $text[1]) {
             // FF FE  UTF-16, little endian BOM
             return substr($text, 2);
           }
           break;
+
       }
     }
     return $text;
@@ -267,49 +255,41 @@ class Charset
   static function checkForBOM($text)
   {
     $len = strlen($text);
-    if($len > 3)
-    {
-      switch ($text[0])
-      {
+    if($len > 3) {
+      switch ($text[0]) {
+
         case "\xEF":
-          if(("\xBB" == $text[1]) && ("\xBF" == $text[2]))
-          {
+          if(("\xBB" == $text[1]) && ("\xBF" == $text[2])) {
             // EF BB BF  UTF-) encoded BOM
             return 'UTF-8';
           }
           break;
+
         case "\xFE":
-          if (("\xFF" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3]))
-          {
+          if (("\xFF" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3])) {
             // FE FF 00 00  UCS-4, unusual octet order BOM (3412)
             return "X-ISO-10646-UCS-4-3412";
-          }
-          else if ("\xFF" == $text[1])
-          {
+          } else if ("\xFF" == $text[1]) {
              // FE FF  UTF-16, big endian BOM
             return "UTF-16BE";
           }
           break;
+
         case "\x00":
-          if (("\x00" == $text[1]) && ("\xFE" == $text[2]) && ("\xFF" == $text[3]))
-          {
+          if (("\x00" == $text[1]) && ("\xFE" == $text[2]) && ("\xFF" == $text[3])) {
             // 00 00 FE FF  UTF-32, big-endian BOM
             return "UTF-32BE";
-          }
-          else if (("\x00" == $text[1]) && ("\xFF" == $text[2]) && ("\xFE" == $text[3]))
-          {
+          } else if (("\x00" == $text[1]) && ("\xFF" == $text[2]) && ("\xFE" == $text[3])) {
             // 00 00 FF FE  UCS-4, unusual octet order BOM (2143)
             return "X-ISO-10646-UCS-4-2143";
           }
           break;
+
         case "\xFF":
-          if (("\xFE" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3]))
-          {
+          if (("\xFE" == $text[1]) && ("\x00" == $text[2]) && ("\x00" == $text[3])) {
             // FF FE 00 00  UTF-32, little-endian BOM
             return "UTF-32LE";
-          }
-          else if ("\xFE" == $text[1])
-          {
+          } else if ("\xFE" == $text[1]) {
             // FF FE  UTF-16, little endian BOM
             return "UTF-16LE";
           }
@@ -329,10 +309,9 @@ class Charset
    **/
   static function printBytes($string, $length=null)
   {
-    if($length == null) $length = strlen($String);
+    if($length == null) $length = strlen($string);
     $bytes = array();
-    for($i = 0; $i < $length; $i++)
-    {
+    for($i = 0; $i < $length; $i++) {
       $bytes[] = "0x".dechex(ord($string[$i]));
     }
     return implode(' ', $bytes);
