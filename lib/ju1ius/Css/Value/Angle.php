@@ -1,0 +1,16 @@
+<?php
+namespace ju1ius\Css\Value;
+
+/**
+ * @package Css
+ * @subpackage Value
+ **/
+class Angle extends Dimension
+{
+  public static $VALID_UNITS = array(
+    PrimitiveValue::UNIT_DEG,
+    PrimitiveValue::UNIT_RAD,
+    PrimitiveValue::UNIT_GRAD,
+    PrimitiveValue::UNIT_TURN,
+  );
+}

@@ -1,17 +1,17 @@
 <phpunit colors="true" verbose="true">
   <testsuites>
     <testsuite name="CSSParser Tests">
-      <file>CSS/Rule/CharsetTest.php</file>
-      <file>CSS/Rule/NSTest.php</file>
-      <file>CSS/Rule/ImportTest.php</file>
-      <file>CSS/Rule/FontFaceTest.php</file>
-      <file>CSS/StyleDeclarationTest.php</file>
-			<file>CSS/StyleDeclaration/ExpandShorthandsTest.php</file>
-			<file>CSS/StyleDeclaration/CreateShorthandsTest.php</file>
-      <file>CSS/Rule/StyleRuleTest.php</file>
-      <file>CSS/Iterator/ValueIteratorTest.php</file>
-      <file>CSS/Resolver/UrlResolverTest.php</file>
-      <file>CSS/Resolver/ImportResolverTest.php</file>
+      <file>Css/Rule/CharsetTest.php</file>
+      <file>Css/Rule/NSTest.php</file>
+      <file>Css/Rule/ImportTest.php</file>
+      <file>Css/Rule/FontFaceTest.php</file>
+      <file>Css/StyleDeclarationTest.php</file>
+			<file>Css/StyleDeclaration/ExpandShorthandsTest.php</file>
+			<file>Css/StyleDeclaration/CreateShorthandsTest.php</file>
+      <file>Css/Rule/StyleRuleTest.php</file>
+      <file>Css/Iterator/ValueIteratorTest.php</file>
+      <file>Css/Resolver/UrlResolverTest.php</file>
+      <file>Css/Resolver/ImportResolverTest.php</file>
     </testsuite>
     <testsuite name="CSSParser Bugs">
       <directory>bugs</directory>
