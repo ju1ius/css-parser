@@ -2,8 +2,10 @@
 
 namespace ju1ius\Css;
 
+use ju1ius\Text\Source;
 use ju1ius\Css\ParserState;
 use ju1ius\Css\Exception\ParseException;
+use ju1ius\Css\Exception\RecoveredParseException;
 
 /**
  * Provides generic parsing methods for Css\Parser
@@ -13,12 +15,25 @@ use ju1ius\Css\Exception\ParseException;
 abstract class AbstractParser
 {
   protected
-    $options = array(),
+    $options = array(
+      'strict' => false
+    ),
+    $source,
     $text,
     $current_position,
+    $backtracking_position,
     $length,
-    $state;
+    $state,
+    $strict_errors = false,
+    $errors;
     
+  /**
+   * Available options:
+   *  - strict boolean If true, throw ParseExceptions on error.
+   *                    If false, recover errors according to http://www.w3.org/TR/CSS2/syndata.html#parsing-errors 
+   *
+   * @param array $options
+   **/
   public function __construct(array $options = array())
   {
     $this->setOptions($options); 
@@ -34,6 +49,11 @@ abstract class AbstractParser
     return $this->charset;
   }
 
+  public function getErrors()
+  {
+    return $this->errors;
+  }
+
   /**
    * Sets an option value.
    *
@@ -46,6 +66,10 @@ abstract class AbstractParser
   {
     $this->options[$name] = $value;
     return $this;
+  }
+  public function getOption($name, $default=null)
+  {
+    return isset($this->options[$name]) ? $this->options[$name] : $default;
   }
 
   /**
@@ -67,23 +91,47 @@ abstract class AbstractParser
    **/
   public function setOptions(array $options) 
   {
-    $this->options = array_merge($this->options, $options);
+    $this->options = array_replace_recursive($this->options, $options);
     return $this;
   }
 
   /**
-   * Initializes the parser according to the input string and charset
+   * Initializes the parser according to the input string and charset.
    *
-   * @param string $text
-   * @param string $charset
+   * If passed a Source\String object, initializes according to it.
+   *
+   * @param string|Source\String $text
+   * @param string               $charset
    **/
   protected function _init($text, $charset=null)
   {
-    $this->text = $text;
+    if($text instanceof Source\String) {
+      $this->source = $text;
+    } else {
+      $this->source = new Source\String($text, $charset);
+    }
+    $this->text = $this->source->getContents();
     $this->current_position = 0;
-    $this->charset = $charset;
-    $this->length = mb_strlen($this->text, $this->charset);
+    $this->charset = $this->source->getEncoding();
+    $this->length = $this->source->getLength();
     $this->state = new ParserState();
+    $this->errors = array();
+  }
+
+  protected function _pushError(ParseException $e)
+  {
+    $start = $this->backtracking_position;
+    $end = $this->current_position;
+    $range = $this->source->getSourceRange($start, $end);
+    $this->errors[] = new RecoveredParseException($range, $e);
+  }
+  protected function _setBacktrackingPosition()
+  {
+    $this->backtracking_position = $this->current_position;
+  }
+  protected function _backtrack()
+  {
+    $this->current_position = $this->backtracking_position;
   }
 
   /**

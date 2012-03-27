@@ -2,6 +2,8 @@
 namespace ju1ius\Css\Resolver;
 
 use ju1ius\Uri;
+use ju1ius\Text\Source;
+
 use ju1ius\Css\StyleSheet;
 use ju1ius\Css\StyleSheetLoader;
 use ju1ius\Css\Parser;
@@ -48,20 +50,19 @@ class ImportResolver
         } else {
           $imported_files[] = $url;
         }
-        $info = $loader->load(new Uri($url));
+        $source = $loader->load($url);
         // if imported file is in another charset,
         // we need to convert it
-        if(mb_strtolower($info->getCharset(), $main_charset) !== $main_charset) {
+        if(mb_strtolower($source->getEncoding(), $main_charset) !== $main_charset) {
           $converted = Util\Charset::convert(
-            $info->getContent(),
-            $info->getCharset(),
+            $source->getContents(),
+            $source->getEncoding(),
             $main_charset
           );
-          $info->setContent($converted);
-          $info->setCharset($main_charset);
+          $source = new Source\File($url, $converted, $main_charset);
         }
         // Do the parsing
-        $stylesheet = $parser->parse($info);
+        $stylesheet = $parser->parse($source);
 
         // Remove charset rules
         $rule_list = $stylesheet->getRuleList();

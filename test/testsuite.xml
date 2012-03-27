@@ -12,6 +12,7 @@
       <file>Css/Iterator/ValueIteratorTest.php</file>
       <file>Css/Resolver/UrlResolverTest.php</file>
       <file>Css/Resolver/ImportResolverTest.php</file>
+      <file>Css/Exception/ErrorHandlingTest.php</file>
     </testsuite>
     <testsuite name="CSSParser Bugs">
       <directory>bugs</directory>

@@ -13,13 +13,35 @@ $loader->register();
 
 class CssParser_TestCase extends PHPUnit_Framework_TestCase
 {
+  protected
+    $stylesheet_loader,
+    $css_parser;
+
+  public function __construct($name=null, $data=array(), $dataName='')
+  {
+    $this->stylesheet_loader = new ju1ius\Css\StyleSheetLoader();
+    $this->css_parser = new ju1ius\Css\Parser();
+    parent::__construct($name, $data, $dataName);
+  }
+
   public function loadFile($file)
   {
     return file_get_contents(__DIR__.'/files/'.$file);
   }
 
-  public function createParser()
+  public function createParser($options=array())
   {
-    return new ju1ius\Css\Parser();
+    return new ju1ius\Css\Parser($options);
+  }
+
+  public function parseStyleSheet($str)
+  {
+    $source = $this->stylesheet_loader->load($str);
+    return $this->css_parser->parseStyleSheet($source);
+  }
+
+  public function loadString($str)
+  {
+    return $this->stylesheet_loader->loadString($str);
   }
 }

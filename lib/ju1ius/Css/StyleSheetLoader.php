@@ -2,12 +2,13 @@
 namespace ju1ius\Css;
 
 use ju1ius\Uri;
+use ju1ius\Text\Source;
 
 /**
- * Handles loading of stylesheets
+ * Handles loading of stylesheets.
  *
  * Relies on the CURL extension to load network urls
- */
+ **/
 class StyleSheetLoader
 {
   private
@@ -18,20 +19,34 @@ class StyleSheetLoader
     $this->setOptions($options);  
   }
 
-  public function load($url)
+  /**
+   * Loads a Css file or string.
+   *
+   * If passed an absolute url or a filesystem path, returns a Source\File object.
+   * If passed a Css string, returns a Source\String object.
+   *
+   * @param string|ju1ius\Uri $url_or_string
+   *
+   * @return Source\String|Source\File
+   **/
+  public function load($url_or_string)
   {
-    $uri = Uri::parse($url);
+    $uri = Uri::parse($url_or_string);
     if($uri->isAbsoluteUrl()) {
       return $this->loadUrl($uri);
     }
-    return $this->loadFile($uri);
+    $path = realpath($uri);
+    if(is_file($path)) {
+      return $this->loadFile($uri);
+    }
+    return $this->loadString($url_or_string);
   }
 
   /**
-   * Loads a CSS file into a StyleSheetInfo object.
+   * Loads a CSS file into a Source\File object.
    *
-   * @param string|ju1ius\Uri The path to the file
-   * @return StyleSheetInfo
+   * @param string|ju1ius\Uri $url The path to the file
+   * @return Source\File
    **/
   public function loadFile($url)
   {
@@ -43,19 +58,18 @@ class StyleSheetLoader
         sprintf('Could not load file: "%s"', $path)
       );
     }
-    $info = $this->loadString($content);
-    $info->setUrl($path);
-    return $info;
+    $infos = self::_loadString($content);
+    return new Source\File($path, $infos['contents'], $infos['charset']);
   }
 
   /**
-   * Loads a CSS file into a StyleSheetInfo object.
+   * Loads a CSS file into a Source\File object.
    *
    * Relies on the CURL extension to load network urls
    *
    * @param string|ju1ius\Uri $url The url of the file
    * @param boolean           $preferFileCharset If false, use the content-type header for charset detection
-   * @return StyleSheetInfo
+   * @return Source\File
    **/
   public function loadUrl($url, $preferFileCharset=false)
   {
@@ -63,21 +77,27 @@ class StyleSheetLoader
     $response = self::_loadUrl($uri);
     $content = $response['body'];
     $charset = $response['charset'];
-    $info = $this->loadString($content);
-    $info->setUrl($url);
-    if($charset && !$preferFileCharset) {
-      $info->setCharset($charset);
+
+    $infos = self::_loadString($response['body']);
+    if($response['charset'] && !$preferFileCharset) {
+      $infos['charset'] = $response['charset'];
     }
-    return $info;
+    return new Source\File($url, $infos['contents'], $infos['charset']);
   }
 
   /**
-   * Loads a CSS string into a StyleSheetInfo object.
+   * Loads a CSS string into a Source\String object.
    *
-   * @param string The CSS string
+   * @param string $str  The CSS string
    * @return StyleSheetInfo
    **/
   public function loadString($str)
+  {
+    $infos = self::_loadString($str);
+    return new Source\String($infos['contents'], $infos['charset']);
+  }
+
+  static private function _loadString($str)
   {
     // detect charset from BOM and/or @charset rule
     $charset = Util\Charset::detect($str);
@@ -86,7 +106,10 @@ class StyleSheetLoader
       $charset = 'utf-8';
     }
     $str = Util\Charset::removeBOM($str);
-    return new StyleSheetInfo(null, $str, $charset);
+    return array(
+      'contents' => $str,
+      'charset' => $charset
+    );
   }
 
   static private function _loadUrl(Uri $url)

@@ -8,8 +8,9 @@ use ju1ius\Css\Util;
 use ju1ius\Css\Value;
 
 /**
- * 
- */
+ * Resolves relative urls in a stylesheet,
+ * using a base url or the stylesheet's href
+ **/
 class UrlResolver
 {
   private
@@ -18,7 +19,11 @@ class UrlResolver
   public function __construct(StyleSheet $stylesheet, $base_url=null)
   {
     $this->stylesheet = $stylesheet;
-    if(!$base_url) {
+    if(!$base_url && !$this->stylesheet->getHref()) {
+      throw new \RuntimeException(
+        "The provided stylesheet has no href, you must provide a base url"
+      );
+    } else if(!$base_url) {
       $href = new Uri($this->stylesheet->getHref());
       $this->base_url = $href->dirname();
       if(!$this->base_url) {
