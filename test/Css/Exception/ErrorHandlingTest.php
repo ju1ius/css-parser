@@ -8,6 +8,7 @@ class ErrorHandlingTest extends CssParser_TestCase
    **/
   public function testMalformedProperty($input, $expected)
   {
+    $this->css_parser->getOptions()->set('strict_parsing', false);
     $stylesheet = $this->parseStyleSheet($input);
     $this->assertEquals($expected, $stylesheet->getCssText());
     //foreach($this->css_parser->getErrors() as $error) {
@@ -87,11 +88,12 @@ class ErrorHandlingTest extends CssParser_TestCase
    **/
   public function testMalformedStatement($input, $expected)
   {
+    $this->css_parser->getOptions()->set('strict_parsing', false);
     $stylesheet = $this->parseStyleSheet($input);
     $this->assertEquals($expected, $stylesheet->getCssText());
-    foreach($this->css_parser->getErrors() as $error) {
-      echo $error . PHP_EOL;
-    }
+    //foreach($this->css_parser->getErrors() as $error) {
+      //echo $error . PHP_EOL;
+    //}
   }
   public function testMalformedStatementProvider()
   {

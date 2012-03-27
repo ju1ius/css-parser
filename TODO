@@ -21,6 +21,9 @@ CSSOM:
 
 Parser:
   Charset handling
-  CSS\Parser::parseInlineStyleDeclaration()
   background-size syntax in background shorthand
   border-radius
+  The parser code is starting to be a bit hairy...
+  Should I use a parser generator ?
+    + maintainability
+    - performance ?

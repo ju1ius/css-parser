@@ -2,6 +2,7 @@
 
 namespace ju1ius\Css;
 
+use ju1ius\Collections\ParameterBag;
 use ju1ius\Text\Source;
 use ju1ius\Css\ParserState;
 use ju1ius\Css\Exception\ParseException;
@@ -15,16 +16,14 @@ use ju1ius\Css\Exception\RecoveredParseException;
 abstract class AbstractParser
 {
   protected
-    $options = array(
-      'strict' => false
-    ),
+    $options,
     $source,
     $text,
     $current_position,
     $backtracking_position,
     $length,
     $state,
-    $strict_errors = false,
+    $strict_parsing = false,
     $errors;
     
   /**
@@ -36,7 +35,10 @@ abstract class AbstractParser
    **/
   public function __construct(array $options = array())
   {
-    $this->setOptions($options); 
+    $this->options = new ParameterBag(array(
+      'strict_parsing' => false
+    ));
+    $this->options->merge($options); 
   }
 
   /**
@@ -55,24 +57,6 @@ abstract class AbstractParser
   }
 
   /**
-   * Sets an option value.
-   *
-   * @param  string $name  The option name
-   * @param  mixed  $value The default value
-   *
-   * @return ju1ius\Css\Parser The current Css\Parser instance
-   */
-  public function setOption($name, $value)
-  {
-    $this->options[$name] = $value;
-    return $this;
-  }
-  public function getOption($name, $default=null)
-  {
-    return isset($this->options[$name]) ? $this->options[$name] : $default;
-  }
-
-  /**
    * Returns the options of the current instance.
    *
    * @return array The current instance's options
@@ -80,19 +64,6 @@ abstract class AbstractParser
   public function getOptions()
   {
     return $this->options;
-  }
-
-  /**
-   * Merge given options with the current options
-   *
-   * @param array $options The options to merge
-   *
-   * @return CssParser The current CssParser instance
-   **/
-  public function setOptions(array $options) 
-  {
-    $this->options = array_replace_recursive($this->options, $options);
-    return $this;
   }
 
   /**
@@ -105,6 +76,9 @@ abstract class AbstractParser
    **/
   protected function _init($text, $charset=null)
   {
+    // options
+    $this->strict_parsing = $this->options->get('strict_parsing');
+
     if($text instanceof Source\String) {
       $this->source = $text;
     } else {
@@ -120,10 +94,7 @@ abstract class AbstractParser
 
   protected function _pushError(ParseException $e)
   {
-    $start = $this->backtracking_position;
-    $end = $this->current_position;
-    $range = $this->source->getSourceRange($start, $end);
-    $this->errors[] = new RecoveredParseException($range, $e);
+    $this->errors[] = new RecoveredParseException($e, $this->backtracking_position, $this->current_position);
   }
   protected function _setBacktrackingPosition()
   {
@@ -247,7 +218,7 @@ abstract class AbstractParser
         throw new ParseException(sprintf(
           'Expected "%s", got "%s"',
           $value, $this->_peek(12)
-        ));
+        ), $this->source, $this->current_position);
       }
       $this->current_position += mb_strlen($value, $this->charset);
       return $value;
@@ -257,7 +228,7 @@ abstract class AbstractParser
       if($this->current_position + $value > $this->length) {
         throw new ParseException(sprintf(
           'Tried to consume %d chars, exceeded file end', $value
-        ));
+        ), $this->source, $this->current_position);
       }
       $result = mb_substr($this->text, $this->current_position, $value, $this->charset);
       $this->current_position += $value;
@@ -281,7 +252,7 @@ abstract class AbstractParser
     throw new ParseException(sprintf(
       'Expected pattern "%s" not found, got: "%s"',
       $pattern, $this->_peek(12)
-    ));
+    ), $this->source, $this->current_position);
   }
 
   /**
@@ -330,7 +301,7 @@ abstract class AbstractParser
       throw new ParseException(sprintf(
         'Required "%s" not found, got "%s"',
         $end, $this->_peek(12)
-      ));
+      ), $this->source, $this->current_position);
     }
     return $this->_consume($end_pos - $this->current_position);
   }

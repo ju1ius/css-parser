@@ -20,7 +20,9 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
   public function __construct($name=null, $data=array(), $dataName='')
   {
     $this->stylesheet_loader = new ju1ius\Css\StyleSheetLoader();
-    $this->css_parser = new ju1ius\Css\Parser();
+    $this->css_parser = new ju1ius\Css\Parser(array(
+      'strict_parsing' => true
+    ));
     parent::__construct($name, $data, $dataName);
   }
 
@@ -29,9 +31,11 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
     return file_get_contents(__DIR__.'/files/'.$file);
   }
 
-  public function createParser($options=array())
+  public function createParser()
   {
-    return new ju1ius\Css\Parser($options);
+    return new ju1ius\Css\Parser(array(
+      'strict_parsing' => true
+    ));
   }
 
   public function parseStyleSheet($str)

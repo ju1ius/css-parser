@@ -92,7 +92,7 @@ class Parser extends AbstractParser
         try{
           $ruleList->append($this->_parseAtRule());
         } catch(ParseException $e) {
-          if($this->strict_errors) {
+          if($this->strict_parsing) {
             throw $e;
           } else {
             $this->_backtrack();
@@ -106,13 +106,13 @@ class Parser extends AbstractParser
 
         $this->_consume('}');
         if($isRoot) {
-          if($this->strict_errors) {
-            throw new ParseException('Unopened { at position: '.$this->current_position);
+          if($this->strict_parsing) {
+            throw new ParseException('Unopened {', $this->source, $this->current_position);
           } else {
             $this->_setBacktrackingPosition();
             $this->_skipStyleRule();
             $this->_pushError(
-              new ParseException('Unopened }')
+              new ParseException('Unopened }', $this->source, $this->current_position)
             );
             continue;
           }
@@ -134,7 +134,7 @@ class Parser extends AbstractParser
         try{
           $ruleList->append($this->_parseStyleRule());
         } catch (ParseException $e) {
-          if($this->strict_errors) {
+          if($this->strict_parsing) {
             throw $e;
           } else {
             $this->_skipStyleRule();
@@ -147,7 +147,7 @@ class Parser extends AbstractParser
       $this->_consumeWhiteSpace();
     }
     if(!$isRoot) {
-      throw new ParseException('Unexpected end of StyleSheet');
+      throw new ParseException('Unexpected end of StyleSheet', $this->source, $this->current_position);
     }
   }/*}}}*/
 
@@ -169,7 +169,7 @@ class Parser extends AbstractParser
     if($identifier === 'charset') {
 
       if($this->state->in(ParserState::AFTER_CHARSET)) {
-        throw new ParseException('Only one @charset rule is allowed');
+        throw new ParseException('Only one @charset rule is allowed', $this->source, $this->current_position);
       }
       $charset = $this->_parseStringValue();
       $this->_consumeWhiteSpace();
@@ -181,7 +181,8 @@ class Parser extends AbstractParser
 
       if($this->state->in(ParserState::AFTER_IMPORTS)) {
         throw new ParseException(
-          '@import rules must follow all @charset rules and precede all other at-rules and rule sets'
+          '@import rules must follow all @charset rules and precede all other at-rules and rule sets',
+          $this->source, $this->current_position
         );
       }
       $this->state->enter(ParserState::AFTER_CHARSET);
@@ -200,7 +201,8 @@ class Parser extends AbstractParser
 
       if($this->state->in(ParserState::AFTER_NAMESPACES)) {
         throw new ParseException(
-          '@namespace rules must follow all @import and @charset rules and precede all other at-rules and rule sets'
+          '@namespace rules must follow all @import and @charset rules and precede all other at-rules and rule sets',
+          $this->source, $this->current_position
         );
       }
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS);
@@ -267,7 +269,7 @@ class Parser extends AbstractParser
       return $rule;
 
     } else {
-      throw new ParseException(sprintf('Unknown rule @%s', $identifier));
+      throw new ParseException(sprintf('Unknown rule @%s', $identifier), $this->source, $this->current_position);
     }
   }/*}}}*/
 
@@ -532,7 +534,7 @@ class Parser extends AbstractParser
     } else {
       $operator = $this->_consume(2);
       if(!in_array($operator, array('^=', '$=', '*=', '~=', '|=', '!='))) {
-        throw new ParseException(sprintf('Operator expected, got "%s"', $operator));
+        throw new ParseException(sprintf('Operator expected, got "%s"', $operator), $this->source, $this->current_position);
       }
     }
     $this->_consumeWhiteSpace();
@@ -554,7 +556,7 @@ class Parser extends AbstractParser
         $property = $this->_parseProperty();
         $styleDeclaration->append($property);
       } catch (ParseException $e) {
-        if($this->strict_errors) {
+        if($this->strict_parsing) {
           throw $e;
         } else {
           $this->_skipProperty();
@@ -590,7 +592,7 @@ class Parser extends AbstractParser
       if(mb_convert_case($importantMarker, MB_CASE_LOWER) !== 'important') {
         throw new ParseException(sprintf(
           '"!" was followed by "%s". Expected "important"', $importantMarker
-        ));
+        ), $this->source, $this->current_position);
       }
       $property->setIsImportant(true);
     }
@@ -669,7 +671,7 @@ class Parser extends AbstractParser
     }
 
     if(empty($stack)) {
-      throw new ParseException("Empty value");
+      throw new ParseException("Empty value", $this->source, $this->current_position);
     }
     //var_dump($stack);
 
@@ -833,7 +835,8 @@ class Parser extends AbstractParser
     $result = $this->_parseCharacter(true);
     if($result === null) {
       throw new ParseException(
-        sprintf('Identifier expected, got "%s"', $this->_peek(50))
+        sprintf('Identifier expected, got "%s"', $this->_peek(12)),
+        $this->source, $this->current_position
       );
     }
     $char;
@@ -880,8 +883,8 @@ class Parser extends AbstractParser
         $content = $this->_parseCharacter(false);
         if($content === null) {
           throw new ParseException(sprintf(
-            'Non-well-formed quoted string "%s"', $this->_peek(3)
-          ));
+            'Non-well-formed quoted string "%s"', $this->_peek(12)
+          ), $this->source, $this->current_position);
         }
         $result .= $content;
       }

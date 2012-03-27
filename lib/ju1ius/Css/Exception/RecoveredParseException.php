@@ -3,15 +3,31 @@ namespace ju1ius\Css\Exception;
 
 use ju1ius\Text\Source;
 
-class RecoveredParseException extends ParseException
+class RecoveredParseException extends \Exception
 {
   protected
     $source_range;
 
-  public function __construct(Source\Range $range, ParseException $previous)
+  public function __construct(ParseException $previous, $start, $end)
   {
-    $this->source_range = $range;
-    parent::__construct("Recovered parsing error", 0, $previous);
+    $source = $previous->getSource();
+    $this->source_range = $source->getSourceRange($start, $end);
+    $skipped = mb_substr($source->getContents(), $start, $end - $start);
+    $start = $this->source_range->getStart();
+    $end = $this->source_range->getEnd();
+    $msg = sprintf(<<<EOS
+Recovered parsing error: %s"
+> Skipped "%s"
+> Starting at line %s, column %s
+> Ending at line %s, column %s
+EOS
+      ,
+      $previous->getMessage(),
+      $skipped,
+      $start->getLine(), $start->getColumn(),
+      $end->getLine(), $end->getColumn()
+    );
+    parent::__construct($msg, 0, $previous);
   }
 
   public function getSourceRange()
@@ -21,27 +37,6 @@ class RecoveredParseException extends ParseException
 
   public function __toString()
   {
-    $start = $this->source_range->getStart();
-    $end = $this->source_range->getEnd();
-    $source = $start->getSource();
-    $skipped = mb_substr(
-      $source->getContents(),
-      $start->getOffset(),
-      $end->getOffset() - $start->getOffset()
-    );
-    $msg = <<<EOS
-%s: %s
-> Skipped "%s"
-> Starting at line %s, column %s
-> Ending at line %s, column %s
-EOS;
-    return sprintf(
-      $msg,
-      $this->getMessage(),
-      $this->getPrevious()->getMessage(),
-      $skipped,
-      $start->getLine(), $start->getColumn(),
-      $end->getLine(), $end->getColumn()
-    );
+    return $this->getMessage();
   }
 }
