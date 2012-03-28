@@ -1,32 +1,30 @@
 {
-    "name": "ju1ius/css-parser",
-    "type": "library",
-    "description": "Css Parser for php",
-    "keywords": ["css", "parser"],
-    "homepage": "https://github.com/ju1ius/css-parser",
-    "license": "LGPLv2",
-    "authors": [
-        {
-            "name": "ju1ius",
-            "homepage": "https://github.com/ju1ius"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.2",
-        "ju1ius/libphp": "dev-master"
-    },
-    "autoload": {
-        "psr-0": { "ju1ius": "lib/" }
-    },
-    "config": {
-      "vendor-dir": "lib/vendor",
-      "bin-dir": "lib/vendor/bin"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "master"
-        }
+  "name": "ju1ius/css-parser",
+  "type": "library",
+  "description": "Css Parser for php",
+  "keywords": ["css", "parser"],
+  "homepage": "https://github.com/ju1ius/css-parser",
+  "license": "LGPLv2",
+  "authors": [
+    {
+    "name": "ju1ius",
+    "homepage": "https://github.com/ju1ius"
+  }
+  ],
+  "require": {
+    "php": ">=5.3.2",
+    "ju1ius/libphp": "dev-master"
+  },
+  "autoload": {
+    "psr-0": { "ju1ius": "lib/" }
+  },
+  "config": {
+    "vendor-dir": "lib/vendor",
+    "bin-dir": "lib/vendor/bin"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "master"
     }
+  }
 }
-
-
