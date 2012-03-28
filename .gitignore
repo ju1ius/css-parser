@@ -1,5 +1,6 @@
-lib/vendor/*
-doc/*
-benchmark/*
-test/quicktest.php
-test/valuelist.php
+/lib/vendor
+/doc
+/benchmark
+/test/quicktest.php
+/test/valuelist.php
+/composer.lock

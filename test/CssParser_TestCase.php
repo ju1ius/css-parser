@@ -6,7 +6,7 @@ $loader->registerNamespace(
   'ju1ius',
   array(
     __DIR__.'/../lib',
-    __DIR__.'/../../ju1ius-libphp/lib',
+    __DIR__.'/../lib/vendor/ju1ius/libphp/lib',
   )
 );
 $loader->register();
