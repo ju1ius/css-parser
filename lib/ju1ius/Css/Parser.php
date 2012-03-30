@@ -96,7 +96,7 @@ class Parser extends AbstractParser
             throw $e;
           } else {
             $this->_backtrack();
-            $this->_skipProperty();
+            $this->_skipAtRule();
             $this->_pushError($e);
           }
         }
@@ -777,7 +777,11 @@ class Parser extends AbstractParser
         }
       }
     }
-    return new Value\Dimension($value, null, $isForColor);
+    $unit = null;
+    if(preg_match('/^[a-z]/i', $this->_peek())) {
+      $unit = $this->_parseIdentifier();
+    }
+    return new Value\Dimension($value, $unit, $isForColor);
   }/*}}}*/
 
   private function _parseColorValue()
@@ -896,6 +900,21 @@ class Parser extends AbstractParser
   /****************************************
    * ---------- Error handling ---------- *
    ****************************************/
+
+  private function _skipAtRule()
+  {
+    $close_char = null;
+    while(true) {
+      if($this->_comes(';')) {
+        $this->_consume(';');
+        break;
+      } else if($this->_comes('{')) {
+        $this->_skipStyleRule();
+        break;
+      }
+      $this->_consume(1);
+    }
+  }
 
   private function _skipStyleRule()
   {/*{{{*/

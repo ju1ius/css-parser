@@ -140,8 +140,8 @@ abstract class AbstractParser
         $utf_32_str .= chr($unicode_byte & 0xff);
         $unicode_byte = $unicode_byte >> 8;
       }
-      return Util\Charset::convert($utf_32_str, 'UTF-32LE', $this->charset);
-
+      $char = Util\Charset::convert($utf_32_str, 'UTF-32BE', $this->charset);
+      return $char;
     }
 
     if($isForIdentifier) {

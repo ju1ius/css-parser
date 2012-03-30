@@ -38,6 +38,12 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
     ));
   }
 
+  public function parseFile($file)
+  {
+    $source = $this->stylesheet_loader->load(__DIR__.'/files/'.$file);
+    return $this->css_parser->parse($source);
+  }
+
   public function parseStyleSheet($str)
   {
     $source = $this->stylesheet_loader->load($str);
