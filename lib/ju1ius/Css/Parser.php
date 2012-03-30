@@ -240,7 +240,7 @@ class Parser extends AbstractParser
 
       $styleDeclaration = new StyleDeclaration();
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
-      $selectors = $this->_parseSelectors();
+      $selectors = $this->_parseSelectorList();
       $this->_consume('{');
       $this->_consumeWhiteSpace();
       $this->state->enter(ParserState::IN_DECLARATION);
@@ -269,7 +269,12 @@ class Parser extends AbstractParser
       return $rule;
 
     } else {
-      throw new ParseException(sprintf('Unknown rule @%s', $identifier), $this->source, $this->current_position);
+
+      throw new ParseException(
+        sprintf('Unknown rule @%s', $identifier),
+        $this->source, $this->current_position
+      );
+
     }
   }/*}}}*/
 
@@ -844,7 +849,7 @@ class Parser extends AbstractParser
       );
     }
     $char;
-    while(($char = $this->_parseCharacter(true)) !== null) {
+    while(null !== ($char = $this->_parseCharacter(true))) {
       $result .= $char;
     }
     if($allowColors) {
@@ -902,7 +907,7 @@ class Parser extends AbstractParser
    ****************************************/
 
   private function _skipAtRule()
-  {
+  {/*{{{*/
     $close_char = null;
     while(true) {
       if($this->_comes(';')) {
@@ -914,7 +919,7 @@ class Parser extends AbstractParser
       }
       $this->_consume(1);
     }
-  }
+  }/*}}}*/
 
   private function _skipStyleRule()
   {/*{{{*/

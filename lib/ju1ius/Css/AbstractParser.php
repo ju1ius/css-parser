@@ -120,11 +120,11 @@ abstract class AbstractParser
       if($this->_comes('\n') || $this->_comes('\r')) {
         return '';
       }
-      if(preg_match('/[0-9a-fA-F]/Su', $this->_peek()) === 0) {
+      if(!preg_match('/[0-9a-fA-F]/Su', $this->_peek())) {
         return $this->_consume(1);
       }
-      $unicode_str = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/u');
-      if(mb_strlen($unicode_str, $this->charset) < 6) {
+      $codepoint = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/u');
+      if(mb_strlen($codepoint, $this->charset) < 6) {
         //Consume whitespace after incomplete unicode escape
         if(preg_match('/\\s/isSu', $this->_peek())) {
           if($this->_comes('\r\n')) {
@@ -134,13 +134,13 @@ abstract class AbstractParser
           }
         }
       }
-      $unicode_byte = intval($unicode_str, 16);
+      $unicode_byte = intval($codepoint, 16);
       $utf_32_str = "";
-      for($i=0;$i<4;$i++) {
+      for($i = 0; $i < 4; $i++) {
         $utf_32_str .= chr($unicode_byte & 0xff);
         $unicode_byte = $unicode_byte >> 8;
       }
-      $char = Util\Charset::convert($utf_32_str, 'UTF-32BE', $this->charset);
+      $char = Util\Charset::convert($utf_32_str, $this->charset, 'UTF-32LE');
       return $char;
     }
 

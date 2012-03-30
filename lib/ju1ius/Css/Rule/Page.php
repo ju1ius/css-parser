@@ -2,7 +2,8 @@
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
-use Css\StyleDeclaration;
+use ju1ius\Css\StyleDeclaration;
+use ju1ius\Css\SelectorList;
 
 /**
  * Represents an @page rule
@@ -14,7 +15,7 @@ class Page extends Rule
   private $selectors;
   private $styleDeclaration;
 
-  public function __construct(array $selectors, StyleDeclaration $styleDeclaration=null)
+  public function __construct(SelectorList $selectors, StyleDeclaration $styleDeclaration=null)
   {
     $this->selectors = $selectors;
     if($styleDeclaration)
@@ -32,7 +33,7 @@ class Page extends Rule
   {
     return $this->selectors;
   }
-  public function setSelectors(Array $selectors)
+  public function setSelectors(SelectorList $selectors)
   {
     $this->selectors = $selectors;
   }
