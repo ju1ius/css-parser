@@ -51,8 +51,4 @@ class ParseException extends \Exception
     return $this->source_column;  
   }
 
-  public function __toString()
-  {
-    return $this->getMessage();
-  }
 }

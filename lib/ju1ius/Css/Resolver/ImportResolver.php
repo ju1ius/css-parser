@@ -56,8 +56,8 @@ class ImportResolver
         if(mb_strtolower($source->getEncoding(), $main_charset) !== $main_charset) {
           $converted = Util\Charset::convert(
             $source->getContents(),
-            $source->getEncoding(),
-            $main_charset
+            $main_charset,
+            $source->getEncoding()
           );
           $source = new Source\File($url, $converted, $main_charset);
         }

@@ -2,6 +2,8 @@
 namespace ju1ius\Css\Rule;
 use ju1ius\Css\Rule;
 
+use ju1ius\Css\StyleDeclaration;
+
 /**
  * Represents an unknown @ rule (unused)
  *
@@ -59,5 +61,10 @@ class AtRule extends Rule
     return $indent . '@' . $prefix . $this->name . '{'
       . $nl . $declarations
       . $nl . $indent . '}';
+  }
+
+  public function __clone()
+  {
+    $this->style_declaration = clone $this->style_declaration;
   }
 }

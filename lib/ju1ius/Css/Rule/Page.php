@@ -2,8 +2,9 @@
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
+use ju1ius\Css\PageSelector;
+use ju1ius\Css\RuleList;
 use ju1ius\Css\StyleDeclaration;
-use ju1ius\Css\SelectorList;
 
 /**
  * Represents an @page rule
@@ -12,71 +13,88 @@ use ju1ius\Css\SelectorList;
  **/
 class Page extends Rule
 {
-  private $selectors;
-  private $styleDeclaration;
+  private
+    $selector,
+    $margin_rules,
+    $style_declaration;
 
-  public function __construct(SelectorList $selectors, StyleDeclaration $styleDeclaration=null)
+  public function __construct(PageSelector $selector=null,
+                              RuleList $margin_rules=null,
+                              StyleDeclaration $style_declaration=null)
   {
-    $this->selectors = $selectors;
-    if($styleDeclaration)
+    $this->selector = $selector;
+    $this->margin_rules = $margin_rules;
+    if($style_declaration)
     {
-      $styleDeclaration->setParentRule($this);
+      $style_declaration->setParentRule($this);
       if($parentStyleSheet = $this->getParentStyleSheet())
       {
-        $styleDeclaration->setParentStyleSheet($parentStyleSheet);
+        $style_declaration->setParentStyleSheet($parentStyleSheet);
       }
-      $this->styleDeclaration = $styleDeclaration;
     }
+    $this->style_declaration = $style_declaration;
   }
 
-  public function getSelectors()
+  public function getSelector()
   {
-    return $this->selectors;
+    return $this->selector;
   }
-  public function setSelectors(SelectorList $selectors)
+  public function setSelector(PageSelector $selector)
   {
-    $this->selectors = $selectors;
+    $this->selector = $selector;
+  }
+
+  public function getRuleList()
+  {
+    return $this->margin_rules;
+  }
+  public function setRuleList(RuleList $margin_rules)
+  {
+    $this->margin_rules = $margin_rules;
   }
 
   public function getStyleDeclaration()
   {
-    return $this->styleDeclaration;
+    return $this->style_declaration;
   }
-  public function setStyleDeclaration(StyleDeclaration $styleDeclaration)
+  public function setStyleDeclaration(StyleDeclaration $style_declaration)
   {
-    $styleDeclaration->setParentRule($this);
+    $style_declaration->setParentRule($this);
     if($parentStyleSheet = $this->getParentStyleSheet())
     {
-      $styleDeclaration->setParentStyleSheet($parentStyleSheet);
+      $style_declaration->setParentStyleSheet($parentStyleSheet);
     }
-    $this->styleDeclaration = $styleDeclaration;
+    $this->style_declaration = $style_declaration;
   }
 
   public function getCssText($options=array())
   {
-		$indent = '';
-		$nl = ' ';
-		if(isset($options['indent_level']))
-		{
+		$indent = $nl = '';
+		if(isset($options['indent_level'])) {
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$options['indent_level']++;
 			$nl = "\n";
-		}
-    $declarations = $this->styleDeclaration ? $this->styleDeclaration->getCssText($options) : '';
-		return $indent . '@page '. $this->getSelectorText() . '{' . $nl . $declarations . $nl . $indent . '}';
+    }
+
+    $rules = $this->margin_rules ? $this->margin_rules->getCssText($options) : '';
+    $declarations = $this->style_declaration ? $this->style_declaration->getCssText($options) : '';
+    
+    return $indent . '@page '. $this->getSelectorText()
+      . '{' . $nl
+      . $rules
+      . $declarations
+      . $nl . $indent . '}';
   }
 
   public function getSelectorText()
   {
-    if(!$this->selectors) return '';
-    return implode(', ', array_map(function($selector)
-    {
-      return $selector->getCssText();
-    }, $this->selectors));
+    return $this->selector ? $this->selector->getCssText() : '';
   }
 
   public function __clone()
   {
-    $this->styleDeclaration = clone $this->styleDeclaration;
+    $this->style_declaration = clone $this->style_declaration;
+    $this->margin_rules = clone $this->margin_rules;
+    $this->selector = clone $this->selector;
   }
 }

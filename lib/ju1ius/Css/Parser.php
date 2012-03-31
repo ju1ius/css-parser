@@ -19,13 +19,33 @@ use ju1ius\Css\Util\Charset;
  **/
 class Parser extends AbstractParser
 {
+  private static
+    $MARGIN_BOX_IDENTIFIERS = array(
+      'top-left-corner',
+      'top-left',
+      'top-center',
+      'top-right',
+      'top-right-corner',
+      'bottom-left-corner',
+      'bottom-left',
+      'bottom-center',
+      'bottom-right',
+      'bottom-right-corner',
+      'left-top',
+      'left-middle',
+      'right-bottom',
+      'right-top',
+      'right-middle',
+      'right-bottom'
+    );
+
   /**
    * Accepts a Source\String object as returned by StyleSheetLoader,
    * and returns the parsed StyleSheet
    *
    * @param ju1ius\Text\Source\String $source
    *
-   * @return ju1ius\Css\StyleSheet
+   * @return ju1ius\)ss\StyleSheet
    **/
   public function parse(Source\String $source)
   {/*{{{*/
@@ -229,24 +249,32 @@ class Parser extends AbstractParser
 
     } else if($identifier === 'font-face') {
 
-      $styleDeclaration = new StyleDeclaration();
+      $style_declaration = new StyleDeclaration();
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
       $this->_consume('{');
       $this->_consumeWhiteSpace();
-      $this->_parseStyleDeclaration($styleDeclaration);
-      return new Rule\FontFace($styleDeclaration);
+      $this->_parseStyleDeclaration($style_declaration);
+      return new Rule\FontFace($style_declaration);
 
     } else if($identifier === 'page') {
 
-      $styleDeclaration = new StyleDeclaration();
-      $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
-      $selectors = $this->_parseSelectorList();
+      $style_declaration = new StyleDeclaration();
+      $this->state->enter(
+        ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES
+        | ParserState::IN_PAGERULE
+      );
+      return $this->_parsePageRule();
+      $selector = null;
+      if(!$this->_comes('{')) $selector = $this->_parsePageSelector();
       $this->_consume('{');
       $this->_consumeWhiteSpace();
       $this->state->enter(ParserState::IN_DECLARATION);
-      $this->_parseStyleDeclaration($styleDeclaration);
+      // FIXME: provide support for @margin-boxes
+      // Shoul I extend StyleDeclaration ?
+      $this->_parseStyleDeclaration($style_declaration);
       $this->state->leave(ParserState::IN_DECLARATION);
-      return new Rule\Page($selectors, $styleDeclaration);
+      $this->state->leave(ParserState::IN_PAGERULE);
+      return new Rule\Page($selector, $style_declaration);
 
     } else if($identifier === 'keyframes') {
 
@@ -270,12 +298,25 @@ class Parser extends AbstractParser
 
     } else {
 
+      if($this->state->in(ParserState::IN_PAGERULE) && self::isMarginBoxIdentifier($identifier)) {
+        $this->_consume('{');
+        $this->_consumeWhiteSpace();
+        $style_declaration = new StyleDeclaration();
+        $this->_parseStyleDeclaration($style_declaration);
+        return new Rule\MarginBox($identifier, $style_declaration);
+      }
+
       throw new ParseException(
         sprintf('Unknown rule @%s', $identifier),
         $this->source, $this->current_position
       );
 
     }
+  }/*}}}*/
+
+  private static function isMarginBoxIdentifier($str)
+  {/*{{{*/
+    return in_array($str, self::$MARGIN_BOX_IDENTIFIERS);
   }/*}}}*/
 
   private function _parseMediaQueryList()
@@ -344,7 +385,7 @@ class Parser extends AbstractParser
 
   private function _parseKeyframeRule()
   {/*{{{*/
-    $styleDeclaration = new StyleDeclaration();
+    $style_declaration = new StyleDeclaration();
     $selectors = array_map(function($selector)
     {
       $selector = trim($selector);
@@ -359,24 +400,60 @@ class Parser extends AbstractParser
     $this->_consume('{');
     $this->state->enter(ParserState::IN_DECLARATION);
     $this->_consumeWhiteSpace();
-    $this->_parseStyleDeclaration($styleDeclaration);
+    $this->_parseStyleDeclaration($style_declaration);
     //$this->_consume('}');
     $this->state->leave(ParserState::IN_DECLARATION);
-    $rule = new Rule\Keyframe($selectors, $styleDeclaration);
+    $rule = new Rule\Keyframe($selectors, $style_declaration);
     return $rule;
+  }/*}}}*/
+
+  private function _parsePageRule()
+  {/*{{{*/
+    $selector = null;
+    if(!$this->_comes('{')) $selector = $this->_parsePageSelector();
+    $this->_consume('{');
+    $this->_consumeWhiteSpace();
+    $rule_list = new RuleList();
+    $style_declaration = new StyleDeclaration();
+    while(true) {
+      if($this->_comes('}') || $this->_isEnd()) break;
+      if($this->_comes('@')) {
+        $rule_list->append($this->_parseAtRule());
+      } else {
+        $this->_parseProperty($style_declaration);
+      }
+      $this->_consumeWhiteSpace();
+    }
+    $this->_consume('}');
+    return new Rule\Page($selector, $rule_list, $style_declaration);
+  }/*}}}*/
+
+  private function _parsePageSelector()
+  {/*{{{*/
+    $page_name = $pseudo_class = '';
+    if(!$this->_comes(':')) {
+      $page_name = $this->_parseIdentifier();
+      $this->_consumeWhiteSpace();
+    }
+    if($this->_comes(':')) {
+      $this->_consume(':');
+      $pseudo_class = $this->_parseIdentifier();
+      $this->_consumeWhiteSpace();
+    }
+    return new PageSelector($page_name, $pseudo_class);
   }/*}}}*/
 
   private function _parseStyleRule()
   {/*{{{*/
-    $styleDeclaration = new StyleDeclaration();
+    $style_declaration = new StyleDeclaration();
     $selectors = $this->_parseSelectorList();
     $this->_consume('{');
     $this->state->enter(ParserState::IN_DECLARATION);
     $this->_consumeWhiteSpace();
-    $this->_parseStyleDeclaration($styleDeclaration);
+    $this->_parseStyleDeclaration($style_declaration);
     //$this->_consume('}');
     $this->state->leave(ParserState::IN_DECLARATION);
-    return new Rule\StyleRule($selectors, $styleDeclaration);
+    return new Rule\StyleRule($selectors, $style_declaration);
   }/*}}}*/
 
   private function _parseSelectorList()
@@ -552,31 +629,39 @@ class Parser extends AbstractParser
     return new Selector\AttributeSelector($selector, $namespace, $attrib, $operator, $value);
   }/*}}}*/
 
-  private function _parseStyleDeclaration($styleDeclaration)
+  private function _parseStyleDeclaration(StyleDeclaration $style_declaration)
   {/*{{{*/
     while(!$this->_comes('}') && !$this->_isEnd()) {
-      $this->state->enter(ParserState::IN_PROPERTY);
-      $this->_setBacktrackingPosition();
-      try {
-        $property = $this->_parseProperty();
-        $styleDeclaration->append($property);
-      } catch (ParseException $e) {
-        if($this->strict_parsing) {
-          throw $e;
-        } else {
-          $this->_skipProperty();
-          $this->_pushError($e);
-        }
-      }
-      $this->state->leave(ParserState::IN_PROPERTY);
-      $this->_consumeWhiteSpace();
+      $this->_parseProperty($style_declaration);
     }
     if(!$this->_isEnd()) {
       $this->_consume('}');
     }
   }/*}}}*/
 
-  private function _parseProperty()
+  /**
+   * Wraps the _doParseProperty method for error recovery
+   **/
+  private function _parseProperty(StyleDeclaration $style_declaration)
+  {/*{{{*/
+    $this->state->enter(ParserState::IN_PROPERTY);
+    $this->_setBacktrackingPosition();
+    try {
+      $property = $this->_doParseProperty();
+      $style_declaration->append($property);
+    } catch (ParseException $e) {
+      if($this->strict_parsing) {
+        throw $e;
+      } else {
+        $this->_skipProperty();
+        $this->_pushError($e);
+      }
+    }
+    $this->state->leave(ParserState::IN_PROPERTY);
+    $this->_consumeWhiteSpace();
+  }/*}}}*/
+
+  private function _doParseProperty()
   {/*{{{*/
     $name = $this->_parseIdentifier();
     $this->_consumeWhiteSpace();

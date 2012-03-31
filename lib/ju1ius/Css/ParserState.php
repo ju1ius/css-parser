@@ -19,6 +19,7 @@ class ParserState
   const IN_SELECTOR      = 0x100;
   const IN_NEGATION      = 0x200;
   const IN_MEDIA_QUERY   = 0x400;
+  const IN_PAGERULE      = 0x800;
 
   private $state;
 

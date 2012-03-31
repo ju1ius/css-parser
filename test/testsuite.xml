@@ -9,6 +9,7 @@
 			<file>Css/StyleDeclaration/ExpandShorthandsTest.php</file>
 			<file>Css/StyleDeclaration/CreateShorthandsTest.php</file>
       <file>Css/Rule/StyleRuleTest.php</file>
+      <file>Css/Rule/PageTest.php</file>
       <file>Css/Iterator/ValueIteratorTest.php</file>
       <file>Css/Resolver/UrlResolverTest.php</file>
       <file>Css/Resolver/ImportResolverTest.php</file>
