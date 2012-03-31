@@ -3,9 +3,6 @@ TEST SUITE !!!
 README
 
 
-Unicode escapes:
-  @\\0070 age{} should turn into a @page rule
-
 CSSOM:
   DOMDocument extensions
   Selectors:

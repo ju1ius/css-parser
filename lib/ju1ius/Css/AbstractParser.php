@@ -120,13 +120,13 @@ abstract class AbstractParser
       if($this->_comes('\n') || $this->_comes('\r')) {
         return '';
       }
-      if(!preg_match('/[0-9a-fA-F]/Su', $this->_peek())) {
+      if(!preg_match('/^[0-9a-fA-F]$/u', $this->_peek())) {
         return $this->_consume(1);
       }
-      $codepoint = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/u');
+      $codepoint = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/uS');
       if(mb_strlen($codepoint, $this->charset) < 6) {
         //Consume whitespace after incomplete unicode escape
-        if(preg_match('/\\s/isSu', $this->_peek())) {
+        if(preg_match('/^\s/u', $this->_peek())) {
           if($this->_comes('\r\n')) {
             $this->_consume(2);
           } else {
@@ -146,7 +146,7 @@ abstract class AbstractParser
 
     if($isForIdentifier) {
 
-      if(preg_match('/\*|[a-zA-Z0-9]|-|_/u', $this->_peek()) === 1) {
+      if(preg_match('/^[*a-zA-Z0-9_-]/uS', $this->_peek())) {
         return $this->_consume(1);
       } else if(ord($this->_peek()) > 0xa1) {
         return $this->_consume(1);

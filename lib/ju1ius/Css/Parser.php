@@ -920,7 +920,7 @@ class Parser extends AbstractParser
   private function _parseUnicodeRange()
   {/*{{{*/
     $this->_consume('U+');
-    $value = $this->_consumeExpression('/^[0-9A-F?]{1,6}(?:-[0-9A-F]{1,6})?/iu');
+    $value = $this->_consumeExpression('/^[0-9A-F?]{1,6}(?:-[0-9A-F]{1,6})?/iuS');
     return new Value\UnicodeRange($value);
   }/*}}}*/
 
@@ -969,7 +969,7 @@ class Parser extends AbstractParser
     $content = null;
     if($quoteChar === null) {
       //Unquoted strings end in whitespace or with braces, brackets, parentheses
-      while(!preg_match('/[\\s{}()<>\\[\\]]/isu', $this->_peek())) {
+      while(!preg_match('/^[\s{}()<>\[\]]/isuS', $this->_peek())) {
         $result .= $this->_parseCharacter(false);
       }
     } else {
