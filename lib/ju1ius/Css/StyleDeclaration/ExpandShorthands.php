@@ -238,7 +238,7 @@ class ExpandShorthands
 				if($mValue instanceof Value\Url) {
 					$aListProperties['list-style-image'] = $mValue;
 				} else if(in_array($mValue, $aListStyleTypes)) {
-					$aListProperties['list-style-types'] = $mValue;
+					$aListProperties['list-style-type'] = $mValue;
 				} else if(in_array($mValue, $aListStylePositions)) {
 					$aListProperties['list-style-position'] = $mValue;
 				}
