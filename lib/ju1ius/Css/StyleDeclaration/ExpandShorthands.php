@@ -94,7 +94,10 @@ class ExpandShorthands
 					list($oSize, $oHeight) = $mValue->getItems();
 					$aFontProperties['font-size'] = $oSize;
 					$aFontProperties['line-height'] = $oHeight;
-				} else if($mValue instanceof Value\Dimension && $mValue->getUnit() !== null) {
+        } else if(
+          ($mValue instanceof Value\Dimension && $mValue->getUnit() !== null)
+          || in_array($mValue, array('xx-small','x-small','small','medium','large','x-large','xx-large','larger','smaller'))
+        ) {
 					$aFontProperties['font-size'] = $mValue;
 				} else {
 					$aFontProperties['font-family'] = $mValue;

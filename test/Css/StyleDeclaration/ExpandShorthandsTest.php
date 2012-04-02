@@ -104,6 +104,18 @@ class ExpandShorthandsTest extends CssParser_TestCase
         'body {font: italic small-caps bold 12px/1.6 serif;}',
         'body{ font-style: italic; font-variant: small-caps; font-weight: bold; font-size: 12px; line-height: 1.6; font-family: serif; }'
       ),
+      array(
+        'p{ font: italic large serif }',
+        'p{ font-style: italic; font-variant: normal; font-weight: normal; font-size: large; line-height: normal; font-family: serif; }'
+      ),
+      array(
+        'p{ font: bold x-large/110% serif }',
+        'p{ font-style: normal; font-variant: normal; font-weight: bold; font-size: x-large; line-height: 110%; font-family: serif; }'
+      ),
+      array(
+        'p{ font: italic small-caps smaller sans }',
+        'p{ font-style: italic; font-variant: small-caps; font-weight: normal; font-size: smaller; line-height: normal; font-family: sans; }'
+      ),
     );  
   }
 
