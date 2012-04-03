@@ -9,33 +9,31 @@ use ju1ius\Css\Util;
  **/
 class Color extends PrimitiveValue
 {
-  private $channels = array(
-    'r' => 0, 'g' => 0, 'b' => 0 
-  );
-  private $mode;
+  private
+    $channels = array(
+      'r' => 0, 'g' => 0, 'b' => 0 
+    ),
+    $mode;
 
+  /**
+   * @param mixed $color Can be an hex color string, an x11 color name,
+   *                     or an array of rgb(a) or hsl(a) channels;
+   *
+   * @example $c = new Color(array('h' => 120, 's' => '50%', 'l' => '50%', 'a' => 0.8));
+   **/
   public function __construct($color=null)
   {
-    if(is_array($color))
-    {
-      if(isset($color['r'], $color['g'], $color['b']))
-      {
-        $this->fromRGB($color);
+    if(is_array($color)) {
+      if(isset($color['r'], $color['g'], $color['b'])) {
+        $this->fromRgb($color);
+      } else if(isset($color['h'], $color['s'], $color['l'])) {
+        $this->fromHsl($color);
       }
-      else if(isset($color['h'], $color['s'], $color['l']))
-      {
-        $this->fromHSL($color);
-      }
-    }
-    else if(is_string($color))
-    {
-      if($rgb = Util\Color::namedColor2rgb($color))
-      {
-        $this->fromRGB($rgb);
-      }
-      else if($rgb = Util\Color::hex2rgb($color))
-      {
-        $this->fromRGB($rgb);
+    } else if(is_string($color)) {
+      if($rgb = Util\Color::x11ToRgb($color)) {
+        $this->fromRgb($rgb);
+      } else if($rgb = Util\Color::hexToRgb($color)) {
+        $this->fromRgb($rgb);
       }
     }
   }
@@ -45,21 +43,16 @@ class Color extends PrimitiveValue
     return $this->mode;
   }
 
-  public function fromRGB(Array $rgb)
+  public function fromRgb(Array $rgb)
   {
     $mode = 'rgb';
-    foreach(array('r', 'g', 'b', 'a') as $channel)
-    {
-      if($channel === 'a')
-      {
-				if(!isset($rgb['a'])) continue;
-				$value = Util\Color::constrainValue((string)$rgb['a'], 0, 1);
+    foreach($rgb as $channel => $value) {
+      if($channel === 'a') {
+				$value = Util\Color::constrainValue((string)$value, 0, 1);
 				if($value === 1) continue;
 				$mode .= 'a';
-			}
-      else
-      {
-				$value = Util\Color::normalizeRGBValue((string)$rgb[$channel]);
+			} else {
+				$value = Util\Color::normalizeRgbValue((string)$value);
 			}
       $this->channels[$channel] = new Dimension($value);
     }
@@ -67,37 +60,36 @@ class Color extends PrimitiveValue
     return $this;
   }
 
-  public function fromHSL(Array $hsl)
+  public function fromHsl(Array $hsl)
   {
-    $rgb = Util\Color::hsl2rgb(
+    $rgb = Util\Color::hslToRgb(
 			(string)$hsl['h'],
 			(string)$hsl['s'],
 			(string)$hsl['l'],
       isset($hsl['a']) ? (string)$hsl['a'] : 1
     );
-    return $this->fromRGB($rgb);
+    return $this->fromRgb($rgb);
   }
 
   public function fromHex($value)
   {
-    $rgb = Util\Color::hex2rgb($value);
-    return $this->fromRGB($rgb);
+    $rgb = Util\Color::hexToRgb($value);
+    return $this->fromRgb($rgb);
   }
 
-  public function fromNamedColor($value)
+  public function fromX11($value)
   {
-    $rgb = Util\Color::namedColor2rgb($value);
-    return $this->fromRGB($rgb);
+    $rgb = Util\Color::x11ToRgb($value);
+    return $this->fromRgb($rgb);
   }
 
-  public function toRGB()
+  public function toRgb()
   {
     $mode = $this->mode;
     $channels = $this->channels;
     
     if(!$mode || $mode === 'rgb') return;
-    if($mode === 'rgba')
-    {
+    if($mode === 'rgba') {
       // If we don't need alpha channel, drop it
       if($channels['a']->getValue() >= 1) {
         unset($this->channels['a']);
@@ -105,7 +97,7 @@ class Color extends PrimitiveValue
       }
       return;
     }
-    $rgb = Util\Color::hsl2rgb(
+    $rgb = Util\Color::hslToRgb(
       $channels['h']->getValue(),
       $channels['s']->getValue(),
       $channels['l']->getValue(),
@@ -120,7 +112,7 @@ class Color extends PrimitiveValue
     return $this;
   }
 
-  public function toHSL()
+  public function toHsl()
   {
     $mode = $this->mode;
     $channels = $this->channels;
@@ -152,33 +144,39 @@ class Color extends PrimitiveValue
     return $this;
   }
 
-  public function getNamedColor()
+  public function getX11Color()
   {
-    $this->toRGB();
-		$channels = $this->channels;
-		var_dump($channels);
-    return Util\Color::rgb2NamedColor(
-      $channels['r']->getValue(),
-      $channels['g']->getValue(),
-      $channels['b']->getValue()
-    );
+    $channels = $this->channels;
+    if(isset($channels['a']) && $channels['a']->getValue() !== 1) return null;
+
+    if($this->mode == 'rgb') {
+      return Util\Color\rgbToX11(
+        $channels['r']->getValue(),
+        $channels['g']->getValue(),
+        $channels['b']->getValue()
+      );
+    } else if ($this->mode == 'hsl') {
+      return Util\Color::hslToX11(
+        $channels['h']->getValue(),
+        $channels['s']->getValue(),
+        $channels['l']->getValue()
+      );
+    }
   }
 
   public function getHexValue()
   {
     $channels = $this->channels;
     if(isset($channels['a']) && $channels['a']->getValue() !== 1) return null;
-    if($this->mode === 'rgb')
-    {
-      return Util\Color::rgb2hex(
+
+    if($this->mode === 'rgb') {
+      return Util\Color::rgbToHex(
         $channels['r']->getValue(),
         $channels['g']->getValue(),
         $channels['b']->getValue()
       );
-    }
-    else if($this->mode === 'hsl')
-    {
-      return Util\Color::hsl2hex(
+    } else if($this->mode === 'hsl') {
+      return Util\Color::hslToX11(
         $channels['h']->getValue(),
         $channels['s']->getValue(),
         $channels['l']->getValue()
@@ -188,23 +186,21 @@ class Color extends PrimitiveValue
 
   public function getCssText($options=array())
   {
-		if(isset($options['color_mode']))
-		{
-			switch($options['color_mode'])
-			{
+		if(isset($options['color_mode'])) {
+			switch($options['color_mode']) {
 				case 'hex':
 					if($value = $this->getHexValue()) return $value;
 					break;
 				case 'X11':
-					if($value = $this->getNamedColor()) return $value;
+					if($value = $this->getX11Color()) return $value;
 					break;
 				case 'rgb':
 				case 'rgba':
-					$this->toRGB();
+					$this->toRgb();
 					break;
 				case 'hsl':
 				case 'hsla':
-					$this->toHSL();
+					$this->toHsl();
 					break;
 			}
 		}

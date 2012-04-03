@@ -1,4 +1,5 @@
 <?php
+/* vim: set fdm=marker : */
 
 namespace ju1ius\Css;
 
@@ -186,7 +187,7 @@ class Parser extends AbstractParser
     $identifier = $this->_parseIdentifier();
     $this->_consumeWhiteSpace();
 
-    if($identifier === 'charset') {
+    if($this->_isAsciiCaseInsensitiveMatch($identifier, 'charset')) {
 
       if($this->state->in(ParserState::AFTER_CHARSET)) {
         throw new ParseException('Only one @charset rule is allowed', $this->source, $this->current_position);
@@ -197,7 +198,7 @@ class Parser extends AbstractParser
       $this->state->enter(ParserState::AFTER_CHARSET);
       return new Rule\Charset($charset);
 
-    } else if($identifier === 'import') {
+    } else if($this->_isAsciiCaseInsensitiveMatch($identifier, 'import')) {
 
       if($this->state->in(ParserState::AFTER_IMPORTS)) {
         throw new ParseException(
@@ -217,7 +218,7 @@ class Parser extends AbstractParser
       if(!$media_list) $media_list = new MediaQueryList();
       return new Rule\Import($url, $media_list);
 
-    } else if($identifier === 'namespace') {
+    } else if($this->_isAsciiCaseInsensitiveMatch($identifier, 'namespace')) {
 
       if($this->state->in(ParserState::AFTER_NAMESPACES)) {
         throw new ParseException(
@@ -237,7 +238,7 @@ class Parser extends AbstractParser
       $this->_consume(';');
       return $rule;
 
-    } else if($identifier === 'media') {
+    } else if($this->_isAsciiCaseInsensitiveMatch($identifier, 'media')) {
 
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
       $media_list = $this->_parseMediaQueryList();
@@ -247,7 +248,7 @@ class Parser extends AbstractParser
       $this->_parseRuleList($rule_list);
       return new Rule\Media($media_list, $rule_list);
 
-    } else if($identifier === 'font-face') {
+    } else if($this->_isAsciiCaseInsensitiveMatch($identifier, 'font-face')) {
 
       $style_declaration = new StyleDeclaration();
       $this->state->enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
@@ -256,7 +257,7 @@ class Parser extends AbstractParser
       $this->_parseStyleDeclaration($style_declaration);
       return new Rule\FontFace($style_declaration);
 
-    } else if($identifier === 'page') {
+    } else if($this->_isAsciiCaseInsensitiveMatch($identifier, 'page')) {
 
       $style_declaration = new StyleDeclaration();
       $this->state->enter(
@@ -276,7 +277,7 @@ class Parser extends AbstractParser
       $this->state->leave(ParserState::IN_PAGERULE);
       return new Rule\Page($selector, $style_declaration);
 
-    } else if($identifier === 'keyframes') {
+    } else if($this->_isAsciiCaseInsensitiveMatch($identifier, 'keyframes')) {
 
       if($this->_comes("'") || $this->_comes('"')) {
         $name = $this->_parseStringValue();
@@ -298,7 +299,7 @@ class Parser extends AbstractParser
 
     } else {
 
-      if($this->state->in(ParserState::IN_PAGERULE) && self::isMarginBoxIdentifier($identifier)) {
+      if($this->state->in(ParserState::IN_PAGERULE) && $this->_isMarginBoxIdentifier($identifier)) {
         $this->_consume('{');
         $this->_consumeWhiteSpace();
         $style_declaration = new StyleDeclaration();
@@ -314,9 +315,14 @@ class Parser extends AbstractParser
     }
   }/*}}}*/
 
-  private static function isMarginBoxIdentifier($str)
+  private function _isMarginBoxIdentifier($str)
   {/*{{{*/
-    return in_array($str, self::$MARGIN_BOX_IDENTIFIERS);
+    foreach(self::$MARGIN_BOX_IDENTIFIERS as $iden) {
+      if($this->_isAsciiCaseInsensitiveMatch($str, $iden)) {
+        return true;
+      }
+    }
+    return false;
   }/*}}}*/
 
   private function _parseMediaQueryList()
@@ -389,9 +395,9 @@ class Parser extends AbstractParser
     $selectors = array_map(function($selector)
     {
       $selector = trim($selector);
-      if($selector === 'from') {
+      if($this->_isAsciiCaseInsensitiveMatch($selector, 'from')) {
         return new Value\Percentage(0);
-      } else if($selector === 'to') {
+      } else if($this->_isAsciiCaseInsensitiveMatch($selector, 'to')) {
         return new Value\Percentage(100);
       } else {
         return new Value\Percentage(substr($selector, 0, strpos($selector, '%')));
@@ -562,7 +568,7 @@ class Parser extends AbstractParser
           $this->_consume('(');
           $this->_consumeWhiteSpace();
           // You can't nest negations
-          if(mb_strtolower($ident, $this->charset) === 'not'
+          if($this->_isAsciiCaseInsensitiveMatch($ident, 'not')
             && !$this->state->in(ParserState::IN_NEGATION)
           ) {
             $this->state->enter(ParserState::IN_NEGATION);
@@ -673,7 +679,9 @@ class Parser extends AbstractParser
       $list->append($value);
       $value = $list;
     }
-    if($name === 'background') $this->_fixBackgroundShorthand($value);
+    if($this->_isAsciiCaseInsensitiveMatch($name, 'background')) {
+      $this->_fixBackgroundShorthand($value);
+    }
     $property->setValueList($value);
     if($this->_comes('!')) {
       $this->_consume('!');
@@ -939,9 +947,9 @@ class Parser extends AbstractParser
     }
     if($allowColors) {
       // is it a color name ?
-      if($rgb = Util\Color::namedColor2rgb($result)) {
+      if($rgb = Util\Color::x11ToRgb($result)) {
         $color = new Value\Color();
-        return $color->fromRGB($rgb);
+        return $color->fromRgb($rgb);
       }
     }
     if($allowFunctions && $this->_comes('(')) {

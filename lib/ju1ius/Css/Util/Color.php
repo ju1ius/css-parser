@@ -163,7 +163,7 @@ class Color
    * @param  string $color An X11 color name.
    * @return array         An array of RGB channels
    **/
-  static function namedColor2rgb($color)
+  static function x11ToRgb($color)
   {
     $color = mb_strtolower($color, Charset::getDefault());
     if($color === 'transparent') {
@@ -176,6 +176,14 @@ class Color
     return null;
   }
 
+  static function x11ToHsl($color)
+  {
+    $rgb = self::x11ToRgb($color);
+    if($rgb) {
+      return self::rgbToHsl($rgb['r'], $rgb['g'], $rgb['b']);
+    }
+  }
+
   /**
    * Converts an RGB color to an X11 color name
    *
@@ -186,7 +194,7 @@ class Color
    *
    * @return string       An X11 color name
    **/
-  static function rgb2namedColor($r, $g, $b, $a=1)
+  static function rgbToX11($r, $g, $b, $a=1)
   {
     if($a !== 1) return null;
     if($a == 0) return 'transparent';
@@ -197,6 +205,14 @@ class Color
     return $result === false ? null : $result;
   }
 
+  static function hslToX11($h, $s, $l, $a=1)
+  {
+    if($a !== 1) return null;
+    if($a == 0) return 'transparent';
+    $rgb = self::hslToRgb($h, $s, $l);
+    return self::rgbToX11($rgb['r'], $rgb['g'], $rgb['b']);
+  }
+
   /**
    * Converts Hexadecimal color to an array of RGB channels
    *
@@ -204,7 +220,7 @@ class Color
    *
    * @return array        An array of RGB channels
    **/
-  static function hex2rgb($value)
+  static function hexToRgb($value)
   {
     if($value[0] == '#') $value = substr($value, 1);
     if(strlen($value) == 3) {
@@ -232,11 +248,11 @@ class Color
    *
    * @return string|int
    **/
-  static function rgb2hex($r, $g, $b, $asString=true)
+  static function rgbToHex($r, $g, $b, $asString=true)
   {
-    $r = self::normalizeRGBValue($r);
-    $g = self::normalizeRGBValue($g);
-    $b = self::normalizeRGBValue($b);
+    $r = self::normalizeRgbValue($r);
+    $g = self::normalizeRgbValue($g);
+    $b = self::normalizeRgbValue($b);
     $value = dechex($r << 16 | $g << 8 | $b);
     $value = str_pad($value, 6, '0', STR_PAD_LEFT);
     return $asString ? '#'.$value : (int)'0x'.$value;
@@ -250,7 +266,7 @@ class Color
    * @param string     $l The lightness value. A percentage
    * @param float      $a The alpha channel value. A float in range 0..1
    **/
-  static function hsl2rgb($h, $s, $l, $a=1)
+  static function hslToRgb($h, $s, $l, $a=1)
   {
     // normalize to float between 0..1
     $s = self::normalizeFraction($s);
@@ -286,16 +302,16 @@ class Color
     $m1 = $l * 2 - $m2;
     
     $aRGB = array(
-      'r' => round(255 * self::hue2rgb($m1, $m2, $h + (1/3))),
-      'g' => round(255 * self::hue2rgb($m1, $m2, $h)),
-      'b' => round(255 * self::hue2rgb($m1, $m2, $h - (1/3)))
+      'r' => round(255 * self::hueToRgb($m1, $m2, $h + (1/3))),
+      'g' => round(255 * self::hueToRgb($m1, $m2, $h)),
+      'b' => round(255 * self::hueToRgb($m1, $m2, $h - (1/3)))
     );
     if($a < 1) $aRGB['a'] = $a;
 
     return $aRGB;
   }
 
-  static private function hue2rgb($m1, $m2, $h)
+  static private function hueToRgb($m1, $m2, $h)
   {
     if($h < 0) $h++;
     if($h > 1) $h--;
@@ -315,12 +331,12 @@ class Color
    *
    * @return array
    **/
-  static function rgb2hsl($r, $g, $b, $a=1)
+  static function rgbToHsl($r, $g, $b, $a=1)
   {
     // normalize to float between 0..1
-    $r = self::normalizeRGBValue($r) / 255;
-    $g = self::normalizeRGBValue($g) / 255;
-    $b = self::normalizeRGBValue($b) / 255;
+    $r = self::normalizeRgbValue($r) / 255;
+    $g = self::normalizeRgbValue($g) / 255;
+    $b = self::normalizeRgbValue($b) / 255;
     $a = self::constrainValue($a, 0, 1);
 
     $min = min($r, $g, $b); //Min. value of RGB
@@ -391,7 +407,7 @@ class Color
    *
    * @returns int             An integer in range 0..255
    **/
-  static function normalizeRGBValue($value)
+  static function normalizeRgbValue($value)
   {
     $i = strpos($value, '%');
     // percentage value

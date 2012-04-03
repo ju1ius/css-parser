@@ -4,6 +4,8 @@ namespace ju1ius\Css;
 
 use ju1ius\Collections\ParameterBag;
 use ju1ius\Text\Source;
+
+use ju1ius\Css\Util\Charset;
 use ju1ius\Css\ParserState;
 use ju1ius\Css\Exception\ParseException;
 use ju1ius\Css\Exception\RecoveredParseException;
@@ -87,6 +89,7 @@ abstract class AbstractParser
     $this->text = $this->source->getContents();
     $this->current_position = 0;
     $this->charset = $this->source->getEncoding();
+    $this->is_ascii_compatible_encoding = Charset::isAsciiCompatible($this->charset);
     $this->length = $this->source->getLength();
     $this->state = new ParserState();
     $this->errors = array();
@@ -103,6 +106,14 @@ abstract class AbstractParser
   protected function _backtrack()
   {
     $this->current_position = $this->backtracking_position;
+  }
+
+  protected function _isAsciiCaseInsensitiveMatch($str, $ascii)
+  {
+    if(!$this->is_ascii_compatible_encoding) {
+      $str = mb_convert_encoding($str, 'ascii', $this->charset);
+    }
+    return 0 === strcasecmp($str, $ascii);
   }
 
   /**
@@ -176,7 +187,7 @@ abstract class AbstractParser
     if($this->_isEnd()) {
       return false;
     }
-    return $this->_peek($string, $offset) == $string;
+    return $this->_peek($string, $offset) === $string;
   }
 
   /**

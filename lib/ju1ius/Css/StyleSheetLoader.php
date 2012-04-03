@@ -2,6 +2,7 @@
 namespace ju1ius\Css;
 
 use ju1ius\Uri;
+use ju1ius\Collections\ParameterBag;
 use ju1ius\Text\Source;
 
 /**
@@ -12,11 +13,24 @@ use ju1ius\Text\Source;
 class StyleSheetLoader
 {
   private
-    $options = array();
+    $options;
 
   public function __construct($options=array())
   {
-    $this->setOptions($options);  
+    $this->options = new ParameterBag(array(
+      'encoding' => null
+    ));
+    $this->options->merge($options);  
+  }
+
+  /**
+   * Returns the options of the current instance.
+   *
+   * @return ParameterBag The current instance's ParameterBag
+   **/
+  public function getOptions()
+  {
+    return $this->options;
   }
 
   /**
@@ -59,6 +73,8 @@ class StyleSheetLoader
       );
     }
     $infos = self::_loadString($content);
+    // Convert encoding if encoding option has been set
+    self::maybeConvertEncoding($infos, $this->options->get('encoding'));
     return new Source\File($path, $infos['contents'], $infos['charset']);
   }
 
@@ -82,6 +98,8 @@ class StyleSheetLoader
     if($response['charset'] && !$preferFileCharset) {
       $infos['charset'] = $response['charset'];
     }
+    // Convert encoding if encoding option has been set
+    self::maybeConvertEncoding($infos, $this->options->get('encoding'));
     return new Source\File($url, $infos['contents'], $infos['charset']);
   }
 
@@ -94,6 +112,8 @@ class StyleSheetLoader
   public function loadString($str)
   {
     $infos = self::_loadString($str);
+    // Convert encoding if encoding option has been set
+    self::maybeConvertEncoding($infos, $this->options->get('encoding'));
     return new Source\String($infos['contents'], $infos['charset']);
   }
 
@@ -106,6 +126,7 @@ class StyleSheetLoader
       $charset = 'utf-8';
     }
     $str = Util\Charset::removeBOM($str);
+
     return array(
       'contents' => $str,
       'charset' => $charset
@@ -142,52 +163,11 @@ class StyleSheetLoader
     return $results;
   }
 
-  /**
-   * Gets an option value.
-   *
-   * @param  string $name    The option name
-   * @param  mixed  $default The default value (null by default)
-   *
-   * @return mixed  The option value or the default value
-   */
-  public function getOption($name, $default=null)
+  static private function maybeConvertEncoding(array &$infos, $to_encoding=null)
   {
-    return isset($this->options[$name]) ? $this->options[$name] : $default;
-  }
-  /**
-   * Sets an option value.
-   *
-   * @param  string $name  The option name
-   * @param  mixed  $value The default value
-   *
-   * @return ju1ius\Css\StyleSheetLoader The current Css\StyleSheetLoader instance
-   */
-  public function setOption($name, $value)
-  {
-    $this->options[$name] = $value;
-    return $this;
-  }
-
-  /**
-   * Returns the options of the current instance.
-   *
-   * @return array The current instance's options
-   **/
-  public function getOptions()
-  {
-    return $this->options;
-  }
-
-  /**
-   * Merge given options with the current options
-   *
-   * @param array $aOptions The options to merge
-   *
-   * @return ju1ius\Css\StyleSheetLoader The current StyleSheetLoader instance
-   **/
-  public function setOptions(array $options) 
-  {
-    $this->options = array_merge($this->options, $options);
-    return $this;
+    if($to_encoding && !Util\Charset::isSameEncoding($infos['charset'], $to_encoding)) {
+      $infos['contents'] = Util\Charset::convert($infos['contents'], $to_encoding, $infos['charset']);
+      $infos['charset'] = $to_encoding;
+    }
   }
 }

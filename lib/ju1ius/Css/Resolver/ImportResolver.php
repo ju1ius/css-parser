@@ -33,9 +33,9 @@ class ImportResolver
     if(empty($imported_files)) {
       $imported_files[] = $this->stylesheet->getHref();
     }
-    $main_charset = $this->stylesheet->getCharset();
-    $main_charset = mb_strtolower($main_charset, $main_charset);
-    $loader = new StyleSheetLoader();
+    $loader = new StyleSheetLoader(array(
+      'encoding' => $this->stylesheet->getCharset()
+    ));
     $parser = new Parser();
 
     $url_resolver = new UrlResolver($this->stylesheet, $this->base_url);
@@ -51,16 +51,6 @@ class ImportResolver
           $imported_files[] = $url;
         }
         $source = $loader->load($url);
-        // if imported file is in another charset,
-        // we need to convert it
-        if(mb_strtolower($source->getEncoding(), $main_charset) !== $main_charset) {
-          $converted = Util\Charset::convert(
-            $source->getContents(),
-            $main_charset,
-            $source->getEncoding()
-          );
-          $source = new Source\File($url, $converted, $main_charset);
-        }
         // Do the parsing
         $stylesheet = $parser->parse($source);
 

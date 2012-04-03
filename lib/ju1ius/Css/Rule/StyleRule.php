@@ -5,6 +5,7 @@ use ju1ius\Css\Rule;
 use ju1ius\Css\SelectorList;
 use ju1ius\Css\StyleDeclaration;
 use ju1ius\Css\Property;
+use ju1ius\Css\Util\Object;
 
 /**
  * Represents a Css style rule
@@ -116,7 +117,7 @@ class StyleRule extends Rule
         }
         if($override) {
           $aProperties[$name] = array(
-            'property' => clone $property,
+            'property' => Object::getClone($property),
             'specificity' => $specificity
           );
         }
