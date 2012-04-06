@@ -40,13 +40,21 @@ class Parser extends AbstractParser
       'right-bottom'
     );
 
+  static public function getParserForSource(Source\String $source, array $options=array())
+  {
+    if(Charset::isSameEncoding($source->getEncoding(), 'ascii')) {
+      return new AsciiParser($options);
+    }
+    return new self($options);
+  }
+
   /**
    * Accepts a Source\String object as returned by StyleSheetLoader,
    * and returns the parsed StyleSheet
    *
    * @param ju1ius\Text\Source\String $source
    *
-   * @return ju1ius\)ss\StyleSheet
+   * @return ju1ius\Css\StyleSheet
    **/
   public function parse(Source\String $source)
   {/*{{{*/
@@ -686,12 +694,13 @@ class Parser extends AbstractParser
     if($this->_comes('!')) {
       $this->_consume('!');
       $this->_consumeWhiteSpace();
-      $importantMarker = $this->_consume(strlen('important'));
-      if(mb_convert_case($importantMarker, MB_CASE_LOWER) !== 'important') {
+      $importantMarker = $this->_parseIdentifier();
+      if(!$this->_isAsciiCaseInsensitiveMatch($importantMarker, 'important')) {
         throw new ParseException(sprintf(
           '"!" was followed by "%s". Expected "important"', $importantMarker
         ), $this->source, $this->current_position);
       }
+      $this->_consumeWhiteSpace();
       $property->setIsImportant(true);
     }
     if($this->_comes(';')) {
