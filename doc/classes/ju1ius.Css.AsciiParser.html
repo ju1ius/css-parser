@@ -1,0 +1,1418 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\AsciiParser</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public inherited"><a href="#__construct" title="__construct :: Available options:
+ - strict boolean If true, throw ParseExceptions on error."><span class="description">Available options:
+ - strict boolean If true, throw ParseExceptions on error.</span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#getCharset" title="getCharset :: Returns the current charset"><span class="description">Returns the current charset</span><pre>getCharset()</pre></a></li>
+<li class="method public inherited"><a href="#getErrors" title="getErrors :: "><span class="description">getErrors()
+        </span><pre>getErrors()</pre></a></li>
+<li class="method public inherited"><a href="#getOptions" title="getOptions :: Returns the options of the current instance."><span class="description">Returns the options of the current instance.</span><pre>getOptions()</pre></a></li>
+<li class="method public inherited"><a href="#getParserForSource" title="getParserForSource :: "><span class="description">getParserForSource()
+        </span><pre>getParserForSource()</pre></a></li>
+<li class="method public inherited"><a href="#parse" title="parse :: Accepts a Source\String object as returned by StyleSheetLoader,
+and returns the parsed StyleSheet"><span class="description">Accepts a Source\String object as returned by StyleSheetLoader,
+and returns the parsed StyleSheet</span><pre>parse()</pre></a></li>
+<li class="method public inherited"><a href="#parseMediaQuery" title="parseMediaQuery :: "><span class="description">parseMediaQuery()
+        </span><pre>parseMediaQuery()</pre></a></li>
+<li class="method public inherited"><a href="#parseSelector" title="parseSelector :: "><span class="description">parseSelector()
+        </span><pre>parseSelector()</pre></a></li>
+<li class="method public inherited"><a href="#parseStyleDeclaration" title="parseStyleDeclaration :: "><span class="description">parseStyleDeclaration()
+        </span><pre>parseStyleDeclaration()</pre></a></li>
+<li class="method public inherited"><a href="#parseStyleRule" title="parseStyleRule :: "><span class="description">parseStyleRule()
+        </span><pre>parseStyleRule()</pre></a></li>
+<li class="method public inherited"><a href="#parseStyleSheet" title="parseStyleSheet :: "><span class="description">parseStyleSheet()
+        </span><pre>parseStyleSheet()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected inherited"><a href="#_backtrack" title="_backtrack :: "><span class="description">_backtrack()
+        </span><pre>_backtrack()</pre></a></li>
+<li class="method protected inherited"><a href="#_comes" title="_comes :: Checks if a given string is found after the current position."><span class="description">Checks if a given string is found after the current position.</span><pre>_comes()</pre></a></li>
+<li class="method protected "><a href="#_consume" title="_consume :: Consumes the input string"><span class="description">Consumes the input string</span><pre>_consume()</pre></a></li>
+<li class="method protected inherited"><a href="#_consumeComment" title="_consumeComment :: "><span class="description">_consumeComment()
+        </span><pre>_consumeComment()</pre></a></li>
+<li class="method protected inherited"><a href="#_consumeExpression" title="_consumeExpression :: Consumes a given regular expression."><span class="description">Consumes a given regular expression.</span><pre>_consumeExpression()</pre></a></li>
+<li class="method protected "><a href="#_consumeUntil" title="_consumeUntil :: Consumes input until the given string is found."><span class="description">Consumes input until the given string is found.</span><pre>_consumeUntil()</pre></a></li>
+<li class="method protected "><a href="#_consumeWhiteSpace" title="_consumeWhiteSpace :: Consumes whitespace and comments."><span class="description">Consumes whitespace and comments.</span><pre>_consumeWhiteSpace()</pre></a></li>
+<li class="method protected "><a href="#_init" title="_init :: Initializes the parser according to the input string and charset."><span class="description">Initializes the parser according to the input string and charset.</span><pre>_init()</pre></a></li>
+<li class="method protected "><a href="#_inputLeft" title="_inputLeft :: Returns the input string from current position to end"><span class="description">Returns the input string from current position to end</span><pre>_inputLeft()</pre></a></li>
+<li class="method protected "><a href="#_isAsciiCaseInsensitiveMatch" title="_isAsciiCaseInsensitiveMatch :: "><span class="description">_isAsciiCaseInsensitiveMatch()
+        </span><pre>_isAsciiCaseInsensitiveMatch()</pre></a></li>
+<li class="method protected inherited"><a href="#_isEnd" title="_isEnd :: Checks for the end of input"><span class="description">Checks for the end of input</span><pre>_isEnd()</pre></a></li>
+<li class="method protected "><a href="#_parseCharacter" title="_parseCharacter :: Parses a single character."><span class="description">Parses a single character.</span><pre>_parseCharacter()</pre></a></li>
+<li class="method protected "><a href="#_peek" title="_peek :: Returns a peek at the input after the current position."><span class="description">Returns a peek at the input after the current position.</span><pre>_peek()</pre></a></li>
+<li class="method protected inherited"><a href="#_pushError" title="_pushError :: "><span class="description">_pushError()
+        </span><pre>_pushError()</pre></a></li>
+<li class="method protected inherited"><a href="#_setBacktrackingPosition" title="_setBacktrackingPosition :: "><span class="description">_setBacktrackingPosition()
+        </span><pre>_setBacktrackingPosition()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private inherited"><a href="#_doParseProperty" title="_doParseProperty :: "><span class="description">_doParseProperty()
+        </span><pre>_doParseProperty()</pre></a></li>
+<li class="method private inherited"><a href="#_fixBackgroundLayer" title="_fixBackgroundLayer :: "><span class="description">_fixBackgroundLayer()
+        </span><pre>_fixBackgroundLayer()</pre></a></li>
+<li class="method private inherited"><a href="#_fixBackgroundShorthand" title="_fixBackgroundShorthand :: "><span class="description">_fixBackgroundShorthand()
+        </span><pre>_fixBackgroundShorthand()</pre></a></li>
+<li class="method private inherited"><a href="#_isMarginBoxIdentifier" title="_isMarginBoxIdentifier :: "><span class="description">_isMarginBoxIdentifier()
+        </span><pre>_isMarginBoxIdentifier()</pre></a></li>
+<li class="method private inherited"><a href="#_listDelimiterForProperty" title="_listDelimiterForProperty :: "><span class="description">_listDelimiterForProperty()
+        </span><pre>_listDelimiterForProperty()</pre></a></li>
+<li class="method private inherited"><a href="#_parseAtRule" title="_parseAtRule :: "><span class="description">_parseAtRule()
+        </span><pre>_parseAtRule()</pre></a></li>
+<li class="method private inherited"><a href="#_parseAttrib" title="_parseAttrib :: Parses an attribute from a selector and returns
+the resulting AttributeSelector object."><span class="description">Parses an attribute from a selector and returns
+the resulting AttributeSelector object.</span><pre>_parseAttrib()</pre></a></li>
+<li class="method private "><a href="#_parseColorValue" title="_parseColorValue :: "><span class="description">_parseColorValue()
+        </span><pre>_parseColorValue()</pre></a></li>
+<li class="method private inherited"><a href="#_parseIdentifier" title="_parseIdentifier :: "><span class="description">_parseIdentifier()
+        </span><pre>_parseIdentifier()</pre></a></li>
+<li class="method private inherited"><a href="#_parseKeyframeRule" title="_parseKeyframeRule :: "><span class="description">_parseKeyframeRule()
+        </span><pre>_parseKeyframeRule()</pre></a></li>
+<li class="method private inherited"><a href="#_parseMediaQuery" title="_parseMediaQuery :: "><span class="description">_parseMediaQuery()
+        </span><pre>_parseMediaQuery()</pre></a></li>
+<li class="method private inherited"><a href="#_parseMediaQueryExpression" title="_parseMediaQueryExpression :: "><span class="description">_parseMediaQueryExpression()
+        </span><pre>_parseMediaQueryExpression()</pre></a></li>
+<li class="method private inherited"><a href="#_parseMediaQueryList" title="_parseMediaQueryList :: "><span class="description">_parseMediaQueryList()
+        </span><pre>_parseMediaQueryList()</pre></a></li>
+<li class="method private inherited"><a href="#_parseNumericValue" title="_parseNumericValue :: "><span class="description">_parseNumericValue()
+        </span><pre>_parseNumericValue()</pre></a></li>
+<li class="method private inherited"><a href="#_parsePageRule" title="_parsePageRule :: "><span class="description">_parsePageRule()
+        </span><pre>_parsePageRule()</pre></a></li>
+<li class="method private inherited"><a href="#_parsePageSelector" title="_parsePageSelector :: "><span class="description">_parsePageSelector()
+        </span><pre>_parsePageSelector()</pre></a></li>
+<li class="method private inherited"><a href="#_parsePrimitiveValue" title="_parsePrimitiveValue :: "><span class="description">_parsePrimitiveValue()
+        </span><pre>_parsePrimitiveValue()</pre></a></li>
+<li class="method private inherited"><a href="#_parseProperty" title="_parseProperty :: Wraps the _doParseProperty method for error recovery"><span class="description">Wraps the _doParseProperty method for error recovery</span><pre>_parseProperty()</pre></a></li>
+<li class="method private inherited"><a href="#_parseRuleList" title="_parseRuleList :: "><span class="description">_parseRuleList()
+        </span><pre>_parseRuleList()</pre></a></li>
+<li class="method private inherited"><a href="#_parseSelector" title="_parseSelector :: "><span class="description">_parseSelector()
+        </span><pre>_parseSelector()</pre></a></li>
+<li class="method private inherited"><a href="#_parseSelectorList" title="_parseSelectorList :: "><span class="description">_parseSelectorList()
+        </span><pre>_parseSelectorList()</pre></a></li>
+<li class="method private inherited"><a href="#_parseSimpleSelector" title="_parseSimpleSelector :: Parses a simple selector and returns the resulting Selector object."><span class="description">Parses a simple selector and returns the resulting Selector object.</span><pre>_parseSimpleSelector()</pre></a></li>
+<li class="method private inherited"><a href="#_parseStringValue" title="_parseStringValue :: "><span class="description">_parseStringValue()
+        </span><pre>_parseStringValue()</pre></a></li>
+<li class="method private inherited"><a href="#_parseStyleDeclaration" title="_parseStyleDeclaration :: "><span class="description">_parseStyleDeclaration()
+        </span><pre>_parseStyleDeclaration()</pre></a></li>
+<li class="method private inherited"><a href="#_parseStyleRule" title="_parseStyleRule :: "><span class="description">_parseStyleRule()
+        </span><pre>_parseStyleRule()</pre></a></li>
+<li class="method private inherited"><a href="#_parseStyleSheet" title="_parseStyleSheet :: "><span class="description">_parseStyleSheet()
+        </span><pre>_parseStyleSheet()</pre></a></li>
+<li class="method private inherited"><a href="#_parseUnicodeRange" title="_parseUnicodeRange :: "><span class="description">_parseUnicodeRange()
+        </span><pre>_parseUnicodeRange()</pre></a></li>
+<li class="method private inherited"><a href="#_parseUrlValue" title="_parseUrlValue :: "><span class="description">_parseUrlValue()
+        </span><pre>_parseUrlValue()</pre></a></li>
+<li class="method private inherited"><a href="#_parseValue" title="_parseValue :: "><span class="description">_parseValue()
+        </span><pre>_parseValue()</pre></a></li>
+<li class="method private inherited"><a href="#_skipAtRule" title="_skipAtRule :: "><span class="description">_skipAtRule()
+        </span><pre>_skipAtRule()</pre></a></li>
+<li class="method private inherited"><a href="#_skipNextRule" title="_skipNextRule :: "><span class="description">_skipNextRule()
+        </span><pre>_skipNextRule()</pre></a></li>
+<li class="method private inherited"><a href="#_skipProperty" title="_skipProperty :: "><span class="description">_skipProperty()
+        </span><pre>_skipProperty()</pre></a></li>
+<li class="method private inherited"><a href="#_skipStyleRule" title="_skipStyleRule :: "><span class="description">_skipStyleRule()
+        </span><pre>_skipStyleRule()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public inherited"><a href="#%24backtracking_position" title="$backtracking_position :: "><span class="description">$backtracking_position</span><pre>$backtracking_position</pre></a></li>
+<li class="property public inherited"><a href="#%24current_position" title="$current_position :: "><span class="description">$current_position</span><pre>$current_position</pre></a></li>
+<li class="property public inherited"><a href="#%24errors" title="$errors :: "><span class="description">$errors</span><pre>$errors</pre></a></li>
+<li class="property public inherited"><a href="#%24length" title="$length :: "><span class="description">$length</span><pre>$length</pre></a></li>
+<li class="property public inherited"><a href="#%24source" title="$source :: "><span class="description">$source</span><pre>$source</pre></a></li>
+<li class="property public inherited"><a href="#%24state" title="$state :: "><span class="description">$state</span><pre>$state</pre></a></li>
+<li class="property public inherited"><a href="#%24strict_parsing" title="$strict_parsing :: "><span class="description">$strict_parsing</span><pre>$strict_parsing</pre></a></li>
+<li class="property public inherited"><a href="#%24text" title="$text :: "><span class="description">$text</span><pre>$text</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected inherited"><a href="#%24options" title="$options :: "><span class="description">$options</span><pre>$options</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="property private inherited"><a href="#%24MARGIN_BOX_IDENTIFIERS" title="$MARGIN_BOX_IDENTIFIERS :: "><span class="description">$MARGIN_BOX_IDENTIFIERS</span><pre>$MARGIN_BOX_IDENTIFIERS</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CAsciiParser" id="\ju1ius\Css\AsciiParser"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.AsciiParser.html">AsciiParser</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.AsciiParser.html" class="element class">
+<p class="short_description">Parses Css text into a data structure.</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="..//packages/Css.html">Css</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">Raphael Schweikert http://sabberworm.com</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ju1ius http://github.com/ju1ius</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Available options:
+ - strict boolean If true, throw ParseExceptions on error.</h2>
+<pre>__construct(array $options) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>If false, recover errors according to http://www.w3.org/TR/CSS2/syndata.html#parsing-errors</p></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::__construct()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::__construct()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$options</h4>
+<code>array</code>
+</div>
+</div></div>
+</div>
+<a name="getCharset" id="getCharset"></a><div class="element clickable method public getCharset" data-toggle="collapse" data-target=".getCharset .collapse">
+<h2>Returns the current charset</h2>
+<pre>getCharset() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::getCharset()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::getCharset()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getErrors" id="getErrors"></a><div class="element clickable method public getErrors" data-toggle="collapse" data-target=".getErrors .collapse">
+<h2>getErrors()
+        </h2>
+<pre>getErrors() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::getErrors()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::getErrors()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="getOptions" id="getOptions"></a><div class="element clickable method public getOptions" data-toggle="collapse" data-target=".getOptions .collapse">
+<h2>Returns the options of the current instance.</h2>
+<pre>getOptions() : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::getOptions()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::getOptions()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>The current instance's options</div>
+</div></div>
+</div>
+<a name="getParserForSource" id="getParserForSource"></a><div class="element clickable method public getParserForSource" data-toggle="collapse" data-target=".getParserForSource .collapse">
+<h2>getParserForSource()
+        </h2>
+<pre>getParserForSource(String $source, array $options) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::getParserForSource()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$options</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="parse" id="parse"></a><div class="element clickable method public parse" data-toggle="collapse" data-target=".parse .collapse">
+<h2>Accepts a Source\String object as returned by StyleSheetLoader,
+and returns the parsed StyleSheet</h2>
+<pre>parse(String $source) : <a href="../classes/ju1ius.Css.StyleSheet.html">\ju1ius\Css\StyleSheet</a></pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::parse()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code>\ju1ius\Text\Source\String</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/ju1ius.Css.StyleSheet.html">\ju1ius\Css\StyleSheet</a></code></div>
+</div></div>
+</div>
+<a name="parseMediaQuery" id="parseMediaQuery"></a><div class="element clickable method public parseMediaQuery" data-toggle="collapse" data-target=".parseMediaQuery .collapse">
+<h2>parseMediaQuery()
+        </h2>
+<pre>parseMediaQuery($text, $charset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::parseMediaQuery()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$text</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="parseSelector" id="parseSelector"></a><div class="element clickable method public parseSelector" data-toggle="collapse" data-target=".parseSelector .collapse">
+<h2>parseSelector()
+        </h2>
+<pre>parseSelector($text, $charset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::parseSelector()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$text</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="parseStyleDeclaration" id="parseStyleDeclaration"></a><div class="element clickable method public parseStyleDeclaration" data-toggle="collapse" data-target=".parseStyleDeclaration .collapse">
+<h2>parseStyleDeclaration()
+        </h2>
+<pre>parseStyleDeclaration($text, $charset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::parseStyleDeclaration()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$text</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="parseStyleRule" id="parseStyleRule"></a><div class="element clickable method public parseStyleRule" data-toggle="collapse" data-target=".parseStyleRule .collapse">
+<h2>parseStyleRule()
+        </h2>
+<pre>parseStyleRule($text, $charset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::parseStyleRule()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$text</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="parseStyleSheet" id="parseStyleSheet"></a><div class="element clickable method public parseStyleSheet" data-toggle="collapse" data-target=".parseStyleSheet .collapse">
+<h2>parseStyleSheet()
+        </h2>
+<pre>parseStyleSheet($text, $charset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::parseStyleSheet()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$text</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_backtrack" id="_backtrack"></a><div class="element clickable method protected _backtrack" data-toggle="collapse" data-target="._backtrack .collapse">
+<h2>_backtrack()
+        </h2>
+<pre>_backtrack() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::_backtrack()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_backtrack()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="_comes" id="_comes"></a><div class="element clickable method protected _comes" data-toggle="collapse" data-target="._comes .collapse">
+<h2>Checks if a given string is found after the current position.</h2>
+<pre>_comes(string $string, int $offset) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::_comes()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_comes()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code>string</code><p>The string to search for.</p></div>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code>int</code><p>The offset at which it should be found.</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_consume" id="_consume"></a><div class="element clickable method protected _consume" data-toggle="collapse" data-target="._consume .collapse">
+<h2>Consumes the input string</h2>
+<pre>_consume(string | int $value) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>stringint</code><p>If string tries to consume the given string, if int consumes the given number of characters.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The consumed input.</div>
+</div></div>
+</div>
+<a name="_consumeComment" id="_consumeComment"></a><div class="element clickable method protected _consumeComment" data-toggle="collapse" data-target="._consumeComment .collapse">
+<h2>_consumeComment()
+        </h2>
+<pre>_consumeComment() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::_consumeComment()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_consumeComment()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="_consumeExpression" id="_consumeExpression"></a><div class="element clickable method protected _consumeExpression" data-toggle="collapse" data-target="._consumeExpression .collapse">
+<h2>Consumes a given regular expression.</h2>
+<pre>_consumeExpression(string $pattern) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::_consumeExpression()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_consumeExpression()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$pattern</h4>
+<code>string</code><p>A regex pattern.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The consumed expression.</div>
+</div></div>
+</div>
+<a name="_consumeUntil" id="_consumeUntil"></a><div class="element clickable method protected _consumeUntil" data-toggle="collapse" data-target="._consumeUntil .collapse">
+<h2>Consumes input until the given string is found.</h2>
+<pre>_consumeUntil(string $end) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$end</h4>
+<code>string</code><p>The string until which we consume input.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The consumed input</div>
+</div></div>
+</div>
+<a name="_consumeWhiteSpace" id="_consumeWhiteSpace"></a><div class="element clickable method protected _consumeWhiteSpace" data-toggle="collapse" data-target="._consumeWhiteSpace .collapse">
+<h2>Consumes whitespace and comments.</h2>
+<pre>_consumeWhiteSpace() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="_init" id="_init"></a><div class="element clickable method protected _init" data-toggle="collapse" data-target="._init .collapse">
+<h2>Initializes the parser according to the input string and charset.</h2>
+<pre>_init(string | \ju1ius\Text\Source\String $text, string $charset) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>If passed a Source\String object, initializes according to it.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$text</h4>
+<code>string\ju1ius\Text\Source\String</code>
+</div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a name="_inputLeft" id="_inputLeft"></a><div class="element clickable method protected _inputLeft" data-toggle="collapse" data-target="._inputLeft .collapse">
+<h2>Returns the input string from current position to end</h2>
+<pre>_inputLeft() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_isAsciiCaseInsensitiveMatch" id="_isAsciiCaseInsensitiveMatch"></a><div class="element clickable method protected _isAsciiCaseInsensitiveMatch" data-toggle="collapse" data-target="._isAsciiCaseInsensitiveMatch .collapse">
+<h2>_isAsciiCaseInsensitiveMatch()
+        </h2>
+<pre>_isAsciiCaseInsensitiveMatch($str, $ascii) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$ascii</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_isEnd" id="_isEnd"></a><div class="element clickable method protected _isEnd" data-toggle="collapse" data-target="._isEnd .collapse">
+<h2>Checks for the end of input</h2>
+<pre>_isEnd() : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::_isEnd()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_isEnd()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_parseCharacter" id="_parseCharacter"></a><div class="element clickable method protected _parseCharacter" data-toggle="collapse" data-target="._parseCharacter .collapse">
+<h2>Parses a single character.</h2>
+<pre>_parseCharacter(bool $isForIdentifier) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$isForIdentifier</h4>
+<code>bool</code><p>true if the character is part of an identifier</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>the parsed character</div>
+</div></div>
+</div>
+<a name="_peek" id="_peek"></a><div class="element clickable method protected _peek" data-toggle="collapse" data-target="._peek .collapse">
+<h2>Returns a peek at the input after the current position.</h2>
+<pre>_peek(int | string $length, int | string $offset) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$length</h4>
+<code>intstring</code><p>The peek length. If string will be the length of the string.</p></div>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code>intstring</code><p>The offset at which to start the peek. If string will be the length of the string.</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_pushError" id="_pushError"></a><div class="element clickable method protected _pushError" data-toggle="collapse" data-target="._pushError .collapse">
+<h2>_pushError()
+        </h2>
+<pre>_pushError(ParseException $e) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::_pushError()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_pushError()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$e</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_setBacktrackingPosition" id="_setBacktrackingPosition"></a><div class="element clickable method protected _setBacktrackingPosition" data-toggle="collapse" data-target="._setBacktrackingPosition .collapse">
+<h2>_setBacktrackingPosition()
+        </h2>
+<pre>_setBacktrackingPosition() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::_setBacktrackingPosition()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_setBacktrackingPosition()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="_doParseProperty" id="_doParseProperty"></a><div class="element clickable method private _doParseProperty" data-toggle="collapse" data-target="._doParseProperty .collapse">
+<h2>_doParseProperty()
+        </h2>
+<pre>_doParseProperty() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_doParseProperty()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_fixBackgroundLayer" id="_fixBackgroundLayer"></a><div class="element clickable method private _fixBackgroundLayer" data-toggle="collapse" data-target="._fixBackgroundLayer .collapse">
+<h2>_fixBackgroundLayer()
+        </h2>
+<pre>_fixBackgroundLayer(PropertyValueList $oValueList) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_fixBackgroundLayer()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$oValueList</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_fixBackgroundShorthand" id="_fixBackgroundShorthand"></a><div class="element clickable method private _fixBackgroundShorthand" data-toggle="collapse" data-target="._fixBackgroundShorthand .collapse">
+<h2>_fixBackgroundShorthand()
+        </h2>
+<pre>_fixBackgroundShorthand(PropertyValueList $oValueList) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_fixBackgroundShorthand()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$oValueList</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_isMarginBoxIdentifier" id="_isMarginBoxIdentifier"></a><div class="element clickable method private _isMarginBoxIdentifier" data-toggle="collapse" data-target="._isMarginBoxIdentifier .collapse">
+<h2>_isMarginBoxIdentifier()
+        </h2>
+<pre>_isMarginBoxIdentifier($str) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_isMarginBoxIdentifier()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_listDelimiterForProperty" id="_listDelimiterForProperty"></a><div class="element clickable method private _listDelimiterForProperty" data-toggle="collapse" data-target="._listDelimiterForProperty .collapse">
+<h2>_listDelimiterForProperty()
+        </h2>
+<pre>_listDelimiterForProperty($propertyName) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_listDelimiterForProperty()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$propertyName</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parseAtRule" id="_parseAtRule"></a><div class="element clickable method private _parseAtRule" data-toggle="collapse" data-target="._parseAtRule .collapse">
+<h2>_parseAtRule()
+        </h2>
+<pre>_parseAtRule() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseAtRule()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseAttrib" id="_parseAttrib"></a><div class="element clickable method private _parseAttrib" data-toggle="collapse" data-target="._parseAttrib .collapse">
+<h2>Parses an attribute from a selector and returns
+the resulting AttributeSelector object.</h2>
+<pre>_parseAttrib(<a href="../classes/ju1ius.Css.Selector.html">\ju1ius\Css\Selector</a> $selector) : \Selector\AttributeSelector</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseAttrib()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$selector</h4>
+<code><a href="../classes/ju1ius.Css.Selector.html">\ju1ius\Css\Selector</a></code><p>The selector object whose attribute is to be parsed.</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/ju1ius.Css.Exception.ParseException.html">\ju1ius\Css\Exception\ParseException</a></code></th>
+<td>When encountered unexpected selector</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>\Selector\AttributeSelector</code></div>
+</div></div>
+</div>
+<a name="_parseColorValue" id="_parseColorValue"></a><div class="element clickable method private _parseColorValue" data-toggle="collapse" data-target="._parseColorValue .collapse">
+<h2>_parseColorValue()
+        </h2>
+<pre>_parseColorValue() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="_parseIdentifier" id="_parseIdentifier"></a><div class="element clickable method private _parseIdentifier" data-toggle="collapse" data-target="._parseIdentifier .collapse">
+<h2>_parseIdentifier()
+        </h2>
+<pre>_parseIdentifier($allowFunctions, $allowColors) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseIdentifier()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$allowFunctions</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$allowColors</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parseKeyframeRule" id="_parseKeyframeRule"></a><div class="element clickable method private _parseKeyframeRule" data-toggle="collapse" data-target="._parseKeyframeRule .collapse">
+<h2>_parseKeyframeRule()
+        </h2>
+<pre>_parseKeyframeRule() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseKeyframeRule()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseMediaQuery" id="_parseMediaQuery"></a><div class="element clickable method private _parseMediaQuery" data-toggle="collapse" data-target="._parseMediaQuery .collapse">
+<h2>_parseMediaQuery()
+        </h2>
+<pre>_parseMediaQuery() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseMediaQuery()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseMediaQueryExpression" id="_parseMediaQueryExpression"></a><div class="element clickable method private _parseMediaQueryExpression" data-toggle="collapse" data-target="._parseMediaQueryExpression .collapse">
+<h2>_parseMediaQueryExpression()
+        </h2>
+<pre>_parseMediaQueryExpression() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseMediaQueryExpression()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseMediaQueryList" id="_parseMediaQueryList"></a><div class="element clickable method private _parseMediaQueryList" data-toggle="collapse" data-target="._parseMediaQueryList .collapse">
+<h2>_parseMediaQueryList()
+        </h2>
+<pre>_parseMediaQueryList() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseMediaQueryList()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseNumericValue" id="_parseNumericValue"></a><div class="element clickable method private _parseNumericValue" data-toggle="collapse" data-target="._parseNumericValue .collapse">
+<h2>_parseNumericValue()
+        </h2>
+<pre>_parseNumericValue($isForColor, $allow_ratios) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseNumericValue()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$isForColor</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$allow_ratios</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parsePageRule" id="_parsePageRule"></a><div class="element clickable method private _parsePageRule" data-toggle="collapse" data-target="._parsePageRule .collapse">
+<h2>_parsePageRule()
+        </h2>
+<pre>_parsePageRule() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parsePageRule()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parsePageSelector" id="_parsePageSelector"></a><div class="element clickable method private _parsePageSelector" data-toggle="collapse" data-target="._parsePageSelector .collapse">
+<h2>_parsePageSelector()
+        </h2>
+<pre>_parsePageSelector() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parsePageSelector()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parsePrimitiveValue" id="_parsePrimitiveValue"></a><div class="element clickable method private _parsePrimitiveValue" data-toggle="collapse" data-target="._parsePrimitiveValue .collapse">
+<h2>_parsePrimitiveValue()
+        </h2>
+<pre>_parsePrimitiveValue($allow_ratios) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parsePrimitiveValue()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$allow_ratios</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parseProperty" id="_parseProperty"></a><div class="element clickable method private _parseProperty" data-toggle="collapse" data-target="._parseProperty .collapse">
+<h2>Wraps the _doParseProperty method for error recovery</h2>
+<pre>_parseProperty(StyleDeclaration $style_declaration) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseProperty()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$style_declaration</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parseRuleList" id="_parseRuleList"></a><div class="element clickable method private _parseRuleList" data-toggle="collapse" data-target="._parseRuleList .collapse">
+<h2>_parseRuleList()
+        </h2>
+<pre>_parseRuleList(RuleList $ruleList, $isRoot) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseRuleList()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ruleList</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$isRoot</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parseSelector" id="_parseSelector"></a><div class="element clickable method private _parseSelector" data-toggle="collapse" data-target="._parseSelector .collapse">
+<h2>_parseSelector()
+        </h2>
+<pre>_parseSelector() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseSelector()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseSelectorList" id="_parseSelectorList"></a><div class="element clickable method private _parseSelectorList" data-toggle="collapse" data-target="._parseSelectorList .collapse">
+<h2>_parseSelectorList()
+        </h2>
+<pre>_parseSelectorList() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseSelectorList()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseSimpleSelector" id="_parseSimpleSelector"></a><div class="element clickable method private _parseSimpleSelector" data-toggle="collapse" data-target="._parseSimpleSelector .collapse">
+<h2>Parses a simple selector and returns the resulting Selector object.</h2>
+<pre>_parseSimpleSelector() : <a href="../classes/ju1ius.Css.Selector.html">\ju1ius\Css\Selector</a></pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseSimpleSelector()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/ju1ius.Css.Selector.html">\ju1ius\Css\Selector</a></code></div>
+</div></div>
+</div>
+<a name="_parseStringValue" id="_parseStringValue"></a><div class="element clickable method private _parseStringValue" data-toggle="collapse" data-target="._parseStringValue .collapse">
+<h2>_parseStringValue()
+        </h2>
+<pre>_parseStringValue() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseStringValue()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseStyleDeclaration" id="_parseStyleDeclaration"></a><div class="element clickable method private _parseStyleDeclaration" data-toggle="collapse" data-target="._parseStyleDeclaration .collapse">
+<h2>_parseStyleDeclaration()
+        </h2>
+<pre>_parseStyleDeclaration(StyleDeclaration $style_declaration) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseStyleDeclaration()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$style_declaration</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parseStyleRule" id="_parseStyleRule"></a><div class="element clickable method private _parseStyleRule" data-toggle="collapse" data-target="._parseStyleRule .collapse">
+<h2>_parseStyleRule()
+        </h2>
+<pre>_parseStyleRule() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseStyleRule()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseStyleSheet" id="_parseStyleSheet"></a><div class="element clickable method private _parseStyleSheet" data-toggle="collapse" data-target="._parseStyleSheet .collapse">
+<h2>_parseStyleSheet()
+        </h2>
+<pre>_parseStyleSheet(StyleSheet $stylesheet) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseStyleSheet()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$stylesheet</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_parseUnicodeRange" id="_parseUnicodeRange"></a><div class="element clickable method private _parseUnicodeRange" data-toggle="collapse" data-target="._parseUnicodeRange .collapse">
+<h2>_parseUnicodeRange()
+        </h2>
+<pre>_parseUnicodeRange() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseUnicodeRange()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseUrlValue" id="_parseUrlValue"></a><div class="element clickable method private _parseUrlValue" data-toggle="collapse" data-target="._parseUrlValue .collapse">
+<h2>_parseUrlValue()
+        </h2>
+<pre>_parseUrlValue() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseUrlValue()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parseValue" id="_parseValue"></a><div class="element clickable method private _parseValue" data-toggle="collapse" data-target="._parseValue .collapse">
+<h2>_parseValue()
+        </h2>
+<pre>_parseValue($listDelimiters) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_parseValue()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$listDelimiters</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_skipAtRule" id="_skipAtRule"></a><div class="element clickable method private _skipAtRule" data-toggle="collapse" data-target="._skipAtRule .collapse">
+<h2>_skipAtRule()
+        </h2>
+<pre>_skipAtRule() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_skipAtRule()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_skipNextRule" id="_skipNextRule"></a><div class="element clickable method private _skipNextRule" data-toggle="collapse" data-target="._skipNextRule .collapse">
+<h2>_skipNextRule()
+        </h2>
+<pre>_skipNextRule() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_skipNextRule()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_skipProperty" id="_skipProperty"></a><div class="element clickable method private _skipProperty" data-toggle="collapse" data-target="._skipProperty .collapse">
+<h2>_skipProperty()
+        </h2>
+<pre>_skipProperty() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_skipProperty()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_skipStyleRule" id="_skipStyleRule"></a><div class="element clickable method private _skipStyleRule" data-toggle="collapse" data-target="._skipStyleRule .collapse">
+<h2>_skipStyleRule()
+        </h2>
+<pre>_skipStyleRule() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::_skipStyleRule()</td>
+</tr></table>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24backtracking_position" id="$backtracking_position"> </a><div class="element clickable property public $backtracking_position" data-toggle="collapse" data-target=".$backtracking_position .collapse">
+<h2>$backtracking_position</h2>
+<pre>$backtracking_position </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$backtracking_position</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$backtracking_position</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24current_position" id="$current_position"> </a><div class="element clickable property public $current_position" data-toggle="collapse" data-target=".$current_position .collapse">
+<h2>$current_position</h2>
+<pre>$current_position </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$current_position</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$current_position</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24errors" id="$errors"> </a><div class="element clickable property public $errors" data-toggle="collapse" data-target=".$errors .collapse">
+<h2>$errors</h2>
+<pre>$errors </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$errors</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$errors</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24length" id="$length"> </a><div class="element clickable property public $length" data-toggle="collapse" data-target=".$length .collapse">
+<h2>$length</h2>
+<pre>$length </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$length</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$length</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24source" id="$source"> </a><div class="element clickable property public $source" data-toggle="collapse" data-target=".$source .collapse">
+<h2>$source</h2>
+<pre>$source </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$source</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$source</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24state" id="$state"> </a><div class="element clickable property public $state" data-toggle="collapse" data-target=".$state .collapse">
+<h2>$state</h2>
+<pre>$state </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$state</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$state</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24strict_parsing" id="$strict_parsing"> </a><div class="element clickable property public $strict_parsing" data-toggle="collapse" data-target=".$strict_parsing .collapse">
+<h2>$strict_parsing</h2>
+<pre>$strict_parsing </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$strict_parsing</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$strict_parsing</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24text" id="$text"> </a><div class="element clickable property public $text" data-toggle="collapse" data-target=".$text .collapse">
+<h2>$text</h2>
+<pre>$text </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$text</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$text</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24options" id="$options"> </a><div class="element clickable property protected $options" data-toggle="collapse" data-target=".$options .collapse">
+<h2>$options</h2>
+<pre>$options </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\AbstractParser::$$options</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$options</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24MARGIN_BOX_IDENTIFIERS" id="$MARGIN_BOX_IDENTIFIERS"> </a><div class="element clickable property private $MARGIN_BOX_IDENTIFIERS" data-toggle="collapse" data-target=".$MARGIN_BOX_IDENTIFIERS .collapse">
+<h2>$MARGIN_BOX_IDENTIFIERS</h2>
+<pre>$MARGIN_BOX_IDENTIFIERS </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Parser::$$MARGIN_BOX_IDENTIFIERS</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

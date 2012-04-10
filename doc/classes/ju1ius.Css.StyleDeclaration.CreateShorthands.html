@@ -1,0 +1,334 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\StyleDeclaration\CreateShorthands</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#createBackgroundShorthand" title="createBackgroundShorthand :: "><span class="description">createBackgroundShorthand()
+        </span><pre>createBackgroundShorthand()</pre></a></li>
+<li class="method public "><a href="#createBorderShorthand" title="createBorderShorthand :: Combine border-color, border-style and border-width into border
+Should be run after create_dimensions_shorthand!"><span class="description">Combine border-color, border-style and border-width into border
+Should be run after create_dimensions_shorthand!</span><pre>createBorderShorthand()</pre></a></li>
+<li class="method public "><a href="#createDimensionsShorthands" title="createDimensionsShorthands :: Looks for long format Css dimensional properties
+(margin, padding, border-color, border-style and border-width)
+and converts them into shorthand Css properties."><span class="description">Looks for long format Css dimensional properties
+(margin, padding, border-color, border-style and border-width)
+and converts them into shorthand Css properties.</span><pre>createDimensionsShorthands()</pre></a></li>
+<li class="method public "><a href="#createFontShorthand" title="createFontShorthand :: Looks for long format Css font properties (e.g. &lt;tt&gt;font-weight&lt;/tt&gt;) and
+tries to convert them into a shorthand Css &lt;tt&gt;font&lt;/tt&gt; property."><span class="description">Looks for long format Css font properties (e.g. &lt;tt&gt;font-weight&lt;/tt&gt;) and
+tries to convert them into a shorthand Css &lt;tt&gt;font&lt;/tt&gt; property.</span><pre>createFontShorthand()</pre></a></li>
+<li class="method public "><a href="#createListStyleShorthand" title="createListStyleShorthand :: "><span class="description">createListStyleShorthand()
+        </span><pre>createListStyleShorthand()</pre></a></li>
+<li class="method public "><a href="#createShorthands" title="createShorthands :: Create shorthand properties (e.g. `margin` or `font`) whenever possible."><span class="description">Create shorthand properties (e.g. `margin` or `font`) whenever possible.</span><pre>createShorthands()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#_createShorthandProperties" title="_createShorthandProperties :: "><span class="description">_createShorthandProperties()
+        </span><pre>_createShorthandProperties()</pre></a></li>
+<li class="method private "><a href="#_destructiveCleanup" title="_destructiveCleanup :: Destructively cleans up rules before creating shorthand properties."><span class="description">Destructively cleans up rules before creating shorthand properties.</span><pre>_destructiveCleanup()</pre></a></li>
+<li class="method private "><a href="#_mergeLayers" title="_mergeLayers :: "><span class="description">_mergeLayers()
+        </span><pre>_mergeLayers()</pre></a></li>
+<li class="method private "><a href="#_mergeValues" title="_mergeValues :: "><span class="description">_mergeValues()
+        </span><pre>_mergeValues()</pre></a></li>
+<li class="method private "><a href="#_safeCleanup" title="_safeCleanup :: Safely cleans up properties before creating shorthand properties."><span class="description">Safely cleans up properties before creating shorthand properties.</span><pre>_safeCleanup()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24styleDeclaration" title="$styleDeclaration :: "><span class="description">$styleDeclaration</span><pre>$styleDeclaration</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CStyleDeclaration%5CCreateShorthands" id="\ju1ius\Css\StyleDeclaration\CreateShorthands"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.StyleDeclaration.html">StyleDeclaration</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.StyleDeclaration.CreateShorthands.html">CreateShorthands</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.StyleDeclaration.CreateShorthands.html" class="element class">
+<p class="short_description">Utility class to create shorthand properties from a StyleDeclaration</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="..//packages/Css.StyleDeclaration.html">Css</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>StyleDeclaration</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct(StyleDeclaration $styleDeclaration) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$styleDeclaration</h4>
+<code><a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></code>
+</div>
+</div></div>
+</div>
+<a name="createBackgroundShorthand" id="createBackgroundShorthand"></a><div class="element clickable method public createBackgroundShorthand" data-toggle="collapse" data-target=".createBackgroundShorthand .collapse">
+<h2>createBackgroundShorthand()
+        </h2>
+<pre>createBackgroundShorthand() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>todo</th>
+<td>Handle background-color</td>
+</tr></table>
+</div></div>
+</div>
+<a name="createBorderShorthand" id="createBorderShorthand"></a><div class="element clickable method public createBorderShorthand" data-toggle="collapse" data-target=".createBorderShorthand .collapse">
+<h2>Combine border-color, border-style and border-width into border
+Should be run after create_dimensions_shorthand!</h2>
+<pre>createBorderShorthand() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="createDimensionsShorthands" id="createDimensionsShorthands"></a><div class="element clickable method public createDimensionsShorthands" data-toggle="collapse" data-target=".createDimensionsShorthands .collapse">
+<h2>Looks for long format Css dimensional properties
+(margin, padding, border-color, border-style and border-width)
+and converts them into shorthand Css properties.</h2>
+<pre>createDimensionsShorthands() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="createFontShorthand" id="createFontShorthand"></a><div class="element clickable method public createFontShorthand" data-toggle="collapse" data-target=".createFontShorthand .collapse">
+<h2>Looks for long format Css font properties (e.g. &lt;tt&gt;font-weight&lt;/tt&gt;) and
+tries to convert them into a shorthand Css &lt;tt&gt;font&lt;/tt&gt; property.</h2>
+<pre>createFontShorthand() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"><p>At least font-size AND font-family must be present in order to create a shorthand declaration.</p></p></div></div>
+</div>
+<a name="createListStyleShorthand" id="createListStyleShorthand"></a><div class="element clickable method public createListStyleShorthand" data-toggle="collapse" data-target=".createListStyleShorthand .collapse">
+<h2>createListStyleShorthand()
+        </h2>
+<pre>createListStyleShorthand() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="createShorthands" id="createShorthands"></a><div class="element clickable method public createShorthands" data-toggle="collapse" data-target=".createShorthands .collapse">
+<h2>Create shorthand properties (e.g. `margin` or `font`) whenever possible.</h2>
+<pre>createShorthands() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="_createShorthandProperties" id="_createShorthandProperties"></a><div class="element clickable method private _createShorthandProperties" data-toggle="collapse" data-target="._createShorthandProperties .collapse">
+<h2>_createShorthandProperties()
+        </h2>
+<pre>_createShorthandProperties(array $aProperties, $sShorthand, $bSafe) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aProperties</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$sShorthand</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$bSafe</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_destructiveCleanup" id="_destructiveCleanup"></a><div class="element clickable method private _destructiveCleanup" data-toggle="collapse" data-target="._destructiveCleanup .collapse">
+<h2>Destructively cleans up rules before creating shorthand properties.</h2>
+<pre>_destructiveCleanup(Array $aProperties, $sShorthand) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>Keeps only significant properties according to their
+respective order and importance.
+This is the method we want to use in most cases.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aProperties</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$sShorthand</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_mergeLayers" id="_mergeLayers"></a><div class="element clickable method private _mergeLayers" data-toggle="collapse" data-target="._mergeLayers .collapse">
+<h2>_mergeLayers()
+        </h2>
+<pre>_mergeLayers($sShorthand, $aLayers, $aOldProperties, $bImportant) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sShorthand</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$aLayers</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$aOldProperties</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$bImportant</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_mergeValues" id="_mergeValues"></a><div class="element clickable method private _mergeValues" data-toggle="collapse" data-target="._mergeValues .collapse">
+<h2>_mergeValues()
+        </h2>
+<pre>_mergeValues($sShorthand, $aValues, $aOldProperties, $bImportant) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sShorthand</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$aValues</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$aOldProperties</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$bImportant</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_safeCleanup" id="_safeCleanup"></a><div class="element clickable method private _safeCleanup" data-toggle="collapse" data-target="._safeCleanup .collapse">
+<h2>Safely cleans up properties before creating shorthand properties.</h2>
+<pre>_safeCleanup(Array $aProperties, $sShorthand) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>Avoids creating a shorthand if:</p>
+
+<ul>
+  <li>
+    More than one shorthand is already present,
+    as it is generally done on purpose, ie for vendor specific values.
+    <pre><code>      background: -webkit-linear-gradient(#000, #fff);
+      background: -moz-linear-gradient(#000, #fff);
+    </code></pre>
+  </li>
+  <li>
+    More than one identical properties are found,
+    for the very same reasons
+  </li>
+</ul></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aProperties</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$sShorthand</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>True if collapsing can continue after cleanup, false otherwise</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24styleDeclaration" id="$styleDeclaration"> </a><div class="element clickable property private $styleDeclaration" data-toggle="collapse" data-target=".$styleDeclaration .collapse">
+<h2>$styleDeclaration</h2>
+<pre>$styleDeclaration </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

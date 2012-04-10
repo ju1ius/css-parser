@@ -1,0 +1,258 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\StyleSheetLoader</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#getOptions" title="getOptions :: Returns the options of the current instance."><span class="description">Returns the options of the current instance.</span><pre>getOptions()</pre></a></li>
+<li class="method public "><a href="#load" title="load :: Loads a Css file or string."><span class="description">Loads a Css file or string.</span><pre>load()</pre></a></li>
+<li class="method public "><a href="#loadFile" title="loadFile :: Loads a CSS file into a Source\File object."><span class="description">Loads a CSS file into a Source\File object.</span><pre>loadFile()</pre></a></li>
+<li class="method public "><a href="#loadString" title="loadString :: Loads a CSS string into a Source\String object."><span class="description">Loads a CSS string into a Source\String object.</span><pre>loadString()</pre></a></li>
+<li class="method public "><a href="#loadUrl" title="loadUrl :: Loads a CSS file into a Source\File object."><span class="description">Loads a CSS file into a Source\File object.</span><pre>loadUrl()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#_loadString" title="_loadString :: "><span class="description">_loadString()
+        </span><pre>_loadString()</pre></a></li>
+<li class="method private "><a href="#_loadUrl" title="_loadUrl :: "><span class="description">_loadUrl()
+        </span><pre>_loadUrl()</pre></a></li>
+<li class="method private "><a href="#maybeConvertEncoding" title="maybeConvertEncoding :: "><span class="description">maybeConvertEncoding()
+        </span><pre>maybeConvertEncoding()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24options" title="$options :: "><span class="description">$options</span><pre>$options</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CStyleSheetLoader" id="\ju1ius\Css\StyleSheetLoader"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.StyleSheetLoader.html">StyleSheetLoader</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.StyleSheetLoader.html" class="element class">
+<p class="short_description">Handles loading of stylesheets.</p>
+<div class="details">
+<p class="long_description"><p>Relies on the CURL extension to load network urls</p></p>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($options) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$options</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="getOptions" id="getOptions"></a><div class="element clickable method public getOptions" data-toggle="collapse" data-target=".getOptions .collapse">
+<h2>Returns the options of the current instance.</h2>
+<pre>getOptions() : \ju1ius\Collections\ParameterBag</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\ju1ius\Collections\ParameterBag</code>The current instance's ParameterBag</div>
+</div></div>
+</div>
+<a name="load" id="load"></a><div class="element clickable method public load" data-toggle="collapse" data-target=".load .collapse">
+<h2>Loads a Css file or string.</h2>
+<pre>load(string | \ju1ius\Uri $url_or_string) : \ju1ius\Text\Source\String | \ju1ius\Text\Source\File</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>If passed an absolute url or a filesystem path, returns a Source\File object.
+If passed a Css string, returns a Source\String object.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url_or_string</h4>
+<code>string\ju1ius\Uri</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\ju1ius\Text\Source\String</code><code>\ju1ius\Text\Source\File</code>
+</div>
+</div></div>
+</div>
+<a name="loadFile" id="loadFile"></a><div class="element clickable method public loadFile" data-toggle="collapse" data-target=".loadFile .collapse">
+<h2>Loads a CSS file into a Source\File object.</h2>
+<pre>loadFile(string | \ju1ius\Uri $url) : \ju1ius\Text\Source\File</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code>string\ju1ius\Uri</code><p>The path to the file</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Text\Source\File</code></div>
+</div></div>
+</div>
+<a name="loadString" id="loadString"></a><div class="element clickable method public loadString" data-toggle="collapse" data-target=".loadString .collapse">
+<h2>Loads a CSS string into a Source\String object.</h2>
+<pre>loadString(string $str) : <a href="../classes/ju1ius.Css.StyleSheetInfo.html">\ju1ius\Css\StyleSheetInfo</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code>string</code><p>The CSS string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/ju1ius.Css.StyleSheetInfo.html">\ju1ius\Css\StyleSheetInfo</a></code></div>
+</div></div>
+</div>
+<a name="loadUrl" id="loadUrl"></a><div class="element clickable method public loadUrl" data-toggle="collapse" data-target=".loadUrl .collapse">
+<h2>Loads a CSS file into a Source\File object.</h2>
+<pre>loadUrl(string | \ju1ius\Uri $url, boolean $preferFileCharset) : \ju1ius\Text\Source\File</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>Relies on the CURL extension to load network urls</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code>string\ju1ius\Uri</code><p>The url of the file</p></div>
+<div class="subelement argument">
+<h4>$preferFileCharset</h4>
+<code>boolean</code><p>If false, use the content-type header for charset detection</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Text\Source\File</code></div>
+</div></div>
+</div>
+<a name="_loadString" id="_loadString"></a><div class="element clickable method private _loadString" data-toggle="collapse" data-target="._loadString .collapse">
+<h2>_loadString()
+        </h2>
+<pre>_loadString($str) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_loadUrl" id="_loadUrl"></a><div class="element clickable method private _loadUrl" data-toggle="collapse" data-target="._loadUrl .collapse">
+<h2>_loadUrl()
+        </h2>
+<pre>_loadUrl(Uri $url) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="maybeConvertEncoding" id="maybeConvertEncoding"></a><div class="element clickable method private maybeConvertEncoding" data-toggle="collapse" data-target=".maybeConvertEncoding .collapse">
+<h2>maybeConvertEncoding()
+        </h2>
+<pre>maybeConvertEncoding(array $infos, $to_encoding) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$infos</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$to_encoding</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24options" id="$options"> </a><div class="element clickable property private $options" data-toggle="collapse" data-target=".$options .collapse">
+<h2>$options</h2>
+<pre>$options </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

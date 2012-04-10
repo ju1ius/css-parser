@@ -1,0 +1,326 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\Value\Length</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public inherited"><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#__toString" title="__toString :: "><span class="description">__toString()
+        </span><pre>__toString()</pre></a></li>
+<li class="method public inherited"><a href="#getCssText" title="getCssText :: "><span class="description">getCssText()
+        </span><pre>getCssText()</pre></a></li>
+<li class="method public inherited"><a href="#getUnit" title="getUnit :: "><span class="description">getUnit()
+        </span><pre>getUnit()</pre></a></li>
+<li class="method public inherited"><a href="#getValue" title="getValue :: "><span class="description">getValue()
+        </span><pre>getValue()</pre></a></li>
+<li class="method public "><a href="#isRelative" title="isRelative :: "><span class="description">isRelative()
+        </span><pre>isRelative()</pre></a></li>
+<li class="method public inherited"><a href="#setUnit" title="setUnit :: "><span class="description">setUnit()
+        </span><pre>setUnit()</pre></a></li>
+<li class="method public inherited"><a href="#setValue" title="setValue :: "><span class="description">setValue()
+        </span><pre>setValue()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24VALID_UNITS" title="$VALID_UNITS :: "><span class="description">$VALID_UNITS</span><pre>$VALID_UNITS</pre></a></li>
+<li class="property public inherited"><a href="#%24unit" title="$unit :: "><span class="description">$unit</span><pre>$unit</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="property private inherited"><a href="#%24value" title="$value :: "><span class="description">$value</span><pre>$value</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants</li>
+<li class="constant  inherited"><a href="#NUMBER" title="NUMBER :: "><span class="description">NUMBER</span><pre>NUMBER</pre></a></li>
+<li class="constant  inherited"><a href="#UNIT_EM" title="UNIT_EM :: "><span class="description">UNIT_EM</span><pre>UNIT_EM</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CValue%5CLength" id="\ju1ius\Css\Value\Length"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.Value.html">Value</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.Value.Length.html">Length</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.Value.Length.html" class="element class">
+<p class="short_description">Represents a dimension (an object that has a value and a unit)</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="..//packages/Css.Value.html">Css</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Value</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($value, $unit) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::__construct()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$value</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$unit</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="__toString" id="__toString"></a><div class="element clickable method public __toString" data-toggle="collapse" data-target=".__toString .collapse">
+<h2>__toString()
+        </h2>
+<pre>__toString() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::__toString()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="getCssText" id="getCssText"></a><div class="element clickable method public getCssText" data-toggle="collapse" data-target=".getCssText .collapse">
+<h2>getCssText()
+        </h2>
+<pre>getCssText($options) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::getCssText()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$options</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="getUnit" id="getUnit"></a><div class="element clickable method public getUnit" data-toggle="collapse" data-target=".getUnit .collapse">
+<h2>getUnit()
+        </h2>
+<pre>getUnit() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::getUnit()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="getValue" id="getValue"></a><div class="element clickable method public getValue" data-toggle="collapse" data-target=".getValue .collapse">
+<h2>getValue()
+        </h2>
+<pre>getValue() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::getValue()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="isRelative" id="isRelative"></a><div class="element clickable method public isRelative" data-toggle="collapse" data-target=".isRelative .collapse">
+<h2>isRelative()
+        </h2>
+<pre>isRelative() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="setUnit" id="setUnit"></a><div class="element clickable method public setUnit" data-toggle="collapse" data-target=".setUnit .collapse">
+<h2>setUnit()
+        </h2>
+<pre>setUnit($unit) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::setUnit()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$unit</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="setValue" id="setValue"></a><div class="element clickable method public setValue" data-toggle="collapse" data-target=".setValue .collapse">
+<h2>setValue()
+        </h2>
+<pre>setValue($value) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::setValue()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$value</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24VALID_UNITS" id="$VALID_UNITS"> </a><div class="element clickable property public $VALID_UNITS" data-toggle="collapse" data-target=".$VALID_UNITS .collapse">
+<h2>$VALID_UNITS</h2>
+<pre>$VALID_UNITS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24unit" id="$unit"> </a><div class="element clickable property public $unit" data-toggle="collapse" data-target=".$unit .collapse">
+<h2>$unit</h2>
+<pre>$unit </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::$$unit</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24value" id="$value"> </a><div class="element clickable property private $value" data-toggle="collapse" data-target=".$value .collapse">
+<h2>$value</h2>
+<pre>$value </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::$$value</td>
+</tr></table>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a name="NUMBER" id="NUMBER"> </a><div class="element clickable constant  NUMBER" data-toggle="collapse" data-target=".NUMBER .collapse">
+<h2>NUMBER</h2>
+<pre>NUMBER </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\PrimitiveValue::NUMBER</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::NUMBER</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="UNIT_EM" id="UNIT_EM"> </a><div class="element clickable constant  UNIT_EM" data-toggle="collapse" data-target=".UNIT_EM .collapse">
+<h2>UNIT_EM</h2>
+<pre>UNIT_EM </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\PrimitiveValue::UNIT_EM</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\Value\Dimension::UNIT_EM</td>
+</tr>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\ParserState</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#enter" title="enter :: Enters given state"><span class="description">Enters given state</span><pre>enter()</pre></a></li>
+<li class="method public "><a href="#get" title="get :: Gets the current state as an integer"><span class="description">Gets the current state as an integer</span><pre>get()</pre></a></li>
+<li class="method public "><a href="#in" title="in :: Checks if the current state contains the given state"><span class="description">Checks if the current state contains the given state</span><pre>in()</pre></a></li>
+<li class="method public "><a href="#is" title="is :: Checks if the current state is the given state"><span class="description">Checks if the current state is the given state</span><pre>is()</pre></a></li>
+<li class="method public "><a href="#leave" title="leave :: Leaves given state"><span class="description">Leaves given state</span><pre>leave()</pre></a></li>
+<li class="method public "><a href="#reset" title="reset :: Resets to ParserState::INITIAL"><span class="description">Resets to ParserState::INITIAL</span><pre>reset()</pre></a></li>
+<li class="method public "><a href="#set" title="set :: Sets the current state"><span class="description">Sets the current state</span><pre>set()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24state" title="$state :: "><span class="description">$state</span><pre>$state</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants</li>
+<li class="constant  "><a href="#AFTER_CHARSET" title="AFTER_CHARSET :: "><span class="description">AFTER_CHARSET</span><pre>AFTER_CHARSET</pre></a></li>
+<li class="constant  "><a href="#AFTER_IMPORTS" title="AFTER_IMPORTS :: "><span class="description">AFTER_IMPORTS</span><pre>AFTER_IMPORTS</pre></a></li>
+<li class="constant  "><a href="#AFTER_NAMESPACES" title="AFTER_NAMESPACES :: "><span class="description">AFTER_NAMESPACES</span><pre>AFTER_NAMESPACES</pre></a></li>
+<li class="constant  "><a href="#INITIAL" title="INITIAL :: "><span class="description">INITIAL</span><pre>INITIAL</pre></a></li>
+<li class="constant  "><a href="#IN_ATRULE" title="IN_ATRULE :: "><span class="description">IN_ATRULE</span><pre>IN_ATRULE</pre></a></li>
+<li class="constant  "><a href="#IN_DECLARATION" title="IN_DECLARATION :: "><span class="description">IN_DECLARATION</span><pre>IN_DECLARATION</pre></a></li>
+<li class="constant  "><a href="#IN_KEYFRAMESRULE" title="IN_KEYFRAMESRULE :: "><span class="description">IN_KEYFRAMESRULE</span><pre>IN_KEYFRAMESRULE</pre></a></li>
+<li class="constant  "><a href="#IN_MEDIA_QUERY" title="IN_MEDIA_QUERY :: "><span class="description">IN_MEDIA_QUERY</span><pre>IN_MEDIA_QUERY</pre></a></li>
+<li class="constant  "><a href="#IN_NEGATION" title="IN_NEGATION :: "><span class="description">IN_NEGATION</span><pre>IN_NEGATION</pre></a></li>
+<li class="constant  "><a href="#IN_PAGERULE" title="IN_PAGERULE :: "><span class="description">IN_PAGERULE</span><pre>IN_PAGERULE</pre></a></li>
+<li class="constant  "><a href="#IN_PROPERTY" title="IN_PROPERTY :: "><span class="description">IN_PROPERTY</span><pre>IN_PROPERTY</pre></a></li>
+<li class="constant  "><a href="#IN_SELECTOR" title="IN_SELECTOR :: "><span class="description">IN_SELECTOR</span><pre>IN_SELECTOR</pre></a></li>
+<li class="constant  "><a href="#IN_STYLERULE" title="IN_STYLERULE :: "><span class="description">IN_STYLERULE</span><pre>IN_STYLERULE</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CParserState" id="\ju1ius\Css\ParserState"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.ParserState.html">ParserState</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.ParserState.html" class="element class">
+<p class="short_description">A Bitmask storing the ju1ius\Css\Parser's states</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="..//packages/Css.html">Css</a></td>
+</tr></table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="enter" id="enter"></a><div class="element clickable method public enter" data-toggle="collapse" data-target=".enter .collapse">
+<h2>Enters given state</h2>
+<pre>enter(int $state) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$state</h4>
+<code>int</code>
+</div>
+</div></div>
+</div>
+<a name="get" id="get"></a><div class="element clickable method public get" data-toggle="collapse" data-target=".get .collapse">
+<h2>Gets the current state as an integer</h2>
+<pre>get() : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
+<a name="in" id="in"></a><div class="element clickable method public in" data-toggle="collapse" data-target=".in .collapse">
+<h2>Checks if the current state contains the given state</h2>
+<pre>in(int $state) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$state</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="is" id="is"></a><div class="element clickable method public is" data-toggle="collapse" data-target=".is .collapse">
+<h2>Checks if the current state is the given state</h2>
+<pre>is(int $state) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$state</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="leave" id="leave"></a><div class="element clickable method public leave" data-toggle="collapse" data-target=".leave .collapse">
+<h2>Leaves given state</h2>
+<pre>leave(int $state) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$state</h4>
+<code>int</code>
+</div>
+</div></div>
+</div>
+<a name="reset" id="reset"></a><div class="element clickable method public reset" data-toggle="collapse" data-target=".reset .collapse">
+<h2>Resets to ParserState::INITIAL</h2>
+<pre>reset() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="set" id="set"></a><div class="element clickable method public set" data-toggle="collapse" data-target=".set .collapse">
+<h2>Sets the current state</h2>
+<pre>set(int $value) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$value</h4>
+<code>int</code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24state" id="$state"> </a><div class="element clickable property private $state" data-toggle="collapse" data-target=".$state .collapse">
+<h2>$state</h2>
+<pre>$state </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a name="AFTER_CHARSET" id="AFTER_CHARSET"> </a><div class="element clickable constant  AFTER_CHARSET" data-toggle="collapse" data-target=".AFTER_CHARSET .collapse">
+<h2>AFTER_CHARSET</h2>
+<pre>AFTER_CHARSET </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="AFTER_IMPORTS" id="AFTER_IMPORTS"> </a><div class="element clickable constant  AFTER_IMPORTS" data-toggle="collapse" data-target=".AFTER_IMPORTS .collapse">
+<h2>AFTER_IMPORTS</h2>
+<pre>AFTER_IMPORTS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="AFTER_NAMESPACES" id="AFTER_NAMESPACES"> </a><div class="element clickable constant  AFTER_NAMESPACES" data-toggle="collapse" data-target=".AFTER_NAMESPACES .collapse">
+<h2>AFTER_NAMESPACES</h2>
+<pre>AFTER_NAMESPACES </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="INITIAL" id="INITIAL"> </a><div class="element clickable constant  INITIAL" data-toggle="collapse" data-target=".INITIAL .collapse">
+<h2>INITIAL</h2>
+<pre>INITIAL </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_ATRULE" id="IN_ATRULE"> </a><div class="element clickable constant  IN_ATRULE" data-toggle="collapse" data-target=".IN_ATRULE .collapse">
+<h2>IN_ATRULE</h2>
+<pre>IN_ATRULE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_DECLARATION" id="IN_DECLARATION"> </a><div class="element clickable constant  IN_DECLARATION" data-toggle="collapse" data-target=".IN_DECLARATION .collapse">
+<h2>IN_DECLARATION</h2>
+<pre>IN_DECLARATION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_KEYFRAMESRULE" id="IN_KEYFRAMESRULE"> </a><div class="element clickable constant  IN_KEYFRAMESRULE" data-toggle="collapse" data-target=".IN_KEYFRAMESRULE .collapse">
+<h2>IN_KEYFRAMESRULE</h2>
+<pre>IN_KEYFRAMESRULE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_MEDIA_QUERY" id="IN_MEDIA_QUERY"> </a><div class="element clickable constant  IN_MEDIA_QUERY" data-toggle="collapse" data-target=".IN_MEDIA_QUERY .collapse">
+<h2>IN_MEDIA_QUERY</h2>
+<pre>IN_MEDIA_QUERY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_NEGATION" id="IN_NEGATION"> </a><div class="element clickable constant  IN_NEGATION" data-toggle="collapse" data-target=".IN_NEGATION .collapse">
+<h2>IN_NEGATION</h2>
+<pre>IN_NEGATION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_PAGERULE" id="IN_PAGERULE"> </a><div class="element clickable constant  IN_PAGERULE" data-toggle="collapse" data-target=".IN_PAGERULE .collapse">
+<h2>IN_PAGERULE</h2>
+<pre>IN_PAGERULE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_PROPERTY" id="IN_PROPERTY"> </a><div class="element clickable constant  IN_PROPERTY" data-toggle="collapse" data-target=".IN_PROPERTY .collapse">
+<h2>IN_PROPERTY</h2>
+<pre>IN_PROPERTY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_SELECTOR" id="IN_SELECTOR"> </a><div class="element clickable constant  IN_SELECTOR" data-toggle="collapse" data-target=".IN_SELECTOR .collapse">
+<h2>IN_SELECTOR</h2>
+<pre>IN_SELECTOR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="IN_STYLERULE" id="IN_STYLERULE"> </a><div class="element clickable constant  IN_STYLERULE" data-toggle="collapse" data-target=".IN_STYLERULE .collapse">
+<h2>IN_STYLERULE</h2>
+<pre>IN_STYLERULE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

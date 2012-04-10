@@ -1,0 +1,714 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\RuleList</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public inherited"><a href="#__clone" title="__clone :: "><span class="description">__clone()
+        </span><pre>__clone()</pre></a></li>
+<li class="method public inherited"><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#__toString" title="__toString :: "><span class="description">__toString()
+        </span><pre>__toString()</pre></a></li>
+<li class="method public "><a href="#append" title="append :: "><span class="description">append()
+        </span><pre>append()</pre></a></li>
+<li class="method public inherited"><a href="#contains" title="contains :: "><span class="description">contains()
+        </span><pre>contains()</pre></a></li>
+<li class="method public inherited"><a href="#count" title="count :: "><span class="description">count()
+        </span><pre>count()</pre></a></li>
+<li class="method public inherited"><a href="#current" title="current :: "><span class="description">current()
+        </span><pre>current()</pre></a></li>
+<li class="method public inherited"><a href="#extend" title="extend :: "><span class="description">extend()
+        </span><pre>extend()</pre></a></li>
+<li class="method public "><a href="#getAllRules" title="getAllRules :: Returns all Css rules recursively"><span class="description">Returns all Css rules recursively</span><pre>getAllRules()</pre></a></li>
+<li class="method public "><a href="#getAllStyleDeclarations" title="getAllStyleDeclarations :: Returns all StyleDeclarations recursively"><span class="description">Returns all StyleDeclarations recursively</span><pre>getAllStyleDeclarations()</pre></a></li>
+<li class="method public "><a href="#getAllStyleRules" title="getAllStyleRules :: Returns all style rules recursively"><span class="description">Returns all style rules recursively</span><pre>getAllStyleRules()</pre></a></li>
+<li class="method public "><a href="#getAllValues" title="getAllValues :: Returns all Css values recursively"><span class="description">Returns all Css values recursively</span><pre>getAllValues()</pre></a></li>
+<li class="method public "><a href="#getCssText" title="getCssText :: ------------ ju1ius\Css\Serializable interface implementation"><span class="description">------------ ju1ius\Css\Serializable interface implementation</span><pre>getCssText()</pre></a></li>
+<li class="method public inherited"><a href="#getFirst" title="getFirst :: "><span class="description">getFirst()
+        </span><pre>getFirst()</pre></a></li>
+<li class="method public inherited"><a href="#getItems" title="getItems :: "><span class="description">getItems()
+        </span><pre>getItems()</pre></a></li>
+<li class="method public inherited"><a href="#getLast" title="getLast :: "><span class="description">getLast()
+        </span><pre>getLast()</pre></a></li>
+<li class="method public "><a href="#getRule" title="getRule :: "><span class="description">getRule()
+        </span><pre>getRule()</pre></a></li>
+<li class="method public "><a href="#getRules" title="getRules :: "><span class="description">getRules()
+        </span><pre>getRules()</pre></a></li>
+<li class="method public inherited"><a href="#insertItemAt" title="insertItemAt :: "><span class="description">insertItemAt()
+        </span><pre>insertItemAt()</pre></a></li>
+<li class="method public inherited"><a href="#isEmpty" title="isEmpty :: "><span class="description">isEmpty()
+        </span><pre>isEmpty()</pre></a></li>
+<li class="method public inherited"><a href="#key" title="key :: "><span class="description">key()
+        </span><pre>key()</pre></a></li>
+<li class="method public inherited"><a href="#next" title="next :: "><span class="description">next()
+        </span><pre>next()</pre></a></li>
+<li class="method public inherited"><a href="#offsetExists" title="offsetExists :: "><span class="description">offsetExists()
+        </span><pre>offsetExists()</pre></a></li>
+<li class="method public inherited"><a href="#offsetGet" title="offsetGet :: "><span class="description">offsetGet()
+        </span><pre>offsetGet()</pre></a></li>
+<li class="method public inherited"><a href="#offsetSet" title="offsetSet :: "><span class="description">offsetSet()
+        </span><pre>offsetSet()</pre></a></li>
+<li class="method public inherited"><a href="#offsetUnset" title="offsetUnset :: "><span class="description">offsetUnset()
+        </span><pre>offsetUnset()</pre></a></li>
+<li class="method public "><a href="#prepend" title="prepend :: "><span class="description">prepend()
+        </span><pre>prepend()</pre></a></li>
+<li class="method public "><a href="#remove" title="remove :: "><span class="description">remove()
+        </span><pre>remove()</pre></a></li>
+<li class="method public inherited"><a href="#removeItemAt" title="removeItemAt :: "><span class="description">removeItemAt()
+        </span><pre>removeItemAt()</pre></a></li>
+<li class="method public inherited"><a href="#replace" title="replace :: Replace an item by another or by every item in an array"><span class="description">Replace an item by another or by every item in an array</span><pre>replace()</pre></a></li>
+<li class="method public inherited"><a href="#resetKeys" title="resetKeys :: Reorder keys in the items array."><span class="description">Reorder keys in the items array.</span><pre>resetKeys()</pre></a></li>
+<li class="method public inherited"><a href="#rewind" title="rewind :: "><span class="description">rewind()
+        </span><pre>rewind()</pre></a></li>
+<li class="method public inherited"><a href="#setItems" title="setItems :: "><span class="description">setItems()
+        </span><pre>setItems()</pre></a></li>
+<li class="method public "><a href="#setRules" title="setRules :: "><span class="description">setRules()
+        </span><pre>setRules()</pre></a></li>
+<li class="method public inherited"><a href="#valid" title="valid :: "><span class="description">valid()
+        </span><pre>valid()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#_findAllValues" title="_findAllValues :: Recursively finds all css values in a given object"><span class="description">Recursively finds all css values in a given object</span><pre>_findAllValues()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected inherited"><a href="#%24items" title="$items :: "><span class="description">$items</span><pre>$items</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CRuleList" id="\ju1ius\Css\RuleList"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.RuleList.html">RuleList</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.RuleList.html" class="element class">
+<p class="short_description">Manages a list of ju1ius\Css\Rule objects</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="..//packages/Css.html">Css</a></td>
+</tr></table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__clone" id="__clone"></a><div class="element clickable method public __clone" data-toggle="collapse" data-target=".__clone .collapse">
+<h2>__clone()
+        </h2>
+<pre>__clone() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::__clone()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($items) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::__construct()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$items</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="__toString" id="__toString"></a><div class="element clickable method public __toString" data-toggle="collapse" data-target=".__toString .collapse">
+<h2>__toString()
+        </h2>
+<pre>__toString() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="append" id="append"></a><div class="element clickable method public append" data-toggle="collapse" data-target=".append .collapse">
+<h2>append()
+        </h2>
+<pre>append(Rule $rule) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$rule</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="contains" id="contains"></a><div class="element clickable method public contains" data-toggle="collapse" data-target=".contains .collapse">
+<h2>contains()
+        </h2>
+<pre>contains($item) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::contains()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$item</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="count" id="count"></a><div class="element clickable method public count" data-toggle="collapse" data-target=".count .collapse">
+<h2>count()
+        </h2>
+<pre>count() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::count()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="current" id="current"></a><div class="element clickable method public current" data-toggle="collapse" data-target=".current .collapse">
+<h2>current()
+        </h2>
+<pre>current() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::current()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="extend" id="extend"></a><div class="element clickable method public extend" data-toggle="collapse" data-target=".extend .collapse">
+<h2>extend()
+        </h2>
+<pre>extend(CssList $items) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::extend()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$items</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="getAllRules" id="getAllRules"></a><div class="element clickable method public getAllRules" data-toggle="collapse" data-target=".getAllRules .collapse">
+<h2>Returns all Css rules recursively</h2>
+<pre>getAllRules() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="getAllStyleDeclarations" id="getAllStyleDeclarations"></a><div class="element clickable method public getAllStyleDeclarations" data-toggle="collapse" data-target=".getAllStyleDeclarations .collapse">
+<h2>Returns all StyleDeclarations recursively</h2>
+<pre>getAllStyleDeclarations() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="getAllStyleRules" id="getAllStyleRules"></a><div class="element clickable method public getAllStyleRules" data-toggle="collapse" data-target=".getAllStyleRules .collapse">
+<h2>Returns all style rules recursively</h2>
+<pre>getAllStyleRules() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="getAllValues" id="getAllValues"></a><div class="element clickable method public getAllValues" data-toggle="collapse" data-target=".getAllValues .collapse">
+<h2>Returns all Css values recursively</h2>
+<pre>getAllValues(string $searchString, bool $searchInFunctionArguments) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$searchString</h4>
+<code>string</code><p>Restrict search to given property name</p></div>
+<div class="subelement argument">
+<h4>$searchInFunctionArguments</h4>
+<code>bool</code><p>Whether to return values used as arguments of Css functions</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="getCssText" id="getCssText"></a><div class="element clickable method public getCssText" data-toggle="collapse" data-target=".getCssText .collapse">
+<h2>------------ ju1ius\Css\Serializable interface implementation</h2>
+<pre>getCssText($options) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$options</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="getFirst" id="getFirst"></a><div class="element clickable method public getFirst" data-toggle="collapse" data-target=".getFirst .collapse">
+<h2>getFirst()
+        </h2>
+<pre>getFirst() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::getFirst()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="getItems" id="getItems"></a><div class="element clickable method public getItems" data-toggle="collapse" data-target=".getItems .collapse">
+<h2>getItems()
+        </h2>
+<pre>getItems() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::getItems()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="getLast" id="getLast"></a><div class="element clickable method public getLast" data-toggle="collapse" data-target=".getLast .collapse">
+<h2>getLast()
+        </h2>
+<pre>getLast() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::getLast()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="getRule" id="getRule"></a><div class="element clickable method public getRule" data-toggle="collapse" data-target=".getRule .collapse">
+<h2>getRule()
+        </h2>
+<pre>getRule($index) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$index</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="getRules" id="getRules"></a><div class="element clickable method public getRules" data-toggle="collapse" data-target=".getRules .collapse">
+<h2>getRules()
+        </h2>
+<pre>getRules() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="insertItemAt" id="insertItemAt"></a><div class="element clickable method public insertItemAt" data-toggle="collapse" data-target=".insertItemAt .collapse">
+<h2>insertItemAt()
+        </h2>
+<pre>insertItemAt($items, $index) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::insertItemAt()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$items</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$index</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="isEmpty" id="isEmpty"></a><div class="element clickable method public isEmpty" data-toggle="collapse" data-target=".isEmpty .collapse">
+<h2>isEmpty()
+        </h2>
+<pre>isEmpty() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::isEmpty()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="key" id="key"></a><div class="element clickable method public key" data-toggle="collapse" data-target=".key .collapse">
+<h2>key()
+        </h2>
+<pre>key() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::key()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="next" id="next"></a><div class="element clickable method public next" data-toggle="collapse" data-target=".next .collapse">
+<h2>next()
+        </h2>
+<pre>next() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::next()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="offsetExists" id="offsetExists"></a><div class="element clickable method public offsetExists" data-toggle="collapse" data-target=".offsetExists .collapse">
+<h2>offsetExists()
+        </h2>
+<pre>offsetExists($offset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::offsetExists()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="offsetGet" id="offsetGet"></a><div class="element clickable method public offsetGet" data-toggle="collapse" data-target=".offsetGet .collapse">
+<h2>offsetGet()
+        </h2>
+<pre>offsetGet($offset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::offsetGet()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="offsetSet" id="offsetSet"></a><div class="element clickable method public offsetSet" data-toggle="collapse" data-target=".offsetSet .collapse">
+<h2>offsetSet()
+        </h2>
+<pre>offsetSet($offset, $value) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::offsetSet()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="offsetUnset" id="offsetUnset"></a><div class="element clickable method public offsetUnset" data-toggle="collapse" data-target=".offsetUnset .collapse">
+<h2>offsetUnset()
+        </h2>
+<pre>offsetUnset($offset) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::offsetUnset()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="prepend" id="prepend"></a><div class="element clickable method public prepend" data-toggle="collapse" data-target=".prepend .collapse">
+<h2>prepend()
+        </h2>
+<pre>prepend(Rule $rule) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$rule</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="remove" id="remove"></a><div class="element clickable method public remove" data-toggle="collapse" data-target=".remove .collapse">
+<h2>remove()
+        </h2>
+<pre>remove(Rule $rule) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$rule</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="removeItemAt" id="removeItemAt"></a><div class="element clickable method public removeItemAt" data-toggle="collapse" data-target=".removeItemAt .collapse">
+<h2>removeItemAt()
+        </h2>
+<pre>removeItemAt($index) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::removeItemAt()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$index</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="replace" id="replace"></a><div class="element clickable method public replace" data-toggle="collapse" data-target=".replace .collapse">
+<h2>Replace an item by another or by every item in an array</h2>
+<pre>replace(mixed $oldItem, mixed $newItems) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::replace()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$oldItem</h4>
+<code>mixed</code><p>The index or item to replace</p></div>
+<div class="subelement argument">
+<h4>$newItems</h4>
+<code>mixed</code><p>An item or array of items to insert starting the old item position</p></div>
+</div></div>
+</div>
+<a name="resetKeys" id="resetKeys"></a><div class="element clickable method public resetKeys" data-toggle="collapse" data-target=".resetKeys .collapse">
+<h2>Reorder keys in the items array.</h2>
+<pre>resetKeys() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>Usefull if items have been unset.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::resetKeys()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="rewind" id="rewind"></a><div class="element clickable method public rewind" data-toggle="collapse" data-target=".rewind .collapse">
+<h2>rewind()
+        </h2>
+<pre>rewind() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::rewind()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="setItems" id="setItems"></a><div class="element clickable method public setItems" data-toggle="collapse" data-target=".setItems .collapse">
+<h2>setItems()
+        </h2>
+<pre>setItems($items) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::setItems()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$items</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="setRules" id="setRules"></a><div class="element clickable method public setRules" data-toggle="collapse" data-target=".setRules .collapse">
+<h2>setRules()
+        </h2>
+<pre>setRules(Array $rules) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$rules</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="valid" id="valid"></a><div class="element clickable method public valid" data-toggle="collapse" data-target=".valid .collapse">
+<h2>valid()
+        </h2>
+<pre>valid() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::valid()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_findAllValues" id="_findAllValues"></a><div class="element clickable method private _findAllValues" data-toggle="collapse" data-target="._findAllValues .collapse">
+<h2>Recursively finds all css values in a given object</h2>
+<pre>_findAllValues(mixed $element, array $result, string $searchString, string $searchInFunctionArguments) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>mixed</code><p>The object to search in</p></div>
+<div class="subelement argument">
+<h4>$result</h4>
+<code>array</code><p>&$result The array to store values in</p>
+</div>
+<div class="subelement argument">
+<h4>$searchString</h4>
+<code>string</code><p>{ @link ju1ius\Css\RuleList::getAllValues() }</p>
+</div>
+<div class="subelement argument">
+<h4>$searchInFunctionArguments</h4>
+<code>string</code><p>{ @link ju1ius\Css\RuleList::getAllValues() }</p>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24items" id="$items"> </a><div class="element clickable property protected $items" data-toggle="collapse" data-target=".$items .collapse">
+<h2>$items</h2>
+<pre>$items </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\ju1ius\Css\CssList::$$items</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

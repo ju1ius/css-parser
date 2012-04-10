@@ -1,0 +1,323 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\XPath\Expression</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor."><span class="description">Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#__toString" title="__toString :: Gets a string representation for this XPath expression."><span class="description">Gets a string representation for this XPath expression.</span><pre>__toString()</pre></a></li>
+<li class="method public "><a href="#addCondition" title="addCondition :: Adds a condition to this XPath expression."><span class="description">Adds a condition to this XPath expression.</span><pre>addCondition()</pre></a></li>
+<li class="method public "><a href="#addNameTest" title="addNameTest :: Adds a condition to this XPath expression using the name of the element
+as the desired value."><span class="description">Adds a condition to this XPath expression using the name of the element
+as the desired value.</span><pre>addNameTest()</pre></a></li>
+<li class="method public "><a href="#addPrefix" title="addPrefix :: Adds a prefix to this XPath expression."><span class="description">Adds a prefix to this XPath expression.</span><pre>addPrefix()</pre></a></li>
+<li class="method public "><a href="#addStarPrefix" title="addStarPrefix :: Adds a star prefix to this XPath expression."><span class="description">Adds a star prefix to this XPath expression.</span><pre>addStarPrefix()</pre></a></li>
+<li class="method public "><a href="#getCondition" title="getCondition :: Gets the condition of this XPath expression."><span class="description">Gets the condition of this XPath expression.</span><pre>getCondition()</pre></a></li>
+<li class="method public "><a href="#getElement" title="getElement :: Gets the element of this XPath expression."><span class="description">Gets the element of this XPath expression.</span><pre>getElement()</pre></a></li>
+<li class="method public "><a href="#getPath" title="getPath :: Gets the path of this XPath expression."><span class="description">Gets the path of this XPath expression.</span><pre>getPath()</pre></a></li>
+<li class="method public "><a href="#getPrefix" title="getPrefix :: Gets the prefix of this XPath expression."><span class="description">Gets the prefix of this XPath expression.</span><pre>getPrefix()</pre></a></li>
+<li class="method public "><a href="#hasStarPrefix" title="hasStarPrefix :: Answers whether this XPath expression has a star prefix."><span class="description">Answers whether this XPath expression has a star prefix.</span><pre>hasStarPrefix()</pre></a></li>
+<li class="method public "><a href="#join" title="join :: Joins this XPath expression with $other (another XPath expression) using
+$combiner to join them."><span class="description">Joins this XPath expression with $other (another XPath expression) using
+$combiner to join them.</span><pre>join()</pre></a></li>
+<li class="method public "><a href="#xpathLiteral" title="xpathLiteral :: Gets an XPath literal for $s."><span class="description">Gets an XPath literal for $s.</span><pre>xpathLiteral()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24condition" title="$condition :: "><span class="description">$condition</span><pre>$condition</pre></a></li>
+<li class="property private "><a href="#%24element" title="$element :: "><span class="description">$element</span><pre>$element</pre></a></li>
+<li class="property private "><a href="#%24path" title="$path :: "><span class="description">$path</span><pre>$path</pre></a></li>
+<li class="property private "><a href="#%24prefix" title="$prefix :: "><span class="description">$prefix</span><pre>$prefix</pre></a></li>
+<li class="property private "><a href="#%24starPrefix" title="$starPrefix :: "><span class="description">$starPrefix</span><pre>$starPrefix</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CXPath%5CExpression" id="\ju1ius\Css\XPath\Expression"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.XPath.html">XPath</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.XPath.Expression.html">Expression</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.XPath.Expression.html" class="element class">
+<p class="short_description">Represents an XPath expression.</p>
+<div class="details">
+<p class="long_description"><p>This component is a port of the Python lxml library,
+which is copyright Infrae and distributed under the BSD license.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="..//packages/Css.XPath.html">Css</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>XPath</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="mailto:fabien@symfony.com">Fabien Potencier</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor.</h2>
+<pre>__construct(string $prefix, string $path, string $element, string $condition, Boolean $starPrefix) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$prefix</h4>
+<code>string</code><p>Prefix for the XPath expression.</p></div>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>Actual path of the expression.</p></div>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element in the expression.</p></div>
+<div class="subelement argument">
+<h4>$condition</h4>
+<code>string</code><p>A condition for the expression.</p></div>
+<div class="subelement argument">
+<h4>$starPrefix</h4>
+<code>Boolean</code><p>Indicates whether to use a star prefix.</p></div>
+</div></div>
+</div>
+<a name="__toString" id="__toString"></a><div class="element clickable method public __toString" data-toggle="collapse" data-target=".__toString .collapse">
+<h2>Gets a string representation for this XPath expression.</h2>
+<pre>__toString() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="addCondition" id="addCondition"></a><div class="element clickable method public addCondition" data-toggle="collapse" data-target=".addCondition .collapse">
+<h2>Adds a condition to this XPath expression.</h2>
+<pre>addCondition(string $condition) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>Any pre-existent condition will be ANDed to it.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$condition</h4>
+<code>string</code><p>The condition to add.</p></div>
+</div></div>
+</div>
+<a name="addNameTest" id="addNameTest"></a><div class="element clickable method public addNameTest" data-toggle="collapse" data-target=".addNameTest .collapse">
+<h2>Adds a condition to this XPath expression using the name of the element
+as the desired value.</h2>
+<pre>addNameTest() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"><p>This method resets the element to '*'.</p></p></div></div>
+</div>
+<a name="addPrefix" id="addPrefix"></a><div class="element clickable method public addPrefix" data-toggle="collapse" data-target=".addPrefix .collapse">
+<h2>Adds a prefix to this XPath expression.</h2>
+<pre>addPrefix(string $prefix) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>It will be prepended to any pre-existent prefixes.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$prefix</h4>
+<code>string</code><p>The prefix to add.</p></div>
+</div></div>
+</div>
+<a name="addStarPrefix" id="addStarPrefix"></a><div class="element clickable method public addStarPrefix" data-toggle="collapse" data-target=".addStarPrefix .collapse">
+<h2>Adds a star prefix to this XPath expression.</h2>
+<pre>addStarPrefix() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"><p>This method will prepend a '*' to the path and set the star prefix flag
+to true.</p></p></div></div>
+</div>
+<a name="getCondition" id="getCondition"></a><div class="element clickable method public getCondition" data-toggle="collapse" data-target=".getCondition .collapse">
+<h2>Gets the condition of this XPath expression.</h2>
+<pre>getCondition() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getElement" id="getElement"></a><div class="element clickable method public getElement" data-toggle="collapse" data-target=".getElement .collapse">
+<h2>Gets the element of this XPath expression.</h2>
+<pre>getElement() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getPath" id="getPath"></a><div class="element clickable method public getPath" data-toggle="collapse" data-target=".getPath .collapse">
+<h2>Gets the path of this XPath expression.</h2>
+<pre>getPath() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="getPrefix" id="getPrefix"></a><div class="element clickable method public getPrefix" data-toggle="collapse" data-target=".getPrefix .collapse">
+<h2>Gets the prefix of this XPath expression.</h2>
+<pre>getPrefix() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="hasStarPrefix" id="hasStarPrefix"></a><div class="element clickable method public hasStarPrefix" data-toggle="collapse" data-target=".hasStarPrefix .collapse">
+<h2>Answers whether this XPath expression has a star prefix.</h2>
+<pre>hasStarPrefix() : Boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>Boolean</code></div>
+</div></div>
+</div>
+<a name="join" id="join"></a><div class="element clickable method public join" data-toggle="collapse" data-target=".join .collapse">
+<h2>Joins this XPath expression with $other (another XPath expression) using
+$combiner to join them.</h2>
+<pre>join(string $combiner, \ju1ius\Css\XPath\XPathExpr $other) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$combiner</h4>
+<code>string</code><p>The combiner string.</p></div>
+<div class="subelement argument">
+<h4>$other</h4>
+<code>\ju1ius\Css\XPath\XPathExpr</code><p>The other XPath expression to combine with this one.</p></div>
+</div></div>
+</div>
+<a name="xpathLiteral" id="xpathLiteral"></a><div class="element clickable method public xpathLiteral" data-toggle="collapse" data-target=".xpathLiteral .collapse">
+<h2>Gets an XPath literal for $s.</h2>
+<pre>xpathLiteral(mixed $s) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$s</h4>
+<code>mixed</code><p>Can either be a Node\ElementNode or a string.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24condition" id="$condition"> </a><div class="element clickable property private $condition" data-toggle="collapse" data-target=".$condition .collapse">
+<h2>$condition</h2>
+<pre>$condition </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24element" id="$element"> </a><div class="element clickable property private $element" data-toggle="collapse" data-target=".$element .collapse">
+<h2>$element</h2>
+<pre>$element </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24path" id="$path"> </a><div class="element clickable property private $path" data-toggle="collapse" data-target=".$path .collapse">
+<h2>$path</h2>
+<pre>$path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24prefix" id="$prefix"> </a><div class="element clickable property private $prefix" data-toggle="collapse" data-target=".$prefix .collapse">
+<h2>$prefix</h2>
+<pre>$prefix </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24starPrefix" id="$starPrefix"> </a><div class="element clickable property private $starPrefix" data-toggle="collapse" data-target=".$starPrefix .collapse">
+<h2>$starPrefix</h2>
+<pre>$starPrefix </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>

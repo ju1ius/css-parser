@@ -1,0 +1,612 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\StyleDeclaration</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
+<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">615</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">3</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__clone" title="__clone :: "><span class="description">__clone()
+        </span><pre>__clone()</pre></a></li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#__toString" title="__toString :: "><span class="description">__toString()
+        </span><pre>__toString()</pre></a></li>
+<li class="method public "><a href="#append" title="append :: Appends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance"><span class="description">Appends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance</span><pre>append()</pre></a></li>
+<li class="method public "><a href="#contains" title="contains :: Checks if this sule set contains the given property or property name"><span class="description">Checks if this sule set contains the given property or property name</span><pre>contains()</pre></a></li>
+<li class="method public "><a href="#createBackgroundShorthand" title="createBackgroundShorthand :: "><span class="description">createBackgroundShorthand()
+        </span><pre>createBackgroundShorthand()</pre></a></li>
+<li class="method public "><a href="#createBorderShorthand" title="createBorderShorthand :: Combine border-color, border-style and border-width into border
+Should be run after createDimensionsShorthand()"><span class="description">Combine border-color, border-style and border-width into border
+Should be run after createDimensionsShorthand()</span><pre>createBorderShorthand()</pre></a></li>
+<li class="method public "><a href="#createDimensionsShorthands" title="createDimensionsShorthands :: Looks for long format Css dimensional properties
+(margin, padding, border-color, border-style and border-width)
+and converts them into shorthand Css properties."><span class="description">Looks for long format Css dimensional properties
+(margin, padding, border-color, border-style and border-width)
+and converts them into shorthand Css properties.</span><pre>createDimensionsShorthands()</pre></a></li>
+<li class="method public "><a href="#createFontShorthand" title="createFontShorthand :: Looks for long format Css font properties (e.g. &lt;tt&gt;font-weight&lt;/tt&gt;) and
+tries to convert them into a shorthand Css &lt;tt&gt;font&lt;/tt&gt; property."><span class="description">Looks for long format Css font properties (e.g. &lt;tt&gt;font-weight&lt;/tt&gt;) and
+tries to convert them into a shorthand Css &lt;tt&gt;font&lt;/tt&gt; property.</span><pre>createFontShorthand()</pre></a></li>
+<li class="method public "><a href="#createListStyleShorthand" title="createListStyleShorthand :: "><span class="description">createListStyleShorthand()
+        </span><pre>createListStyleShorthand()</pre></a></li>
+<li class="method public "><a href="#createShorthands" title="createShorthands :: Create shorthand declarations (e.g. +margin+ or +font+) whenever possible."><span class="description">Create shorthand declarations (e.g. +margin+ or +font+) whenever possible.</span><pre>createShorthands()</pre></a></li>
+<li class="method public "><a href="#expandBackgroundShorthands" title="expandBackgroundShorthands :: "><span class="description">expandBackgroundShorthands()
+        </span><pre>expandBackgroundShorthands()</pre></a></li>
+<li class="method public "><a href="#expandBorderShorthands" title="expandBorderShorthands :: Split shorthand border declarations (e.g. &lt;tt&gt;border: 1px red;&lt;/tt&gt;)
+Additional splitting happens in expandDimensionsShorthand
+Multiple borders are not yet supported as of CSS3"><span class="description">Split shorthand border declarations (e.g. &lt;tt&gt;border: 1px red;&lt;/tt&gt;)
+Additional splitting happens in expandDimensionsShorthand
+Multiple borders are not yet supported as of CSS3</span><pre>expandBorderShorthands()</pre></a></li>
+<li class="method public "><a href="#expandDimensionsShorthands" title="expandDimensionsShorthands :: Split shorthand dimensional declarations (e.g. &lt;tt&gt;margin: 0px auto;&lt;/tt&gt;)
+into their constituent parts."><span class="description">Split shorthand dimensional declarations (e.g. &lt;tt&gt;margin: 0px auto;&lt;/tt&gt;)
+into their constituent parts.</span><pre>expandDimensionsShorthands()</pre></a></li>
+<li class="method public "><a href="#expandFontShorthands" title="expandFontShorthands :: Convert shorthand font declarations
+(e.g. &lt;tt&gt;font: 300 italic 11px/14px verdana, helvetica, sans-serif;&lt;/tt&gt;)
+into their constituent parts."><span class="description">Convert shorthand font declarations
+(e.g. &lt;tt&gt;font: 300 italic 11px/14px verdana, helvetica, sans-serif;&lt;/tt&gt;)
+into their constituent parts.</span><pre>expandFontShorthands()</pre></a></li>
+<li class="method public "><a href="#expandListStyleShorthands" title="expandListStyleShorthands :: "><span class="description">expandListStyleShorthands()
+        </span><pre>expandListStyleShorthands()</pre></a></li>
+<li class="method public "><a href="#expandShorthands" title="expandShorthands :: Split shorthand declarations (e.g. +margin+ or +font+) into their constituent parts."><span class="description">Split shorthand declarations (e.g. +margin+ or +font+) into their constituent parts.</span><pre>expandShorthands()</pre></a></li>
+<li class="method public "><a href="#getAppliedProperties" title="getAppliedProperties :: "><span class="description">getAppliedProperties()
+        </span><pre>getAppliedProperties()</pre></a></li>
+<li class="method public "><a href="#getAppliedProperty" title="getAppliedProperty :: Returns the last property matching name, taking !important declaration into account."><span class="description">Returns the last property matching name, taking !important declaration into account.</span><pre>getAppliedProperty()</pre></a></li>
+<li class="method public "><a href="#getCssText" title="getCssText :: "><span class="description">getCssText()
+        </span><pre>getCssText()</pre></a></li>
+<li class="method public "><a href="#getFirst" title="getFirst :: Returns the first property or the first property matching name."><span class="description">Returns the first property or the first property matching name.</span><pre>getFirst()</pre></a></li>
+<li class="method public "><a href="#getLast" title="getLast :: Returns the first property or the first property matching name."><span class="description">Returns the first property or the first property matching name.</span><pre>getLast()</pre></a></li>
+<li class="method public "><a href="#getParentRule" title="getParentRule :: "><span class="description">getParentRule()
+        </span><pre>getParentRule()</pre></a></li>
+<li class="method public "><a href="#getProperties" title="getProperties :: Returns all properties matching the given property name."><span class="description">Returns all properties matching the given property name.</span><pre>getProperties()</pre></a></li>
+<li class="method public "><a href="#getPropertyIndex" title="getPropertyIndex :: Get the position of a property in the property set."><span class="description">Get the position of a property in the property set.</span><pre>getPropertyIndex()</pre></a></li>
+<li class="method public "><a href="#insertAfter" title="insertAfter :: Inserts a property or an array of properties after the specified property."><span class="description">Inserts a property or an array of properties after the specified property.</span><pre>insertAfter()</pre></a></li>
+<li class="method public "><a href="#insertBefore" title="insertBefore :: Inserts a property or an array of rules before the specified property."><span class="description">Inserts a property or an array of rules before the specified property.</span><pre>insertBefore()</pre></a></li>
+<li class="method public "><a href="#prepend" title="prepend :: Prepends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance"><span class="description">Prepends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance</span><pre>prepend()</pre></a></li>
+<li class="method public "><a href="#remove" title="remove :: Removes a property from this StyleDeclaration."><span class="description">Removes a property from this StyleDeclaration.</span><pre>remove()</pre></a></li>
+<li class="method public "><a href="#removeUnusedProperties" title="removeUnusedProperties :: Removes all unused duplicate properties"><span class="description">Removes all unused duplicate properties</span><pre>removeUnusedProperties()</pre></a></li>
+<li class="method public "><a href="#replace" title="replace :: Replaces a property by another property or an array of properties."><span class="description">Replaces a property by another property or an array of properties.</span><pre>replace()</pre></a></li>
+<li class="method public "><a href="#setParentRule" title="setParentRule :: "><span class="description">setParentRule()
+        </span><pre>setParentRule()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24parentRule" title="$parentRule :: "><span class="description">$parentRule</span><pre>$parentRule</pre></a></li>
+<li class="property private "><a href="#%24properties" title="$properties :: "><span class="description">$properties</span><pre>$properties</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CStyleDeclaration" id="\ju1ius\Css\StyleDeclaration"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.StyleDeclaration.html">StyleDeclaration</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.StyleDeclaration.html" class="element class">
+<p class="short_description">Represents a Css style declaration</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="..//packages/Css.html">Css</a></td>
+</tr></table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__clone" id="__clone"></a><div class="element clickable method public __clone" data-toggle="collapse" data-target=".__clone .collapse">
+<h2>__clone()
+        </h2>
+<pre>__clone() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($properties) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$properties</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="__toString" id="__toString"></a><div class="element clickable method public __toString" data-toggle="collapse" data-target=".__toString .collapse">
+<h2>__toString()
+        </h2>
+<pre>__toString() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="append" id="append"></a><div class="element clickable method public append" data-toggle="collapse" data-target=".append .collapse">
+<h2>Appends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance</h2>
+<pre>append(Property $property) : <a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code><p>The ju1ius\Css\Property to append</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></code>The current ju1ius\Css\StyleDeclaration instance</div>
+</div></div>
+</div>
+<a name="contains" id="contains"></a><div class="element clickable method public contains" data-toggle="collapse" data-target=".contains .collapse">
+<h2>Checks if this sule set contains the given property or property name</h2>
+<pre>contains(<a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a> | string $property) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a>string</code><p>The ju1ius\Css\Property or rule name to search for.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="createBackgroundShorthand" id="createBackgroundShorthand"></a><div class="element clickable method public createBackgroundShorthand" data-toggle="collapse" data-target=".createBackgroundShorthand .collapse">
+<h2>createBackgroundShorthand()
+        </h2>
+<pre>createBackgroundShorthand() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="createBorderShorthand" id="createBorderShorthand"></a><div class="element clickable method public createBorderShorthand" data-toggle="collapse" data-target=".createBorderShorthand .collapse">
+<h2>Combine border-color, border-style and border-width into border
+Should be run after createDimensionsShorthand()</h2>
+<pre>createBorderShorthand() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="createDimensionsShorthands" id="createDimensionsShorthands"></a><div class="element clickable method public createDimensionsShorthands" data-toggle="collapse" data-target=".createDimensionsShorthands .collapse">
+<h2>Looks for long format Css dimensional properties
+(margin, padding, border-color, border-style and border-width)
+and converts them into shorthand Css properties.</h2>
+<pre>createDimensionsShorthands() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="createFontShorthand" id="createFontShorthand"></a><div class="element clickable method public createFontShorthand" data-toggle="collapse" data-target=".createFontShorthand .collapse">
+<h2>Looks for long format Css font properties (e.g. &lt;tt&gt;font-weight&lt;/tt&gt;) and
+tries to convert them into a shorthand Css &lt;tt&gt;font&lt;/tt&gt; property.</h2>
+<pre>createFontShorthand() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>At least font-size AND font-family must be present in order to create a shorthand declaration.</p></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="createListStyleShorthand" id="createListStyleShorthand"></a><div class="element clickable method public createListStyleShorthand" data-toggle="collapse" data-target=".createListStyleShorthand .collapse">
+<h2>createListStyleShorthand()
+        </h2>
+<pre>createListStyleShorthand() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="createShorthands" id="createShorthands"></a><div class="element clickable method public createShorthands" data-toggle="collapse" data-target=".createShorthands .collapse">
+<h2>Create shorthand declarations (e.g. +margin+ or +font+) whenever possible.</h2>
+<pre>createShorthands() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="expandBackgroundShorthands" id="expandBackgroundShorthands"></a><div class="element clickable method public expandBackgroundShorthands" data-toggle="collapse" data-target=".expandBackgroundShorthands .collapse">
+<h2>expandBackgroundShorthands()
+        </h2>
+<pre>expandBackgroundShorthands() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="expandBorderShorthands" id="expandBorderShorthands"></a><div class="element clickable method public expandBorderShorthands" data-toggle="collapse" data-target=".expandBorderShorthands .collapse">
+<h2>Split shorthand border declarations (e.g. &lt;tt&gt;border: 1px red;&lt;/tt&gt;)
+Additional splitting happens in expandDimensionsShorthand
+Multiple borders are not yet supported as of CSS3</h2>
+<pre>expandBorderShorthands() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="expandDimensionsShorthands" id="expandDimensionsShorthands"></a><div class="element clickable method public expandDimensionsShorthands" data-toggle="collapse" data-target=".expandDimensionsShorthands .collapse">
+<h2>Split shorthand dimensional declarations (e.g. &lt;tt&gt;margin: 0px auto;&lt;/tt&gt;)
+into their constituent parts.</h2>
+<pre>expandDimensionsShorthands() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>Handles margin, padding, border-color, border-style and border-width.</p></p>
+<table class="table table-bordered"><tr>
+<th>params</th>
+<td>boolean $cleanup Whether to remove unused properties</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="expandFontShorthands" id="expandFontShorthands"></a><div class="element clickable method public expandFontShorthands" data-toggle="collapse" data-target=".expandFontShorthands .collapse">
+<h2>Convert shorthand font declarations
+(e.g. &lt;tt&gt;font: 300 italic 11px/14px verdana, helvetica, sans-serif;&lt;/tt&gt;)
+into their constituent parts.</h2>
+<pre>expandFontShorthands() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="expandListStyleShorthands" id="expandListStyleShorthands"></a><div class="element clickable method public expandListStyleShorthands" data-toggle="collapse" data-target=".expandListStyleShorthands .collapse">
+<h2>expandListStyleShorthands()
+        </h2>
+<pre>expandListStyleShorthands() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="expandShorthands" id="expandShorthands"></a><div class="element clickable method public expandShorthands" data-toggle="collapse" data-target=".expandShorthands .collapse">
+<h2>Split shorthand declarations (e.g. +margin+ or +font+) into their constituent parts.</h2>
+<pre>expandShorthands() : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="getAppliedProperties" id="getAppliedProperties"></a><div class="element clickable method public getAppliedProperties" data-toggle="collapse" data-target=".getAppliedProperties .collapse">
+<h2>getAppliedProperties()
+        </h2>
+<pre>getAppliedProperties() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="getAppliedProperty" id="getAppliedProperty"></a><div class="element clickable method public getAppliedProperty" data-toggle="collapse" data-target=".getAppliedProperty .collapse">
+<h2>Returns the last property matching name, taking !important declaration into account.</h2>
+<pre>getAppliedProperty(string $property, bool $withPosition) : null | <a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a> | array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code>string</code><p>A property name</p></div>
+<div class="subelement argument">
+<h4>$withPosition</h4>
+<code>bool</code><p>If true return an associative array containing the property object and its position. If false return the matched property.</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>null</code><code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code><code>array</code>
+</div>
+</div></div>
+</div>
+<a name="getCssText" id="getCssText"></a><div class="element clickable method public getCssText" data-toggle="collapse" data-target=".getCssText .collapse">
+<h2>getCssText()
+        </h2>
+<pre>getCssText($options) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$options</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="getFirst" id="getFirst"></a><div class="element clickable method public getFirst" data-toggle="collapse" data-target=".getFirst .collapse">
+<h2>Returns the first property or the first property matching name.</h2>
+<pre>getFirst(null | string $property) : <a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code>nullstring</code><p>A property name to match</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code></div>
+</div></div>
+</div>
+<a name="getLast" id="getLast"></a><div class="element clickable method public getLast" data-toggle="collapse" data-target=".getLast .collapse">
+<h2>Returns the first property or the first property matching name.</h2>
+<pre>getLast(null | string $property) : <a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code>nullstring</code><p>A property name to match</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code></div>
+</div></div>
+</div>
+<a name="getParentRule" id="getParentRule"></a><div class="element clickable method public getParentRule" data-toggle="collapse" data-target=".getParentRule .collapse">
+<h2>getParentRule()
+        </h2>
+<pre>getParentRule() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="getProperties" id="getProperties"></a><div class="element clickable method public getProperties" data-toggle="collapse" data-target=".getProperties .collapse">
+<h2>Returns all properties matching the given property name.</h2>
+<pre>getProperties(\ju1ius\Css\(null | string | \ju1ius\Css\Property) $property, $wildcard) : array</pre>
+<div class="labels"></div>
+<div class="row collapse">
+<div class="span4">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>example</th>
+<td>$styleDeclaration-&gt;getProperties('font', true) //returns an array of all rules beginning with font.</td>
+</tr>
+<tr>
+<th>example</th>
+<td>$styleDeclaration-&gt;getProperties('font') //returns array([index] =&gt; $property) or empty array().</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code>\ju1ius\Css\(nullstring\ju1ius\Css\Property)</code><p>Pattern to search for. If null, returns all rules. If ju1ius\Css\Property, the property name is used for searching.</p>
+</div>
+<div class="subelement argument">
+<h4>$wildcard</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>An array of matching properties</div>
+</div>
+<div class="span4">
+<h3>Examples</h3>
+<pre class="prettyprint linenums"></pre>
+<pre class="prettyprint linenums"></pre>
+</div>
+</div>
+</div>
+<a name="getPropertyIndex" id="getPropertyIndex"></a><div class="element clickable method public getPropertyIndex" data-toggle="collapse" data-target=".getPropertyIndex .collapse">
+<h2>Get the position of a property in the property set.</h2>
+<pre>getPropertyIndex(Property $property) : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code><p>The ju1ius\Css\Property to search for.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>The position of the property or false if it is not found;</div>
+</div></div>
+</div>
+<a name="insertAfter" id="insertAfter"></a><div class="element clickable method public insertAfter" data-toggle="collapse" data-target=".insertAfter .collapse">
+<h2>Inserts a property or an array of properties after the specified property.</h2>
+<pre>insertAfter(<a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a> | array $newProp, Property $oldProp) : <a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newProp</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a>array</code><p>The property or array of properties to insert</p></div>
+<div class="subelement argument">
+<h4>$oldProp</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code><p>The ju1ius\Css\Property after which properties will be added.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></code>The current ju1ius\Css\StyleDeclaration instance</div>
+</div></div>
+</div>
+<a name="insertBefore" id="insertBefore"></a><div class="element clickable method public insertBefore" data-toggle="collapse" data-target=".insertBefore .collapse">
+<h2>Inserts a property or an array of rules before the specified property.</h2>
+<pre>insertBefore(<a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a> | array $newProp, Property $oldProp) : <a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newProp</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a>array</code><p>The property or array of rules to insert</p></div>
+<div class="subelement argument">
+<h4>$oldProp</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code><p>The ju1ius\Css\Property before which rules will be added.</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></code>The current ju1ius\Css\StyleDeclaration instance</div>
+</div></div>
+</div>
+<a name="prepend" id="prepend"></a><div class="element clickable method public prepend" data-toggle="collapse" data-target=".prepend .collapse">
+<h2>Prepends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance</h2>
+<pre>prepend(Property $property) : <a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$property</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code><p>The ju1ius\Css\Property to prepend</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></code>The current ju1ius\Css\StyleDeclaration instance</div>
+</div></div>
+</div>
+<a name="remove" id="remove"></a><div class="element clickable method public remove" data-toggle="collapse" data-target=".remove .collapse">
+<h2>Removes a property from this StyleDeclaration.</h2>
+<pre>remove(int | string | <a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a> | array $search, $wildcard) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$search</h4>
+<code>intstring<a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a>array</code><p>An index, ju1ius\Css\Property instance or property name to remove, or an array thereof. If int, removes the property at given position. If ju1ius\Css\Property, removes the specified property. If string, all matching properties will be removed.</p>
+</div>
+<div class="subelement argument">
+<h4>$wildcard</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="removeUnusedProperties" id="removeUnusedProperties"></a><div class="element clickable method public removeUnusedProperties" data-toggle="collapse" data-target=".removeUnusedProperties .collapse">
+<h2>Removes all unused duplicate properties</h2>
+<pre>removeUnusedProperties(array $excludes) : \ju1ius\Css\$this</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$excludes</h4>
+<code>array</code><p>an array of property names to exclude from removal</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Css\$this</code></div>
+</div></div>
+</div>
+<a name="replace" id="replace"></a><div class="element clickable method public replace" data-toggle="collapse" data-target=".replace .collapse">
+<h2>Replaces a property by another property or an array of properties.</h2>
+<pre>replace(Property $oldProp, <a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a> | array $newProp) : <a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$oldProp</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a></code><p>The ju1ius\Css\Property to replace</p>
+</div>
+<div class="subelement argument">
+<h4>$newProp</h4>
+<code><a href="../classes/ju1ius.Css.Property.html">\ju1ius\Css\Property</a>array</code><p>A ju1ius\Css\Property or an array of rules to add</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/ju1ius.Css.StyleDeclaration.html">\ju1ius\Css\StyleDeclaration</a></code>The current ju1ius\Css\StyleDeclaration instance</div>
+</div></div>
+</div>
+<a name="setParentRule" id="setParentRule"></a><div class="element clickable method public setParentRule" data-toggle="collapse" data-target=".setParentRule .collapse">
+<h2>setParentRule()
+        </h2>
+<pre>setParentRule(Rule $rule) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$rule</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24parentRule" id="$parentRule"> </a><div class="element clickable property private $parentRule" data-toggle="collapse" data-target=".$parentRule .collapse">
+<h2>$parentRule</h2>
+<pre>$parentRule </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24properties" id="$properties"> </a><div class="element clickable property private $properties" data-toggle="collapse" data-target=".$properties .collapse">
+<h2>$properties</h2>
+<pre>$properties </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-04-10T12:17:22+02:00.<br></footer></div>
+</div>
+</body>
+</html>
