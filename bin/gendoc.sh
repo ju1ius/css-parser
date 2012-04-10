@@ -23,7 +23,7 @@ then
   mkdir -p ./doc
 fi
 
-docblox $VERBOSE -d lib/ju1ius -t doc \
+phpdoc $VERBOSE -d lib/ju1ius -t doc \
   --defaultpackagename Css --sourcecode \
   --title "ju1ius\Css Documentation"
 
