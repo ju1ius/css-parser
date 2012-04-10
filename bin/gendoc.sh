@@ -22,10 +22,9 @@ if [[ ! -d ./doc ]];
 then
   mkdir -p ./doc
 fi
-rm -r doc/*
 
-docblox $VERBOSE -d lib/CSS -t doc \
-  --defaultpackagename CSS --sourcecode \
-  --title "CSSParser Documentation" --template default
+docblox $VERBOSE -d lib/ju1ius -t doc \
+  --defaultpackagename Css --sourcecode \
+  --title "ju1ius\Css Documentation"
 
 popd >/dev/null
