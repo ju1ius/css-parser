@@ -1,0 +1,208 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Rule;
+
+use ju1ius\Css\Rule;
+use ju1ius\Css\SelectorList;
+use ju1ius\Css\StyleDeclaration;
+use ju1ius\Css\Property;
+use ju1ius\Css\Util\Object;
+
+/**
+ * Represents a Css style rule
+ *
+ * @package Css
+ * @subpackage Rule
+ **/
+class StyleRule extends Rule
+{
+  private $selectorList;
+  private $styleDeclaration;
+
+  public function __construct(SelectorList $selectorList, StyleDeclaration $styleDeclaration=null)
+  {
+    $this-&gt;selectorList = $selectorList;
+    if($styleDeclaration)
+    {
+      $styleDeclaration-&gt;setParentRule($this);
+      if($parentStyleSheet = $this-&gt;getParentStyleSheet())
+      {
+        $styleDeclaration-&gt;setParentStyleSheet($parentStyleSheet);
+      }
+      $this-&gt;styleDeclaration = $styleDeclaration;
+    }
+  }
+
+  public function getSelectorList()
+  {
+    return $this-&gt;selectorList;
+  }
+  public function setSelectorList(SelectorList $selectorList)
+  {
+    $this-&gt;selectorList = $selectorList;
+  }
+
+  public function getStyleDeclaration()
+  {
+    return $this-&gt;styleDeclaration;
+  }
+  public function setStyleDeclaration(StyleDeclaration $styleDeclaration)
+  {
+    $styleDeclaration-&gt;setParentRule($this);
+    if($parentStyleSheet = $this-&gt;getParentStyleSheet())
+    {
+      $styleDeclaration-&gt;setParentStyleSheet($parentStyleSheet);
+    }
+    $this-&gt;styleDeclaration = $styleDeclaration;
+  }
+
+  /**
+   * Merge multiple Css RuleSets by cascading according to the Css 3 cascading rules 
+   * (http://www.w3.org/TR/REC-CSS2/cascade.html#cascading-order).
+   * 
+   * Cascading:
+   * If a Css\StyleRule object has its +specificity+ defined, that specificity is 
+   * used in the cascade calculations.  
+   * 
+   * If no specificity is explicitly set and the Css\StyleRule has *one* selector, 
+   * the specificity is calculated using that selector.
+   * 
+   * If no selectors or multiple selectors are present, the specificity is 
+   * treated as 0.
+   * 
+   *
+   * @param  array $rules An array of Css\StyleRule objects
+   * @return ju1ius\Css\StyleRule The merged ju1ius\Css\StyleRule
+   * 
+   **/
+  public static function merge(Array $rules)
+  {
+    if(1 === count($rules)) {
+      if(!$rules[0] instanceof StyleRule) {
+        throw new \InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
+      }
+      return clone $rules[0];
+    }
+    // Internal storage of Css properties that we will keep
+    $aProperties = array();
+    foreach($rules as $rule)
+    {
+      if(!$rule instanceof StyleRule) {
+        throw new \InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
+      }
+      $styleDeclaration = $rule-&gt;getStyleDeclaration();
+      $selectorList = $rule-&gt;getSelectorList();
+      $specificity = 0;
+      //
+      $styleDeclaration-&gt;expandShorthands();
+      if(1 === count($selectorList)) {
+        $specificity = $selectorList[0]-&gt;getSpecificity();
+      }
+      //
+      foreach($styleDeclaration-&gt;getAppliedProperties() as $name =&gt; $property)
+      {
+        // Add the property to the list to be folded per
+        // http://www.w3.org/TR/css3-cascade/#cascading
+        $override = false;
+        $isImportant = $property-&gt;getIsImportant();
+        if(isset($aProperties[$name])) {
+          $oldProp = $aProperties[$name];
+          // properties have same weight so we consider specificity
+          if($isImportant === $oldProp['property']-&gt;getIsImportant()) {
+            if($specificity &gt;= $oldProp['specificity']) $override = true;
+          } else if($isImportant) {
+            $override = true;
+          }
+        } else {
+          $override = true;
+        }
+        if($override) {
+          $aProperties[$name] = array(
+            'property' =&gt; Object::getClone($property),
+            'specificity' =&gt; $specificity
+          );
+        }
+      }
+    }
+    $merged = new StyleDeclaration();
+    foreach($aProperties as $name =&gt; $details) {
+      $merged-&gt;append($details['property']);
+    }
+    $merged-&gt;createShorthands();
+    return new StyleRule(
+      new SelectorList(),
+      $merged
+    );
+  }
+
+  public function getCssText($options=array())
+  {
+		$indent = '';
+		$nl = ' ';
+		if(isset($options['indent_level']))
+		{
+			$indent = str_repeat($options['indent_char'], $options['indent_level']);
+			$options['indent_level']++;
+			$nl = &quot;\n&quot;;
+		}
+    $declarations = $this-&gt;styleDeclaration ? $this-&gt;styleDeclaration-&gt;getCssText($options) : '';
+    return $indent . $this-&gt;selectorList-&gt;getCssText($options) . '{' . $nl
+      . $declarations . $nl
+      . $indent . '}';
+  }
+
+  public function getSelectorText()
+  {
+    return $this-&gt;selectorList-&gt;getCssText();
+  }
+
+  public function __clone()
+  {
+    $this-&gt;selectorList = clone $this-&gt;selectorList;
+    $this-&gt;styleDeclaration = clone $this-&gt;styleDeclaration;
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

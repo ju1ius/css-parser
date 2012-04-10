@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css;
+
+/**
+ * Represents a Css StyleSheet
+ * @package Css
+ **/
+class StyleSheet implements Serializable
+{
+  private
+    $href,
+    $media_list,
+    $rule_list,
+    $charset;
+
+  public function __construct(RuleList $rule_list=null, $charset=&quot;utf-8&quot;)
+  {
+    if($rule_list === null)
+    {
+      $this-&gt;rule_list = new RuleList(); 
+    }
+    $this-&gt;charset = $charset;
+  }
+
+  public function getHref()
+  {
+    return $this-&gt;href;
+  }
+  public function setHref($href)
+  {
+    $this-&gt;href = $href;
+  }
+
+  public function getCharset()
+  {
+    return $this-&gt;charset;
+  }
+
+  public function getMediaQueryList()
+  {
+    return $this-&gt;media_list;
+  }
+  public function setMediaQueryList(MediaQueryList $media_list)
+  {
+    $this-&gt;media_list = $media_list;
+  }
+
+  public function getRuleList()
+  {
+    return $this-&gt;rule_list;
+  }
+  public function setRuleList(RuleList $rule_list)
+  {
+    $this-&gt;rule_list = $rule_list;
+  }
+
+  public function getCssText($options=array())
+  {
+    return $this-&gt;rule_list-&gt;getCssText($options);
+  }
+  public function __toString()
+  {
+    return $this-&gt;getCssText();
+  }
+
+  public function getFirstRule()
+  {
+    return $this-&gt;rule_list-&gt;getFirst();
+  }
+
+  public function getLastRule()
+  {
+    return $this-&gt;rule_list-&gt;getLast();
+  }
+
+  /*
+  public function __call($method, $args)
+  {
+    if(method_exists($this-&gt;rule_list, $method))
+    {
+      return call_user_func_array(array($this-&gt;rule_list, $method), $args);
+    }
+  }
+   */
+
+  public function __clone()
+  {
+    $this-&gt;media_list = clone $this-&gt;media_list;
+    $this-&gt;rule_list = clone $this-&gt;rule_list;
+  }
+
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,99 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Exception;
+
+use ju1ius\Text\Source;
+
+/**
+ * @package Css
+ * @subpackage Exception
+ **/
+class ParseException extends \Exception
+{
+  protected
+    $source,
+    $source_file,
+    $source_position,
+    $source_line,
+    $source_column;
+
+  public function __construct($msg, Source\String $source, $position)
+  {
+    $this-&gt;source = $source;
+    $this-&gt;source_file = $source instanceof Source\File ? $source-&gt;getUrl() : 'internal_string';
+    $this-&gt;source_position = $position;
+    $this-&gt;source_line = $source-&gt;getLine($position);
+    $this-&gt;source_column = $source-&gt;getColumn($position, $this-&gt;source_line);
+    $msg = sprintf(
+      &quot;%s in %s on line %s, column %s&quot;,
+      $msg, $this-&gt;source_file, $this-&gt;source_line, $this-&gt;source_column
+    );
+    parent::__construct($msg);
+  }
+
+  public function getSource()
+  {
+    return $this-&gt;source;  
+  }
+  public function getSourceFile()
+  {
+    return $this-&gt;source_file;
+  }
+  public function getSourcePosition()
+  {
+    return $this-&gt;source_position;
+  }
+  public function getSourceLine()
+  {
+    return $this-&gt;source_line;
+  }
+  public function getSourceColumn()
+  {
+    return $this-&gt;source_column;  
+  }
+
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

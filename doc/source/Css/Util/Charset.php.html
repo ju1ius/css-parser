@@ -1,0 +1,217 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Util;
+
+use ju1ius\Text\Encoding;
+
+/**
+ * @package Css
+ * @subpackage Util
+ **/
+class Charset extends Encoding
+{
+  private static $CHARSET_DETECTION_MAP = array(
+    array(
+      'pattern' =&gt; '#^\xEF\xBB\xBF\x40\x63\x68\x61\x72\x73\x65\x74\x20\x22([\x20-\x7F]*)\x22\x3B#',
+      'charset' =&gt; null,
+      'endianness' =&gt; null
+    ),
+    array(
+      'pattern' =&gt; '#^\xEF\xBB\xBF#',
+      'charset' =&gt; &quot;UTF-8&quot;,
+      'endianness' =&gt; null
+    ),
+    array(
+      'pattern' =&gt; '#^\x40\x63\x68\x61\x72\x73\x65\x74\x20\x22([\x20-\x7F]*)\x22\x3B#',
+      'charset' =&gt; null,
+      'endianness' =&gt; null 
+    ),
+    array(
+      'pattern' =&gt; '#^\xFE\xFF\x00\x40\x00\x63\x00\x68\x00\x61\x00\x72\x00\x73\x00\x65\x00\x74\x00\x20\x00\x22((?:\x00[\x20-\x7F])*)\x00\x22\x00\x3B#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'BE'
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x40\x00\x63\x00\x68\x00\x61\x00\x72\x00\x73\x00\x65\x00\x74\x00\x20\x00\x22((?:\x00[\x20-\x7F])*)\x00\x22\x00\x3B#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'BE' 
+    ),
+    array(
+      'pattern' =&gt; '#^\xFF\xFE\x40\x00\x63\x00\x68\x00\x61\x00\x72\x00\x73\x00\x65\x00\x74\x00\x20\x00\x22\x00((?:\x00[\x20-\x7F])*)\x22\x00\x3B\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'BE' 
+    ),
+    array(
+      'pattern' =&gt; '#^\x40\x00\x63\x00\x68\x00\x61\x00\x72\x00\x73\x00\x65\x00\x74\x00\x20\x00\x22\x00((?:\x00[\x20-\x7F])*)\x22\x00\x3B\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'LE' 
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x00\xFE\xFF\x00\x00\x00\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22((?:\x00\x00\x00[\x20-\x7F])*)\x00\x00\x00\x22\x00\x00\x00\x3B#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'BE'
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x00\x00\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22((?:\x00\x00\x00[\x20-\x7F])*)\x00\x00\x00\x22\x00\x00\x00\x3B#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'BE' 
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x00\xFF\xFE\x00\x00\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22\x00((?:\x00\x00[\x20-\x7F]\x00)*)\x00\x00\x22\x00\x00\x00\x3B\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; '2143'
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x00\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22\x00((?:\x00\x00[\x20-\x7F]\x00)*)\x00\x00\x22\x00\x00\x00\x3B\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; '2143' 
+    ),
+    array(
+      'pattern' =&gt; '#^\xFE\xFF\x00\x00\x00\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22\x00\x00((?:\x00[\x20-\x7F]\x00\x00)*)\x00\x22\x00\x00\x00\x3B\x00\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; '3412'
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22\x00\x00((?:\x00[\x20-\x7F]\x00\x00)*)\x00\x22\x00\x00\x00\x3B\x00\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; '3412' 
+    ),
+    array(
+      'pattern' =&gt; '#^\xFF\xFE\x00\x00\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22\x00\x00\x00((?:[\x20-\x7F]\x00\x00\x00)*)\x22\x00\x00\x00\x3B\x00\x00\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'LE'
+    ),
+    array(
+      'pattern' =&gt; '#^\x40\x00\x00\x00\x63\x00\x00\x00\x68\x00\x00\x00\x61\x00\x00\x00\x72\x00\x00\x00\x73\x00\x00\x00\x65\x00\x00\x00\x74\x00\x00\x00\x20\x00\x00\x00\x22\x00\x00\x00((?:[\x20-\x7F]\x00\x00\x00)*)\x22\x00\x00\x00\x3B\x00\x00\x00#',
+      'charset' =&gt; null,
+      'endianness' =&gt; 'LE' 
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x00\xFE\xFF#',
+      'charset' =&gt; 'UTF-32BE',
+      'endianness' =&gt; null
+    ),
+    array(
+      'pattern' =&gt; '#^\xFF\xFE\x00\x00#',
+      'charset' =&gt; 'UTF-32LE',
+      'endianness' =&gt; null
+    ),
+    array(
+      'pattern' =&gt; '#^\x00\x00\xFF\xFE#',
+      'charset' =&gt; 'UTF-32-2143',
+      'endianness' =&gt; null
+    ),
+    array(
+      'pattern' =&gt; '#^\xFE\xFF\x00\x00#',
+      'charset' =&gt; 'UTF-32-3412',
+      'endianness' =&gt; null
+    ),
+    array(
+      'pattern' =&gt; '#^\xFE\xFF#',
+      'charset' =&gt; &quot;UTF-16BE&quot;,
+      'endianness' =&gt; null
+    ),
+    array(
+      'pattern' =&gt; '#^\xFF\xFE#',
+      'charset' =&gt; 'UTF-16LE',
+      'endianness' =&gt; null
+    ),
+/*
+    // The following encodings are not supported by mbstring extension.
+     
+    array(
+      'pattern' =&gt; '/^\x7C\x83\x88\x81\x99\xA2\x85\xA3\x40\x7F(YY)*\x7F\x5E/',
+      'charset' =&gt; null,
+      'endianness' =&gt; null,
+      'transcoded-from' =&gt; 'EBCDIC'
+    ),
+    array(
+      'pattern' =&gt; '/^\xAE\x83\x88\x81\x99\xA2\x85\xA3\x40\xFC(YY)*\xFC\x5E/',
+      'charset' =&gt; null,
+      'endianness' =&gt; null, 
+      'transcoded-from' =&gt; 'IBM1026'
+    ),
+    array(
+      'pattern' =&gt; '/^\x00\x63\x68\x61\x72\x73\x65\x74\x20\x22(YY)*\x22\x3B/',
+      'charset' =&gt; null,
+      'endianness' =&gt; null 
+      'transcoded-from' =&gt; 'GSM 03.38'
+    ),
+*/
+  );
+
+  /**
+   * Detects a Css StyleSheet's charset according to the spec.
+   *
+   * @param string $text The stylesheet's text
+   *
+   * @return string      The detected charset or false
+   **/
+  public static function detect($text)
+  {
+    foreach(self::$CHARSET_DETECTION_MAP as $charset_map) {
+      $pattern = $charset_map['pattern'];
+      $matches = array();
+      if(preg_match($pattern, $text, $matches)) {
+        if($charset_map['charset']) {
+          $charset = $charset_map['charset'];
+        } else {
+          $charset = $matches[1];
+        }
+        return $charset;
+      }
+    }
+    return parent::detect($text);
+  }
+
+  public static function detectFile($filename)
+  {
+    return self::detect(file_get_contents($filename));
+  }
+
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

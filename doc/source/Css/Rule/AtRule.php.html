@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Rule;
+use ju1ius\Css\Rule;
+
+use ju1ius\Css\StyleDeclaration;
+
+/**
+ * Represents an unknown @ rule (unused)
+ *
+ * @package Css
+ * @subpackage Rule
+ **/
+class AtRule extends Rule
+{
+  private
+    $name,
+    $style_declaration,
+    $vendor_prefix;
+
+  public function __construct($name, StyleDeclaration $style_declaration=null)
+  {
+    $this-&gt;name = $name;
+    $this-&gt;style_declaration = $style_declaration;
+  }
+
+  public function getName()
+  {
+    return $this-&gt;name;
+  }
+
+  public function getStyleDeclaration()
+  {
+    return $this-&gt;style_declaration;
+  }
+  public function setStyleDeclaration(StyleDeclaration $style_declaration)
+  {
+    $this-&gt;style_declaration = $style_declaration;
+  }
+
+  public function getVendorPrefix()
+  {
+    return $this-&gt;vendor_prefix;
+  }
+  public function setVendorPrefix($vendor_prefix)
+  {
+    $this-&gt;vendor_prefix = $vendor_prefix;
+  }
+
+  public function getCssText($options=array())
+  {
+		$indent = '';
+		$nl = ' ';
+		if(isset($options['indent_level']))
+		{
+			$indent = str_repeat($options['indent_char'], $options['indent_level']);
+			$options['indent_level']++;
+			$nl = &quot;\n&quot;;
+    }
+    $prefix = $this-&gt;vendor_prefix ? $this-&gt;vendor_prefix . '-' : '';
+    $declarations = $this-&gt;style_declaration ? $this-&gt;style_declaration-&gt;getCssText($options) : '';
+    return $indent . '@' . $prefix . $this-&gt;name . '{'
+      . $nl . $declarations
+      . $nl . $indent . '}';
+  }
+
+  public function __clone()
+  {
+    $this-&gt;style_declaration = clone $this-&gt;style_declaration;
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

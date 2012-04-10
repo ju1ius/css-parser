@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Selector;
+
+use ju1ius\Css\Selector;
+use ju1ius\Css\Exception\ParseException;
+
+/**
+ * Represents a combined selector
+ *
+ * This component is a port of the Python lxml library,
+ * which is copyright Infrae and distributed under the BSD license.
+ *
+ * @package Css
+ * @subpackage Selector
+ * @author Fabien Potencier &lt;fabien@symfony.com&gt;
+ * @author ju1ius http://github.com/ju1ius
+ **/
+class CombinedSelector extends Selector
+{
+  static protected $methodMapping = array(
+    ' ' =&gt; 'descendant',
+    '&gt;' =&gt; 'child',
+    '+' =&gt; 'direct_adjacent',
+    '~' =&gt; 'indirect_adjacent',
+  );
+  protected $selector;
+  protected $combinator;
+  protected $subselector;
+
+  /**
+   * The constructor.
+   *
+   * @param Selector $selector The XPath selector
+   * @param string   $combinator The combinator
+   * @param Selector $subselector The sub XPath selector
+   */
+  public function __construct($selector, $combinator, $subselector)
+  {
+    $this-&gt;selector = $selector;
+    $this-&gt;combinator = $combinator;
+    $this-&gt;subselector = $subselector;
+  }
+
+  public function getSpecificity()
+  {
+    return $this-&gt;selector-&gt;getSpecificity() + $this-&gt;subselector-&gt;getSpecificity();  
+  }
+
+  public function getCssText($options=array())
+  {
+    $comb = $this-&gt;combinator === ' ' ? ' ' : ' '.$this-&gt;combinator.' ';
+    return $this-&gt;selector-&gt;getCssText() . $comb . $this-&gt;subselector-&gt;getCssText();
+  }
+
+  /**
+   * {@inheritDoc}
+   * @throws ParseException When unknown combinator is found
+   */
+  public function toXPath()
+  {
+    if (!isset(self::$methodMapping[$this-&gt;combinator]))
+    {
+      throw new ParseException(sprintf('Unknown combinator: %s', $this-&gt;combinator));
+    }
+    $method = '_xpath_'.self::$methodMapping[$this-&gt;combinator];
+    $path = $this-&gt;selector-&gt;toXPath();
+
+    return $this-&gt;$method($path, $this-&gt;subselector);
+  }
+
+  /**
+   * Joins a Selector into the XPath of this object.
+   *
+   * @param XPath\Expression $xpath The XPath expression for this object
+   * @param Selector $sub The Selector object to add
+   */
+  protected function _xpath_descendant($xpath, $sub)
+  {
+    // when sub is a descendant in any way of xpath
+    $xpath-&gt;join('/descendant::', $sub-&gt;toXPath());
+
+    return $xpath;
+  }
+
+  /**
+   * Joins a Selector as a child of this object.
+   *
+   * @param XPath\Expression $xpath The parent XPath expression
+   * @param Selector $sub The Selector object to add
+   */
+  protected function _xpath_child($xpath, $sub)
+  {
+    // when sub is an immediate child of xpath
+    $xpath-&gt;join('/', $sub-&gt;toXPath());
+
+    return $xpath;
+  }
+
+  /**
+   * Joins an XPath expression as an adjacent of another.
+   *
+   * @param XPath\Expression $xpath The parent XPath expression
+   * @param Selector $sub The adjacent XPath expression
+   */
+  protected function _xpath_direct_adjacent($xpath, $sub)
+  {
+    // when sub immediately follows xpath
+    $xpath-&gt;join('/following-sibling::', $sub-&gt;toXPath());
+    $xpath-&gt;addNameTest();
+    $xpath-&gt;addCondition('position() = 1');
+
+    return $xpath;
+  }
+
+  /**
+   * Joins an XPath expression as an indirect adjacent of another.
+   *
+   * @param XPath\Expression $xpath The parent XPath expression
+   * @param Selector $sub The indirect adjacent Selector object
+   */
+  protected function _xpath_indirect_adjacent($xpath, $sub)
+  {
+    // when sub comes somewhere after xpath as a sibling
+    $xpath-&gt;join('/following-sibling::', $sub-&gt;toXPath());
+
+    return $xpath;
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

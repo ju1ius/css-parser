@@ -1,0 +1,148 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Iterator;
+
+use ju1ius\Css;
+use ju1ius\Css\Rule;
+/**
+ * 
+ */
+class ValueIterator implements \Iterator
+{
+  private
+    $values = array();
+
+  public function __construct($object, $type_filter=null, $returnFuncArgs=false)
+  {
+    $this-&gt;object = $object;
+    $this-&gt;values = self::getValuesForObject($object, $type_filter, $returnFuncArgs);
+  }
+
+  public function getValues()
+  {
+    return $this-&gt;values;
+  }
+  public function getObject()
+  {
+    return $this-&gt;object;
+  }
+
+  public static function getValuesForObject($obj, $type=null, $returnFuncArgs=false)
+  {
+    $values = array();
+    if($obj instanceof Css\Value\Func) {
+      if($returnFuncArgs) {
+        $values = $obj-&gt;getArguments();
+      } else {
+        $values[] = $obj;
+      }
+    } else if($obj instanceof Css\Value) {
+      $values[] = $obj;
+    } else if($obj instanceof Css\ValueList) {
+      foreach($obj-&gt;getItems() as $item) {
+        $values = array_merge(
+          $values,
+          self::getValuesForObject($item, $type, $returnFuncArgs)
+        );
+      }
+    } else if($obj instanceof Rule\Charset) {
+      $values[] = $obj-&gt;getEncoding();
+    } else if($obj instanceof Rule\Import) {
+      $values[] = $obj-&gt;getHref();
+    } else if($obj instanceof Rule\NS) {
+      $values[] = $obj-&gt;getUri();
+    } else if(method_exists($obj, 'getStyleDeclaration')) {
+      // Rule\StyleRule, Rule\AtRule, Rule\FontFace, Rule\KeyFrame, Rule\Page
+      $decl = $obj-&gt;getStyleDeclaration();
+      foreach($decl-&gt;getProperties() as $prop) {
+        $values = array_merge(
+          $values,
+          self::getValuesForObject($prop-&gt;getValueList(), $type, $returnFuncArgs)
+        );
+      }
+    } else if(method_exists($obj, 'getRuleList')) {
+      // StyleSheet, Rule\Media, Rule\Keyframes
+      foreach($obj-&gt;getRuleList()-&gt;getRules() as $rule) {
+        $values = array_merge(
+          $values,
+          self::getValuesForObject($rule, $type, $returnFuncArgs)
+        );
+      }
+    }
+    if($type) {
+      return array_filter($values, function($item) use($type)
+      {
+        return $item instanceof $type;
+      });
+    }
+    return $values;
+  }
+
+  /* ----- Iterator Interface implementation ----- */
+
+  public function rewind()
+  {
+    reset($this-&gt;values);
+  }
+  public function current()
+  {
+    return current($this-&gt;values);
+  }
+  public function key()
+  {
+    return key($this-&gt;values);
+  }
+  public function next()
+  {
+    return next($this-&gt;values);
+  }
+  public function valid()
+  {
+    $key = key($this-&gt;values);
+    return $key !== null &amp;&amp; $key !== false;
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

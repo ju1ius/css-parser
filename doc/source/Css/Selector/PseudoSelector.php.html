@@ -1,0 +1,266 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Selector;
+
+use ju1ius\Css\Selector;
+use ju1ius\Css\Exception\ParseException;
+use ju1ius\Css\Exception\UnsupportedSelectorException;
+use ju1ius\Css\XPath;
+
+/**
+ * Represents an pseudo class/element selector
+ *
+ * This component is a port of the Python lxml library,
+ * which is copyright Infrae and distributed under the BSD license.
+ *
+ * @package Css
+ * @subpackage Selector
+ * @author Fabien Potencier &lt;fabien@symfony.com&gt;
+ * @author ju1ius [http://github.com/ju1ius]
+ **/
+class PseudoSelector extends Selector
+{
+  static protected $unsupported = array(
+    'indeterminate', 'first-line', 'first-letter',
+    'selection', 'before', 'after', 'link', 'visited',
+    'active', 'focus', 'hover',
+  );
+
+  protected $element;
+  protected $type;
+  protected $ident;
+
+  /**
+   * Constructor.
+   *
+   * @param Selector $element The Selector element
+   * @param string $type Node type
+   * @param string $ident The ident
+   * @throws ParseException When incorrect PseudoNode type is given
+   */
+  public function __construct($element, $type, $ident)
+  {
+    $this-&gt;element = $element;
+    if (!in_array($type, array(':', '::')))
+    {
+      throw new ParseException(sprintf(
+        'The PseudoSelector type can only be : or :: (%s given).', $type
+      ));
+    }
+    $this-&gt;type = $type;
+    $this-&gt;ident = $ident;
+  } 
+
+  public function getSpecificity()
+  {
+    $spec = $this-&gt;type === ':' ? 10 : 1;
+    return $this-&gt;element-&gt;getSpecificity() + $spec; 
+  }
+
+  public function getCssText($options=array())
+  {
+    return $this-&gt;element-&gt;getCssText($options)
+      . $this-&gt;type . $this-&gt;ident;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @throws ParseException When unsupported or unknown pseudo-class is found
+   */
+  public function toXPath()
+  {
+    $elXpath = $this-&gt;element-&gt;toXPath();
+
+    if (in_array($this-&gt;ident, self::$unsupported))
+    {
+      throw new UnsupportedSelectorException(sprintf(
+        'The pseudo-class %s is unsupported', $this-&gt;ident
+      ));
+    }
+    $method = 'xpath_'.str_replace('-', '_', $this-&gt;ident);
+    if (!method_exists($this, $method))
+    {
+      throw new UnsupportedSelectorException(
+        sprintf('The pseudo-class %s is unknown', $this-&gt;ident)
+      );
+    }
+    return $this-&gt;$method($elXpath);
+  }
+
+  /**
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified XPath expression
+   */
+  protected function xpath_checked(XPath\Expression $xpath)
+  {
+    // FIXME: is this really all the elements?
+    $xpath-&gt;addCondition(&quot;(@selected or @checked) and (name(.) = 'input' or name(.) = 'option')&quot;);
+    return $xpath;
+  }
+
+  /**
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified XPath expression
+   * @throws ParseException If this element is the root element
+   */
+  protected function xpath_root($xpath)
+  {
+    // if this element is the root element
+    throw new ParseException();
+  }
+
+  /**
+   * Marks this XPath expression as the first child.
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified expression
+   */
+  protected function xpath_first_child($xpath)
+  {
+    $xpath-&gt;addStarPrefix();
+    $xpath-&gt;addNameTest();
+    $xpath-&gt;addCondition('position() = 1');
+
+    return $xpath;
+  }
+
+  /**
+   * Sets the XPath  to be the last child.
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified expression
+   */
+  protected function xpath_last_child($xpath)
+  {
+    $xpath-&gt;addStarPrefix();
+    $xpath-&gt;addNameTest();
+    $xpath-&gt;addCondition('position() = last()');
+
+    return $xpath;
+  }
+
+  /**
+   * Sets the XPath expression to be the first of type.
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified expression
+   */
+  protected function xpath_first_of_type($xpath)
+  {
+    if ($xpath-&gt;getElement() == '*')
+    {
+      throw new UnsupportedSelectorException('*:first-of-type is not implemented');
+    }
+    $xpath-&gt;addStarPrefix();
+    $xpath-&gt;addCondition('position() = 1');
+    return $xpath;
+  }
+
+  /**
+   * Sets the XPath expression to be the last of type.
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified expression
+   * @throws ParseException Because *:last-of-type is not implemented
+   */
+  protected function xpath_last_of_type($xpath)
+  {
+    if ($xpath-&gt;getElement() == '*')
+    {
+      throw new UnsupportedSelectorException('*:last-of-type is not implemented');
+    }
+    $xpath-&gt;addStarPrefix();
+    $xpath-&gt;addCondition('position() = last()');
+    return $xpath;
+  }
+
+  /**
+   * Sets the XPath expression to be the only child.
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified expression
+   */
+  protected function xpath_only_child($xpath)
+  {
+    $xpath-&gt;addNameTest();
+    $xpath-&gt;addStarPrefix();
+    $xpath-&gt;addCondition('last() = 1');
+    return $xpath;
+  }
+
+  /**
+   * Sets the XPath expression to be only of type.
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified expression
+   * @throws ParseException Because *:only-of-type is not implemented
+   */
+  protected function xpath_only_of_type($xpath)
+  {
+    if ($xpath-&gt;getElement() == '*')
+    {
+      throw new UnsupportedSelectorException('*:only-of-type is not implemented');
+    }
+    $xpath-&gt;addCondition('last() = 1');
+
+    return $xpath;
+  }
+
+  /**
+   * undocumented function
+   *
+   * @param XPath\Expression $xpath The XPath expression
+   * @return XPath\Expression The modified expression
+   */
+  protected function xpath_empty($xpath)
+  {
+    $xpath-&gt;addCondition('not(*) and not(normalize-space())');
+
+    return $xpath;
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

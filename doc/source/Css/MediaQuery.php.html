@@ -1,0 +1,151 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace ju1ius\Css;
+
+use ju1ius\Css\MediaQuery;
+
+/**
+ * Represents a single Css MediaQuery
+ *
+ * @package Css
+ **/
+class MediaQuery implements Serializable
+{
+  private
+    $restrictor,
+    $media_type,
+    $expressions = array();
+
+  private static
+    $RESTRICTORS = array(
+      'not', 'only', ''
+    );
+
+  /**
+   * @param string $restrictor The MediaQuery restrictor (&quot;not&quot;, &quot;only&quot; or &quot;&quot;)
+   * @param string $media_type The MediaQuery media type (eg screen, print, handheld...)
+   * @param array  $expressions An array of MediaQueryExpression objects
+   **/
+  public function __construct($restrictor='', $media_type='all', $expressions=array())
+  {
+    $this-&gt;restrictor = $restrictor;
+    $this-&gt;media_type = $media_type;
+    $this-&gt;expressions = $expressions;
+  }
+
+  public function getRestrictor()
+  {
+    return $this-&gt;restrictor;
+  }
+  public function setRestrictor($restrictor)
+  {
+    $this-&gt;restrictor = $restrictor;
+  }
+
+  public function getMediaType()
+  {
+    return $this-&gt;media_type;
+  }
+  public function setMediaType($media_type)
+  {
+    $this-&gt;media_type = $media_type;
+  }
+
+  public function getExpressions()
+  {
+    return $this-&gt;expressions;
+  }
+  public function setExpressions(array $expressions)
+  {
+    $this-&gt;expressions = $expressions;
+  }
+
+  /**
+   * Append a MediaQuery\Expression to the MediaQuery expressions list
+   *
+   * @param MediaQueryExpression $expr
+   **/
+  public function append(MediaQuery\Expression $expr)
+  {
+    $this-&gt;expressions[] = $expr;
+  }
+  /**
+   * Removes a MediaQuery\Expression from the MediaQuery expressions list
+   *
+   * @param MediaQueryExpression $expr
+   * @param bool $reset_keys True to reorder the array keys after removal
+   **/
+  public function remove(MediaQuery\Expression $expr, $reset_keys=false)
+  {
+    $idx = array_search($expr, $this-&gt;expressions);
+    if(false !== $idx) {
+      unset($this-&gt;expressions[$idx]);
+      if($reset_keys) $this-&gt;expressions = array_values($this-&gt;expressions);
+    }
+  }
+
+  public function getCssText($options=array())
+  {
+    $restrictor = $this-&gt;restrictor ? $this-&gt;restrictor . ' ' : ''; 
+    $media_type = (empty($this-&gt;media_type) || $this-&gt;media_type == 'all') ? '' : $this-&gt;media_type;
+
+    $expressions = array();
+    foreach ($this-&gt;expressions as $expr) {
+      $expr_text = $expr-&gt;getCssText();
+      if($expr_text) $expressions[] = $expr_text;
+    }
+    $expressions = empty($expressions) ? '' : implode(' and ', $expressions);
+    
+    $and = (empty($media_type) || empty($expressions)) ? '' : ' and ';
+    return $restrictor . $media_type . $and . $expressions;
+  }
+  public function __toString()
+  {
+    return $this-&gt;getCssText();
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

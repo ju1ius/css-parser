@@ -1,0 +1,182 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Selector;
+
+use ju1ius\Css\Exception\ParseException;
+use ju1ius\Css\Selector;
+use Css\XPath;
+
+/**
+ * Represents an attribute selector
+ *
+ * This component is a port of the Python lxml library,
+ * which is copyright Infrae and distributed under the BSD license.
+ *
+ * @package Css
+ * @subpackage Selector
+ * @author Fabien Potencier &lt;fabien@symfony.com&gt;
+ * @author ju1ius http://github.com/ju1ius
+ **/
+class AttributeSelector extends Selector
+{
+  protected $selector;
+  protected $namespace;
+  protected $attrib;
+  protected $operator;
+  protected $value;
+
+  public function __construct($selector, $namespace, $attrib, $operator, $value)
+  {
+    $this-&gt;selector = $selector;
+    $this-&gt;namespace = $namespace;
+    $this-&gt;attrib = $attrib;
+    $this-&gt;operator = $operator;
+    $this-&gt;value = $value; 
+  }
+
+  public function getSpecificity()
+  {
+    return $this-&gt;selector-&gt;getSpecificity() + 10;
+  }
+
+  public function getCssText($options=array())
+  {
+    $ns =  $this-&gt;namespace === '*'      ? '' : $this-&gt;namespace.'|';
+    $op =  $this-&gt;operator  === 'exists' ? '' : $this-&gt;operator;
+    $val = $this-&gt;value     === null     ? '' : $this-&gt;value;
+    return $this-&gt;selector-&gt;getCssText($options)
+      .'['.$ns.$this-&gt;attrib.$op.$val.']';
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function toXPath()
+  {
+    $path = $this-&gt;selector-&gt;toXPath();
+    $attrib = $this-&gt;xpathAttrib();
+    $value = $this-&gt;value;
+    if($this-&gt;operator == 'exists')
+    {
+      $path-&gt;addCondition($attrib);
+    }
+    elseif($this-&gt;operator == '=')
+    {
+      $path-&gt;addCondition(sprintf('%s = %s', $attrib, XPath\Expression::xpathLiteral($value)));
+    }
+    elseif($this-&gt;operator == '!=')
+    {
+      // FIXME: this seems like a weird hack...
+      if ($value)
+      {
+        $path-&gt;addCondition(sprintf('not(%s) or %s != %s', $attrib, $attrib, XPath\Expression::xpathLiteral($value)));
+      }
+      else
+      {
+        $path-&gt;addCondition(sprintf('%s != %s', $attrib, XPath\Expression::xpathLiteral($value)));
+      }
+      // path.addCondition('%s != %s' % (attrib, xpathLiteral(value)))
+    }
+    elseif ($this-&gt;operator == '~=')
+    {
+      $path-&gt;addCondition(sprintf(&quot;contains(concat(' ', normalize-space(%s), ' '), %s)&quot;, $attrib, XPath\Expression::xpathLiteral(' '.$value.' ')));
+    }
+    elseif ($this-&gt;operator == '|=')
+    {
+      // Weird, but true...
+      $path-&gt;addCondition(sprintf('%s = %s or starts-with(%s, %s)', $attrib, XPath\Expression::xpathLiteral($value), $attrib, XPath\Expression::xpathLiteral($value.'-')));
+    }
+    elseif ($this-&gt;operator == '^=')
+    {
+      $path-&gt;addCondition(sprintf('starts-with(%s, %s)', $attrib, XPath\Expression::xpathLiteral($value)));
+    }
+    elseif ($this-&gt;operator == '$=')
+    {
+      // Oddly there is a starts-with in XPath 1.0, but not ends-with
+      $path-&gt;addCondition(sprintf('substring(%s, string-length(%s)-%s) = %s', $attrib, $attrib, strlen($value) - 1, XPath\Expression::xpathLiteral($value)));
+    }
+    elseif ($this-&gt;operator == '*=')
+    {
+      // FIXME: case sensitive?
+      $path-&gt;addCondition(sprintf('contains(%s, %s)', $attrib, XPath\Expression::xpathLiteral($value)));
+    }
+    else
+    {
+      throw new ParseException(sprintf('Unknown operator: %s', $this-&gt;operator));
+    }
+    return $path;
+  }
+
+  /**
+   * Returns the XPath Attribute
+   *
+   * @return string The XPath attribute
+   */
+  protected function xpathAttrib()
+  {
+    // FIXME: if attrib is *?
+    if ($this-&gt;namespace == '*')
+    {
+      return '@'.$this-&gt;attrib;
+    }
+    return sprintf('@%s:%s', $this-&gt;namespace, $this-&gt;attrib);
+  }
+
+  /**
+   * Returns a formatted attribute
+   *
+   * @return string The formatted attribute
+   */
+  protected function formatAttrib()
+  {
+    if ($this-&gt;namespace == '*')
+    {
+      return $this-&gt;attrib;
+    }
+    return sprintf('%s|%s', $this-&gt;namespace, $this-&gt;attrib);
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,1128 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+/* vim: set fdm=marker : */
+
+namespace ju1ius\Css;
+
+use ju1ius\Text\Source;
+
+use ju1ius\Css\AbstractParser;
+use ju1ius\Css\Exception\ParseException;
+use ju1ius\Css\Exception\RecoveredParseException;
+use ju1ius\Css\MediaQuery;
+use ju1ius\Css\Util\Charset;
+
+/**
+ * Parses Css text into a data structure.
+ *
+ * @package Css
+ * @author Raphael Schweikert http://sabberworm.com
+ * @author ju1ius http://github.com/ju1ius
+ **/
+class Parser extends AbstractParser
+{
+  private static
+    $MARGIN_BOX_IDENTIFIERS = array(
+      'top-left-corner',
+      'top-left',
+      'top-center',
+      'top-right',
+      'top-right-corner',
+      'bottom-left-corner',
+      'bottom-left',
+      'bottom-center',
+      'bottom-right',
+      'bottom-right-corner',
+      'left-top',
+      'left-middle',
+      'right-bottom',
+      'right-top',
+      'right-middle',
+      'right-bottom'
+    );
+
+  static public function getParserForSource(Source\String $source, array $options=array())
+  {
+    if(Charset::isSameEncoding($source-&gt;getEncoding(), 'ascii')) {
+      return new AsciiParser($options);
+    }
+    return new self($options);
+  }
+
+  /**
+   * Accepts a Source\String object as returned by StyleSheetLoader,
+   * and returns the parsed StyleSheet
+   *
+   * @param ju1ius\Text\Source\String $source
+   *
+   * @return ju1ius\Css\StyleSheet
+   **/
+  public function parse(Source\String $source)
+  {/*{{{*/
+    $this-&gt;source = $source;
+    $stylesheet = $this-&gt;parseStyleSheet($this-&gt;source);
+    if($this-&gt;source instanceof Source\File) {
+      $stylesheet-&gt;setHref($this-&gt;source-&gt;getUrl());
+    }
+    return $stylesheet;
+  }/*}}}*/
+
+  public function parseStyleSheet($text, $charset = 'utf-8')
+  {/*{{{*/
+    $this-&gt;_init($text, $charset);
+    $result = new StyleSheet(null, $this-&gt;source-&gt;getEncoding());
+    $this-&gt;_parseStyleSheet($result);
+    return $result;
+  }/*}}}*/
+
+  public function parseStyleRule($text, $charset='utf-8')
+  {/*{{{*/
+    $this-&gt;_init($text, $charset);
+    return $this-&gt;_parseStyleRule();
+  }/*}}}*/
+
+  public function parseStyleDeclaration($text, $charset='utf-8')
+  {/*{{{*/
+    $this-&gt;_init($text, $charset);
+    $result = new StyleDeclaration();
+    $this-&gt;_parseStyleDeclaration($result);
+    return $result;
+  }/*}}}*/
+
+  public function parseSelector($text, $charset='utf-8')
+  {/*{{{*/
+    $this-&gt;_init($text, $charset);
+    $selector_list = $this-&gt;_parseSelectorList();
+    if(count($selector_list) === 0) {
+      return $selector_list-&gt;getFirst();
+    }
+    return $selector_list;
+  }/*}}}*/
+
+  public function parseMediaQuery($text, $charset='utf-8')
+  {/*{{{*/
+    $this-&gt;_init($text, $charset);
+    $media_list = $this-&gt;_parseMediaQueryList();
+    return $media_list;
+  }/*}}}*/
+
+  private function _parseStyleSheet(StyleSheet $stylesheet)
+  {/*{{{*/
+    $this-&gt;_consumeWhiteSpace();
+    $this-&gt;_parseRuleList($stylesheet-&gt;getRuleList(), true);
+  }/*}}}*/
+
+  private function _parseRuleList(RuleList $ruleList, $isRoot = false)
+  {/*{{{*/
+    while(!$this-&gt;_isEnd()) {
+      if($this-&gt;_comes('@')) {
+
+        $this-&gt;state-&gt;enter(ParserState::IN_ATRULE);
+        $this-&gt;_setBacktrackingPosition();
+        try{
+          $ruleList-&gt;append($this-&gt;_parseAtRule());
+        } catch(ParseException $e) {
+          if($this-&gt;strict_parsing) {
+            throw $e;
+          } else {
+            $this-&gt;_backtrack();
+            $this-&gt;_skipAtRule();
+            $this-&gt;_pushError($e);
+          }
+        }
+        $this-&gt;state-&gt;leave(ParserState::IN_ATRULE);
+
+      } else if($this-&gt;_comes('}')) {
+
+        $this-&gt;_consume('}');
+        if($isRoot) {
+          if($this-&gt;strict_parsing) {
+            throw new ParseException('Unopened {', $this-&gt;source, $this-&gt;current_position);
+          } else {
+            $this-&gt;_setBacktrackingPosition();
+            $this-&gt;_skipStyleRule();
+            $this-&gt;_pushError(
+              new ParseException('Unopened }', $this-&gt;source, $this-&gt;current_position)
+            );
+            continue;
+          }
+        } else {
+          return;
+        }
+
+      } else if($this-&gt;state-&gt;in(ParserState::IN_KEYFRAMESRULE)) {
+
+        $ruleList-&gt;append($this-&gt;_parseKeyframeRule());
+
+      } else {
+
+        $this-&gt;state-&gt;enter(
+          ParserState::IN_STYLERULE | ParserState::AFTER_CHARSET
+          | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES
+        );
+        $this-&gt;_setBacktrackingPosition();
+        try{
+          $ruleList-&gt;append($this-&gt;_parseStyleRule());
+        } catch (ParseException $e) {
+          if($this-&gt;strict_parsing) {
+            throw $e;
+          } else {
+            $this-&gt;_skipStyleRule();
+            $this-&gt;_pushError($e);
+          }
+        }
+        $this-&gt;state-&gt;leave(ParserState::IN_STYLERULE);
+
+      }
+      $this-&gt;_consumeWhiteSpace();
+    }
+    if(!$isRoot) {
+      throw new ParseException('Unexpected end of StyleSheet', $this-&gt;source, $this-&gt;current_position);
+    }
+  }/*}}}*/
+
+  private function _parseAtRule()
+  {/*{{{*/
+    $this-&gt;_consume('@');
+
+    // Handle vendor prefixes
+    $vendor_prefix = null;
+    if($this-&gt;_comes('-')){
+      $vendor_prefix = $this-&gt;_consume(1);
+      $vendor_prefix .= $this-&gt;_consumeUntil('-');
+      $this-&gt;_consume('-');
+    }
+
+    $identifier = $this-&gt;_parseIdentifier();
+    $this-&gt;_consumeWhiteSpace();
+
+    if($this-&gt;_isAsciiCaseInsensitiveMatch($identifier, 'charset')) {
+
+      if($this-&gt;state-&gt;in(ParserState::AFTER_CHARSET)) {
+        throw new ParseException('Only one @charset rule is allowed', $this-&gt;source, $this-&gt;current_position);
+      }
+      $charset = $this-&gt;_parseStringValue();
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;_consume(';');
+      $this-&gt;state-&gt;enter(ParserState::AFTER_CHARSET);
+      return new Rule\Charset($charset);
+
+    } else if($this-&gt;_isAsciiCaseInsensitiveMatch($identifier, 'import')) {
+
+      if($this-&gt;state-&gt;in(ParserState::AFTER_IMPORTS)) {
+        throw new ParseException(
+          '@import rules must follow all @charset rules and precede all other at-rules and rule sets',
+          $this-&gt;source, $this-&gt;current_position
+        );
+      }
+      $this-&gt;state-&gt;enter(ParserState::AFTER_CHARSET);
+      $url = $this-&gt;_parseUrlValue();
+      $this-&gt;_consumeWhiteSpace();
+      $media_list = null;
+      if(!$this-&gt;_comes(';') || !$this-&gt;_isEnd()) {
+        $media_list = $this-&gt;_parseMediaQueryList();
+      }
+      $this-&gt;_consume(';');
+
+      if(!$media_list) $media_list = new MediaQueryList();
+      return new Rule\Import($url, $media_list);
+
+    } else if($this-&gt;_isAsciiCaseInsensitiveMatch($identifier, 'namespace')) {
+
+      if($this-&gt;state-&gt;in(ParserState::AFTER_NAMESPACES)) {
+        throw new ParseException(
+          '@namespace rules must follow all @import and @charset rules and precede all other at-rules and rule sets',
+          $this-&gt;source, $this-&gt;current_position
+        );
+      }
+      $this-&gt;state-&gt;enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS);
+      if($this-&gt;_comes('&quot;') || $this-&gt;_comes(&quot;'&quot;) || $this-&gt;_comes(('url'))) {
+        $rule = new Rule\NS($this-&gt;_parseUrlValue()); 
+      } else {
+        $prefix = $this-&gt;_parseIdentifier();
+        $this-&gt;_consumeWhiteSpace();
+        $rule = new Rule\NS($this-&gt;_parseUrlValue(), $prefix);
+      }
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;_consume(';');
+      return $rule;
+
+    } else if($this-&gt;_isAsciiCaseInsensitiveMatch($identifier, 'media')) {
+
+      $this-&gt;state-&gt;enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
+      $media_list = $this-&gt;_parseMediaQueryList();
+      $this-&gt;_consume('{');
+      $this-&gt;_consumeWhiteSpace();
+      $rule_list = new RuleList();
+      $this-&gt;_parseRuleList($rule_list);
+      return new Rule\Media($media_list, $rule_list);
+
+    } else if($this-&gt;_isAsciiCaseInsensitiveMatch($identifier, 'font-face')) {
+
+      $style_declaration = new StyleDeclaration();
+      $this-&gt;state-&gt;enter(ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES);
+      $this-&gt;_consume('{');
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;_parseStyleDeclaration($style_declaration);
+      return new Rule\FontFace($style_declaration);
+
+    } else if($this-&gt;_isAsciiCaseInsensitiveMatch($identifier, 'page')) {
+
+      $style_declaration = new StyleDeclaration();
+      $this-&gt;state-&gt;enter(
+        ParserState::AFTER_CHARSET | ParserState::AFTER_IMPORTS | ParserState::AFTER_NAMESPACES
+        | ParserState::IN_PAGERULE
+      );
+      return $this-&gt;_parsePageRule();
+      $selector = null;
+      if(!$this-&gt;_comes('{')) $selector = $this-&gt;_parsePageSelector();
+      $this-&gt;_consume('{');
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;state-&gt;enter(ParserState::IN_DECLARATION);
+      // FIXME: provide support for @margin-boxes
+      // Shoul I extend StyleDeclaration ?
+      $this-&gt;_parseStyleDeclaration($style_declaration);
+      $this-&gt;state-&gt;leave(ParserState::IN_DECLARATION);
+      $this-&gt;state-&gt;leave(ParserState::IN_PAGERULE);
+      return new Rule\Page($selector, $style_declaration);
+
+    } else if($this-&gt;_isAsciiCaseInsensitiveMatch($identifier, 'keyframes')) {
+
+      if($this-&gt;_comes(&quot;'&quot;) || $this-&gt;_comes('&quot;')) {
+        $name = $this-&gt;_parseStringValue();
+      } else {
+        $name = new Value\String($this-&gt;_parseIdentifier());
+      }
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;_consume('{');
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;state-&gt;enter(ParserState::IN_KEYFRAMESRULE);
+      $ruleList = new RuleList();
+      $this-&gt;_parseRuleList($ruleList);
+      $this-&gt;state-&gt;leave(ParserState::IN_KEYFRAMESRULE);
+      $rule = new Rule\Keyframes($name, $ruleList);
+      if($vendor_prefix) {
+        $rule-&gt;setVendorPrefix($vendor_prefix);
+      }
+      return $rule;
+
+    } else {
+
+      if($this-&gt;state-&gt;in(ParserState::IN_PAGERULE) &amp;&amp; $this-&gt;_isMarginBoxIdentifier($identifier)) {
+        $this-&gt;_consume('{');
+        $this-&gt;_consumeWhiteSpace();
+        $style_declaration = new StyleDeclaration();
+        $this-&gt;_parseStyleDeclaration($style_declaration);
+        return new Rule\MarginBox($identifier, $style_declaration);
+      }
+
+      throw new ParseException(
+        sprintf('Unknown rule @%s', $identifier),
+        $this-&gt;source, $this-&gt;current_position
+      );
+
+    }
+  }/*}}}*/
+
+  private function _isMarginBoxIdentifier($str)
+  {/*{{{*/
+    foreach(self::$MARGIN_BOX_IDENTIFIERS as $iden) {
+      if($this-&gt;_isAsciiCaseInsensitiveMatch($str, $iden)) {
+        return true;
+      }
+    }
+    return false;
+  }/*}}}*/
+
+  private function _parseMediaQueryList()
+  {/*{{{*/
+    $media_queries = array();
+    while(!$this-&gt;_comes('{') &amp;&amp; !$this-&gt;_comes(';') &amp;&amp; !$this-&gt;_isEnd()) {
+      $this-&gt;state-&gt;enter(ParserState::IN_MEDIA_QUERY);
+      $media_queries[] = $this-&gt;_parseMediaQuery(); 
+      $this-&gt;state-&gt;leave(ParserState::IN_MEDIA_QUERY);
+      if($this-&gt;_comes(',')) {
+        $this-&gt;_consume(',');
+        $this-&gt;_consumeWhiteSpace();
+        continue;
+      }
+    }
+    return new MediaQueryList($media_queries);
+  }/*}}}*/
+
+  private function _parseMediaQuery()
+  {/*{{{*/
+    $restrictor = '';
+    $media_type = '';
+    $expressions = array();
+
+    if($this-&gt;_comes('not') || $this-&gt;_comes('only')) {
+      $restrictor = $this-&gt;_parseIdentifier();
+      $this-&gt;_consumeWhiteSpace();
+    }
+    if(!$this-&gt;_comes('(')) {
+      $media_type = $this-&gt;_parseIdentifier();
+      $this-&gt;_consumeWhiteSpace();
+      if($this-&gt;_comes('and')) {
+        $this-&gt;_consume('and');
+        $this-&gt;_consumeWhiteSpace();
+      }
+    }
+    $this-&gt;_consumeWhiteSpace();
+    while(true) {
+      if($this-&gt;_comes(',') || $this-&gt;_comes('{') || $this-&gt;_comes(';') || $this-&gt;_isEnd()) {
+        break;
+      }
+      $expressions[] = $this-&gt;_parseMediaQueryExpression();
+    }
+    return new MediaQuery($restrictor, $media_type, $expressions);
+  }/*}}}*/
+  private function _parseMediaQueryExpression()
+  {/*{{{*/
+    $value = null;
+    $this-&gt;_consume('(');
+    $media_feature = $this-&gt;_parseIdentifier();
+    $this-&gt;_consumeWhiteSpace();
+    if($this-&gt;_comes(':')) {
+      $this-&gt;_consume(':');
+      $this-&gt;_consumeWhiteSpace();
+      $value = $this-&gt;_parsePrimitiveValue(true);
+      $this-&gt;_consumeWhiteSpace();
+    }
+    $this-&gt;_consume(')');
+    $this-&gt;_consumeWhiteSpace();
+    if($this-&gt;_comes('and')) {
+      $this-&gt;_consume('and');
+      $this-&gt;_consumeWhiteSpace();
+    }
+    return new MediaQuery\Expression($media_feature, $value);
+  }/*}}}*/
+
+  private function _parseKeyframeRule()
+  {/*{{{*/
+    $style_declaration = new StyleDeclaration();
+    $selectors = array_map(function($selector)
+    {
+      $selector = trim($selector);
+      if($this-&gt;_isAsciiCaseInsensitiveMatch($selector, 'from')) {
+        return new Value\Percentage(0);
+      } else if($this-&gt;_isAsciiCaseInsensitiveMatch($selector, 'to')) {
+        return new Value\Percentage(100);
+      } else {
+        return new Value\Percentage(substr($selector, 0, strpos($selector, '%')));
+      }
+    }, explode(',', trim($this-&gt;_consumeUntil('{'))));
+    $this-&gt;_consume('{');
+    $this-&gt;state-&gt;enter(ParserState::IN_DECLARATION);
+    $this-&gt;_consumeWhiteSpace();
+    $this-&gt;_parseStyleDeclaration($style_declaration);
+    //$this-&gt;_consume('}');
+    $this-&gt;state-&gt;leave(ParserState::IN_DECLARATION);
+    $rule = new Rule\Keyframe($selectors, $style_declaration);
+    return $rule;
+  }/*}}}*/
+
+  private function _parsePageRule()
+  {/*{{{*/
+    $selector = null;
+    if(!$this-&gt;_comes('{')) $selector = $this-&gt;_parsePageSelector();
+    $this-&gt;_consume('{');
+    $this-&gt;_consumeWhiteSpace();
+    $rule_list = new RuleList();
+    $style_declaration = new StyleDeclaration();
+    while(true) {
+      if($this-&gt;_comes('}') || $this-&gt;_isEnd()) break;
+      if($this-&gt;_comes('@')) {
+        $rule_list-&gt;append($this-&gt;_parseAtRule());
+      } else {
+        $this-&gt;_parseProperty($style_declaration);
+      }
+      $this-&gt;_consumeWhiteSpace();
+    }
+    $this-&gt;_consume('}');
+    return new Rule\Page($selector, $rule_list, $style_declaration);
+  }/*}}}*/
+
+  private function _parsePageSelector()
+  {/*{{{*/
+    $page_name = $pseudo_class = '';
+    if(!$this-&gt;_comes(':')) {
+      $page_name = $this-&gt;_parseIdentifier();
+      $this-&gt;_consumeWhiteSpace();
+    }
+    if($this-&gt;_comes(':')) {
+      $this-&gt;_consume(':');
+      $pseudo_class = $this-&gt;_parseIdentifier();
+      $this-&gt;_consumeWhiteSpace();
+    }
+    return new PageSelector($page_name, $pseudo_class);
+  }/*}}}*/
+
+  private function _parseStyleRule()
+  {/*{{{*/
+    $style_declaration = new StyleDeclaration();
+    $selectors = $this-&gt;_parseSelectorList();
+    $this-&gt;_consume('{');
+    $this-&gt;state-&gt;enter(ParserState::IN_DECLARATION);
+    $this-&gt;_consumeWhiteSpace();
+    $this-&gt;_parseStyleDeclaration($style_declaration);
+    //$this-&gt;_consume('}');
+    $this-&gt;state-&gt;leave(ParserState::IN_DECLARATION);
+    return new Rule\StyleRule($selectors, $style_declaration);
+  }/*}}}*/
+
+  private function _parseSelectorList()
+  {/*{{{*/
+    $selectors = array();
+    $this-&gt;_consumeWhiteSpace();
+    while(!($this-&gt;_comes('{'))) {
+      $this-&gt;state-&gt;enter(ParserState::IN_SELECTOR);
+      $selectors[] = $this-&gt;_parseSelector();
+      $this-&gt;state-&gt;leave(ParserState::IN_SELECTOR);
+      if($this-&gt;_comes(',')) {
+        $this-&gt;_consume(',');
+        $this-&gt;_consumeWhiteSpace();
+        continue;
+      }
+    }
+    return new SelectorList($selectors);
+  }/*}}}*/
+
+  private function _parseSelector()
+  {/*{{{*/
+    $result = $this-&gt;_parseSimpleSelector();
+    while(true) {
+      $this-&gt;_consumeWhiteSpace();
+      if($this-&gt;_comes(',') || $this-&gt;_comes('{')) break;
+      $peek = $this-&gt;_peek();
+      if(in_array($peek, array('+', '&gt;', '~'))) {
+        $combinator = $peek;
+        $this-&gt;_consume($peek);
+      } else {
+        $combinator = ' ';
+      }
+      $this-&gt;_consumeWhiteSpace();
+      $nextSelector = $this-&gt;_parseSimpleSelector();
+      $result = new Selector\CombinedSelector($result, $combinator, $nextSelector);
+    }
+    return $result;
+  }/*}}}*/
+
+  /**
+   * Parses a simple selector and returns the resulting Selector object.
+   *
+   * @return Selector
+   */
+  private function _parseSimpleSelector()
+  {/*{{{*/
+    $namespace = $element = '*';
+    if($this-&gt;_comes('*')) {
+      $this-&gt;_consume('*');
+      if($this-&gt;_comes('|')) {
+        $this-&gt;_consume('|');
+        if($this-&gt;_comes('*')) {
+          $this-&gt;_consume('*');
+        } else {
+          $element = $this-&gt;_parseIdentifier();
+        }
+      }
+    } else if(!(
+      $this-&gt;_comes('#') || $this-&gt;_comes('.') || $this-&gt;_comes('[') || $this-&gt;_comes(':')
+    )){
+      $element = $this-&gt;_parseIdentifier();
+      if($this-&gt;_comes('|')) {
+        $namespace = $element;
+        $this-&gt;_consume('|');
+        $element = $this-&gt;_parseIdentifier();
+      }    // code...
+    }
+    $result = new Selector\ElementSelector($namespace, $element);
+
+    $hasHash = false;
+    while(true) {
+      if($this-&gt;_comes('#')) {
+
+        // You can't have 2 hashes
+        if($hasHash) break;
+        $this-&gt;_consume('#');
+        $id = $this-&gt;_parseIdentifier();
+        $result = new Selector\IDSelector($result, $id);
+        $hasHash = true;
+        continue;
+
+      } else if($this-&gt;_comes('.')) {
+
+        $this-&gt;_consume('.');
+        $class = $this-&gt;_parseIdentifier();
+        $result = new Selector\ClassSelector($result, $class);
+        continue;
+
+      } else if($this-&gt;_comes('[')) {
+
+        $this-&gt;_consume('[');
+        $result = $this-&gt;_parseAttrib($result);
+        $this-&gt;_consume(']');
+        continue;
+
+      } else if($this-&gt;_comes(':')) {
+
+        $this-&gt;_consume(':');
+        $type = ':';
+        if($this-&gt;_comes(':')) {
+          $this-&gt;_consume(':');
+          $type = '::';
+        }
+        $ident = $this-&gt;_parseIdentifier();
+        if($this-&gt;_comes('(')) {
+          $this-&gt;_consume('(');
+          $this-&gt;_consumeWhiteSpace();
+          // You can't nest negations
+          if($this-&gt;_isAsciiCaseInsensitiveMatch($ident, 'not')
+            &amp;&amp; !$this-&gt;state-&gt;in(ParserState::IN_NEGATION)
+          ) {
+            $this-&gt;state-&gt;enter(ParserState::IN_NEGATION);
+            $expr = $this-&gt;_parseSimpleSelector();
+            $this-&gt;state-&gt;leave(ParserState::IN_NEGATION);
+          } else {
+            $expr = $this-&gt;_consumeUntil(')');
+          }
+          $this-&gt;_consume(')');
+          $result = new Selector\FunctionSelector($result, $type, $ident, $expr);
+        } else {
+
+          $result = new Selector\PseudoSelector($result, $type, $ident);
+
+        }
+        continue;
+
+      } else {
+        break;
+      }
+    }
+    return $result; 
+  }/*}}}*/
+
+  /**
+   * Parses an attribute from a selector and returns
+   * the resulting AttributeSelector object.
+   *
+   * @throws ParseException When encountered unexpected selector
+   *
+   * @param Selector $selector The selector object whose attribute is to be parsed.
+   *
+   * @return Selector\AttributeSelector
+   */
+  private function _parseAttrib($selector)
+  {/*{{{*/
+    $this-&gt;_consumeWhiteSpace();
+    $namespace = '*';
+    $attrib = $this-&gt;_parseIdentifier();
+    if($this-&gt;_comes('|')) {
+      $namespace = $attrib;
+      $this-&gt;_consume('|');
+      $attrib = $this-&gt;_parseIdentifier();
+    }
+    $this-&gt;_consumeWhiteSpace();
+    if($this-&gt;_comes(']')) {
+      return new Selector\AttributeSelector($selector, $namespace, $attrib, 'exists', null);
+    }
+    if($this-&gt;_comes('=')) {
+      $operator = $this-&gt;_consume('=');
+    } else {
+      $operator = $this-&gt;_consume(2);
+      if(!in_array($operator, array('^=', '$=', '*=', '~=', '|=', '!='))) {
+        throw new ParseException(sprintf('Operator expected, got &quot;%s&quot;', $operator), $this-&gt;source, $this-&gt;current_position);
+      }
+    }
+    $this-&gt;_consumeWhiteSpace();
+    if($this-&gt;_comes(&quot;'&quot;) || $this-&gt;_comes('&quot;')) {
+      $value = $this-&gt;_parseStringValue();
+    } else {
+      $value = $this-&gt;_parseIdentifier();
+    }
+    $this-&gt;_consumeWhiteSpace();
+    return new Selector\AttributeSelector($selector, $namespace, $attrib, $operator, $value);
+  }/*}}}*/
+
+  private function _parseStyleDeclaration(StyleDeclaration $style_declaration)
+  {/*{{{*/
+    while(!$this-&gt;_comes('}') &amp;&amp; !$this-&gt;_isEnd()) {
+      $this-&gt;_parseProperty($style_declaration);
+    }
+    if(!$this-&gt;_isEnd()) {
+      $this-&gt;_consume('}');
+    }
+  }/*}}}*/
+
+  /**
+   * Wraps the _doParseProperty method for error recovery
+   **/
+  private function _parseProperty(StyleDeclaration $style_declaration)
+  {/*{{{*/
+    $this-&gt;state-&gt;enter(ParserState::IN_PROPERTY);
+    $this-&gt;_setBacktrackingPosition();
+    try {
+      $property = $this-&gt;_doParseProperty();
+      $style_declaration-&gt;append($property);
+    } catch (ParseException $e) {
+      if($this-&gt;strict_parsing) {
+        throw $e;
+      } else {
+        $this-&gt;_skipProperty();
+        $this-&gt;_pushError($e);
+      }
+    }
+    $this-&gt;state-&gt;leave(ParserState::IN_PROPERTY);
+    $this-&gt;_consumeWhiteSpace();
+  }/*}}}*/
+
+  private function _doParseProperty()
+  {/*{{{*/
+    $name = $this-&gt;_parseIdentifier();
+    $this-&gt;_consumeWhiteSpace();
+    $this-&gt;_consume(':');
+    $property = new Property($name);
+    $value = $this-&gt;_parseValue(self::_listDelimiterForProperty($name));
+    if(!$value instanceof PropertyValueList) {
+      $list = new PropertyValueList();
+      $list-&gt;append($value);
+      $value = $list;
+    }
+    if($this-&gt;_isAsciiCaseInsensitiveMatch($name, 'background')) {
+      $this-&gt;_fixBackgroundShorthand($value);
+    }
+    $property-&gt;setValueList($value);
+    if($this-&gt;_comes('!')) {
+      $this-&gt;_consume('!');
+      $this-&gt;_consumeWhiteSpace();
+      $importantMarker = $this-&gt;_parseIdentifier();
+      if(!$this-&gt;_isAsciiCaseInsensitiveMatch($importantMarker, 'important')) {
+        throw new ParseException(sprintf(
+          '&quot;!&quot; was followed by &quot;%s&quot;. Expected &quot;important&quot;', $importantMarker
+        ), $this-&gt;source, $this-&gt;current_position);
+      }
+      $this-&gt;_consumeWhiteSpace();
+      $property-&gt;setIsImportant(true);
+    }
+    if($this-&gt;_comes(';')) {
+      $this-&gt;_consume(';');
+    }
+    return $property;
+  }/*}}}*/
+
+  private function _fixBackgroundShorthand(PropertyValueList $oValueList)
+  {/*{{{*/
+    if(count($oValueList) &lt; 2) return;
+    if($oValueList-&gt;getSeparator() === ',') {
+      // we have multiple layers
+      foreach($oValueList-&gt;getItems() as $layer) {
+        if($layer instanceof PropertyValueList) $this-&gt;_fixBackgroundLayer($layer);
+      }
+    } else {
+      // we have only one value or a space separated list of values
+      $this-&gt;_fixBackgroundLayer($oValueList);
+    }
+  }/*}}}*/
+  private function _fixBackgroundLayer(PropertyValueList $oValueList)
+  {/*{{{*/
+    foreach($oValueList-&gt;getItems() as $i =&gt; $mValue) {
+      if($mValue instanceof PropertyValueList &amp;&amp; $mValue-&gt;getSeparator() === '/') {
+        $before = $oValueList[$i-1];
+        if($before &amp;&amp; (in_array($before, array('left','center','right','top','bottom')) || $before instanceof Value\Dimension)) {
+          $leftList = new PropertyValueList(
+            array($before, $mValue-&gt;getFirst()),
+            ' '
+          );
+          $mValue-&gt;replace(0, $leftList);
+          //$oValueList-&gt;remove($before);
+          unset($oValueList[$i-1]);
+        }
+        $after = $oValueList[$i+1];
+        if($after &amp;&amp; (in_array($after, array('auto','cover','contain')) || $after instanceof Value\Dimension)) {
+          $rightList = new PropertyValueList(
+            array($mValue-&gt;getLast(), $after),
+            ' '
+          );
+          $mValue-&gt;replace(1, $rightList);
+          //$oValueList-&gt;remove($after);
+          unset($oValueList[$i+1]);
+        }
+      }
+    }
+    $oValueList-&gt;resetKeys();
+  }/*}}}*/
+
+  private function _parseValue($listDelimiters)
+  {/*{{{*/
+    $stack = array();
+    $this-&gt;_consumeWhiteSpace();
+    while(!(
+      $this-&gt;_comes('}') || $this-&gt;_comes(';') || $this-&gt;_comes('!') || $this-&gt;_comes(')')
+    )){
+      if(count($stack) &gt; 0) {
+        $foundDelimiter = false;
+        foreach($listDelimiters as $delimiter) {
+          if($this-&gt;_comes($delimiter)) {
+            $stack[] = $this-&gt;_consume($delimiter);
+            $this-&gt;_consumeWhiteSpace();
+            $foundDelimiter = true;
+            break;
+          }
+        }
+        if(!$foundDelimiter) {
+          // Whitespace was the list delimiter
+          $stack[] = ' ';
+        }
+      }
+      $stack[] = $this-&gt;_parsePrimitiveValue();
+      $this-&gt;_consumeWhiteSpace();
+    }
+
+    if(empty($stack)) {
+      throw new ParseException(&quot;Empty value&quot;, $this-&gt;source, $this-&gt;current_position);
+    }
+    //var_dump($stack);
+
+    foreach($listDelimiters as $delimiter) {
+      if(count($stack) === 1) {
+        return $stack[0];
+      }
+      $startPos = null;
+      while(($startPos = array_search($delimiter, $stack, true)) !== false) {
+        $length = 2; //Number of elements to be joined
+        for($i = $startPos + 2; $i &lt; count($stack); $i += 2) {
+          if($delimiter !== $stack[$i]) {
+            break;
+          }
+          $length++;
+        }
+        $valueList = new PropertyValueList(array(), $delimiter);
+        for($i = $startPos - 1; $i - $startPos + 1 &lt; $length * 2; $i += 2) {
+          $valueList-&gt;append($stack[$i]);
+        }
+        array_splice($stack, $startPos - 1, $length * 2 - 1, array($valueList));
+      }
+    }
+    return $stack[0];
+  }/*}}}*/
+
+  private static function _listDelimiterForProperty($propertyName)
+  {/*{{{*/
+    if(preg_match('/^font(?:$|-family)/iSu', $propertyName)) {
+      return array(',', '/', ' ');
+    } else if (preg_match('/^background$/iSu', $propertyName)) {
+      return array('/', ' ', ',');
+    }
+    return array(' ', ',', '/');
+  }/*}}}*/
+
+  private function _parsePrimitiveValue($allow_ratios=false)
+  {/*{{{*/
+    $value = null;
+    $this-&gt;_consumeWhiteSpace();
+    if(is_numeric($this-&gt;_peek())
+      || (
+        ($this-&gt;_comes('-') || $this-&gt;_comes('.'))
+        &amp;&amp; is_numeric($this-&gt;_peek(1, 1))
+      )
+    ){
+      $value = $this-&gt;_parseNumericValue(false, $allow_ratios);
+    } else if($this-&gt;_comes('#') || $this-&gt;_comes('rgb') || $this-&gt;_comes('hsl')) {
+      $value = $this-&gt;_parseColorValue();
+    } else if($this-&gt;_comes('url')) {
+      $value = $this-&gt;_parseUrlValue();
+    } else if($this-&gt;_comes(&quot;'&quot;) || $this-&gt;_comes('&quot;')) {
+      $value = $this-&gt;_parseStringValue();
+    } else if($this-&gt;_comes('U+')) {
+      $value = $this-&gt;_parseUnicodeRange();  
+    } else {
+      $value = $this-&gt;_parseIdentifier(true, true);
+    }
+    $this-&gt;_consumeWhiteSpace();
+    return $value;
+  }/*}}}*/
+
+  private function _parseNumericValue($isForColor = false, $allow_ratios=false)
+  {/*{{{*/
+    $value = '';
+    if($this-&gt;_comes('-')) {
+      $value .= $this-&gt;_consume('-');
+    }
+    while(is_numeric($this-&gt;_peek()) || $this-&gt;_comes('.')){
+      if($this-&gt;_comes('.')) {
+        $value .= $this-&gt;_consume('.');
+      } else {
+        $value .= $this-&gt;_consume(1);
+      }
+    }
+    // FIXME: we should allow whitespace between Ratio operands
+    if($allow_ratios &amp;&amp; $this-&gt;_comes('/')) {
+      $this-&gt;_consume('/');
+      $numerator = $value;
+      $denominator = '';
+      while(is_numeric($this-&gt;_peek())) {
+        $denominator .= $this-&gt;_consume(1);
+      }
+      return new Value\Ratio($numerator, $denominator);
+    }
+    $value = floatval($value);
+    if($this-&gt;_comes('%')) {
+      $this-&gt;_consume('%');
+      return new Value\Percentage($value);
+    } else {
+      $classes = array(
+        'ju1ius\Css\Value\Length',
+        'ju1ius\Css\Value\Angle',
+        'ju1ius\Css\Value\Frequency',
+        'ju1ius\Css\Value\Time',
+        'ju1ius\Css\Value\Resolution'
+      );
+      foreach($classes as $class) {
+        foreach($class::$VALID_UNITS as $unit) {
+          if($this-&gt;_comes($unit)) {
+            return new $class($value, $this-&gt;_consume($unit));
+          }
+        }
+      }
+    }
+    $unit = null;
+    if(preg_match('/^[a-z]/i', $this-&gt;_peek())) {
+      $unit = $this-&gt;_parseIdentifier();
+    }
+    return new Value\Dimension($value, $unit, $isForColor);
+  }/*}}}*/
+
+  private function _parseColorValue()
+  {/*{{{*/
+    if($this-&gt;_comes('#')) {
+      $this-&gt;_consume('#');
+      $value = $this-&gt;_parseIdentifier();
+      return new Value\Color($value);
+    } else {
+      $colors = array();
+      $colorMode = $this-&gt;_parseIdentifier();
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;_consume('(');
+      $length = mb_strlen($colorMode, $this-&gt;charset);
+      for($i = 0; $i &lt; $length; $i++) {
+        $this-&gt;_consumeWhiteSpace();
+        $colors[$colorMode[$i]] = $this-&gt;_parseNumericValue(true);
+        $this-&gt;_consumeWhiteSpace();
+        if($i &lt; ($length - 1)) {
+          $this-&gt;_consume(',');
+        }
+      }
+      $this-&gt;_consume(')');
+      return new Value\Color($colors);
+    }
+  }/*}}}*/
+
+  private function _parseUrlValue()
+  {/*{{{*/
+    $useUrl = $this-&gt;_comes('url');
+    if($useUrl) {
+      $this-&gt;_consume('url');
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;_consume('(');
+    }
+    $this-&gt;_consumeWhiteSpace();
+    $value = $this-&gt;_parseStringValue();
+    $result = new Value\Url($value);
+    if($useUrl) {
+      $this-&gt;_consumeWhiteSpace();
+      $this-&gt;_consume(')');
+    }
+    return $result;
+  }/*}}}*/
+
+  private function _parseUnicodeRange()
+  {/*{{{*/
+    $this-&gt;_consume('U+');
+    $value = $this-&gt;_consumeExpression('/^[0-9A-F?]{1,6}(?:-[0-9A-F]{1,6})?/iuS');
+    return new Value\UnicodeRange($value);
+  }/*}}}*/
+
+  private function _parseIdentifier($allowFunctions=false, $allowColors=false)
+  {/*{{{*/
+    $result = $this-&gt;_parseCharacter(true);
+    if($result === null) {
+      throw new ParseException(
+        sprintf('Identifier expected, got &quot;%s&quot;', $this-&gt;_peek(12)),
+        $this-&gt;source, $this-&gt;current_position
+      );
+    }
+    $char;
+    while(null !== ($char = $this-&gt;_parseCharacter(true))) {
+      $result .= $char;
+    }
+    if($allowColors) {
+      // is it a color name ?
+      if($rgb = Util\Color::x11ToRgb($result)) {
+        $color = new Value\Color();
+        return $color-&gt;fromRgb($rgb);
+      }
+    }
+    if($allowFunctions &amp;&amp; $this-&gt;_comes('(')) {
+      $this-&gt;_consume('(');
+      $args = $this-&gt;_parseValue(array('=', ','));
+      $result = new Value\Func($result, $args);
+      $this-&gt;_consume(')');
+    }
+    return $result;
+  }/*}}}*/
+
+  private function _parseStringValue()
+  {/*{{{*/
+    $firstChar = $this-&gt;_peek();
+    $quoteChar = null;
+    if($firstChar === &quot;'&quot;) {
+      $quoteChar = &quot;'&quot;;
+    } else if($firstChar === '&quot;') {
+      $quoteChar = '&quot;';
+    }
+    if($quoteChar !== null) {
+      $this-&gt;_consume($quoteChar);
+    }
+    $result = &quot;&quot;;
+    $content = null;
+    if($quoteChar === null) {
+      //Unquoted strings end in whitespace or with braces, brackets, parentheses
+      while(!preg_match('/^[\s{}()&lt;&gt;\[\]]/isuS', $this-&gt;_peek())) {
+        $result .= $this-&gt;_parseCharacter(false);
+      }
+    } else {
+      while(!$this-&gt;_comes($quoteChar)) {
+        $content = $this-&gt;_parseCharacter(false);
+        if($content === null) {
+          throw new ParseException(sprintf(
+            'Non-well-formed quoted string &quot;%s&quot;', $this-&gt;_peek(12)
+          ), $this-&gt;source, $this-&gt;current_position);
+        }
+        $result .= $content;
+      }
+      $this-&gt;_consume($quoteChar);
+    }
+    return new Value\String($result);
+  }/*}}}*/
+
+  /****************************************
+   * ---------- Error handling ---------- *
+   ****************************************/
+
+  private function _skipAtRule()
+  {/*{{{*/
+    $close_char = null;
+    while(true) {
+      if($this-&gt;_comes(';')) {
+        $this-&gt;_consume(';');
+        break;
+      } else if($this-&gt;_comes('{')) {
+        $this-&gt;_skipStyleRule();
+        break;
+      }
+      $this-&gt;_consume(1);
+    }
+  }/*}}}*/
+
+  private function _skipStyleRule()
+  {/*{{{*/
+    $opened_brackets = 0;
+    while(true) {
+      if($this-&gt;_comes('{')) $opened_brackets++;
+      if($opened_brackets &gt; 0) {
+        if($this-&gt;_comes('}')) {
+          $opened_brackets--;
+          if($opened_brackets == 0) {
+            $this-&gt;_consume('}');
+            break;
+          }
+        }
+      }
+      $this-&gt;_consume(1);
+    }
+  }/*}}}*/
+
+  private function _skipNextRule()
+  {/*{{{*/
+    $opened_brackets = 0;
+    while(true) {
+      if($this-&gt;_comes('{')) $opened_brackets++;
+      // while we have opened brackets, consume everything
+      if($opened_brackets &gt; 0) {
+        if($this-&gt;_comes('}')) {
+          $opened_brackets--;
+        }
+      } else if($this-&gt;_comes('}')){
+        break; 
+      }
+      $this-&gt;_consume(1);
+    }
+  }/*}}}*/
+
+  private function _skipProperty()
+  {/*{{{*/
+    $opened_brackets = 0;
+    while(true) {
+      if($this-&gt;_comes('{')) {
+        $opened_brackets++;
+      }
+      // while we have opened brackets, consume everything
+      if($opened_brackets &gt; 0) {
+        if($this-&gt;_comes('}')) {
+          $opened_brackets--;
+        }
+      } else if($this-&gt;_comes(';')){
+        $this-&gt;_consume(';');
+        break;
+      } else if($this-&gt;_comes('}')){
+        break; 
+      }
+      $this-&gt;_consume(1);
+    }
+  }/*}}}*/
+
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

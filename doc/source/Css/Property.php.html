@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css;
+
+/**
+ * Represents a Css property
+ * @package Css
+ **/
+class Property implements Serializable
+{
+  private $name;
+  private $valueList;
+  private $isImportant;
+
+  public function __construct($name, PropertyValueList $valueList=null)
+  {
+    $this-&gt;name = $name;
+    if($valueList === null)
+    {
+      $this-&gt;valueList = new PropertyValueList();
+    }
+    $this-&gt;valueList = $valueList;
+  }
+
+  public function getName()
+  {
+    return $this-&gt;name;
+  }
+  public function setName($name)
+  {
+    $this-&gt;name = $name;
+  }
+
+  public function getValueList()
+  {
+    return $this-&gt;valueList;
+  }
+  public function setValueList(PropertyValueList $valueList)
+  {
+    $this-&gt;valueList = $valueList;
+  }
+
+  public function getIsImportant()
+  {
+    return $this-&gt;isImportant;
+  }
+  public function setIsImportant($isImportant)
+  {
+    $this-&gt;isImportant = $isImportant;
+  }
+
+	/**
+   * Adds a value to the existing value.
+   * Value will be appended if a PropertyValueList exists of the given type.
+   * Otherwise, the existing value will be wrapped by one.
+	 */
+  public function addValue($value, $type = ' ')
+  {
+    //$this-&gt;value-&gt;append($value);
+    if(!is_array($value))
+    {
+      $value = array($value);
+    }
+    if(!$this-&gt;valueList instanceof PropertyValueList || $this-&gt;valueList-&gt;getSeparator() !== $type)
+    {
+      $currentValue = $this-&gt;valueList;
+      $this-&gt;valueList = new PropertyValueList($type);
+      if($currentValue)
+      {
+        $this-&gt;valueList-&gt;append($currentValue);
+      }
+    }
+    foreach($value as $valueItem)
+    {
+      $this-&gt;valueList-&gt;append($valueItem);
+    }
+	}
+
+  public function getCssText($options=array())
+  {
+    return $this-&gt;name . ': '
+      . $this-&gt;valueList-&gt;getCssText($options)
+      . ($this-&gt;isImportant ? ' !important' : '')
+      . ';';
+  }
+  public function __toString()
+  {
+    return $this-&gt;getCssText();
+  }
+
+  public function __clone()
+  {
+    $this-&gt;valueList = clone $this-&gt;valueList;
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

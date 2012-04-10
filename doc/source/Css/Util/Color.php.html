@@ -1,0 +1,481 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Util;
+
+/**
+ * @package Css
+ * @subpackage Util
+ **/
+class Color
+{
+  static $X11_COLORS_MAP = array(
+    'aliceblue'            =&gt;	array('r' =&gt; 240, 'g' =&gt; 248, 'b' =&gt; 255),
+    'antiquewhite'         =&gt;	array('r' =&gt; 250, 'g' =&gt; 235, 'b' =&gt; 215),
+    'aqua'                 =&gt;	array('r' =&gt; 0,   'g' =&gt; 255, 'b' =&gt; 255),
+    'aquamarine'           =&gt;	array('r' =&gt; 127, 'g' =&gt; 255, 'b' =&gt; 212),
+    'azure'                =&gt;	array('r' =&gt; 240, 'g' =&gt; 255, 'b' =&gt; 255),
+    'beige'                =&gt;	array('r' =&gt; 245, 'g' =&gt; 245, 'b' =&gt; 220),
+    'bisque'               =&gt;	array('r' =&gt; 255, 'g' =&gt; 228, 'b' =&gt; 196),
+    'black'                =&gt;	array('r' =&gt; 0,   'g' =&gt; 0,   'b' =&gt; 0),
+    'blanchedalmond'       =&gt;	array('r' =&gt; 255, 'g' =&gt; 235, 'b' =&gt; 205),
+    'blue'                 =&gt;	array('r' =&gt; 0,   'g' =&gt; 0,   'b' =&gt; 255),
+    'blueviolet'           =&gt;	array('r' =&gt; 138, 'g' =&gt; 43,  'b' =&gt; 226),
+    'brown'                =&gt;	array('r' =&gt; 165, 'g' =&gt; 42,  'b' =&gt; 42),
+    'burlywood'            =&gt;	array('r' =&gt; 222, 'g' =&gt; 184, 'b' =&gt; 135),
+    'cadetblue'            =&gt;	array('r' =&gt; 95,  'g' =&gt; 158, 'b' =&gt; 160),
+    'chartreuse'           =&gt;	array('r' =&gt; 127, 'g' =&gt; 255, 'b' =&gt; 0),
+    'chocolate'            =&gt;	array('r' =&gt; 210, 'g' =&gt; 105, 'b' =&gt; 30),
+    'coral'                =&gt;	array('r' =&gt; 255, 'g' =&gt; 127, 'b' =&gt; 80),
+    'cornflowerblue'       =&gt;	array('r' =&gt; 100, 'g' =&gt; 149, 'b' =&gt; 237),
+    'cornsilk'             =&gt;	array('r' =&gt; 255, 'g' =&gt; 248, 'b' =&gt; 220),
+    'crimson'              =&gt;	array('r' =&gt; 220, 'g' =&gt; 20,  'b' =&gt; 60),
+    'cyan'                 =&gt;	array('r' =&gt; 0,   'g' =&gt; 255, 'b' =&gt; 255),
+    'darkblue'             =&gt;	array('r' =&gt; 0,   'g' =&gt; 0,   'b' =&gt; 139),
+    'darkcyan'             =&gt;	array('r' =&gt; 0,   'g' =&gt; 139, 'b' =&gt; 139),
+    'darkgoldenrod'        =&gt;	array('r' =&gt; 184, 'g' =&gt; 134, 'b' =&gt; 11),
+    'darkgray'             =&gt;	array('r' =&gt; 169, 'g' =&gt; 169, 'b' =&gt; 169),
+    'darkgreen'            =&gt;	array('r' =&gt; 0,   'g' =&gt; 100, 'b' =&gt; 0),
+    'darkgrey'             =&gt;	array('r' =&gt; 169, 'g' =&gt; 169, 'b' =&gt; 169),
+    'darkkhaki'            =&gt;	array('r' =&gt; 189, 'g' =&gt; 183, 'b' =&gt; 107),
+    'darkmagenta'          =&gt;	array('r' =&gt; 139, 'g' =&gt; 0,   'b' =&gt; 139),
+    'darkolivegreen'       =&gt;	array('r' =&gt; 85,  'g' =&gt; 107, 'b' =&gt; 47),
+    'darkorange'           =&gt;	array('r' =&gt; 255, 'g' =&gt; 140, 'b' =&gt; 0),
+    'darkorchid'           =&gt;	array('r' =&gt; 153, 'g' =&gt; 50,  'b' =&gt; 204),
+    'darkred'              =&gt;	array('r' =&gt; 139, 'g' =&gt; 0,   'b' =&gt; 0),
+    'darksalmon'           =&gt;	array('r' =&gt; 233, 'g' =&gt; 150, 'b' =&gt; 122),
+    'darkseagreen'         =&gt;	array('r' =&gt; 143, 'g' =&gt; 188, 'b' =&gt; 143),
+    'darkslateblue'        =&gt;	array('r' =&gt; 72,  'g' =&gt; 61,  'b' =&gt; 139),
+    'darkslategray'        =&gt;	array('r' =&gt; 47,  'g' =&gt; 79,  'b' =&gt; 79),
+    'darkslategrey'        =&gt;	array('r' =&gt; 47,  'g' =&gt; 79,  'b' =&gt; 79),
+    'darkturquoise'        =&gt;	array('r' =&gt; 0,   'g' =&gt; 206, 'b' =&gt; 209),
+    'darkviolet'           =&gt;	array('r' =&gt; 148, 'g' =&gt; 0,   'b' =&gt; 211),
+    'deeppink'             =&gt;	array('r' =&gt; 255, 'g' =&gt; 20,  'b' =&gt; 147),
+    'deepskyblue'          =&gt;	array('r' =&gt; 0,   'g' =&gt; 191, 'b' =&gt; 255),
+    'dimgray'              =&gt;	array('r' =&gt; 105, 'g' =&gt; 105, 'b' =&gt; 105),
+    'dimgrey'              =&gt;	array('r' =&gt; 105, 'g' =&gt; 105, 'b' =&gt; 105),
+    'dodgerblue'           =&gt;	array('r' =&gt; 30,  'g' =&gt; 144, 'b' =&gt; 255),
+    'firebrick'            =&gt;	array('r' =&gt; 178, 'g' =&gt; 34,  'b' =&gt; 34),
+    'floralwhite'          =&gt;	array('r' =&gt; 255, 'g' =&gt; 250, 'b' =&gt; 240),
+    'forestgreen'          =&gt;	array('r' =&gt; 34,  'g' =&gt; 139, 'b' =&gt; 34),
+    'fuchsia'              =&gt;	array('r' =&gt; 255, 'g' =&gt; 0,   'b' =&gt; 255),
+    'gainsboro'            =&gt;	array('r' =&gt; 220, 'g' =&gt; 220, 'b' =&gt; 220),
+    'ghostwhite'           =&gt;	array('r' =&gt; 248, 'g' =&gt; 248, 'b' =&gt; 255),
+    'gold'                 =&gt;	array('r' =&gt; 255, 'g' =&gt; 215, 'b' =&gt; 0),
+    'goldenrod'            =&gt;	array('r' =&gt; 218, 'g' =&gt; 165, 'b' =&gt; 32),
+    'gray'                 =&gt;	array('r' =&gt; 128, 'g' =&gt; 128, 'b' =&gt; 128),
+    'green'                =&gt;	array('r' =&gt; 0,   'g' =&gt; 128, 'b' =&gt; 0),
+    'greenyellow'          =&gt;	array('r' =&gt; 173, 'g' =&gt; 255, 'b' =&gt; 47),
+    'grey'                 =&gt;	array('r' =&gt; 128, 'g' =&gt; 128, 'b' =&gt; 128),
+    'honeydew'             =&gt;	array('r' =&gt; 240, 'g' =&gt; 255, 'b' =&gt; 240),
+    'hotpink'              =&gt;	array('r' =&gt; 255, 'g' =&gt; 105, 'b' =&gt; 180),
+    'indianred'            =&gt;	array('r' =&gt; 205, 'g' =&gt; 92,  'b' =&gt; 92),
+    'indigo'               =&gt;	array('r' =&gt; 75,  'g' =&gt; 0,   'b' =&gt; 130),
+    'ivory'                =&gt;	array('r' =&gt; 255, 'g' =&gt; 255, 'b' =&gt; 240),
+    'khaki'                =&gt;	array('r' =&gt; 240, 'g' =&gt; 230, 'b' =&gt; 140),
+    'lavender'             =&gt;	array('r' =&gt; 230, 'g' =&gt; 230, 'b' =&gt; 250),
+    'lavenderblush'        =&gt;	array('r' =&gt; 255, 'g' =&gt; 240, 'b' =&gt; 245),
+    'lawngreen'            =&gt;	array('r' =&gt; 124, 'g' =&gt; 252, 'b' =&gt; 0),
+    'lemonchiffon'         =&gt;	array('r' =&gt; 255, 'g' =&gt; 250, 'b' =&gt; 205),
+    'lightblue'            =&gt;	array('r' =&gt; 173, 'g' =&gt; 216, 'b' =&gt; 230),
+    'lightcoral'           =&gt;	array('r' =&gt; 240, 'g' =&gt; 128, 'b' =&gt; 128),
+    'lightcyan'            =&gt;	array('r' =&gt; 224, 'g' =&gt; 255, 'b' =&gt; 255),
+    'lightgoldenrodyellow' =&gt;	array('r' =&gt; 250, 'g' =&gt; 250, 'b' =&gt; 210),
+    'lightgray'            =&gt;	array('r' =&gt; 211, 'g' =&gt; 211, 'b' =&gt; 211),
+    'lightgreen'           =&gt;	array('r' =&gt; 144, 'g' =&gt; 238, 'b' =&gt; 144),
+    'lightgrey'            =&gt;	array('r' =&gt; 211, 'g' =&gt; 211, 'b' =&gt; 211),
+    'lightpink'            =&gt;	array('r' =&gt; 255, 'g' =&gt; 182, 'b' =&gt; 193),
+    'lightsalmon'          =&gt;	array('r' =&gt; 255, 'g' =&gt; 160, 'b' =&gt; 122),
+    'lightseagreen'        =&gt;	array('r' =&gt; 32,  'g' =&gt; 178, 'b' =&gt; 170),
+    'lightskyblue'         =&gt;	array('r' =&gt; 135, 'g' =&gt; 206, 'b' =&gt; 250),
+    'lightslategray'       =&gt;	array('r' =&gt; 119, 'g' =&gt; 136, 'b' =&gt; 153),
+    'lightslategrey'       =&gt;	array('r' =&gt; 119, 'g' =&gt; 136, 'b' =&gt; 153),
+    'lightsteelblue'       =&gt;	array('r' =&gt; 176, 'g' =&gt; 196, 'b' =&gt; 222),
+    'lightyellow'          =&gt;	array('r' =&gt; 255, 'g' =&gt; 255, 'b' =&gt; 224),
+    'lime'                 =&gt;	array('r' =&gt; 0,   'g' =&gt; 255, 'b' =&gt; 0),
+    'limegreen'            =&gt;	array('r' =&gt; 50,  'g' =&gt; 205, 'b' =&gt; 50),
+    'linen'                =&gt;	array('r' =&gt; 250, 'g' =&gt; 240, 'b' =&gt; 230),
+    'magenta'              =&gt;	array('r' =&gt; 255, 'g' =&gt; 0,   'b' =&gt; 255),
+    'maroon'               =&gt;	array('r' =&gt; 128, 'g' =&gt; 0,   'b' =&gt; 0),
+    'mediumaquamarine'     =&gt;	array('r' =&gt; 102, 'g' =&gt; 205, 'b' =&gt; 170),
+    'mediumblue'           =&gt;	array('r' =&gt; 0,   'g' =&gt; 0,   'b' =&gt; 205),
+    'mediumorchid'         =&gt;	array('r' =&gt; 186, 'g' =&gt; 85,  'b' =&gt; 211),
+    'mediumpurple'         =&gt;	array('r' =&gt; 147, 'g' =&gt; 112, 'b' =&gt; 219),
+    'mediumseagreen'       =&gt;	array('r' =&gt; 60,  'g' =&gt; 179, 'b' =&gt; 113),
+    'mediumslateblue'      =&gt;	array('r' =&gt; 123, 'g' =&gt; 104, 'b' =&gt; 238),
+    'mediumspringgreen'    =&gt;	array('r' =&gt; 0,   'g' =&gt; 250, 'b' =&gt; 154),
+    'mediumturquoise'      =&gt;	array('r' =&gt; 72,  'g' =&gt; 209, 'b' =&gt; 204),
+    'mediumvioletred'      =&gt;	array('r' =&gt; 199, 'g' =&gt; 21,  'b' =&gt; 133),
+    'midnightblue'         =&gt;	array('r' =&gt; 25,  'g' =&gt; 25,  'b' =&gt; 112),
+    'mintcream'            =&gt;	array('r' =&gt; 245, 'g' =&gt; 255, 'b' =&gt; 250),
+    'mistyrose'            =&gt;	array('r' =&gt; 255, 'g' =&gt; 228, 'b' =&gt; 225),
+    'moccasin'             =&gt;	array('r' =&gt; 255, 'g' =&gt; 228, 'b' =&gt; 181),
+    'navajowhite'          =&gt;	array('r' =&gt; 255, 'g' =&gt; 222, 'b' =&gt; 173),
+    'navy'                 =&gt;	array('r' =&gt; 0,   'g' =&gt; 0,   'b' =&gt; 128),
+    'oldlace'              =&gt;	array('r' =&gt; 253, 'g' =&gt; 245, 'b' =&gt; 230),
+    'olive'                =&gt;	array('r' =&gt; 128, 'g' =&gt; 128, 'b' =&gt; 0),
+    'olivedrab'            =&gt;	array('r' =&gt; 107, 'g' =&gt; 142, 'b' =&gt; 35),
+    'orange'               =&gt;	array('r' =&gt; 255, 'g' =&gt; 165, 'b' =&gt; 0),
+    'orangered'            =&gt;	array('r' =&gt; 255, 'g' =&gt; 69,  'b' =&gt; 0),
+    'orchid'               =&gt;	array('r' =&gt; 218, 'g' =&gt; 112, 'b' =&gt; 214),
+    'palegoldenrod'        =&gt;	array('r' =&gt; 238, 'g' =&gt; 232, 'b' =&gt; 170),
+    'palegreen'            =&gt;	array('r' =&gt; 152, 'g' =&gt; 251, 'b' =&gt; 152),
+    'paleturquoise'        =&gt;	array('r' =&gt; 175, 'g' =&gt; 238, 'b' =&gt; 238),
+    'palevioletred'        =&gt;	array('r' =&gt; 219, 'g' =&gt; 112, 'b' =&gt; 147),
+    'papayawhip'           =&gt;	array('r' =&gt; 255, 'g' =&gt; 239, 'b' =&gt; 213),
+    'peachpuff'            =&gt;	array('r' =&gt; 255, 'g' =&gt; 218, 'b' =&gt; 185),
+    'peru'                 =&gt;	array('r' =&gt; 205, 'g' =&gt; 133, 'b' =&gt; 63),
+    'pink'                 =&gt;	array('r' =&gt; 255, 'g' =&gt; 192, 'b' =&gt; 203),
+    'plum'                 =&gt;	array('r' =&gt; 221, 'g' =&gt; 160, 'b' =&gt; 221),
+    'powderblue'           =&gt;	array('r' =&gt; 176, 'g' =&gt; 224, 'b' =&gt; 230),
+    'purple'               =&gt;	array('r' =&gt; 128, 'g' =&gt; 0,   'b' =&gt; 128),
+    'red'                  =&gt;	array('r' =&gt; 255, 'g' =&gt; 0,   'b' =&gt; 0),
+    'rosybrown'            =&gt;	array('r' =&gt; 188, 'g' =&gt; 143, 'b' =&gt; 143),
+    'royalblue'            =&gt;	array('r' =&gt; 65,  'g' =&gt; 105, 'b' =&gt; 225),
+    'saddlebrown'          =&gt;	array('r' =&gt; 139, 'g' =&gt; 69,  'b' =&gt; 19),
+    'salmon'               =&gt;	array('r' =&gt; 250, 'g' =&gt; 128, 'b' =&gt; 114),
+    'sandybrown'           =&gt;	array('r' =&gt; 244, 'g' =&gt; 164, 'b' =&gt; 96),
+    'seagreen'             =&gt;	array('r' =&gt; 46,  'g' =&gt; 139, 'b' =&gt; 87),
+    'seashell'             =&gt;	array('r' =&gt; 255, 'g' =&gt; 245, 'b' =&gt; 238),
+    'sienna'               =&gt;	array('r' =&gt; 160, 'g' =&gt; 82,  'b' =&gt; 45),
+    'silver'               =&gt;	array('r' =&gt; 192, 'g' =&gt; 192, 'b' =&gt; 192),
+    'skyblue'              =&gt;	array('r' =&gt; 135, 'g' =&gt; 206, 'b' =&gt; 235),
+    'slateblue'            =&gt;	array('r' =&gt; 106, 'g' =&gt; 90,  'b' =&gt; 205),
+    'slategray'            =&gt;	array('r' =&gt; 112, 'g' =&gt; 128, 'b' =&gt; 144),
+    'slategrey'            =&gt;	array('r' =&gt; 112, 'g' =&gt; 128, 'b' =&gt; 144),
+    'snow'                 =&gt;	array('r' =&gt; 255, 'g' =&gt; 250, 'b' =&gt; 250),
+    'springgreen'          =&gt;	array('r' =&gt; 0,   'g' =&gt; 255, 'b' =&gt; 127),
+    'steelblue'            =&gt;	array('r' =&gt; 70,  'g' =&gt; 130, 'b' =&gt; 180),
+    'tan'                  =&gt;	array('r' =&gt; 210, 'g' =&gt; 180, 'b' =&gt; 140),
+    'teal'                 =&gt;	array('r' =&gt; 0,   'g' =&gt; 128, 'b' =&gt; 128),
+    'thistle'              =&gt;	array('r' =&gt; 216, 'g' =&gt; 191, 'b' =&gt; 216),
+    'tomato'               =&gt;	array('r' =&gt; 255, 'g' =&gt; 99,  'b' =&gt; 71),
+    'turquoise'            =&gt;	array('r' =&gt; 64,  'g' =&gt; 224, 'b' =&gt; 208),
+    'violet'               =&gt;	array('r' =&gt; 238, 'g' =&gt; 130, 'b' =&gt; 238),
+    'wheat'                =&gt;	array('r' =&gt; 245, 'g' =&gt; 222, 'b' =&gt; 179),
+    'white'                =&gt;	array('r' =&gt; 255, 'g' =&gt; 255, 'b' =&gt; 255),
+    'whitesmoke'           =&gt;	array('r' =&gt; 245, 'g' =&gt; 245, 'b' =&gt; 245),
+    'yellow'               =&gt;	array('r' =&gt; 255, 'g' =&gt; 255, 'b' =&gt; 0),
+    'yellowgreen'          =&gt;	array('r' =&gt; 154, 'g' =&gt; 205, 'b' =&gt; 50)
+  );
+
+  /**
+   * Converts a X11 color name to an array of RGB channels
+   *
+   * @param  string $color An X11 color name.
+   * @return array         An array of RGB channels
+   **/
+  static function x11ToRgb($color)
+  {
+    $color = mb_strtolower($color, Charset::getDefault());
+    if($color === 'transparent') {
+      return array('r'=&gt;0, 'g'=&gt;0, 'b'=&gt;0, 'a'=&gt;0);
+    }
+    if(isset(self::$X11_COLORS_MAP[$color])) {
+      $rgb = self::$X11_COLORS_MAP[$color];
+      return $rgb;
+    }
+    return null;
+  }
+
+  static function x11ToHsl($color)
+  {
+    $rgb = self::x11ToRgb($color);
+    if($rgb) {
+      return self::rgbToHsl($rgb['r'], $rgb['g'], $rgb['b']);
+    }
+  }
+
+  /**
+   * Converts an RGB color to an X11 color name
+   *
+   * @param int|string $r The red channel value. An integer in range 0..255 or a percentage
+   * @param int|string $g The green channel value. An integer in range 0..255 or a percentage
+   * @param int|string $b The blue channel value. An integer in range 0..255 or a percentage
+   * @param float      $a The alpha channel value. A float in range 0..1
+   *
+   * @return string       An X11 color name
+   **/
+  static function rgbToX11($r, $g, $b, $a=1)
+  {
+    if($a !== 1) return null;
+    if($a == 0) return 'transparent';
+    $result = array_search(
+      array('r' =&gt; $r, 'g' =&gt; $g, 'b' =&gt; $b),
+      self::$X11_COLORS_MAP
+    );
+    return $result === false ? null : $result;
+  }
+
+  static function hslToX11($h, $s, $l, $a=1)
+  {
+    if($a !== 1) return null;
+    if($a == 0) return 'transparent';
+    $rgb = self::hslToRgb($h, $s, $l);
+    return self::rgbToX11($rgb['r'], $rgb['g'], $rgb['b']);
+  }
+
+  /**
+   * Converts Hexadecimal color to an array of RGB channels
+   *
+   * @param string $value An hexadecimal color.
+   *
+   * @return array        An array of RGB channels
+   **/
+  static function hexToRgb($value)
+  {
+    if($value[0] == '#') $value = substr($value, 1);
+    if(strlen($value) == 3) {
+      $value = $value[0].$value[0].$value[1].$value[1].$value[2].$value[2]; 
+    }
+    //If a proper hex code, convert using bitwise operation. No overhead... faster
+    if (strlen($value) == 6) {
+      $decimal = hexdec($value);
+      return array(
+        'r' =&gt; 0xFF &amp; ($decimal &gt;&gt; 0x10),
+        'g' =&gt; 0xFF &amp; ($decimal &gt;&gt; 0x8),
+        'b' =&gt; 0xFF &amp; $decimal
+      );
+    }
+    return false; //Invalid hex color code
+  }
+
+  /**
+   * Converts a RGB color to Hexadecimal notation
+   *
+   * @param int|string $r The red channel value. An integer in range 0..255 or a percentage
+   * @param int|string $g The green channel value. An integer in range 0..255 or a percentage
+   * @param int|string $b The blue channel value. An integer in range 0..255 or a percentage
+   * @param bool       $asString Wether to return a string or an integer
+   *
+   * @return string|int
+   **/
+  static function rgbToHex($r, $g, $b, $asString=true)
+  {
+    $r = self::normalizeRgbValue($r);
+    $g = self::normalizeRgbValue($g);
+    $b = self::normalizeRgbValue($b);
+    $value = dechex($r &lt;&lt; 16 | $g &lt;&lt; 8 | $b);
+    $value = str_pad($value, 6, '0', STR_PAD_LEFT);
+    return $asString ? '#'.$value : (int)'0x'.$value;
+  }
+
+  /**
+   * Converts HSL to RGB
+   *
+   * @param int        $h The hue value. An integer
+   * @param string     $s The saturation value. A percentage
+   * @param string     $l The lightness value. A percentage
+   * @param float      $a The alpha channel value. A float in range 0..1
+   **/
+  static function hslToRgb($h, $s, $l, $a=1)
+  {
+    // normalize to float between 0..1
+    $s = self::normalizeFraction($s);
+    $l = self::normalizeFraction($l);
+    $a = self::constrainValue($a, 0, 1);
+
+    if($l == 1) {
+      // white
+      $aRGB = array('r' =&gt; 255, 'g' =&gt; 255, 'b' =&gt; 255);
+      if($a &lt; 1) $aRGB['a'] = $a;
+      return $aRGB;
+    }
+    if ($l == 0) {
+      // black
+      $aRGB = array('r' =&gt; 0, 'g' =&gt; 0, 'b' =&gt; 0);
+      if($a &lt; 1) $aRGB['a'] = $a;
+      return $aRGB;
+    }
+    if($s == 0) {
+      // Grayscale: we don't need no fancy calculation !
+      $v = round(255 * $l);
+      $aRGB = array('r' =&gt; $v, 'g' =&gt; $v, 'b' =&gt; $v);
+      if($a &lt; 1) $aRGB['a'] = $a;
+      return $aRGB;
+    }
+    // normalize to int between [0,360)
+    $h = (($h % 360) + 360) % 360; 
+    // then to float between 0..1
+    $h /= 360;
+    
+    if($l &lt; 0.5) $m2 = $l * ($s +1);
+    else $m2 = ($l + $s) - ($l * $s);
+    $m1 = $l * 2 - $m2;
+    
+    $aRGB = array(
+      'r' =&gt; round(255 * self::hueToRgb($m1, $m2, $h + (1/3))),
+      'g' =&gt; round(255 * self::hueToRgb($m1, $m2, $h)),
+      'b' =&gt; round(255 * self::hueToRgb($m1, $m2, $h - (1/3)))
+    );
+    if($a &lt; 1) $aRGB['a'] = $a;
+
+    return $aRGB;
+  }
+
+  static private function hueToRgb($m1, $m2, $h)
+  {
+    if($h &lt; 0) $h++;
+    if($h &gt; 1) $h--;
+    if(($h * 6) &lt; 1) return $m1 + ($m2 - $m1) * $h * 6;
+    if(($h * 2) &lt; 1) return $m2;
+    if(($h * 3) &lt; 2) return $m1 + ($m2 - $m1) * (2/3 - $h) * 6;
+    return $m1;
+  }
+
+  /**
+   * Converts RGB to HSL
+   *
+   * @param int|string $r The red channel value. An integer in range 0..255 or a percentage
+   * @param int|string $g The green channel value. An integer in range 0..255 or a percentage
+   * @param int|string $b The blue channel value. An integer in range 0..255 or a percentage
+   * @param float      $a The alpha channel value. A float in range 0..1
+   *
+   * @return array
+   **/
+  static function rgbToHsl($r, $g, $b, $a=1)
+  {
+    // normalize to float between 0..1
+    $r = self::normalizeRgbValue($r) / 255;
+    $g = self::normalizeRgbValue($g) / 255;
+    $b = self::normalizeRgbValue($b) / 255;
+    $a = self::constrainValue($a, 0, 1);
+
+    $min = min($r, $g, $b); //Min. value of RGB
+    $max = max($r, $g, $b); //Max. value of RGB
+    $delta_max = $max - $min; //Delta RGB value
+
+    $l = ($max + $min) / 2;
+
+    if($delta_max == 0) {
+      // This is a gray, no chroma...
+      // HSL results from 0 to 1
+      $h = 0;
+      $s = 0;
+    } else {
+      // Chromatic data...
+      if($l &lt; 0.5) {
+        $s = $delta_max / ($max + $min);
+      } else {
+        $s = $delta_max / (2 - $max - $min);
+      }
+
+      $delta_r = ((($max - $r) / 6) + ($delta_max / 2)) / $delta_max;
+      $delta_g = ((($max - $g) / 6) + ($delta_max / 2)) / $delta_max;
+      $delta_b = ((($max - $b) / 6) + ($delta_max / 2)) / $delta_max;
+
+      if($r == $max) {
+        $h = $delta_b - $delta_g;
+      } else if($g == $max) {
+        $h = (1/3) + $delta_r - $delta_b;
+      } else if($b == $max) {
+        $h = (2/3) + $delta_g - $delta_r;
+      }
+      if ($h &lt; 0) $h++;
+      if ($h &gt; 1) $h--;
+    }
+    $aHSL = array(
+      'h' =&gt; round($h * 360),
+      's' =&gt; round($s * 100) . '%',
+      'l' =&gt; round($l * 100) . '%'
+    );
+    if($a &lt; 1) $aHSL['a'] = $a;
+
+    return $aHSL;
+  }
+
+  /**
+   * Normalize a fraction value
+   *
+   * @param int|string $value The divided of the fraction, either a percentage or a number. 
+   * @param int $max          The divisor of the fraction.
+   * @return float            A float in range 0..1
+   **/
+  static function normalizeFraction($value, $max=100)
+  {
+    $i = strpos($value, '%');
+    if($i !== false) {
+      $value = substr($value, 0, $i);
+      $max = 100;
+    }
+    $value = self::constrainValue($value, 0, $max);
+    return $value / $max;
+  }
+
+  /**
+   * Normalize a rgb value
+   *
+   * @param int|string $value Either a percentage or a number
+   *
+   * @returns int             An integer in range 0..255
+   **/
+  static function normalizeRgbValue($value)
+  {
+    $i = strpos($value, '%');
+    // percentage value
+    if($i !== false) {
+      $value = substr($value, 0, $i);
+      $value = self::constrainValue($value, 0, 100);
+      return round($value * 255 / 100);
+    }
+    // normal value
+    return self::constrainValue($value, 0, 255);
+  }
+
+  /**
+   * Constrain a value between two boundaries
+   *
+   * @param int $value The value to constrain
+   * @param int $min   The low boundary
+   * @param int $max   The high boundary
+   *
+   * @return int
+   **/
+  static function constrainValue($value, $min, $max)
+  {
+    return max($min, min($value, $max));
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

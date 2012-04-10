@@ -1,0 +1,106 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Resolver;
+
+use ju1ius\Uri;
+use ju1ius\Css\StyleSheet;
+use ju1ius\Css\Iterator\ValueIterator;
+use ju1ius\Css\Util;
+use ju1ius\Css\Value;
+
+/**
+ * Resolves relative urls in a stylesheet,
+ * using a base url or the stylesheet's href
+ **/
+class UrlResolver
+{
+  private
+    $stylesheet;
+
+  public function __construct(StyleSheet $stylesheet, $base_url=null)
+  {
+    $this-&gt;stylesheet = $stylesheet;
+    if(!$base_url &amp;&amp; !$this-&gt;stylesheet-&gt;getHref()) {
+      throw new \RuntimeException(
+        &quot;The provided stylesheet has no href, you must provide a base url&quot;
+      );
+    } else if(!$base_url) {
+      $href = new Uri($this-&gt;stylesheet-&gt;getHref());
+      $this-&gt;base_url = $href-&gt;dirname();
+      if(!$this-&gt;base_url) {
+        throw new \RuntimeException(&quot;You must provide a valid base url&quot;);
+      }
+    } else if($base_url instanceof Uri){
+      $this-&gt;base_url = $base_url;
+    } else {
+      $this-&gt;base_url = new Uri($base_url);
+    }
+  }
+
+  public function resolve()
+  {
+    $it = new ValueIterator($this-&gt;stylesheet, 'ju1ius\Css\Value\Url', true);
+    $bIsAbsBaseUrl = $this-&gt;base_url-&gt;isAbsoluteUrl() || $this-&gt;base_url-&gt;isAbsolutePath();
+    foreach($it as $value) {
+      $url = new Uri($value-&gt;getUrl()-&gt;getString());
+      $isAbsPath = $url-&gt;isAbsolutePath();
+      $isAbsUrl = $url-&gt;isAbsoluteUrl();
+      // resolve only if:
+      if(!$isAbsUrl &amp;&amp; !$isAbsPath){
+        // $url is not absolute url or absolute path
+        $url = $this-&gt;base_url-&gt;join($url);
+        $value-&gt;setUrl(new Value\String((string) $url));
+      } else if($isAbsPath &amp;&amp; $bIsAbsBaseUrl) {
+        // $url is absolute path and base url is absolute
+        // get the base domain from url
+        $base_url = $this-&gt;base_url-&gt;getRootUrl();
+        $url = $base_url-&gt;join($url);
+        $value-&gt;setUrl(new Value\String((string) $url));
+      }
+    }
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

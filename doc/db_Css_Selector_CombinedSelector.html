@@ -1,0 +1,411 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>ju1ius\Css Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/jquery-ui.css" type="text/css"></link><link rel="stylesheet" href="css/docblox/jquery-ui-1.8.16.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.tools.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script xmlns:dbx="http://docblox-project.org/xsl/functions">
+
+      function filterElements()
+      {
+        inherited = !$('#show-inherited').hasClass('deselected');
+        public    = !$('#show-public').hasClass('deselected');
+        protected = !$('#show-protected').hasClass('deselected');
+        private   = !$('#show-private').hasClass('deselected');
+
+        $('div.public').each(function(index, val) {
+            $(val).toggle(public && !($(val).hasClass('inherited_from') && !inherited));
+        });
+        $('div.protected').each(function(index, val) {
+            $(val).toggle(protected && !($(val).hasClass('inherited_from') && !inherited));
+        });
+        $('div.private').each(function(index, val) {
+            $(val).toggle(private && !($(val).hasClass('inherited_from') && !inherited));
+        });
+      }
+
+      $(document).ready(function() {
+        $('a.gripper').click(function() {
+            $(this).nextAll('div.code-tabs').slideToggle();
+            $(this).children('img').toggle();
+            return false;
+        });
+
+        $('div.method code span.highlight,div.function code span.highlight,div.constant code span.highlight,div.property code span.highlight').css('cursor', 'pointer');
+
+        $('div.method code span.highlight,div.function code span.highlight,div.constant code span.highlight,div.property code span.highlight').click(function() {
+            $(this).parent().nextAll('div.code-tabs').slideToggle();
+            $(this).parent().prevAll('a.gripper').children('img').toggle();
+            return false;
+        });
+
+        $('div.code-tabs').hide();
+        $('a.gripper').show();
+        $('div.code-tabs:empty').prevAll('a.gripper').html('');
+
+        $('#show-public, #show-protected, #show-private, #show-inherited')
+            .css('cursor', 'pointer')
+            .click(function(){
+                $(this).toggleClass('deselected');
+                if ($(this).hasClass('deselected')) {
+                  $(this).fadeTo('fast', '0.4');
+                } else {
+                  $(this).fadeTo('fast', '1.0');
+                }
+                filterElements();
+                return false;
+            });
+        $('#show-protected, #show-private').click();
+
+        // add the sliding behaviour to the file navigation and show it
+        // it is initially hidden for non-JS users.
+        $("#file-nav-box").show().hover(function() {
+            $("#file-nav-container").slideDown(400);
+        }, function() {
+            $("#file-nav-container").slideUp(400);
+        });
+      });
+
+      
+    </script><h1 xmlns:dbx="http://docblox-project.org/xsl/functions" class="file">Css/Selector/CombinedSelector.php<a href="source/Css/Selector/CombinedSelector.php.html"><img src="images/icons/view_source.png" border="0"></a>
+</h1>
+<div xmlns:dbx="http://docblox-project.org/xsl/functions" id="file-nav-box">
+<div id="file-nav-options">
+              Show:
+              <img src="images/icons/visibility_public.png" id="show-public"><img src="images/icons/visibility_protected.png" id="show-protected"><img src="images/icons/visibility_private.png" id="show-private"><span class="attribute" id="show-inherited">inherited</span>
+</div>
+<div id="file-nav-container">
+<ul id="file-nav"><li>
+<a href="#classes"><img src="images/icons/class.png" height="14">
+                          Classes
+                      </a><ul><li><a href="#%5Cju1ius%5CCss%5CSelector%5CCombinedSelector">\ju1ius\Css\Selector\CombinedSelector</a></li></ul>
+</li></ul>
+<div style="clear: left;"></div>
+</div>
+<div id="file-nav-tab">
+              Table of Contents
+          </div>
+</div>
+<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\ju1ius\Css\Selector\CombinedSelector" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\ju1ius\Css\Selector\CombinedSelector<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">
+<small class="package"><b>Package: </b>Css\Selector</small><p class="short-description">Represents a combined selector</p>
+<div class="long-description"><p>This component is a port of the Python lxml library,
+which is copyright Infrae and distributed under the BSD license.</p></div>
+<dl class="class-info">
+<dt>Parent(s)</dt>
+<dd>
+<a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a>
+            &lt;
+            <a href="db_Css_Serializable.html#%5Cju1ius%5CCss%5CSerializable" style="color: gray; font-size: 0.8em
+                ">\ju1ius\Css\Serializable</a>
+</dd>
+<dt>Author</dt>
+<dd>
+<a href="mailto:fabien@symfony.com">Fabien Potencier</a>
+         
+    </dd>
+<dt>Author</dt>
+<dd>ju1ius http://github.com/ju1ius
+         
+    </dd>
+</dl>
+<h3>Properties</h3>
+<div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::$combinator" class="anchor"></a><div class="property protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
+                 <span class="highlight">$combinator</span>= ''
+                </code><div class="description"></div>
+<div class="code-tabs">
+<strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd>n/a</dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::$methodMapping" class="anchor"></a><div class="property protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
+                 <span class="highlight">$methodMapping</span>= 'array(
+    ' ' =&gt; 'descendant',
+    '&gt;' =&gt; 'child',
+    '+' =&gt; 'direct_adjacent',
+    '~' =&gt; 'indirect_adjacent',
+  )'
+                </code><div class="description"><span class="attribute">static</span></div>
+<div class="code-tabs">
+<strong>Default value</strong><code>array(
+    ' ' =&gt; 'descendant',
+    '&gt;' =&gt; 'child',
+    '+' =&gt; 'direct_adjacent',
+    '~' =&gt; 'indirect_adjacent',
+  )</code><strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd>n/a</dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::$selector" class="anchor"></a><div class="property protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
+                 <span class="highlight">$selector</span>= ''
+                </code><div class="description"></div>
+<div class="code-tabs">
+<strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd>n/a</dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::$subselector" class="anchor"></a><div class="property protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected">
+                 <span class="highlight">$subselector</span>= ''
+                </code><div class="description"></div>
+<div class="code-tabs">
+<strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd>n/a</dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::__construct()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__construct</span><span class="nb-faded-text">(
+          <a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a> $selector, string $combinator, <a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a> $subselector
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">The constructor.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$selector</th>
+<td><a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a></td>
+<td><em><p>The XPath selector</p></em></td>
+</tr>
+<tr>
+<th>$combinator</th>
+<td>string</td>
+<td><em><p>The combinator</p></em></td>
+</tr>
+<tr>
+<th>$subselector</th>
+<td><a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a></td>
+<td><em><p>The sub XPath selector</p></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::__toString()" class="anchor"></a><div class="method public inherited_from ">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__toString</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description">
+<span class="attribute">inherited</span><p class="short_description"></p>
+<small>Inherited from:
+                    <a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector::__toString()">\ju1ius\Css\Selector::__toString()</a></small>
+</div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::_xpath_child()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">_xpath_child</span><span class="nb-faded-text">(
+          \XPath\Expression $xpath, <a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a> $sub
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">Joins a Selector as a child of this object.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$xpath</th>
+<td>\XPath\Expression</td>
+<td><em><p>The parent XPath expression</p></em></td>
+</tr>
+<tr>
+<th>$sub</th>
+<td><a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a></td>
+<td><em><p>The Selector object to add</p></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::_xpath_descendant()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">_xpath_descendant</span><span class="nb-faded-text">(
+          \XPath\Expression $xpath, <a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a> $sub
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">Joins a Selector into the XPath of this object.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$xpath</th>
+<td>\XPath\Expression</td>
+<td><em><p>The XPath expression for this object</p></em></td>
+</tr>
+<tr>
+<th>$sub</th>
+<td><a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a></td>
+<td><em><p>The Selector object to add</p></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::_xpath_direct_adjacent()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">_xpath_direct_adjacent</span><span class="nb-faded-text">(
+          \XPath\Expression $xpath, <a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a> $sub
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">Joins an XPath expression as an adjacent of another.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$xpath</th>
+<td>\XPath\Expression</td>
+<td><em><p>The parent XPath expression</p></em></td>
+</tr>
+<tr>
+<th>$sub</th>
+<td><a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a></td>
+<td><em><p>The adjacent XPath expression</p></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::_xpath_indirect_adjacent()" class="anchor"></a><div class="method protected">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_protected.png" style="margin-right: 5px" alt="protected"><span class="highlight">_xpath_indirect_adjacent</span><span class="nb-faded-text">(
+          \XPath\Expression $xpath, <a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a> $sub
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">Joins an XPath expression as an indirect adjacent of another.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$xpath</th>
+<td>\XPath\Expression</td>
+<td><em><p>The parent XPath expression</p></em></td>
+</tr>
+<tr>
+<th>$sub</th>
+<td><a href="db_Css_Selector.html#%5Cju1ius%5CCss%5CSelector">\ju1ius\Css\Selector</a></td>
+<td><em><p>The indirect adjacent Selector object</p></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::getCssText()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getCssText</span><span class="nb-faded-text">(
+           $options
+              =
+              array()
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$options</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::getSpecificity()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getSpecificity</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\Selector\CombinedSelector::toXPath()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">toXPath</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">{@inheritDoc}</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Throws</strong><table class="argument-info">
+<thead><tr>
+<th>Exception</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_Exception_ParseException.html#%5Cju1ius%5CCss%5CException%5CParseException">\ju1ius\Css\Exception\ParseException</a></td>
+<td><em>When unknown combinator is found</em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.18.1</a>.
+    </small></body></html>

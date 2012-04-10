@@ -1,0 +1,997 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>ju1ius\Css Documentation</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/jquery-ui.css" type="text/css"></link><link rel="stylesheet" href="css/docblox/jquery-ui-1.8.16.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.tools.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><div xmlns="" id="content">
+<script xmlns:dbx="http://docblox-project.org/xsl/functions">
+
+      function filterElements()
+      {
+        inherited = !$('#show-inherited').hasClass('deselected');
+        public    = !$('#show-public').hasClass('deselected');
+        protected = !$('#show-protected').hasClass('deselected');
+        private   = !$('#show-private').hasClass('deselected');
+
+        $('div.public').each(function(index, val) {
+            $(val).toggle(public && !($(val).hasClass('inherited_from') && !inherited));
+        });
+        $('div.protected').each(function(index, val) {
+            $(val).toggle(protected && !($(val).hasClass('inherited_from') && !inherited));
+        });
+        $('div.private').each(function(index, val) {
+            $(val).toggle(private && !($(val).hasClass('inherited_from') && !inherited));
+        });
+      }
+
+      $(document).ready(function() {
+        $('a.gripper').click(function() {
+            $(this).nextAll('div.code-tabs').slideToggle();
+            $(this).children('img').toggle();
+            return false;
+        });
+
+        $('div.method code span.highlight,div.function code span.highlight,div.constant code span.highlight,div.property code span.highlight').css('cursor', 'pointer');
+
+        $('div.method code span.highlight,div.function code span.highlight,div.constant code span.highlight,div.property code span.highlight').click(function() {
+            $(this).parent().nextAll('div.code-tabs').slideToggle();
+            $(this).parent().prevAll('a.gripper').children('img').toggle();
+            return false;
+        });
+
+        $('div.code-tabs').hide();
+        $('a.gripper').show();
+        $('div.code-tabs:empty').prevAll('a.gripper').html('');
+
+        $('#show-public, #show-protected, #show-private, #show-inherited')
+            .css('cursor', 'pointer')
+            .click(function(){
+                $(this).toggleClass('deselected');
+                if ($(this).hasClass('deselected')) {
+                  $(this).fadeTo('fast', '0.4');
+                } else {
+                  $(this).fadeTo('fast', '1.0');
+                }
+                filterElements();
+                return false;
+            });
+        $('#show-protected, #show-private').click();
+
+        // add the sliding behaviour to the file navigation and show it
+        // it is initially hidden for non-JS users.
+        $("#file-nav-box").show().hover(function() {
+            $("#file-nav-container").slideDown(400);
+        }, function() {
+            $("#file-nav-container").slideUp(400);
+        });
+      });
+
+      
+    </script><h1 xmlns:dbx="http://docblox-project.org/xsl/functions" class="file">Css/StyleDeclaration.php<a href="source/Css/StyleDeclaration.php.html"><img src="images/icons/view_source.png" border="0"></a>
+</h1>
+<div xmlns:dbx="http://docblox-project.org/xsl/functions" id="file-nav-box">
+<div id="file-nav-options">
+              Show:
+              <img src="images/icons/visibility_public.png" id="show-public"><img src="images/icons/visibility_protected.png" id="show-protected"><img src="images/icons/visibility_private.png" id="show-private"><span class="attribute" id="show-inherited">inherited</span>
+</div>
+<div id="file-nav-container">
+<ul id="file-nav"><li>
+<a href="#classes"><img src="images/icons/class.png" height="14">
+                          Classes
+                      </a><ul><li><a href="#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></li></ul>
+</li></ul>
+<div style="clear: left;"></div>
+</div>
+<div id="file-nav-tab">
+              Table of Contents
+          </div>
+</div>
+<a xmlns:dbx="http://docblox-project.org/xsl/functions" name="top" class="anchor"></a><a name="classes" class="anchor"></a><a xmlns:dbx="http://docblox-project.org/xsl/functions" id="\ju1ius\Css\StyleDeclaration" class="anchor"></a><h2 xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">\ju1ius\Css\StyleDeclaration<div class="to-top"><a href="#top">jump to top</a></div>
+</h2>
+<div xmlns:dbx="http://docblox-project.org/xsl/functions" class="class">
+<small class="package"><b>Package: </b>Css</small><p class="short-description">Represents a Css style declaration</p>
+<div class="long-description"></div>
+<dl class="class-info">
+<dt>Parent(s)</dt>
+<dd><a href="db_Css_Serializable.html#%5Cju1ius%5CCss%5CSerializable">\ju1ius\Css\Serializable</a></dd>
+</dl>
+<h3>Properties</h3>
+<div>
+<a id="\ju1ius\Css\StyleDeclaration::$parentRule" class="anchor"></a><div class="property private">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_private.png" style="margin-right: 5px" alt="private">
+                 <span class="highlight">$parentRule</span>= ''
+                </code><div class="description"></div>
+<div class="code-tabs">
+<strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd>n/a</dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::$properties" class="anchor"></a><div class="property private">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/property.png" alt="Property"><img src="images/icons/visibility_private.png" style="margin-right: 5px" alt="private">
+                 <span class="highlight">$properties</span>= ''
+                </code><div class="description"></div>
+<div class="code-tabs">
+<strong>Details</strong><dl class="property-info">
+<dt>Type</dt>
+<dd>n/a</dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+<h3>Methods</h3>
+<div>
+<a id="\ju1ius\Css\StyleDeclaration::__clone()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__clone</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::__construct()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__construct</span><span class="nb-faded-text">(
+           $properties
+              =
+              array()
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$properties</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::__toString()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">__toString</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::append()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">append</span><span class="nb-faded-text">(
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> $property
+          )
+        </span>
+        :
+          <a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></code><div class="description"><p class="short_description">Appends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td><em><p>The ju1ius\Css\Property to append</p>
+</em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></td>
+<td>The current ju1ius\Css\StyleDeclaration instance</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::contains()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">contains</span><span class="nb-faded-text">(
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | string $property
+          )
+        </span>
+        :
+          bool</code><div class="description"><p class="short_description">Checks if this sule set contains the given property or property name</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td>
+<a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | string</td>
+<td><em><p>The ju1ius\Css\Property or rule name to search for.</p>
+</em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>bool</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::createBackgroundShorthand()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">createBackgroundShorthand</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::createBorderShorthand()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">createBorderShorthand</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Combine border-color, border-style and border-width into border
+Should be run after createDimensionsShorthand()</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::createDimensionsShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">createDimensionsShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Looks for long format Css dimensional properties
+(margin, padding, border-color, border-style and border-width)
+and converts them into shorthand Css properties.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::createFontShorthand()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">createFontShorthand</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Looks for long format Css font properties (e.g. <tt>font-weight</tt>) and
+tries to convert them into a shorthand Css <tt>font</tt> property.</p></div>
+<div class="code-tabs">
+<div class="long-description"><p>At least font-size AND font-family must be present in order to create a shorthand declaration.</p></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::createListStyleShorthand()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">createListStyleShorthand</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::createShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">createShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Create shorthand declarations (e.g. +margin+ or +font+) whenever possible.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::expandBackgroundShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">expandBackgroundShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::expandBorderShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">expandBorderShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Split shorthand border declarations (e.g. <tt>border: 1px red;</tt>)
+Additional splitting happens in expandDimensionsShorthand
+Multiple borders are not yet supported as of CSS3</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::expandDimensionsShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">expandDimensionsShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Split shorthand dimensional declarations (e.g. <tt>margin: 0px auto;</tt>)
+into their constituent parts.</p></div>
+<div class="code-tabs">
+<div class="long-description"><p>Handles margin, padding, border-color, border-style and border-width.</p></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+<strong>Details</strong><dl class="function-info">
+<dt>Params</dt>
+<dd>boolean $cleanup Whether to remove unused properties
+         
+    </dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::expandFontShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">expandFontShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Convert shorthand font declarations
+(e.g. <tt>font: 300 italic 11px/14px verdana, helvetica, sans-serif;</tt>)
+into their constituent parts.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::expandListStyleShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">expandListStyleShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::expandShorthands()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">expandShorthands</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Split shorthand declarations (e.g. +margin+ or +font+) into their constituent parts.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getAppliedProperties()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getAppliedProperties</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getAppliedProperty()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getAppliedProperty</span><span class="nb-faded-text">(
+          string $property, bool $withPosition
+              =
+              false
+          )
+        </span>
+        :
+          null | <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array</code><div class="description"><p class="short_description">Returns the last property matching name, taking !important declaration into account.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td>string</td>
+<td><em><p>A property name</p></em></td>
+</tr>
+<tr>
+<th>$withPosition</th>
+<td>bool</td>
+<td><em><p>If true return an associative array containing the property object and its position. If false return the matched property.</p></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>null | <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getCssText()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getCssText</span><span class="nb-faded-text">(
+           $options
+              =
+              array()
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$options</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getFirst()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getFirst</span><span class="nb-faded-text">(
+          null | string $property
+              =
+              null
+          )
+        </span>
+        :
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></code><div class="description"><p class="short_description">Returns the first property or the first property matching name.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td>null | string</td>
+<td><em><p>A property name to match</p></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getLast()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getLast</span><span class="nb-faded-text">(
+          null | string $property
+              =
+              null
+          )
+        </span>
+        :
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></code><div class="description"><p class="short_description">Returns the first property or the first property matching name.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td>null | string</td>
+<td><em><p>A property name to match</p></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getParentRule()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getParentRule</span><span class="nb-faded-text">(
+          
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs"></div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getProperties()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getProperties</span><span class="nb-faded-text">(
+          \ju1ius\Css\(null | string | \ju1ius\Css\Property) $property
+              =
+              null,  $wildcard
+              =
+              false
+          )
+        </span>
+        :
+          array</code><div class="description"><p class="short_description">Returns all properties matching the given property name.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td>\ju1ius\Css\(null | string | \ju1ius\Css\Property)</td>
+<td><em><p>Pattern to search for. If null, returns all rules. If ju1ius\Css\Property, the property name is used for searching.</p>
+</em></td>
+</tr>
+<tr>
+<th>$wildcard</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>array</td>
+<td>An array of matching properties</td>
+</tr>
+</table>
+<strong>Details</strong><dl class="function-info">
+<dt>Example</dt>
+<dd>$styleDeclaration->getProperties('font', true) //returns an array of all rules beginning with font.
+         
+    </dd>
+<dt>Example</dt>
+<dd>$styleDeclaration->getProperties('font') //returns array([index] => $property) or empty array().
+         
+    </dd>
+</dl>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::getPropertyIndex()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">getPropertyIndex</span><span class="nb-faded-text">(
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> $property
+          )
+        </span>
+        :
+          int</code><div class="description"><p class="short_description">Get the position of a property in the property set.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td><em><p>The ju1ius\Css\Property to search for.</p>
+</em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>int</td>
+<td>The position of the property or false if it is not found;</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::insertAfter()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">insertAfter</span><span class="nb-faded-text">(
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array $newProp, <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> $oldProp
+          )
+        </span>
+        :
+          <a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></code><div class="description"><p class="short_description">Inserts a property or an array of properties after the specified property.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$newProp</th>
+<td>
+<a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array</td>
+<td><em><p>The property or array of properties to insert</p></em></td>
+</tr>
+<tr>
+<th>$oldProp</th>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td><em><p>The ju1ius\Css\Property after which properties will be added.</p>
+</em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></td>
+<td>The current ju1ius\Css\StyleDeclaration instance</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::insertBefore()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">insertBefore</span><span class="nb-faded-text">(
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array $newProp, <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> $oldProp
+          )
+        </span>
+        :
+          <a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></code><div class="description"><p class="short_description">Inserts a property or an array of rules before the specified property.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$newProp</th>
+<td>
+<a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array</td>
+<td><em><p>The property or array of rules to insert</p></em></td>
+</tr>
+<tr>
+<th>$oldProp</th>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td><em><p>The ju1ius\Css\Property before which rules will be added.</p>
+</em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></td>
+<td>The current ju1ius\Css\StyleDeclaration instance</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::prepend()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">prepend</span><span class="nb-faded-text">(
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> $property
+          )
+        </span>
+        :
+          <a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></code><div class="description"><p class="short_description">Prepends a ju1ius\Css\Property to this ju1ius\Css\StyleDeclaration instance</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$property</th>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td><em><p>The ju1ius\Css\Property to prepend</p>
+</em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></td>
+<td>The current ju1ius\Css\StyleDeclaration instance</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::remove()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">remove</span><span class="nb-faded-text">(
+          int | string | <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array $search,  $wildcard
+              =
+              false
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description">Removes a property from this StyleDeclaration.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$search</th>
+<td>int | string | <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array</td>
+<td><em><p>An index, ju1ius\Css\Property instance or property name to remove, or an array thereof. If int, removes the property at given position. If ju1ius\Css\Property, removes the specified property. If string, all matching properties will be removed.</p>
+</em></td>
+</tr>
+<tr>
+<th>$wildcard</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::removeUnusedProperties()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">removeUnusedProperties</span><span class="nb-faded-text">(
+          array $excludes
+              =
+              array()
+          )
+        </span>
+        :
+          \ju1ius\Css\$this</code><div class="description"><p class="short_description">Removes all unused duplicate properties</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$excludes</th>
+<td>array</td>
+<td><em><p>an array of property names to exclude from removal</p></em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td>\ju1ius\Css\$this</td>
+<td></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::replace()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">replace</span><span class="nb-faded-text">(
+          <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> $oldProp, <a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array $newProp
+          )
+        </span>
+        :
+          <a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></code><div class="description"><p class="short_description">Replaces a property by another property or an array of properties.</p></div>
+<div class="code-tabs">
+<div class="long-description"></div>
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$oldProp</th>
+<td><a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a></td>
+<td><em><p>The ju1ius\Css\Property to replace</p>
+</em></td>
+</tr>
+<tr>
+<th>$newProp</th>
+<td>
+<a href="db_Css_Property.html#%5Cju1ius%5CCss%5CProperty">\ju1ius\Css\Property</a> | array</td>
+<td><em><p>A ju1ius\Css\Property or an array of rules to add</p>
+</em></td>
+</tr>
+</table>
+<strong>Returns</strong><table class="argument-info">
+<thead><tr>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="db_Css_StyleDeclaration.html#%5Cju1ius%5CCss%5CStyleDeclaration">\ju1ius\Css\StyleDeclaration</a></td>
+<td>The current ju1ius\Css\StyleDeclaration instance</td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+<a id="\ju1ius\Css\StyleDeclaration::setParentRule()" class="anchor"></a><div class="method public">
+<a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">setParentRule</span><span class="nb-faded-text">(
+           $rule
+          )
+        </span>
+        :
+          void</code><div class="description"><p class="short_description"></p></div>
+<div class="code-tabs">
+<strong>Parameters</strong><table class="argument-info">
+<thead><tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<th>$rule</th>
+<td></td>
+<td><em></em></td>
+</tr>
+</table>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+</div>
+</div>
+<small xmlns="" class="footer">Documentation was generated by <a href="http://docblox-project.org">DocBlox 0.18.1</a>.
+    </small></body></html>

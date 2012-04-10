@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Resolver;
+
+use ju1ius\Uri;
+use ju1ius\Text\Source;
+
+use ju1ius\Css\StyleSheet;
+use ju1ius\Css\StyleSheetLoader;
+use ju1ius\Css\Parser;
+use ju1ius\Css\Rule;
+use ju1ius\Css\Util;
+
+/**
+ * Recursively resolve @import rules
+ * and merge their associated stylesheets into the main StyleSheet
+ *
+ * @package Css
+ * @subpackage Resolver
+ **/
+class ImportResolver
+{
+  private
+    $stylesheet;
+
+  public function __construct(StyleSheet $stylesheet, $base_url=null)
+  {
+    $this-&gt;stylesheet = $stylesheet;
+    $this-&gt;base_url = $base_url;
+  }
+
+  public function resolve($imported_files=array())
+  {
+    if(empty($imported_files)) {
+      $imported_files[] = $this-&gt;stylesheet-&gt;getHref();
+    }
+    $loader = new StyleSheetLoader(array(
+      'encoding' =&gt; $this-&gt;stylesheet-&gt;getCharset()
+    ));
+    $parser = new Parser();
+
+    $url_resolver = new UrlResolver($this-&gt;stylesheet, $this-&gt;base_url);
+    $url_resolver-&gt;resolve();
+
+    foreach($this-&gt;stylesheet-&gt;getRuleList()-&gt;getRules() as $rule) {
+      if($rule instanceof Rule\Import) {
+        $url = $rule-&gt;getHref()-&gt;getUrl()-&gt;getString();
+        // Take care of circular imports !
+        if(in_array($url, $imported_files)) {
+          continue;
+        } else {
+          $imported_files[] = $url;
+        }
+        $source = $loader-&gt;load($url);
+        // Do the parsing
+        $stylesheet = $parser-&gt;parse($source);
+
+        // Remove charset rules
+        $rule_list = $stylesheet-&gt;getRuleList();
+        foreach($rule_list-&gt;getItems() as $sub_rule) {
+          if($sub_rule instanceof Rule\Charset) {
+            $stylesheet-&gt;getRuleList()-&gt;remove($sub_rule);
+            // Only one charset is allowed, so we can
+            break;
+          }
+        }
+        $rule_list-&gt;resetKeys();
+        
+        // Do the recurse
+        $resolver = new ImportResolver($stylesheet);
+        $resolver-&gt;resolve($imported_files);
+
+        // Wrap into media query if needed
+        if($rule-&gt;getMediaQueryList() !== null &amp;&amp; !$rule-&gt;getMediaQueryList()-&gt;isEmpty()) {
+          $media_query = new Rule\Media(
+            $rule-&gt;getMediaQueryList(),
+            $rule_list
+          );
+          $this-&gt;stylesheet-&gt;getRuleList()-&gt;replace($rule, $media_query);
+        } else {
+          $this-&gt;stylesheet-&gt;getRuleList()-&gt;replace(
+            $rule,
+            $rule_list-&gt;getItems()
+          );
+        }
+      } 
+    }
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

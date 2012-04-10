@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+namespace ju1ius\Css\Selector;
+
+use ju1ius\Css\Selector;
+use ju1ius\Css\XPath;
+
+/**
+ * Represents an element selector
+ *
+ * This component is a port of the Python lxml library,
+ * which is copyright Infrae and distributed under the BSD license.
+ *
+ * @package Css
+ * @subpackage Selector
+ * @author Fabien Potencier &lt;fabien@symfony.com&gt;
+ * @author ju1ius http://github.com/ju1ius
+ **/
+class ElementSelector extends Selector
+{
+  protected $namespace;
+  protected $element;
+
+  /**
+   * Constructor.
+   *
+   * @param string $namespace Namespace
+   * @param string $element Element
+   */
+  public function __construct($namespace, $element)
+  {
+    $this-&gt;namespace = $namespace;
+    $this-&gt;element = $element;
+  }
+
+  public function getSpecificity()
+  {
+    return $this-&gt;element === '*' ? 0 : 1;
+  }
+
+  public function getCssText($options=array())
+  {
+    if($this-&gt;namespace === '*')
+    {
+      return $this-&gt;element === '*' ? '' : $this-&gt;element;
+    }
+    return sprintf('%s|%s', $this-&gt;namespace, $this-&gt;element);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function toXPath()
+  {
+    if($this-&gt;namespace == '*')
+    {
+      $el = strtolower($this-&gt;element);
+    }
+    else
+    {
+      // FIXME: Should we lowercase here?
+      $el = sprintf('%s:%s', $this-&gt;namespace, $this-&gt;element);
+    }
+    return new XPath\Expression(null, null, $el);
+  }
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all()
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>
