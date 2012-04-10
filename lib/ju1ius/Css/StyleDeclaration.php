@@ -150,7 +150,7 @@ class StyleDeclaration implements Serializable
   public function getPropertyIndex(Property $property)
   {
 		return array_search($property, $this->properties, true);
-	}  
+  }
 
 	/**
    * Returns all properties matching the given property name.
@@ -248,10 +248,36 @@ class StyleDeclaration implements Serializable
       }
     }
     if($lastImportantProp) {
-      return $withPosition ? $lastImportantProp : $lastImportantProp['property'];
+      return $withPosition
+        ? array($lastImportantProp['position'] => $lastImportantProp['property'])
+        : $lastImportantProp['property'];
     } else if($lastProp) {
-      return $withPosition ? $lastProp : $lastProp['property'];
+      return $withPosition
+        ? array($lastProp['position'] => $lastProp['property'])
+        : $lastProp['property'];
     }
+  }
+
+  /**
+   * Removes all unused duplicate properties
+   *
+   * @param array $excludes an array of property names to exclude from removal
+   *
+   * @return $this
+   **/
+  public function removeUnusedProperties(array $excludes=array())
+  {
+    $applied_properties = $this->getAppliedProperties();
+    foreach($applied_properties as $applied_property) {
+      $name = $applied_property->getName();
+      if(in_array($name, $excludes)) continue;
+      $properties = $this->getProperties($name);
+      foreach ($properties as $property) {
+        if($property === $applied_property) continue;
+        $this->remove($property);
+      }
+    }
+    return $this;
   }
 
   public function getParentRule()
@@ -265,22 +291,30 @@ class StyleDeclaration implements Serializable
 
   /**
    * Split shorthand declarations (e.g. +margin+ or +font+) into their constituent parts.
+   *
+   * @return $this
    **/
   public function expandShorthands()
   {
     $expander = new StyleDeclaration\ExpandShorthands($this);
     $expander->expandShorthands();
+
+    return $this;
   }
 
   /**
    * Convert shorthand font declarations
    * (e.g. <tt>font: 300 italic 11px/14px verdana, helvetica, sans-serif;</tt>)
    * into their constituent parts.
+   *
+   * @return $this
    **/
   public function expandFontShorthands()
   {
     $expander = new StyleDeclaration\ExpandShorthands($this);
     $expander->expandFontShorthands();
+
+    return $this;
   }
 
   /*
@@ -288,92 +322,131 @@ class StyleDeclaration implements Serializable
    * (e.g. <tt>background: url("chess.png") gray 50% repeat fixed;</tt>)
    * into their constituent parts.
    * @see http://www.w3.org/TR/CSS21/colors.html#propdef-background
+   *
+   * @return $this
    **/
   public function expandBackgroundShorthands()
   {
     $expander = new StyleDeclaration\ExpandShorthands($this);
     $expander->expandBackgroundShorthands();
+
+    return $this;
   }
 
   /**
    * Split shorthand border declarations (e.g. <tt>border: 1px red;</tt>)
    * Additional splitting happens in expandDimensionsShorthand
    * Multiple borders are not yet supported as of CSS3
+   *
+   * @return $this
    **/
   public function expandBorderShorthands()
   {
     $expander = new StyleDeclaration\ExpandShorthands($this);
     $expander->expandBorderShorthands();
+
+    return $this;
   }
 
+  /**
+   *
+   * @return $this
+   **/
   public function expandListStyleShorthands()
   {
     $expander = new StyleDeclaration\ExpandShorthands($this);
     $expander->expandListStyleShorthands();
+
+    return $this;
   }
 
   /**
    * Split shorthand dimensional declarations (e.g. <tt>margin: 0px auto;</tt>)
    * into their constituent parts.
    * Handles margin, padding, border-color, border-style and border-width.
+   *
+   * @params boolean $cleanup Whether to remove unused properties
+   * @return $this
    **/
   public function expandDimensionsShorthands()
   {
     $expander = new StyleDeclaration\ExpandShorthands($this);
     $expander->expandDimensionsShorthands();
+
+    return $this;
   }
 
   /**
    * Create shorthand declarations (e.g. +margin+ or +font+) whenever possible.
+   *
+   * @return $this
    **/
   public function createShorthands()
   {
     $creator = new StyleDeclaration\CreateShorthands($this);
     $creator->createShorthands();
+
+    return $this;
   }
 
   public function createBackgroundShorthand()
   {
     $creator = new StyleDeclaration\CreateShorthands($this);
     $creator->createBackgroundShorthand();
+
+    return $this;
 	}
 
   public function createListStyleShorthand()
   {
     $creator = new StyleDeclaration\CreateShorthands($this);
     $creator->createListStyleShorthand();
+
+    return $this;
 	}
 
   /**
    * Combine border-color, border-style and border-width into border
    * Should be run after createDimensionsShorthand()
+   *
+   * @return $this
    **/
   public function createBorderShorthand()
   {
     $creator = new StyleDeclaration\CreateShorthands($this);
     $creator->createBorderShorthand();
+
+    return $this;
   }
 
   /**
    * Looks for long format Css dimensional properties
    * (margin, padding, border-color, border-style and border-width) 
    * and converts them into shorthand Css properties.
+   *
+   * @return $this
    **/
   public function createDimensionsShorthands()
   {
     $creator = new StyleDeclaration\CreateShorthands($this);
     $creator->createDimensionsShorthands();
+
+    return $this;
   }
 
   /**
    * Looks for long format Css font properties (e.g. <tt>font-weight</tt>) and 
    * tries to convert them into a shorthand Css <tt>font</tt> property. 
    * At least font-size AND font-family must be present in order to create a shorthand declaration.
+   *
+   * @return $this
    **/
   public function createFontShorthand()
   {
     $creator = new StyleDeclaration\CreateShorthands($this);
     $creator->createFontShorthand();
+
+    return $this;
 	}
 
   public function getCssText($options=array())

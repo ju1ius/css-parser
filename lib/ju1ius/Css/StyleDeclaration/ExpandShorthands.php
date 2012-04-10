@@ -30,6 +30,7 @@ class ExpandShorthands
 
   /**
    * Split shorthand declarations (e.g. +margin+ or +font+) into their constituent parts.
+   *
    **/
   public function expandShorthands()
   {
@@ -161,7 +162,8 @@ class ExpandShorthands
       'border-width' => 'border-%s-width'
     );
     foreach ($aExpansions as $sProperty => $sExpanded) {
-			$aProperties = $this->styleDeclaration->getProperties($sProperty);
+      $aProperties = $this->styleDeclaration->getProperties($sProperty);
+      //$aProperties = $this->styleDeclaration->getAppliedProperty($sProperty, true);
 			if(empty($aProperties)) continue;
 			foreach($aProperties as $iPos => $oProperty) {
 				$aValues = $oProperty->getValueList()->getItems();
@@ -202,7 +204,7 @@ class ExpandShorthands
 				}
 				foreach($result as $sPosition => $mValue) {
 					$sNewPropertyName = sprintf($sExpanded, $sPosition);
-					$this->_addPropertyExpansion($iPos, $oProperty, $sNewPropertyName, $mValue);
+          $this->_addPropertyExpansion($iPos, $oProperty, $sNewPropertyName, $mValue);
 				}
 				$this->styleDeclaration->remove($oProperty);
 			}
@@ -232,6 +234,7 @@ class ExpandShorthands
 			if(count($aValues) === 1 && $aValues[0] === 'inherit') {
 				foreach ($aListProperties as $sProperty => $mValue) {
 					$this->_addPropertyExpansion($iPos, $oProperty, $sProperty, 'inherit');
+          if($cleanup) $this->_cleanupProperty($sNewPropertyName);
 				}
         $this->styleDeclaration->remove($iPos);
 				return;
@@ -253,6 +256,20 @@ class ExpandShorthands
 		}
 	}
 
+  private function _addPropertyExpansion($iShorthandPosition, $oShorthandProperty, $sNewPropertyName, $mValue)
+  {
+    if(!$this->_canAddShorthandExpansion($oShorthandProperty, $sNewPropertyName/*, $iShorthandPosition*/)) {
+      return;
+    }
+    if(is_array($mValue)) $separator = ' ';
+    else $separator = ',';
+    $oNewProperty = new Property(
+      $sNewPropertyName, new PropertyValueList($mValue, $separator)
+    );
+    $oNewProperty->setIsImportant($oShorthandProperty->getIsImportant());
+    $this->styleDeclaration->insertAfter($oNewProperty, $oShorthandProperty);
+	}
+
   /**
    * Checks if we can add an expansion
    * We don't expand if a property exists with the same name after the new one,
@@ -263,8 +280,8 @@ class ExpandShorthands
     if($iShorthandPosition === null) {
       $iShorthandPosition = $this->styleDeclaration->getPropertyIndex($oShorthandProperty);
     }
-		$aExistingProperties = $this->styleDeclaration->getProperties($sNewPropertyName);
     $bShorthandIsImportant = $oShorthandProperty->getIsImportant();
+		$aExistingProperties = $this->styleDeclaration->getProperties($sNewPropertyName);
     if(!empty($aExistingProperties)) {
       foreach($aExistingProperties as $iPos => $oProperty) {
         $bPropertyIsImportant = $oProperty->getIsImportant();
@@ -277,19 +294,6 @@ class ExpandShorthands
     }
     return true;
   }
-
-	private function _addPropertyExpansion($iShorthandPosition, $oShorthandProperty, $sNewPropertyName, $mValue) {
-    if(!$this->_canAddShorthandExpansion($oShorthandProperty, $sNewPropertyName, $iShorthandPosition)) {
-      return;
-    }
-    if(is_array($mValue)) $separator = ' ';
-    else $separator = ',';
-    $oNewProperty = new Property(
-      $sNewPropertyName, new PropertyValueList($mValue, $separator)
-    );
-    $oNewProperty->setIsImportant($oShorthandProperty->getIsImportant());
-    $this->styleDeclaration->insertAfter($oNewProperty, $oShorthandProperty);
-	}
 
   private function _expandBackgroundShorthand($iPos, $oProperty)
   {
@@ -410,5 +414,6 @@ class ExpandShorthands
     }
     $this->styleDeclaration->remove($oProperty);
   }
+
 }
 

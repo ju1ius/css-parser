@@ -51,7 +51,7 @@ class ExpandShorthandsTest extends CssParser_TestCase
         'p{ border-width: 2px !important; border-style: dotted !important; border-color: rgb(0,0,255) !important; }'
       ),
       array(
-        'p {border: 2px dotted rgb(0,0,255) !important;border-style: solid;}',
+        'p {border: 2px dotted rgb(0,0,255) !important; border-style: solid;}',
         'p{ border-width: 2px !important; border-style: dotted !important; border-color: rgb(0,0,255) !important; border-style: solid; }'
       ),
       array(
@@ -61,7 +61,11 @@ class ExpandShorthandsTest extends CssParser_TestCase
       array(
         'p {border: 2px dotted rgb(0,0,255);border-style: solid !important;}',
         'p{ border-width: 2px; border-color: rgb(0,0,255); border-style: solid !important; }'
-      )
+      ),
+      array(
+        'p{ border-color: red; border: 2px dotted rgb(0,0,255);}',
+        'p{ border-color: rgb(255,0,0); border-width: 2px; border-style: dotted; border-color: rgb(0,0,255); }'
+      ),
     );
   }
 

@@ -1,5 +1,10 @@
 README
 
+API:
+  Parser::parse
+    call StyleSheetLoader::load ?
+  make StyleSheetLoader::load static ?
+
 Tests:
   selectors
   list-style shorthands

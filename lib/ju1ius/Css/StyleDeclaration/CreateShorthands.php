@@ -329,25 +329,27 @@ class CreateShorthands
   private function _destructiveCleanup(Array $aProperties, $sShorthand) {
     // first we check if a shorthand already exists, and keep only the relevant one.
     $aLastExistingShorthand = $this->styleDeclaration->getAppliedProperty($sShorthand, true);
+    if($aLastExistingShorthand) {
+      list($iLastExistingShorthandPosition, $oLastExistingShorthand) = each($aLastExistingShorthand);
+    }
     foreach($this->styleDeclaration->getProperties($sShorthand) as $iPos => $oProperty) {
-      if($iPos !== $aLastExistingShorthand['position']) $this->styleDeclaration->remove($iPos);
+      if($iPos !== $iLastExistingShorthandPosition) $this->styleDeclaration->remove($iPos);
     }
     // next we try to get rid of unused rules
     foreach($aProperties as $sProperty) {
       $aRule = $this->styleDeclaration->getAppliedProperty($sProperty, true);
       if(!$aRule) continue;
+      list($iRulePosition, $oRule) = each($aRule);
 			foreach($this->styleDeclaration->getProperties($sProperty) as $iPos => $oProperty) {
-        if($iPos !== $aRule['position']) $this->styleDeclaration->remove($iPos);
+        if($iPos !== $iRulePosition) $this->styleDeclaration->remove($iPos);
       }
       if($aLastExistingShorthand) {
-        $bRuleIsImportant = $aRule['property']->getIsImportant();
-        $bShorthandIsImportant = $aLastExistingShorthand['property']->getIsImportant();
-        $iRulePosition = $aRule['position'];
-        $iShorthandPosition = $aLastExistingShorthand['position'];
+        $bRuleIsImportant = $oRule->getIsImportant();
+        $bShorthandIsImportant = $oLastExistingShorthand->getIsImportant();
         // IF property comes before shorthand AND they have the same importance,
         // OR IF shorthand is important AND property is not,
         // we can get rid of the property.
-        if(($iRulePosition < $iShorthandPosition && $bRuleIsImportant === $bShorthandIsImportant)
+        if(($iRulePosition < $iLastExistingShorthandPosition && $bRuleIsImportant === $bShorthandIsImportant)
            || (!$bRuleIsImportant && $bShorthandIsImportant)) {
           $this->styleDeclaration->remove($iRulePosition);
         }
