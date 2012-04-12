@@ -2,8 +2,9 @@
 namespace ju1ius\Css;
 
 use ju1ius\Uri;
-use ju1ius\Collections\ParameterBag;
 use ju1ius\Text\Source;
+
+use ju1ius\Css\Exception\StyleSheetNotFoundException;
 
 /**
  * Handles loading of stylesheets.
@@ -12,69 +13,50 @@ use ju1ius\Text\Source;
  **/
 class StyleSheetLoader
 {
-  private
-    $options;
-
-  public function __construct($options=array())
-  {
-    $this->options = new ParameterBag(array(
-      'encoding' => null
-    ));
-    $this->options->merge($options);  
-  }
 
   /**
-   * Returns the options of the current instance.
+   * Loads a Css file or url.
    *
-   * @return ParameterBag The current instance's ParameterBag
+   * @param string|ju1ius\Uri $url
+   * @param string|null $encoding Force the file encoding
+   *
+   * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
+   *
+   * @return Source\File
    **/
-  public function getOptions()
+  static public function load($url, $encoding=null)
   {
-    return $this->options;
-  }
-
-  /**
-   * Loads a Css file or string.
-   *
-   * If passed an absolute url or a filesystem path, returns a Source\File object.
-   * If passed a Css string, returns a Source\String object.
-   *
-   * @param string|ju1ius\Uri $url_or_string
-   *
-   * @return Source\String|Source\File
-   **/
-  public function load($url_or_string)
-  {
-    $uri = Uri::parse($url_or_string);
+    $uri = Uri::parse($url);
     if($uri->isAbsoluteUrl()) {
-      return $this->loadUrl($uri);
+      return self::loadUrl($uri, $encoding);
     }
-    $path = realpath($uri);
-    if(is_file($path)) {
-      return $this->loadFile($uri);
-    }
-    return $this->loadString($url_or_string);
+    return self::loadFile($uri, $encoding);
   }
 
   /**
    * Loads a CSS file into a Source\File object.
    *
    * @param string|ju1ius\Uri $url The path to the file
+   * @param string|null $encoding Force the file encoding
+   *
+   * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
+   *
    * @return Source\File
    **/
-  public function loadFile($url)
+  static public function loadFile($url, $encoding=null)
   {
     $uri = Uri::parse($url);
     $path = realpath($uri);
+    if(false === $path || !is_file($path) || !is_readable($path)) {
+      throw new StyleSheetNotFoundException($path);
+    }
     $content = file_get_contents($path);
     if(false === $content) {
-      throw new \RuntimeException(
-        sprintf('Could not load file: "%s"', $path)
-      );
+      throw new StyleSheetNotFoundException($path);
     }
     $infos = self::_loadString($content);
     // Convert encoding if encoding option has been set
-    self::maybeConvertEncoding($infos, $this->options->get('encoding'));
+    self::maybeConvertEncoding($infos, $encoding);
     return new Source\File($path, $infos['contents'], $infos['charset']);
   }
 
@@ -84,10 +66,13 @@ class StyleSheetLoader
    * Relies on the CURL extension to load network urls
    *
    * @param string|ju1ius\Uri $url The url of the file
-   * @param boolean           $preferFileCharset If false, use the content-type header for charset detection
+   * @param string|null $encoding Force the file encoding
+   *
+   * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
+   *
    * @return Source\File
    **/
-  public function loadUrl($url, $preferFileCharset=false)
+  static public function loadUrl($url, $encoding=null)
   {
     $uri = Uri::parse($url);
     $response = self::_loadUrl($uri);
@@ -95,11 +80,14 @@ class StyleSheetLoader
     $charset = $response['charset'];
 
     $infos = self::_loadString($response['body']);
+    // FIXME: Http header sometimes return wrong results
+    /*
     if($response['charset'] && !$preferFileCharset) {
       $infos['charset'] = $response['charset'];
     }
+     */
     // Convert encoding if encoding option has been set
-    self::maybeConvertEncoding($infos, $this->options->get('encoding'));
+    self::maybeConvertEncoding($infos, $encoding);
     return new Source\File($url, $infos['contents'], $infos['charset']);
   }
 
@@ -107,13 +95,15 @@ class StyleSheetLoader
    * Loads a CSS string into a Source\String object.
    *
    * @param string $str  The CSS string
-   * @return StyleSheetInfo
+   * @param string|null $encoding Force the string encoding
+   *
+   * @return Source\String
    **/
-  public function loadString($str)
+  static public function loadString($str, $encoding=null)
   {
     $infos = self::_loadString($str);
     // Convert encoding if encoding option has been set
-    self::maybeConvertEncoding($infos, $this->options->get('encoding'));
+    self::maybeConvertEncoding($infos, $encoding);
     return new Source\String($infos['contents'], $infos['charset']);
   }
 
@@ -145,7 +135,7 @@ class StyleSheetLoader
 
     $response = curl_exec($curl);
     if(false === $response) {
-      throw new \RuntimeException(curl_error($curl));
+      throw new StyleSheetNotFoundException($url, curl_error($curl));
     };
     $infos = curl_getinfo($curl);
 

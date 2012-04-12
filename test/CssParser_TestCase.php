@@ -11,6 +11,9 @@ $loader->registerNamespace(
 );
 $loader->register();
 
+use ju1ius\Css\StyleSheetLoader;
+use ju1ius\Css\Parser;
+
 class CssParser_TestCase extends PHPUnit_Framework_TestCase
 {
   protected
@@ -19,8 +22,7 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
 
   public function __construct($name=null, $data=array(), $dataName='')
   {
-    $this->stylesheet_loader = new ju1ius\Css\StyleSheetLoader();
-    $this->css_parser = new ju1ius\Css\Parser(array(
+    $this->css_parser = new Parser(array(
       'strict_parsing' => true
     ));
     parent::__construct($name, $data, $dataName);
@@ -31,27 +33,27 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
     return file_get_contents(__DIR__.'/files/'.$file);
   }
 
-  public function createParser()
+  public function createParser($strict=true)
   {
-    return new ju1ius\Css\Parser(array(
-      'strict_parsing' => true
+    return new Parser(array(
+      'strict_parsing' => $strict
     ));
   }
 
   public function parseFile($file)
   {
-    $source = $this->stylesheet_loader->load(__DIR__.'/files/'.$file);
+    $source = StyleSheetLoader::load(__DIR__.'/files/'.$file);
     return $this->css_parser->parse($source);
   }
 
   public function parseStyleSheet($str)
   {
-    $source = $this->stylesheet_loader->load($str);
+    $source = StyleSheetLoader::loadString($str);
     return $this->css_parser->parseStyleSheet($source);
   }
 
   public function loadString($str)
   {
-    return $this->stylesheet_loader->loadString($str);
+    return StyleSheetLoader::loadString($str);
   }
 }

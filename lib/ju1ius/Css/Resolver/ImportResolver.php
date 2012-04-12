@@ -10,6 +10,8 @@ use ju1ius\Css\Parser;
 use ju1ius\Css\Rule;
 use ju1ius\Css\Util;
 
+use ju1ius\Css\Exception\StyleSheetNotFoundException;
+
 /**
  * Recursively resolve @import rules
  * and merge their associated stylesheets into the main StyleSheet
@@ -33,11 +35,8 @@ class ImportResolver
     if(empty($imported_files)) {
       $imported_files[] = $this->stylesheet->getHref();
     }
-    $loader = new StyleSheetLoader(array(
-      'encoding' => $this->stylesheet->getCharset()
-    ));
+    $encoding = $this->stylesheet->getCharset();
     $parser = new Parser();
-
     $url_resolver = new UrlResolver($this->stylesheet, $this->base_url);
     $url_resolver->resolve();
 
@@ -50,7 +49,12 @@ class ImportResolver
         } else {
           $imported_files[] = $url;
         }
-        $source = $loader->load($url);
+        try {
+          $source = StyleSheetLoader::load($url, $encoding);
+        } catch(StyleSheetNotFoundException $e) {
+          // FIXME: should we remove the rule ?
+          continue;
+        }
         // Do the parsing
         $stylesheet = $parser->parse($source);
 

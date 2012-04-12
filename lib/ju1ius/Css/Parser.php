@@ -105,13 +105,13 @@ class Parser extends AbstractParser
     return $media_list;
   }/*}}}*/
 
-  private function _parseStyleSheet(StyleSheet $stylesheet)
+  protected function _parseStyleSheet(StyleSheet $stylesheet)
   {/*{{{*/
     $this->_consumeWhiteSpace();
     $this->_parseRuleList($stylesheet->getRuleList(), true);
   }/*}}}*/
 
-  private function _parseRuleList(RuleList $ruleList, $isRoot = false)
+  protected function _parseRuleList(RuleList $ruleList, $isRoot = false)
   {/*{{{*/
     while(!$this->_isEnd()) {
       if($this->_comes('@')) {
@@ -133,7 +133,7 @@ class Parser extends AbstractParser
 
       } else if($this->_comes('}')) {
 
-        $this->_consume('}');
+        $this->_consume(1);
         if($isRoot) {
           if($this->strict_parsing) {
             throw new ParseException('Unopened {', $this->source, $this->current_position);
@@ -180,7 +180,7 @@ class Parser extends AbstractParser
     }
   }/*}}}*/
 
-  private function _parseAtRule()
+  protected function _parseAtRule()
   {/*{{{*/
     $this->_consume('@');
 
@@ -189,7 +189,7 @@ class Parser extends AbstractParser
     if($this->_comes('-')){
       $vendor_prefix = $this->_consume(1);
       $vendor_prefix .= $this->_consumeUntil('-');
-      $this->_consume('-');
+      $this->_consume(1);
     }
 
     $identifier = $this->_parseIdentifier();
@@ -275,7 +275,7 @@ class Parser extends AbstractParser
       return $this->_parsePageRule();
       $selector = null;
       if(!$this->_comes('{')) $selector = $this->_parsePageSelector();
-      $this->_consume('{');
+      $this->_consume(1);
       $this->_consumeWhiteSpace();
       $this->state->enter(ParserState::IN_DECLARATION);
       // FIXME: provide support for @margin-boxes
@@ -323,7 +323,7 @@ class Parser extends AbstractParser
     }
   }/*}}}*/
 
-  private function _isMarginBoxIdentifier($str)
+  protected function _isMarginBoxIdentifier($str)
   {/*{{{*/
     foreach(self::$MARGIN_BOX_IDENTIFIERS as $iden) {
       if($this->_isAsciiCaseInsensitiveMatch($str, $iden)) {
@@ -333,7 +333,7 @@ class Parser extends AbstractParser
     return false;
   }/*}}}*/
 
-  private function _parseMediaQueryList()
+  protected function _parseMediaQueryList()
   {/*{{{*/
     $media_queries = array();
     while(!$this->_comes('{') && !$this->_comes(';') && !$this->_isEnd()) {
@@ -341,7 +341,7 @@ class Parser extends AbstractParser
       $media_queries[] = $this->_parseMediaQuery(); 
       $this->state->leave(ParserState::IN_MEDIA_QUERY);
       if($this->_comes(',')) {
-        $this->_consume(',');
+        $this->_consume(1);
         $this->_consumeWhiteSpace();
         continue;
       }
@@ -349,7 +349,7 @@ class Parser extends AbstractParser
     return new MediaQueryList($media_queries);
   }/*}}}*/
 
-  private function _parseMediaQuery()
+  protected function _parseMediaQuery()
   {/*{{{*/
     $restrictor = '';
     $media_type = '';
@@ -363,7 +363,7 @@ class Parser extends AbstractParser
       $media_type = $this->_parseIdentifier();
       $this->_consumeWhiteSpace();
       if($this->_comes('and')) {
-        $this->_consume('and');
+        $this->_consume(3);
         $this->_consumeWhiteSpace();
       }
     }
@@ -376,14 +376,14 @@ class Parser extends AbstractParser
     }
     return new MediaQuery($restrictor, $media_type, $expressions);
   }/*}}}*/
-  private function _parseMediaQueryExpression()
+  protected function _parseMediaQueryExpression()
   {/*{{{*/
     $value = null;
     $this->_consume('(');
     $media_feature = $this->_parseIdentifier();
     $this->_consumeWhiteSpace();
     if($this->_comes(':')) {
-      $this->_consume(':');
+      $this->_consume(1);
       $this->_consumeWhiteSpace();
       $value = $this->_parsePrimitiveValue(true);
       $this->_consumeWhiteSpace();
@@ -391,26 +391,27 @@ class Parser extends AbstractParser
     $this->_consume(')');
     $this->_consumeWhiteSpace();
     if($this->_comes('and')) {
-      $this->_consume('and');
+      $this->_consume(3);
       $this->_consumeWhiteSpace();
     }
     return new MediaQuery\Expression($media_feature, $value);
   }/*}}}*/
 
-  private function _parseKeyframeRule()
+  protected function _parseKeyframeRule()
   {/*{{{*/
     $style_declaration = new StyleDeclaration();
-    $selectors = array_map(function($selector)
-    {
+    $self = $this;
+    $selectors = explode(',', trim($this->_consumeUntil('{')));
+    foreach ($selectors as &$selector) {
       $selector = trim($selector);
       if($this->_isAsciiCaseInsensitiveMatch($selector, 'from')) {
-        return new Value\Percentage(0);
+        $selector = new Value\Percentage(0);
       } else if($this->_isAsciiCaseInsensitiveMatch($selector, 'to')) {
-        return new Value\Percentage(100);
+        $selector = new Value\Percentage(100);
       } else {
-        return new Value\Percentage(substr($selector, 0, strpos($selector, '%')));
+        $selector = new Value\Percentage(substr($selector, 0, strpos($selector, '%')));
       }
-    }, explode(',', trim($this->_consumeUntil('{'))));
+    }
     $this->_consume('{');
     $this->state->enter(ParserState::IN_DECLARATION);
     $this->_consumeWhiteSpace();
@@ -421,11 +422,11 @@ class Parser extends AbstractParser
     return $rule;
   }/*}}}*/
 
-  private function _parsePageRule()
+  protected function _parsePageRule()
   {/*{{{*/
     $selector = null;
     if(!$this->_comes('{')) $selector = $this->_parsePageSelector();
-    $this->_consume('{');
+    $this->_consume(1);
     $this->_consumeWhiteSpace();
     $rule_list = new RuleList();
     $style_declaration = new StyleDeclaration();
@@ -442,7 +443,7 @@ class Parser extends AbstractParser
     return new Rule\Page($selector, $rule_list, $style_declaration);
   }/*}}}*/
 
-  private function _parsePageSelector()
+  protected function _parsePageSelector()
   {/*{{{*/
     $page_name = $pseudo_class = '';
     if(!$this->_comes(':')) {
@@ -450,14 +451,14 @@ class Parser extends AbstractParser
       $this->_consumeWhiteSpace();
     }
     if($this->_comes(':')) {
-      $this->_consume(':');
+      $this->_consume(1);
       $pseudo_class = $this->_parseIdentifier();
       $this->_consumeWhiteSpace();
     }
     return new PageSelector($page_name, $pseudo_class);
   }/*}}}*/
 
-  private function _parseStyleRule()
+  protected function _parseStyleRule()
   {/*{{{*/
     $style_declaration = new StyleDeclaration();
     $selectors = $this->_parseSelectorList();
@@ -470,7 +471,7 @@ class Parser extends AbstractParser
     return new Rule\StyleRule($selectors, $style_declaration);
   }/*}}}*/
 
-  private function _parseSelectorList()
+  protected function _parseSelectorList()
   {/*{{{*/
     $selectors = array();
     $this->_consumeWhiteSpace();
@@ -479,7 +480,7 @@ class Parser extends AbstractParser
       $selectors[] = $this->_parseSelector();
       $this->state->leave(ParserState::IN_SELECTOR);
       if($this->_comes(',')) {
-        $this->_consume(',');
+        $this->_consume(1);
         $this->_consumeWhiteSpace();
         continue;
       }
@@ -487,7 +488,7 @@ class Parser extends AbstractParser
     return new SelectorList($selectors);
   }/*}}}*/
 
-  private function _parseSelector()
+  protected function _parseSelector()
   {/*{{{*/
     $result = $this->_parseSimpleSelector();
     while(true) {
@@ -496,7 +497,7 @@ class Parser extends AbstractParser
       $peek = $this->_peek();
       if(in_array($peek, array('+', '>', '~'))) {
         $combinator = $peek;
-        $this->_consume($peek);
+        $this->_consume(1);
       } else {
         $combinator = ' ';
       }
@@ -512,15 +513,15 @@ class Parser extends AbstractParser
    *
    * @return Selector
    */
-  private function _parseSimpleSelector()
+  protected function _parseSimpleSelector()
   {/*{{{*/
     $namespace = $element = '*';
     if($this->_comes('*')) {
-      $this->_consume('*');
+      $this->_consume(1);
       if($this->_comes('|')) {
-        $this->_consume('|');
+        $this->_consume(1);
         if($this->_comes('*')) {
-          $this->_consume('*');
+          $this->_consume(1);
         } else {
           $element = $this->_parseIdentifier();
         }
@@ -530,8 +531,8 @@ class Parser extends AbstractParser
     )){
       $element = $this->_parseIdentifier();
       if($this->_comes('|')) {
+        $this->_consume(1);
         $namespace = $element;
-        $this->_consume('|');
         $element = $this->_parseIdentifier();
       }    // code...
     }
@@ -543,7 +544,7 @@ class Parser extends AbstractParser
 
         // You can't have 2 hashes
         if($hasHash) break;
-        $this->_consume('#');
+        $this->_consume(1);
         $id = $this->_parseIdentifier();
         $result = new Selector\IDSelector($result, $id);
         $hasHash = true;
@@ -551,29 +552,29 @@ class Parser extends AbstractParser
 
       } else if($this->_comes('.')) {
 
-        $this->_consume('.');
+        $this->_consume(1);
         $class = $this->_parseIdentifier();
         $result = new Selector\ClassSelector($result, $class);
         continue;
 
       } else if($this->_comes('[')) {
 
-        $this->_consume('[');
+        $this->_consume(1);
         $result = $this->_parseAttrib($result);
         $this->_consume(']');
         continue;
 
       } else if($this->_comes(':')) {
 
-        $this->_consume(':');
+        $this->_consume(1);
         $type = ':';
         if($this->_comes(':')) {
-          $this->_consume(':');
+          $this->_consume(1);
           $type = '::';
         }
         $ident = $this->_parseIdentifier();
         if($this->_comes('(')) {
-          $this->_consume('(');
+          $this->_consume(1);
           $this->_consumeWhiteSpace();
           // You can't nest negations
           if($this->_isAsciiCaseInsensitiveMatch($ident, 'not')
@@ -611,14 +612,14 @@ class Parser extends AbstractParser
    *
    * @return Selector\AttributeSelector
    */
-  private function _parseAttrib($selector)
+  protected function _parseAttrib($selector)
   {/*{{{*/
     $this->_consumeWhiteSpace();
     $namespace = '*';
     $attrib = $this->_parseIdentifier();
     if($this->_comes('|')) {
+      $this->_consume(1);
       $namespace = $attrib;
-      $this->_consume('|');
       $attrib = $this->_parseIdentifier();
     }
     $this->_consumeWhiteSpace();
@@ -626,11 +627,14 @@ class Parser extends AbstractParser
       return new Selector\AttributeSelector($selector, $namespace, $attrib, 'exists', null);
     }
     if($this->_comes('=')) {
-      $operator = $this->_consume('=');
+      $operator = $this->_consume(1);
     } else {
       $operator = $this->_consume(2);
       if(!in_array($operator, array('^=', '$=', '*=', '~=', '|=', '!='))) {
-        throw new ParseException(sprintf('Operator expected, got "%s"', $operator), $this->source, $this->current_position);
+        throw new ParseException(
+          sprintf('Operator expected, got "%s"', $operator),
+          $this->source, $this->current_position
+        );
       }
     }
     $this->_consumeWhiteSpace();
@@ -643,7 +647,7 @@ class Parser extends AbstractParser
     return new Selector\AttributeSelector($selector, $namespace, $attrib, $operator, $value);
   }/*}}}*/
 
-  private function _parseStyleDeclaration(StyleDeclaration $style_declaration)
+  protected function _parseStyleDeclaration(StyleDeclaration $style_declaration)
   {/*{{{*/
     while(!$this->_comes('}') && !$this->_isEnd()) {
       $this->_parseProperty($style_declaration);
@@ -656,7 +660,7 @@ class Parser extends AbstractParser
   /**
    * Wraps the _doParseProperty method for error recovery
    **/
-  private function _parseProperty(StyleDeclaration $style_declaration)
+  protected function _parseProperty(StyleDeclaration $style_declaration)
   {/*{{{*/
     $this->state->enter(ParserState::IN_PROPERTY);
     $this->_setBacktrackingPosition();
@@ -675,7 +679,7 @@ class Parser extends AbstractParser
     $this->_consumeWhiteSpace();
   }/*}}}*/
 
-  private function _doParseProperty()
+  protected function _doParseProperty()
   {/*{{{*/
     $name = $this->_parseIdentifier();
     $this->_consumeWhiteSpace();
@@ -692,7 +696,7 @@ class Parser extends AbstractParser
     }
     $property->setValueList($value);
     if($this->_comes('!')) {
-      $this->_consume('!');
+      $this->_consume(1);
       $this->_consumeWhiteSpace();
       $importantMarker = $this->_parseIdentifier();
       if(!$this->_isAsciiCaseInsensitiveMatch($importantMarker, 'important')) {
@@ -704,12 +708,12 @@ class Parser extends AbstractParser
       $property->setIsImportant(true);
     }
     if($this->_comes(';')) {
-      $this->_consume(';');
+      $this->_consume(1);
     }
     return $property;
   }/*}}}*/
 
-  private function _fixBackgroundShorthand(PropertyValueList $oValueList)
+  protected function _fixBackgroundShorthand(PropertyValueList $oValueList)
   {/*{{{*/
     if(count($oValueList) < 2) return;
     if($oValueList->getSeparator() === ',') {
@@ -722,7 +726,7 @@ class Parser extends AbstractParser
       $this->_fixBackgroundLayer($oValueList);
     }
   }/*}}}*/
-  private function _fixBackgroundLayer(PropertyValueList $oValueList)
+  protected function _fixBackgroundLayer(PropertyValueList $oValueList)
   {/*{{{*/
     foreach($oValueList->getItems() as $i => $mValue) {
       if($mValue instanceof PropertyValueList && $mValue->getSeparator() === '/') {
@@ -751,7 +755,7 @@ class Parser extends AbstractParser
     $oValueList->resetKeys();
   }/*}}}*/
 
-  private function _parseValue($listDelimiters)
+  protected function _parseValue($listDelimiters)
   {/*{{{*/
     $stack = array();
     $this->_consumeWhiteSpace();
@@ -805,7 +809,7 @@ class Parser extends AbstractParser
     return $stack[0];
   }/*}}}*/
 
-  private static function _listDelimiterForProperty($propertyName)
+  protected static function _listDelimiterForProperty($propertyName)
   {/*{{{*/
     if(preg_match('/^font(?:$|-family)/iSu', $propertyName)) {
       return array(',', '/', ' ');
@@ -815,7 +819,7 @@ class Parser extends AbstractParser
     return array(' ', ',', '/');
   }/*}}}*/
 
-  private function _parsePrimitiveValue($allow_ratios=false)
+  protected function _parsePrimitiveValue($allow_ratios=false)
   {/*{{{*/
     $value = null;
     $this->_consumeWhiteSpace();
@@ -841,22 +845,22 @@ class Parser extends AbstractParser
     return $value;
   }/*}}}*/
 
-  private function _parseNumericValue($isForColor = false, $allow_ratios=false)
+  protected function _parseNumericValue($isForColor = false, $allow_ratios=false)
   {/*{{{*/
     $value = '';
     if($this->_comes('-')) {
-      $value .= $this->_consume('-');
+      $value .= $this->_consume(1);
     }
     while(is_numeric($this->_peek()) || $this->_comes('.')){
       if($this->_comes('.')) {
-        $value .= $this->_consume('.');
+        $value .= $this->_consume(1);
       } else {
         $value .= $this->_consume(1);
       }
     }
     // FIXME: we should allow whitespace between Ratio operands
     if($allow_ratios && $this->_comes('/')) {
-      $this->_consume('/');
+      $this->_consume(1);
       $numerator = $value;
       $denominator = '';
       while(is_numeric($this->_peek())) {
@@ -866,7 +870,7 @@ class Parser extends AbstractParser
     }
     $value = floatval($value);
     if($this->_comes('%')) {
-      $this->_consume('%');
+      $this->_consume(1);
       return new Value\Percentage($value);
     } else {
       $classes = array(
@@ -891,10 +895,10 @@ class Parser extends AbstractParser
     return new Value\Dimension($value, $unit, $isForColor);
   }/*}}}*/
 
-  private function _parseColorValue()
+  protected function _parseColorValue()
   {/*{{{*/
     if($this->_comes('#')) {
-      $this->_consume('#');
+      $this->_consume(1);
       $value = $this->_parseIdentifier();
       return new Value\Color($value);
     } else {
@@ -916,11 +920,11 @@ class Parser extends AbstractParser
     }
   }/*}}}*/
 
-  private function _parseUrlValue()
+  protected function _parseUrlValue()
   {/*{{{*/
     $useUrl = $this->_comes('url');
     if($useUrl) {
-      $this->_consume('url');
+      $this->_consume(3);
       $this->_consumeWhiteSpace();
       $this->_consume('(');
     }
@@ -934,14 +938,14 @@ class Parser extends AbstractParser
     return $result;
   }/*}}}*/
 
-  private function _parseUnicodeRange()
+  protected function _parseUnicodeRange()
   {/*{{{*/
     $this->_consume('U+');
     $value = $this->_consumeExpression('/^[0-9A-F?]{1,6}(?:-[0-9A-F]{1,6})?/iuS');
     return new Value\UnicodeRange($value);
   }/*}}}*/
 
-  private function _parseIdentifier($allowFunctions=false, $allowColors=false)
+  protected function _parseIdentifier($allowFunctions=false, $allowColors=false)
   {/*{{{*/
     $result = $this->_parseCharacter(true);
     if($result === null) {
@@ -962,7 +966,7 @@ class Parser extends AbstractParser
       }
     }
     if($allowFunctions && $this->_comes('(')) {
-      $this->_consume('(');
+      $this->_consume(1);
       $args = $this->_parseValue(array('=', ','));
       $result = new Value\Func($result, $args);
       $this->_consume(')');
@@ -970,7 +974,7 @@ class Parser extends AbstractParser
     return $result;
   }/*}}}*/
 
-  private function _parseStringValue()
+  protected function _parseStringValue()
   {/*{{{*/
     $firstChar = $this->_peek();
     $quoteChar = null;
@@ -1008,12 +1012,12 @@ class Parser extends AbstractParser
    * ---------- Error handling ---------- *
    ****************************************/
 
-  private function _skipAtRule()
+  protected function _skipAtRule()
   {/*{{{*/
     $close_char = null;
     while(true) {
       if($this->_comes(';')) {
-        $this->_consume(';');
+        $this->_consume(1);
         break;
       } else if($this->_comes('{')) {
         $this->_skipStyleRule();
@@ -1023,7 +1027,7 @@ class Parser extends AbstractParser
     }
   }/*}}}*/
 
-  private function _skipStyleRule()
+  protected function _skipStyleRule()
   {/*{{{*/
     $opened_brackets = 0;
     while(true) {
@@ -1032,7 +1036,7 @@ class Parser extends AbstractParser
         if($this->_comes('}')) {
           $opened_brackets--;
           if($opened_brackets == 0) {
-            $this->_consume('}');
+            $this->_consume(1);
             break;
           }
         }
@@ -1041,7 +1045,7 @@ class Parser extends AbstractParser
     }
   }/*}}}*/
 
-  private function _skipNextRule()
+  protected function _skipNextRule()
   {/*{{{*/
     $opened_brackets = 0;
     while(true) {
@@ -1058,7 +1062,7 @@ class Parser extends AbstractParser
     }
   }/*}}}*/
 
-  private function _skipProperty()
+  protected function _skipProperty()
   {/*{{{*/
     $opened_brackets = 0;
     while(true) {
@@ -1071,7 +1075,7 @@ class Parser extends AbstractParser
           $opened_brackets--;
         }
       } else if($this->_comes(';')){
-        $this->_consume(';');
+        $this->_consume(1);
         break;
       } else if($this->_comes('}')){
         break; 

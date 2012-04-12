@@ -25,8 +25,8 @@ class String extends PrimitiveValue
 
   public function getCssText($options=array())
   {
-    $str = str_replace("\n", '\A', addslashes($this->string));
-    return '"'.$str.'"';
+    //$str = str_replace("\n", '\A', addcslashes($this->string, '"'));
+    return '"' . addcslashes($this->string, '"') . '"';
   }
 
   public function getValueType()

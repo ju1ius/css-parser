@@ -1,9 +1,13 @@
 README
 
+Encoding:
+  figure out what to do with unicode escapes:
+    should they be left as is in strings ?
+    should they be left as is in identifiers ?
+
 API:
   Parser::parse
     call StyleSheetLoader::load ?
-  make StyleSheetLoader::load static ?
 
 Tests:
   selectors

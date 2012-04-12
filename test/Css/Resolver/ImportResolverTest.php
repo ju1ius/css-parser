@@ -13,10 +13,7 @@ class ImportResolverTest extends CssParser_TestCase
    **/
   public function testImports($file, $expected)
   {
-    $loader = new StyleSheetLoader();
-    $parser = $this->createParser();
-    $info = $loader->loadFile(new Uri($file));
-    $stylesheet = $parser->parse($info);
+    $stylesheet = $this->parseFile($file);
     $resolver = new ImportResolver($stylesheet);
     $resolver->resolve();
     $this->assertEquals($expected, $stylesheet->getCssText());
@@ -25,7 +22,7 @@ class ImportResolverTest extends CssParser_TestCase
   {
     return array(
       array(
-        __DIR__."/../../files/Css/Resolver/import.css",
+        'Css/Resolver/import.css',
         '@charset "utf-8";@media screen,print{ h1{ padding: 4px; } }p{ color: rgb(255,0,0); }body{ background: rgb(0,0,0); color: rgb(255,255,255); }'
       )
     );

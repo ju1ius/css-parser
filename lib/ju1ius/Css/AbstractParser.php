@@ -4,6 +4,7 @@ namespace ju1ius\Css;
 
 use ju1ius\Collections\ParameterBag;
 use ju1ius\Text\Source;
+use ju1ius\Text\MultiByte;
 
 use ju1ius\Css\Util\Charset;
 use ju1ius\Css\ParserState;
@@ -127,32 +128,47 @@ abstract class AbstractParser
   {
     if($this->_peek() === '\\') {
 
-      $this->_consume('\\');
-      if($this->_comes('\n') || $this->_comes('\r')) {
+      $escape = $this->_consume(1);
+      if($this->_comes("\n") || $this->_comes("\r")) {
+        $this->_consume(1);
         return '';
       }
       if(!preg_match('/^[0-9a-fA-F]$/u', $this->_peek())) {
+        if($isForIdentifier) {
+          return $escape . $this->_consume(1);
+        }
         return $this->_consume(1);
       }
       $codepoint = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/uS');
+      $escape .= $codepoint;
       if(mb_strlen($codepoint, $this->charset) < 6) {
         //Consume whitespace after incomplete unicode escape
         if(preg_match('/^\s/u', $this->_peek())) {
-          if($this->_comes('\r\n')) {
+          if($this->_comes("\r\n")) {
             $this->_consume(2);
           } else {
-            $this->_consume(1);
+            $escape .= $this->_consume(1);
           }
         }
       }
       $unicode_byte = intval($codepoint, 16);
-      $utf_32_str = "";
-      for($i = 0; $i < 4; $i++) {
-        $utf_32_str .= chr($unicode_byte & 0xff);
-        $unicode_byte = $unicode_byte >> 8;
+      if($this->is_ascii_compatible_encoding && $unicode_byte <= 127) {
+        return chr($unicode_byte);
       }
-      $char = Util\Charset::convert($utf_32_str, $this->charset, 'UTF-32LE');
-      return $char;
+      return $escape;
+      //return $backslash . MultiByte::str_pad($codepoint, 6, '0', STR_PAD_LEFT, $this->charset);
+      /**      
+       * What's the point of converting unicode escapes,
+       * since they are here to refer to characters not represented
+       * in the current encoding ?
+       **/
+      //$utf_32_str = "";
+      //for($i = 0; $i < 4; $i++) {
+        //$utf_32_str .= chr($unicode_byte & 0xff);
+        //$unicode_byte = $unicode_byte >> 8;
+      //}
+      //$char = Util\Charset::convert($utf_32_str, $this->charset, 'UTF-32LE');
+      //return $char;
     }
 
     if($isForIdentifier) {
@@ -231,7 +247,7 @@ abstract class AbstractParser
           $value, $this->_peek(12)
         ), $this->source, $this->current_position);
       }
-      $this->current_position += mb_strlen($value, $this->charset);
+      $this->current_position += $length;
       return $value;
 
     } else {
@@ -272,7 +288,7 @@ abstract class AbstractParser
   protected function _consumeWhiteSpace()
   {
     do {
-      while(preg_match('/\\s/isSu', $this->_peek()) === 1) {
+      while(preg_match('/\s/isSu', $this->_peek()) === 1) {
         $this->_consume(1);
       }
     } while($this->_consumeComment());

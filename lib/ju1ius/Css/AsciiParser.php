@@ -38,10 +38,10 @@ class AsciiParser extends Parser
     $this->errors = array();
   }
 
-  private function _parseColorValue()
+  protected function _parseColorValue()
   {/*{{{*/
     if($this->_comes('#')) {
-      $this->_consume('#');
+      $this->_consume(1);
       $value = $this->_parseIdentifier();
       return new Value\Color($value);
     } else {
@@ -49,7 +49,7 @@ class AsciiParser extends Parser
       $colorMode = $this->_parseIdentifier();
       $this->_consumeWhiteSpace();
       $this->_consume('(');
-      $length = strlen($colorMode, $this->charset);
+      $length = strlen($colorMode);
       for($i = 0; $i < $length; $i++) {
         $this->_consumeWhiteSpace();
         $colors[$colorMode[$i]] = $this->_parseNumericValue(true);
@@ -79,18 +79,22 @@ class AsciiParser extends Parser
   {
     if($this->_peek() === '\\') {
 
-      $this->_consume('\\');
-      if($this->_comes('\n') || $this->_comes('\r')) {
+      $this->_consume(1);
+      if($this->_comes("\n") || $this->_comes("\r")) {
+        $this->_consume(1);
         return '';
       }
       if(!preg_match('/^[0-9a-fA-F]$/', $this->_peek())) {
+        if($isForIdentifier) {
+          return '\\' . $this->_consume(1);
+        }
         return $this->_consume(1);
       }
       $codepoint = $this->_consumeExpression('/^[0-9a-fA-F]{1,6}/S');
       if(strlen($codepoint) < 6) {
         //Consume whitespace after incomplete unicode escape
         if(preg_match('/^\s/', $this->_peek())) {
-          if($this->_comes('\r\n')) {
+          if($this->_comes("\r\n")) {
             $this->_consume(2);
           } else {
             $this->_consume(1);
@@ -98,6 +102,12 @@ class AsciiParser extends Parser
         }
       }
       $unicode_byte = intval($codepoint, 16);
+      if($unicode_byte > 127) {
+        // Not an Ascii char, return a normalized unicode escape
+        return "\\" . str_pad($codepoint, 6, '0', STR_PAD_LEFT);
+      }
+      return chr($unicode_byte);
+      /*
       $utf_32_str = "";
       for($i = 0; $i < 4; $i++) {
         $utf_32_str .= chr($unicode_byte & 0xff);
@@ -105,6 +115,7 @@ class AsciiParser extends Parser
       }
       $char = Util\Charset::convert($utf_32_str, 'ascii', 'UTF-32LE');
       return $char;
+       */
     }
 
     if($isForIdentifier) {
@@ -166,7 +177,7 @@ class AsciiParser extends Parser
           $value, $this->_peek(12)
         ), $this->source, $this->current_position);
       }
-      $this->current_position += strlen($value);
+      $this->current_position += $length;
       return $value;
 
     } else {
