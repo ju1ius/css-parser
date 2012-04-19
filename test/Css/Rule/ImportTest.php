@@ -8,8 +8,7 @@ class ImportTest extends CssParser_TestCase
    **/
   public function testOutput($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $this->assertEquals($expected, $rule->getCssText());
   }
@@ -31,8 +30,7 @@ class ImportTest extends CssParser_TestCase
    **/
   public function testImportsAllowedOnlyAfterCharset($input)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
   }
   public function testImportsAllowedOnlyAfterCharsetProvider()
   {

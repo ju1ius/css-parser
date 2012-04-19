@@ -8,7 +8,7 @@ class ErrorHandlingTest extends CssParser_TestCase
    **/
   public function testMalformedProperty($input, $expected)
   {
-    $this->css_parser->getOptions()->set('strict_parsing', false);
+    //$this->css_parser->getOptions()->set('strict_parsing', false);
     $stylesheet = $this->parseStyleSheet($input);
     $this->assertEquals($expected, $stylesheet->getCssText());
     //foreach($this->css_parser->getErrors() as $error) {

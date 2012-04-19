@@ -30,7 +30,6 @@ class CharsetTest extends CssParser_TestCase
   public function testOnlyOneCharsetAllowed()
   {
     $css = "@charset 'utf-8'; @charset 'UTF-32LE';";
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($css);
+    $styleSheet = $this->parseStyleSheet($css);
   }
 }

@@ -8,8 +8,7 @@ class ExpandShorthandsTest extends CssParser_TestCase
    **/
   public function testExpandBorderShorthands($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->expandBorderShorthands();
@@ -74,8 +73,7 @@ class ExpandShorthandsTest extends CssParser_TestCase
    **/
   public function testExpandFontShorthands($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->expandFontShorthands();
@@ -128,8 +126,7 @@ class ExpandShorthandsTest extends CssParser_TestCase
    **/
   public function testExpandDimensionsShorthands($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->expandDimensionsShorthands();
@@ -166,8 +163,7 @@ class ExpandShorthandsTest extends CssParser_TestCase
    **/
   public function testExpandBackgroundShorthands($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->expandBackgroundShorthands();
@@ -235,8 +231,7 @@ class ExpandShorthandsTest extends CssParser_TestCase
   {
     $this->markTestIncomplete();
 
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->expandListStyleShorthands();

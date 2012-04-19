@@ -8,8 +8,7 @@ class NSTest extends CssParser_TestCase
    **/
   public function testOutput($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $this->assertEquals($expected, $rule->getCssText());
   }
@@ -33,8 +32,7 @@ class NSTest extends CssParser_TestCase
    **/
   public function testAllowedOnlyAfterCharsetAndImports($input)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
   }
   public function testAllowedOnlyAfterCharsetAndImportsProvider()
   {

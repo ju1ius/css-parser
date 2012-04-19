@@ -8,10 +8,9 @@ class StyleRuleTest extends CssParser_TestCase
    **/
   public function testMerge($inputs, $expected)
   {
-    $parser = $this->createParser();
     $rules = array();
     foreach($inputs as $input) {
-      $styleSheet = $parser->parseStyleSheet($input);
+      $styleSheet = $this->parseStyleSheet($input);
       $rules[] = $styleSheet->getFirstRule();
     }
     $merged = ju1ius\Css\Rule\StyleRule::merge($rules);
