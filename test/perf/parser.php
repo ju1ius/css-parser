@@ -7,18 +7,16 @@ use ju1ius\Text\Source;
 use ju1ius\Css;
 
 $timer = new Benchmark_Timer();
-//$nb_iterations = 1;
 $timer->start();
 
 $source = Css\StyleSheetLoader::load(__DIR__.'/../files/full/02.css');
 $timer->setMarker("Source init");
 
-$lexer = new Css\Lexer();
-$lexer->setSource($source);
+$lexer = new Css\Lexer($source);
 $timer->setMarker("Lexer init");
 
 //$token = $lexer->nextToken();
-//while (!$token->isOfType(Css\Lexer::T_EOF)) {
+//while ($token->type !== Css\Lexer::T_EOF) {
   ////echo $lexer->getLiteral($token) . PHP_EOL;
   //$token = $lexer->nextToken();
 //}

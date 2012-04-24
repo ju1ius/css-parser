@@ -82,25 +82,25 @@ class Parser extends LLk
    **/
   protected function _stylesheet()
   {/*{{{*/
-    $stylesheet = new StyleSheet(null, $this->lexer->getSource()->getEncoding());
+    $stylesheet = new StyleSheet(null, $this->lexer->getEncoding());
     $rule_list = $stylesheet->getRuleList();
 
     $charset = $this->_charset();
     if($charset) $rule_list->append($charset);
     $this->_ws();
 
-    while ($this->LA() === Lexer::T_IMPORT_SYM) {
+    while ($this->LT()->type === Lexer::T_IMPORT_SYM) {
       $rule_list->append($this->_import());
       $this->_ws();
     }
-    while ($this->LA() === Lexer::T_NAMESPACE_SYM) {
+    while ($this->LT()->type === Lexer::T_NAMESPACE_SYM) {
       $rule_list->append($this->_namespace());
       $this->_ws();
     }
 
-    while ($this->LA() !== Lexer::T_EOF) {
+    while ($this->LT()->type !== Lexer::T_EOF) {
       
-      switch ($this->LA()) {
+      switch ($this->LT()->type) {
       
         case Lexer::T_MEDIA_SYM:
           $rule_list->append($this->_media());
@@ -125,11 +125,11 @@ class Parser extends LLk
 
   protected function _charset()
   {/*{{{*/
-    if($this->LA() === Lexer::T_CHARSET_SYM) {
+    if($this->LT()->type === Lexer::T_CHARSET_SYM) {
       $this->consume();
       $this->_ws();
       $this->ensure(Lexer::T_STRING);
-      $value = $this->LT()->getValue();
+      $value = $this->LT()->value;
       $this->consume();
       $this->_ws();
       $this->match(Lexer::T_SEMICOLON);
@@ -147,7 +147,7 @@ class Parser extends LLk
     $this->_ws();
     $this->ensure(array(Lexer::T_STRING, Lexer::T_URI));
     $url = new Value\Url(
-      new Value\String($this->LT()->getValue())
+      new Value\String($this->LT()->value)
     );
     $this->consume();
     $media_query_list = $this->_media_query_list();
@@ -168,13 +168,13 @@ class Parser extends LLk
 
     $this->match(Lexer::T_NAMESPACE_SYM);
     $this->_ws();
-    if ($this->current()->isOfType(Lexer::T_IDENT)) {
-      $prefix = $this->current()->getValue();
+    if ($this->LT()->type === Lexer::T_IDENT) {
+      $prefix = $this->LT()->value;
       $this->consume();
       $this->_ws();
     }
     $this->ensure(array(Lexer::T_STRING, Lexer::T_URI));
-    $uri = $this->current()->getValue();
+    $uri = $this->LT()->value;
     $this->consume();
     $this->_ws();
     $this->match(Lexer::T_SEMICOLON);
@@ -183,7 +183,7 @@ class Parser extends LLk
       $prefix
     );
   }/*}}}*/
-  /**
+  /**)
    * media
    *   : MEDIA_SYM S* media_query_list S* '{' S* ruleset* '}' S*
    *   ;
@@ -199,8 +199,7 @@ class Parser extends LLk
     $rule_list = new RuleList();
 
     while (true) {
-      $token = $this->current();
-      switch ($token->getType()) {
+      switch ($this->LT()->type) {
       
         case Lexer::T_PAGE_SYM:
           break;
@@ -216,7 +215,7 @@ class Parser extends LLk
       
       }
     }
-    $this->match(Lexer::T_RCURLY);
+    $this->match(Lexer::R_RCURLY);
     return new Rule\Media($media_query_list, $rule_list);
   }/*}}}*/
   /**
@@ -228,12 +227,16 @@ class Parser extends LLk
   {/*{{{*/
     $this->_ws();
     $media_list = new MediaQueryList();
-    $token = $this->current();
+    $t = $this->LT()->type;
     
-    if($token->isOneOfTypes(array(Lexer::T_ONLY, LEXER::T_NOT, Lexer::T_IDENT, Lexer::T_LPAREN))) {
+    if($t === Lexer::T_ONLY ||
+        $t === Lexer::T_NOT ||
+        $t === Lexer::T_IDENT ||
+        $t === Lexer::T_LPAREN
+    ) {
       $media_list->append($this->_media_query());
     }
-    while($this->current()->isOfType(Lexer::T_COMMA)) {
+    while($this->LT()->type === Lexer::T_COMMA) {
       $this->consume();
       $this->_ws();
       $media_list->append($this->_media_query());
@@ -253,24 +256,24 @@ class Parser extends LLk
     $media_type = '';
     $expressions = array();
     $this->_ws();
-    $token = $this->current();
 
     // Alternative #1
-    if($token->isOneOfTypes(array(Lexer::T_ONLY, Lexer::T_NOT))) {
-      $restrictor = $token->getValue();
+    $t = $this->LT();
+    if($t->type === Lexer::T_ONLY || $t->type === Lexer::T_NOT) {
+      $restrictor = $t->value;
       $this->consume();
       $this->_ws();
     }
-    if($this->current()->isOfType(Lexer::T_IDENT)) {
+    if($this->LT()->type === Lexer::T_IDENT) {
       $media_type = $this->_media_type();
       $this->_ws();
-    } else if ($this->current()->isOfType(Lexer::T_LPAREN)) {
+    } else if ($this->LT()->type === Lexer::T_LPAREN) {
       $expressions[] = $this->_media_expression();
     }
 
     if(!$media_type) {}
 
-    while ($this->current()->isOfType(Lexer::T_AND)) {
+    while ($this->LT()->type === Lexer::T_AND) {
       $this->consume();
       $this->_ws();
       $expressions[] = $this->_media_expression();
@@ -295,7 +298,7 @@ class Parser extends LLk
   protected function _media_feature()
   {/*{{{*/
     $this->ensure(Lexer::T_IDENT);
-    $value = $this->current()->getValue();
+    $value = $this->LT()->value;
     $this->consume();
     return $value;
   }/*}}}*/
@@ -313,7 +316,7 @@ class Parser extends LLk
     $this->_ws();
     $media_feature = $this->_media_feature();
     $this->_ws();
-    if($this->current()->isOfType(Lexer::T_COLON)) {
+    if($this->LT()->type === Lexer::T_COLON) {
       //$expression = $this->_expression();
       $this->consume();
       $this->_ws();
@@ -381,7 +384,7 @@ class Parser extends LLk
 
     $property->setValueList($values);
 
-    if ($this->current()->isOfType(Lexer::T_IMPORTANT_SYM)) {
+    if ($this->LT()->type === Lexer::T_IMPORTANT_SYM) {
       $this->_prio();
       $property->setIsImportant(true);
     }
@@ -395,8 +398,8 @@ class Parser extends LLk
    **/
   protected function _property()
   {/*{{{*/
-    if(!$this->current()->isOfType(Lexer::T_IDENT)) return;
-    $name = $this->current()->getValue();
+    if($this->LT()->type !== Lexer::T_IDENT) return;
+    $name = $this->LT()->value;
     $this->consume();
     $this->_ws();
     return new Property($name);
@@ -424,13 +427,13 @@ class Parser extends LLk
     $selectors = array();
     $selectors[] = $this->_selector();
 
-    while ($this->current()->isOfType(Lexer::T_COMMA)) {
+    while ($this->LT()->type === Lexer::T_COMMA) {
       $this->consume();
       $this->_ws();
       $selector = $this->_selector();
     
-      if (!$selector) {
-        throw new UnexpectedTokenException($this->current());
+      if (!$selector){
+        throw new UnexpectedTokenException($this->current);
       }
       $selectors[] = $selector;
     }
@@ -467,10 +470,10 @@ class Parser extends LLk
 
     while(true) {
 
-      switch ($this->current()->getType()) {
+      switch ($this->LT()->type) {
       
         case Lexer::T_HASH:
-          //if($has_hash) $this->_parseException("Two hashes", $this->current());
+          //if($has_hash) $this->_parseException("Two hashes", $this->current);
           $id = $this->_id($selector);
           if(!$has_hash) $selector = $id; // there can't be two hashes
           $has_hash = true;
@@ -508,22 +511,24 @@ class Parser extends LLk
    **/ 
   protected function _combinator()
   {/*{{{*/
-
-    switch ($this->current()->getType()) {
+    $token = $this->LT();
+    switch ($token->type) {
 
       case Lexer::T_PLUS:
       case Lexer::T_GREATER:
       case Lexer::T_TILDE:
-        $combinator = $this->current()->getValue();
+        $combinator = $token->value;
         $this->consume();
         $this->_ws();
         return $combinator;
 
       case Lexer::T_S:
         $this->_ws();
-        if($this->current()->isOneOfTypes(array(
-          Lexer::T_COMMA, Lexer::T_LCURLY, Lexer::T_EOF
-        ))) {
+        $next = $this->LT()->type;
+        if($next === Lexer::T_COMMA || 
+           $next === Lexer::T_LCURLY ||
+           $next === Lexer::T_EOF
+        ) {
           return null;
         }
         return ' ';
@@ -553,7 +558,7 @@ class Parser extends LLk
   protected function _id($selector)
   {/*{{{*/
     $this->ensure(Lexer::T_HASH);
-    $id = $this->current()->getValue();
+    $id = $this->LT()->value;
     $this->consume();
     return new Selector\IDSelector($selector, $id);
   }/*}}}*/
@@ -566,7 +571,7 @@ class Parser extends LLk
   {/*{{{*/
     $this->match(Lexer::T_DOT);
     $this->ensure(Lexer::T_IDENT);
-    $class = $this->current()->getValue();
+    $class = $this->LT()->value;
     $this->consume();
     return new Selector\ClassSelector($selector, $class);
   }/*}}}*/
@@ -578,8 +583,9 @@ class Parser extends LLk
   protected function _element_name()
   {/*{{{*/
     $element = '*';
-    if ($this->current()->isOneOfTypes(array(Lexer::T_IDENT, Lexer::T_STAR))) {
-      $element = $this->current()->getValue();
+    $token = $this->LT();
+    if ($token->type === Lexer::T_IDENT || $token->type === Lexer::T_STAR) {
+      $element = $token->value;
       $this->consume();
     }
     return $element;
@@ -592,9 +598,10 @@ class Parser extends LLk
   protected function _namespace_prefix()
   {/*{{{*/
     $namespace = '*';
-    if ($this->LA() === Lexer::T_PIPE || $this->LA(2) === Lexer::T_PIPE) {
-      if ($this->current()->isOneOfTypes(array(Lexer::T_IDENT, Lexer::T_STAR))) {
-        $namespace = $this->current()->getValue();
+    $token = $this->LT();
+    if ($token->type === Lexer::T_PIPE || $this->LA(2) === Lexer::T_PIPE) {
+      if ($token->type === Lexer::T_IDENT || $token->type === Lexer::T_STAR) {
+        $namespace = $token->value;
         $this->consume();
       }
       $this->match(Lexer::T_PIPE);
@@ -633,22 +640,26 @@ class Parser extends LLk
     $this->_ws();
     $namespace = $this->_namespace_prefix();
     $this->ensure(Lexer::T_IDENT);
-    $attribute = $this->current()->getValue();
+    $attribute = $this->LT()->value;
     $this->consume();
     $this->_ws();
 
     $operator = 'exists';
     $value = null;
 
-    if($this->current()->isOneOfTypes(array(
-      Lexer::T_EQUALS, Lexer::T_PREFIXMATCH, Lexer::T_SUFFIXMATCH,
-      Lexer::T_SUBSTRINGMATCH, Lexer::T_INCLUDES, Lexer::T_DASHMATCH
-    ))) {
-      $operator = $this->current()->getValue();
+    $t = $this->LT();
+    if($t->type === Lexer::T_EQUALS
+      || $t->type === Lexer::T_PREFIXMATCH
+      || $t->type === Lexer::T_SUFFIXMATCH
+      || $t->type === Lexer::T_SUBSTRINGMATCH
+      || $t->type === Lexer::T_INCLUDES
+      || $t->type === Lexer::T_DASHMATCH
+    ) {
+      $operator = $t->value;
       $this->consume();
       $this->_ws();
       $this->ensure(array(Lexer::T_IDENT, Lexer::T_STRING));
-      $value = $this->current()->getValue();
+      $value = $this->LT()->value;
       $this->consume();
       $this->_ws();
     }
@@ -665,16 +676,17 @@ class Parser extends LLk
     $this->match(Lexer::T_COLON);
     $type = ':';
 
-    if($this->current()->isOfType(Lexer::T_COLON)) {
+    if($this->LT()->type === Lexer::T_COLON) {
       $type .= ':';
       $this->consume();
     }
 
     $this->ensure(array(Lexer::T_IDENT, Lexer::T_FUNCTION));
-    $token = $this->current();
-    $ident = $token->getValue();
 
-    if($token->isOfType(Lexer::T_IDENT)) {
+    $token = $this->LT();
+    $ident = $token->value;
+
+    if($token->type === Lexer::T_IDENT) {
       $this->consume();
       return new Selector\PseudoSelector($selector, $type, $ident);
     }
@@ -704,21 +716,21 @@ class Parser extends LLk
     $expr = '';
 
     while (true) {
-
-      switch ($this->current()->getType()) {
+      $token = $this->LT();
+      switch ($token->type) {
       
         case Lexer::T_PLUS:
         case Lexer::T_MINUS:
         case Lexer::T_NUMBER:
         case Lexer::T_STRING:
         case Lexer::T_IDENT:
-          $expr .= $this->current()->getValue();
+          $expr .= $token->value;
           $this->consume();
           $this->_ws();
           break;
 
         case Lexer::T_DIMENSION:
-          $value = $this->current()->getValue();
+          $value = $token->value;
           $expr .= $value['value'] . $value['unit'];
           $this->consume();
           $this->_ws();
@@ -754,8 +766,8 @@ class Parser extends LLk
   {/*{{{*/
     $selector = $this->_type_selector();
 
-    switch ($this->current()->getType()) {
-    
+    switch ($this->LT()->type) {
+
       case Lexer::T_HASH:
         $selector = $this->_id($selector);
         break;
@@ -773,7 +785,7 @@ class Parser extends LLk
         break;
 
       default:
-        throw new UnexpectedTokenException($this->current());
+        throw new UnexpectedTokenException($this->current);
         break;
     
     }
@@ -794,7 +806,7 @@ class Parser extends LLk
 
     if (null === $value) {
       throw new ParseException(
-        "Null value", $this->lexer->getSource(), $this->current()
+        "Null value", $this->lexer->getSource(), $this->current
       );
     }
     $values[] = $value;
@@ -821,22 +833,22 @@ class Parser extends LLk
    **/
   protected function _term()
   {/*{{{*/
-    $token = $this->current();
-    switch ($token->getType()) {
+    $token = $this->LT();
+    switch ($token->type) {
 
       case Lexer::T_NUMBER:
         $this->consume();
         $this->_ws();
-        return new Value\Dimension($token->getValue(), null);
+        return new Value\Dimension($token->value, null);
 
       case Lexer::T_DIMENSION:
-        $value = $token->getValue();
+        $value = $token->value;
         $this->consume();
         $this->_ws();
         return new Value\Dimension($value['value'], $value['unit']);
 
       case Lexer::T_RATIO:
-        $value = $token->getValue();
+        $value = $token->value;
         $this->consume();
         $this->_ws();
         return new Value\Ratio($value['numerator'], $value['denominator']);
@@ -844,41 +856,41 @@ class Parser extends LLk
       case Lexer::T_PERCENTAGE:
         $this->consume();
         $this->_ws();
-        return new Value\Percentage($token->getValue());
+        return new Value\Percentage($token->value);
 
       case Lexer::T_LENGTH:
+        $value = $token->value;
         $this->consume();
         $this->_ws();
-        $value = $token->getValue();
         return new Value\Length($value['value'], $value['unit']);
 
       case Lexer::T_ANGLE:
+        $value = $token->value;
         $this->consume();
         $this->_ws();
-        $value = $token->getValue();
         return new Value\Angle($value['value'], $value['unit']);
 
       case Lexer::T_TIME:
+        $value = $token->value;
         $this->consume();
         $this->_ws();
-        $value = $token->getValue();
         return new Value\Time($value['value'], $value['unit']);
 
       case Lexer::T_FREQ:
+        $value = $token->value;
         $this->consume();
         $this->_ws();
-        $value = $token->getValue();
         return new Value\Frequency($value['value'], $value['unit']);
 
       case Lexer::T_STRING:
         $this->consume();
         $this->_ws();
-        return new Value\String($token->getValue());
+        return new Value\String($token->value);
 
       case Lexer::T_IDENT:
+        $ident = $token->value;
         $this->consume();
         $this->_ws();
-        $ident = $token->getValue();
         // is it a color name ?
         if($rgb = Util\Color::x11ToRgb($ident)) {
           $color = new Value\Color();
@@ -889,12 +901,12 @@ class Parser extends LLk
       case Lexer::T_URI:
         $this->consume();
         $this->_ws();
-        return new Value\Url(new Value\String($token->getValue()));
+        return new Value\Url(new Value\String($token->value));
 
       case Lexer::T_UNICODERANGE:
         $this->consume();
         $this->_ws();
-        return new Value\UnicodeRange($token->getValue());
+        return new Value\UnicodeRange($token->value);
 
       case Lexer::T_FUNCTION:
         return $this->_function();
@@ -915,7 +927,7 @@ class Parser extends LLk
   protected function _hexcolor()
   {/*{{{*/
     $this->ensure(Lexer::T_HASH);
-    $hex = $this->current()->getValue();
+    $hex = $this->LT()->value;
     $this->consume();
     $this->_ws();
     if (!preg_match('/[0-9a-f]{6}|[0-9a-f]{3}/i', $hex)) {
@@ -931,7 +943,7 @@ class Parser extends LLk
   protected function _function()
   {/*{{{*/
     $this->ensure(Lexer::T_FUNCTION);
-    $name = $this->current()->getValue();
+    $name = $this->LT()->value;
     $this->consume();
     $this->_ws();
     // TODO: calc(), attr(), cycle(), image(), gradients ...
@@ -970,11 +982,11 @@ class Parser extends LLk
    **/
   protected function _operator()
   {/*{{{*/
-    $token = $this->current();
-    if ($token->isOneOfTypes(array(Lexer::T_COMMA, Lexer::T_SLASH))) {
+    $t = $this->LT();
+    if ($t->type === Lexer::T_COMMA || $t->type === Lexer::T_SLASH) {
       $this->consume();
       $this->_ws();
-      return $token->getvalue();
+      return $t->value;
     } 
   }/*}}}*/
 
@@ -986,14 +998,14 @@ class Parser extends LLk
   protected function _parseStyleDeclaration()
   {/*{{{*/
     $style_declaration = new StyleDeclaration();
-    $this->_ws();
+    //$this->_ws();
     $property = $this->_declaration();
     
     if(null !== $property) {
       $style_declaration->append($property);
-      if ($this->current()->isOfType(Lexer::T_SEMICOLON)) {
+      if ($this->LT()->type === Lexer::T_SEMICOLON) {
         while (true) {
-          $this->_ws();
+          //$this->_ws();
           $this->match(Lexer::T_SEMICOLON);
           $this->_ws();
           $property = $this->_declaration();
@@ -1007,13 +1019,20 @@ class Parser extends LLk
   }/*}}}*/
 
   protected function _ws()
-  {
-    while($this->current()->isOneOfTypes(array(
-      Lexer::T_S, Lexer::T_COMMENT, Lexer::T_CDO, Lexer::T_CDC
-    ))) {
-      $this->consume();
+  {/*{{{*/
+    while(true) {
+      switch($this->LT()->type) {
+        case Lexer::T_S:
+        case Lexer::T_COMMENT:
+        case Lexer::T_CDO:
+        case Lexer::T_CDC:
+          $this->consume();
+          break;
+        default:
+          break 2;
+      }
     }
-  }
+  }/*}}}*/
 
   /**
    * Reduces a list of values into a PropertyValueList object

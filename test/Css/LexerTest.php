@@ -26,6 +26,20 @@ class LexerTest extends CssParser_TestCase
   public function testTokenizationProvider()
   {
     return array(
+      // Identifiers are case insensitive
+      array('!iMpoRTAnt', array(Lexer::T_IMPORTANT_SYM)),
+      // Identifiers can contain escapes
+      array('!iM\po\RTAnt', array(Lexer::T_IMPORTANT_SYM)),
+      // Identifiers can contain unicode escapes
+      array('!\049\006d\00050\00004f\rT\41 NT', array(Lexer::T_IMPORTANT_SYM)),
+      // Identifiers can begin by unicode escape
+      array('\049\006d\00050\00004f\rT', array(Lexer::T_IDENT)),
+      // Longest match
+      array('@import', array(Lexer::T_IMPORT_SYM)),
+      array('@important', array(Lexer::T_ATKEYWORD)),
+      array('1em', array(Lexer::T_LENGTH)),
+      array('1email', array(Lexer::T_DIMENSION)),
+      //
       array(
         '@charset "utf-8";',
         array(Lexer::T_CHARSET_SYM, Lexer::T_S, Lexer::T_STRING, Lexer::T_SEMICOLON)

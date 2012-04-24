@@ -30,7 +30,6 @@ while (!$token->isOfType(Css\Lexer::T_EOF)) {
   $token = $lexer->nextToken();
 }
 echo $lexer->getLiteral($token) . PHP_EOL;
-$lexer->reset();
 $timer->setMarker("Tokenization end");
 
 $parser = new Css\Parser($lexer);

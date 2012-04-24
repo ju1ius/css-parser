@@ -1,13 +1,23 @@
 README
 
+New Lexer:
+  ASCII pcre + strlen -> DONE
+  UTF8 pcre + mb_strlen -> ALMOST
+  MULTIBYTE mb_ereg + mb_strlen -> NOT YET
+  write tests
+
+New Parser:
+  finish the grammar (@page, @media, @keyframes)
+  rewrite tests
+
 Encoding:
   figure out what to do with unicode escapes:
-    should they be left as is in strings ?
-    should they be left as is in identifiers ?
+    should they be left as is in strings ? => YES
+    should they be left as is in identifiers ? => CONVERT IF POSSIBLE
 
 API:
-  Parser::parse
-    call StyleSheetLoader::load ?
+  ParserFactory:
+    determines which lexer to use from source encoding
 
 Tests:
   selectors
@@ -22,7 +32,3 @@ CSSOM:
 Parser:
   background-size syntax in background shorthand
   border-radius
-  The parser code is starting to be a bit hairy:
-    Should I use a parser generator ?
-      + maintainability
-      - performance ?

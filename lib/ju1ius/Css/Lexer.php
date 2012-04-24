@@ -1,4 +1,5 @@
 <?php
+/* vim: set fdm=marker : */
 
 namespace ju1ius\Css;
 
@@ -79,8 +80,6 @@ class Lexer extends BaseLexer
     T_BADSTRING = 600,
     T_BADCOMMENT = 601;
 
-  protected static $TOKEN_NAMES;
-
   protected static $regex = array(
     'ws' => '\s',
     'nl' => '\v',
@@ -88,35 +87,35 @@ class Lexer extends BaseLexer
     'nonascii' => '[\240-\377]',
     'num' => '[-+]?[0-9]*\.?[0-9]+',
 
-    'A' => 'a|\\\\0{0,4}(?:41|61)(?:\r\n|[ \t\r\n\f])?',
-    'B' => 'b|\\\\0{0,4}(?:42|62)(?:\r\n|[ \t\r\n\f])?',
-    'C' => 'c|\\\\0{0,4}(?:43|63)(?:\r\n|[ \t\r\n\f])?',
-    'D' => 'd|\\\\0{0,4}(?:44|64)(?:\r\n|[ \t\r\n\f])?',
-    'E' => 'e|\\\\0{0,4}(?:45|65)(?:\r\n|[ \t\r\n\f])?',
-    'F' => 'f|\\\\0{0,4}(?:46|66)(?:\r\n|[ \t\r\n\f])?',
-    'G' => 'g|\\\\0{0,4}(?:47|67)(?:\r\n|[ \t\r\n\f])?|\\\\g',
-    'H' => 'h|\\\\0{0,4}(?:48|68)(?:\r\n|[ \t\r\n\f])?|\\\\h',
-    'I' => 'i|\\\\0{0,4}(?:49|69)(?:\r\n|[ \t\r\n\f])?|\\\\i',
-    'J' => 'j|\\\\0{0,4}(?:4a|6a)(?:\r\n|[ \t\r\n\f])?|\\\\j',
-    'K' => 'k|\\\\0{0,4}(?:4b|6b)(?:\r\n|[ \t\r\n\f])?|\\\\k',
-    'L' => 'l|\\\\0{0,4}(?:4c|6c)(?:\r\n|[ \t\r\n\f])?|\\\\l',
-    'M' => 'm|\\\\0{0,4}(?:4d|6d)(?:\r\n|[ \t\r\n\f])?|\\\\m',
-    'N' => 'n|\\\\0{0,4}(?:4e|6e)(?:\r\n|[ \t\r\n\f])?|\\\\n',
-    'O' => 'o|\\\\0{0,4}(?:4f|6f)(?:\r\n|[ \t\r\n\f])?|\\\\o',
-    'P' => 'p|\\\\0{0,4}(?:50|70)(?:\r\n|[ \t\r\n\f])?|\\\\p',
-    'Q' => 'q|\\\\0{0,4}(?:51|71)(?:\r\n|[ \t\r\n\f])?|\\\\q',
-    'R' => 'r|\\\\0{0,4}(?:52|72)(?:\r\n|[ \t\r\n\f])?|\\\\r',
-    'S' => 's|\\\\0{0,4}(?:53|73)(?:\r\n|[ \t\r\n\f])?|\\\\s',
-    'T' => 't|\\\\0{0,4}(?:54|74)(?:\r\n|[ \t\r\n\f])?|\\\\t',
-    'U' => 'u|\\\\0{0,4}(?:55|75)(?:\r\n|[ \t\r\n\f])?|\\\\u',
-    'V' => 'v|\\\\0{0,4}(?:56|76)(?:\r\n|[ \t\r\n\f])?|\\\\v',
-    'W' => 'w|\\\\0{0,4}(?:57|77)(?:\r\n|[ \t\r\n\f])?|\\\\w',
-    'X' => 'x|\\\\0{0,4}(?:58|78)(?:\r\n|[ \t\r\n\f])?|\\\\x',
-    'Y' => 'y|\\\\0{0,4}(?:59|79)(?:\r\n|[ \t\r\n\f])?|\\\\y',
-    'Z' => 'z|\\\\0{0,4}(?:5a|7a)(?:\r\n|[ \t\r\n\f])?|\\\\z',
+    'A' => 'a|\\\\0{0,4}(?>41|61)(?>\r\n|[ \t\r\n\f])?',
+    'B' => 'b|\\\\0{0,4}(?>42|62)(?>\r\n|[ \t\r\n\f])?',
+    'C' => 'c|\\\\0{0,4}(?>43|63)(?>\r\n|[ \t\r\n\f])?',
+    'D' => 'd|\\\\0{0,4}(?>44|64)(?>\r\n|[ \t\r\n\f])?',
+    'E' => 'e|\\\\0{0,4}(?>45|65)(?>\r\n|[ \t\r\n\f])?',
+    'F' => 'f|\\\\0{0,4}(?>46|66)(?>\r\n|[ \t\r\n\f])?',
+    'G' => 'g|\\\\0{0,4}(?>47|67)(?>\r\n|[ \t\r\n\f])?|\\\\g',
+    'H' => 'h|\\\\0{0,4}(?>48|68)(?>\r\n|[ \t\r\n\f])?|\\\\h',
+    'I' => 'i|\\\\0{0,4}(?>49|69)(?>\r\n|[ \t\r\n\f])?|\\\\i',
+    'J' => 'j|\\\\0{0,4}(?>4a|6a)(?>\r\n|[ \t\r\n\f])?|\\\\j',
+    'K' => 'k|\\\\0{0,4}(?>4b|6b)(?>\r\n|[ \t\r\n\f])?|\\\\k',
+    'L' => 'l|\\\\0{0,4}(?>4c|6c)(?>\r\n|[ \t\r\n\f])?|\\\\l',
+    'M' => 'm|\\\\0{0,4}(?>4d|6d)(?>\r\n|[ \t\r\n\f])?|\\\\m',
+    'N' => 'n|\\\\0{0,4}(?>4e|6e)(?>\r\n|[ \t\r\n\f])?|\\\\n',
+    'O' => 'o|\\\\0{0,4}(?>4f|6f)(?>\r\n|[ \t\r\n\f])?|\\\\o',
+    'P' => 'p|\\\\0{0,4}(?>50|70)(?>\r\n|[ \t\r\n\f])?|\\\\p',
+    'Q' => 'q|\\\\0{0,4}(?>51|71)(?>\r\n|[ \t\r\n\f])?|\\\\q',
+    'R' => 'r|\\\\0{0,4}(?>52|72)(?>\r\n|[ \t\r\n\f])?|\\\\r',
+    'S' => 's|\\\\0{0,4}(?>53|73)(?>\r\n|[ \t\r\n\f])?|\\\\s',
+    'T' => 't|\\\\0{0,4}(?>54|74)(?>\r\n|[ \t\r\n\f])?|\\\\t',
+    'U' => 'u|\\\\0{0,4}(?>55|75)(?>\r\n|[ \t\r\n\f])?|\\\\u',
+    'V' => 'v|\\\\0{0,4}(?>56|76)(?>\r\n|[ \t\r\n\f])?|\\\\v',
+    'W' => 'w|\\\\0{0,4}(?>57|77)(?>\r\n|[ \t\r\n\f])?|\\\\w',
+    'X' => 'x|\\\\0{0,4}(?>58|78)(?>\r\n|[ \t\r\n\f])?|\\\\x',
+    'Y' => 'y|\\\\0{0,4}(?>59|79)(?>\r\n|[ \t\r\n\f])?|\\\\y',
+    'Z' => 'z|\\\\0{0,4}(?>5a|7a)(?>\r\n|[ \t\r\n\f])?|\\\\z',
   );
-  protected static $regex_cache = array();
   protected static
+    $regex_cache = array(),
     $units = array(
       'em','rem','ex','px','cm','mm','in','pt','pc',
       'deg','rad','grad','ms','s','Hz','kHz','dpi','dpcm',
@@ -127,7 +126,7 @@ class Lexer extends BaseLexer
     );
 
 
-  public function __construct()
+  public function __construct(Source\String $source)
   {/*{{{*/
     self::$regex['unicode']    = '\\\\'.self::$regex['hexdigit'].'{1,6}\s?';
     self::$regex['escape']     = self::$regex['unicode'].'|\\\\[ -~\200-\377]';
@@ -151,291 +150,293 @@ class Lexer extends BaseLexer
       //self::$regex[$unit] = $pattern;
       $units[] = '(?:'.$pattern.')';
     }
-    self::$regex['units'] = implode('|', $units);
+    //self::$regex['units'] = implode('|', $units);
+    self::$regex['units'] = '(?>'.implode('|', $units).')(?!'.self::$regex['nmchar'].')';
 
     $at_pattern = 'charset';
     foreach(self::$atkeywords as $keyword) {
       $pattern = self::getPatternForIdentifier($keyword);
       $at_pattern .= '|(?:'.$pattern.')';
     }
-    self::$regex['atkeyword'] = $at_pattern;
+    self::$regex['atkeyword'] = '(?>'.$at_pattern .')(?!'.self::$regex['nmchar'].')';
 
-    parent::__construct();
+    parent::__construct($source);
   }/*}}}*/
 
   public function nextToken()
   {/*{{{*/
-    if($this->position === -1) $this->consume();
+    while (true) {
+    
+      if($this->position === -1) $this->consume();
 
-    while ($this->lookahead !== null) {
+      while ($this->lookahead !== null) {
 
-      $position = $this->position;
+        $position = $this->position;
 
-      switch ($this->lookahead) {
+        switch ($this->lookahead) {
 
-        case '/':
-          if($this->peek() === '*') {
-            $this->handleComment();
-          } else {
+          case '/':
+            if($this->peek() === '*') {
+              $this->handleComment();
+            } else {
+              $this->consume();
+              return new Token(self::T_SLASH, '/', $this->lineno, $position);
+            }
+            break;
+
+          case '@':
+            return $this->handleAtKeyword();
+            break;
+
+          case '"':
+          case "'":
+            return $this->handleString();
+            break;
+
+          case '(':
             $this->consume();
-            return new Token(self::T_SLASH, '/', $position);
-          }
-          break;
+            return new Token(self::T_LPAREN, '(', $this->lineno, $position);
+            break;
 
-        case '@':
-          return $this->handleAtKeyword();
-          break;
-
-        case '"':
-        case "'":
-          return $this->handleString();
-          break;
-
-        case '(':
-          $this->consume();
-          return new Token(self::T_LPAREN, '(', $position);
-          break;
-
-        case ')':
-          $this->consume();
-          return new Token(self::T_RPAREN, ')', $position);
-          break;
-
-        case '{':
-          $this->consume();
-          return new Token(self::T_LCURLY, '{', $position);
-          break;
-
-        case '}':
-          $this->consume();
-          return new Token(self::T_RCURLY, '}', $position);
-          break;
-
-        case '#':
-          return $this->handleHash();
-          break;
-
-        case '.':
-          $next = $this->peek();
-          if(ctype_digit($next)) {
-            return $this->handleNumber();
-          } else /*if(preg_match('/'.self::$regex['nmstart'].'/', $next))*/ {
+          case ')':
             $this->consume();
-            return new Token(self::T_DOT, '.', $position);
-          }
-          break;
+            return new Token(self::T_RPAREN, ')', $this->lineno, $position);
+            break;
 
-        case ':':
-          if($this->comesExpression(self::$regex['negation'])) {
-            return $this->handleNegation();
-          } else {
+          case '{':
             $this->consume();
-            return new Token(self::T_COLON, ':', $position);
-          }
-          break;
+            return new Token(self::T_LCURLY, '{', $this->lineno, $position);
+            break;
 
-        case ';':
-          $this->consume();
-          return new Token(self::T_SEMICOLON, ';', $position);
-          break;
-
-        case ',':
-          $this->consume();
-          return new Token(self::T_COMMA, ',', $position);
-          break;
-
-        case '!':
-          return $this->handleImportant();
-          break;
-
-        case '*':
-          $next = $this->peek();
-          if($next === '=') {
-            $this->consume(2);
-            return new Token(self::T_SUBSTRINGMATCH, '*=', $position);
-          } else {
+          case '}':
             $this->consume();
-            return new Token(self::T_STAR, '*', $position);
-          }
-          break;
+            return new Token(self::T_RCURLY, '}', $this->lineno, $position);
+            break;
 
-        case '|':
-          $next = $this->peek();
-          if($next === '=') {
-            $this->consume(2);
-            return new Token(self::T_DASHMATCH, '|=', $position);
-          } else {
+          case '#':
+            return $this->handleHash();
+            break;
+
+          case '.':
+            $next = $this->peek();
+            if(ctype_digit($next)) {
+              return $this->handleNumber();
+            } else /*if(preg_match('/'.self::$regex['nmstart'].'/', $next))*/ {
+              $this->consume();
+              return new Token(self::T_DOT, '.', $this->lineno, $position);
+            }
+            break;
+
+          case ':':
+            if($this->comesExpression(self::$regex['negation'])) {
+              return $this->handleNegation();
+            } else {
+              $this->consume();
+              return new Token(self::T_COLON, ':', $this->lineno, $position);
+            }
+            break;
+
+          case ';':
             $this->consume();
-            return new Token(self::T_PIPE, '|', $position);
-          }
-          break;
+            return new Token(self::T_SEMICOLON, ';', $this->lineno, $position);
+            break;
 
-        case '$':
-          $next = $this->peek();
-          if($next === '=') {
-            $this->consume(2);
-            return new Token(self::T_SUFFIXMATCH, '$=', $position);
-          } else {
+          case ',':
             $this->consume();
-            return new Token(self::T_INVALID, '^', $position);
-          }
-          break;
+            return new Token(self::T_COMMA, ',', $this->lineno, $position);
+            break;
 
-        case '^':
-          $next = $this->peek();
-          if($next === '=') {
-            $this->consume(2);
-            return new Token(self::T_PREFIXMATCH, '^=', $position);
-          } else {
+          case '!':
+            return $this->handleImportant();
+            break;
+
+          case '*':
+            $next = $this->peek();
+            if($next === '=') {
+              $this->consume(2);
+              return new Token(self::T_SUBSTRINGMATCH, '*=', $this->lineno, $position);
+            } else {
+              $this->consume();
+              return new Token(self::T_STAR, '*', $this->lineno, $position);
+            }
+            break;
+
+          case '|':
+            $next = $this->peek();
+            if($next === '=') {
+              $this->consume(2);
+              return new Token(self::T_DASHMATCH, '|=', $this->lineno, $position);
+            } else {
+              $this->consume();
+              return new Token(self::T_PIPE, '|', $this->lineno, $position);
+            }
+            break;
+
+          case '$':
+            $next = $this->peek();
+            if($next === '=') {
+              $this->consume(2);
+              return new Token(self::T_SUFFIXMATCH, '$=', $this->lineno, $position);
+            } else {
+              $this->consume();
+              return new Token(self::T_INVALID, '^', $this->lineno, $position);
+            }
+            break;
+
+          case '^':
+            $next = $this->peek();
+            if($next === '=') {
+              $this->consume(2);
+              return new Token(self::T_PREFIXMATCH, '^=', $this->lineno, $position);
+            } else {
+              $this->consume();
+              return new Token(self::T_INVALID, '^', $this->lineno, $position);
+            }
+            break;
+
+          case '=':
             $this->consume();
-            return new Token(self::T_INVALID, '^', $position);
-          }
-          break;
+            return new Token(self::T_EQUALS, '=', $this->lineno, $position);
 
-        case '=':
-          $this->consume();
-          return new Token(self::T_EQUALS, '=', $position);
-
-        case '[':
-          $this->consume();
-          return new Token(self::T_LBRACK, '[', $position);
-          break;
-
-        case ']':
-          $this->consume();
-          return new Token(self::T_RBRACK, ']', $position);
-          break;
-
-        case '+':
-          $this->consume();
-          return new Token(self::T_PLUS, '+', $position);
-          break;
-
-        case '-':
-          if($this->comesExpression('\s')) {
+          case '[':
             $this->consume();
-            return new Token(self::T_MINUS, '-', $position);
-          } else if($this->comesExpression(self::$regex['num'])) {
-            return $this->handleNumber();
-          } else {
+            return new Token(self::T_LBRACK, '[', $this->lineno, $position);
+            break;
+
+          case ']':
+            $this->consume();
+            return new Token(self::T_RBRACK, ']', $this->lineno, $position);
+            break;
+
+          case '+':
+            $this->consume();
+            return new Token(self::T_PLUS, '+', $this->lineno, $position);
+            break;
+
+          case '-':
+            if(ctype_space($this->peek())) {
+              $this->consume();
+              return new Token(self::T_MINUS, '-', $this->lineno, $position);
+            } else if($this->comesExpression(self::$regex['num'])) {
+              return $this->handleNumber();
+            } else {
+              return $this->handleIdent();
+            }
+            break;
+
+          case '>':
+            $this->consume();
+            return new Token(self::T_GREATER, '>', $this->lineno, $position);
+            break;
+
+          case '<':
+            $this->consume();
+            return new Token(self::T_LOWER, '<', $this->lineno, $position);
+            break;
+
+          case '~':
+            $next = $this->peek();
+            if($next === '=') {
+              $this->consume(2);
+              return new Token(self::T_INCLUDES, '~=', $this->lineno, $position);
+            } else {
+              $this->consume();
+              return new Token(self::T_TILDE, '~', $this->lineno, $position);
+            }
+            break;
+
+          case '%':
+            $this->consume();
+            return new Token(self::T_PERCENT, '%', $this->lineno, $position);
+            break;
+
+          case 'U':
+          case 'u':
+            if ($this->peek() === '+') {
+              return $this->handleUnicodeRange();
+            } else {
+              return $this->handleIdent();
+            }
+            break;
+
+          case '\\':
             return $this->handleIdent();
-          }
-          break;
+            break;
 
-        case '>':
-          $this->consume();
-          return new Token(self::T_GREATER, '>', $position);
-          break;
+          default:
 
-        case '<':
-          $this->consume();
-          return new Token(self::T_LOWER, '<', $position);
-          break;
-
-        case '~':
-          $next = $this->peek();
-          if($next === '=') {
-            $this->consume(2);
-            return new Token(self::T_INCLUDES, '~=', $position);
-          } else {
-            $this->consume();
-            return new Token(self::T_TILDE, '~', $position);
-          }
-          break;
-
-        case '%':
-          $this->consume();
-          return new Token(self::T_PERCENT, '%', $position);
-          break;
-
-        case 'U':
-        case 'u':
-          if ($this->peek() === '+') {
-            return $this->handleUnicodeRange();
-          } else {
-            return $this->handleIdent();
-          }
-          break;
-
-        default:
-
-          if (preg_match('/^\s/', $this->lookahead)) {
-            return $this->handleWhitespace();
-          } else if (ctype_digit($this->lookahead)) {
-            return $this->handleNumber();
-          } else if(ctype_alpha($this->lookahead)) {
-            return $this->handleIdent();
-          } else {
-            // Invalid character ?
-            //var_dump($this->lookahead);
-            $this->consume();
-          }
-          break;
-
+            //if(preg_match('/\G\s+/', $this->text, $matches, 0, $position)) {
+            if($this->match('\G\s+', $position)) {
+              $matches = mb_ereg_search_getregs();
+              $this->consume(strlen($matches[0]));
+              return new Token(self::T_S, ' ', $this->lineno, $position);
+            } else if (ctype_digit($this->lookahead)) {
+              return $this->handleNumber();
+            } else if(ctype_alpha($this->lookahead)) {
+              return $this->handleIdent();
+            } else {
+              // Invalid character ?
+              //var_dump($this->lookahead);
+              $this->consume();
+            }
+            break;
+        }
+      }
+      // EOL
+      if($this->lineno < $this->numlines-1) {
+        $this->nextLine();
+      } else {
+        break;
       }
     }
-    return new Token(self::T_EOF, null, $this->position);
-  }/*}}}*/
-
-  protected function consume($length=1)
-  {/*{{{*/
-    $this->position += $length;
-    if($this->position > $this->length) {
-      $this->lookahead = null;
-    } else {
-      $this->lookahead = substr($this->text, $this->position, 1);
-    }
-  }/*}}}*/
-
-  public function consumeString($str)
-  {/*{{{*/
-    $this->position += strlen($str);
-    if($this->position > $this->length) {
-      $this->lookahead = null;
-    } else {
-      $this->lookahead = substr($this->text, $this->position, 1);
-    }
-  }/*}}}*/
-
-  public function comes($str)
-  {/*{{{*/
-    if($this->position > $this->length) return false;
-    $length = strlen($str);
-    return substr($this->text, $this->position, $length) === $str;
-  }/*}}}*/
-
-  public function peek($length=1, $offset=0)
-  {/*{{{*/
-    return substr($this->text, $this->position + $offset + 1, $length);
-  }/*}}}*/
-
-  public function comesExpression($pattern)
-  {/*{{{*/
-    if($this->position > $this->length) return false;
-    return preg_match('/\G'.$pattern.'/i', $this->text, $matches, 0, $this->position);
+    // EOF
+    return new Token(self::T_EOF, null, $this->lineno, $this->position);
   }/*}}}*/
 
   protected function handleWhitespace()
   {/*{{{*/
-    $pos = $this->position;
-    if(preg_match('/\G\s+/', $this->text, $matches, 0, $pos)){
+    $position = $this->position;
+    if(preg_match('/\G\s+/', $this->text, $matches, 0, $position)){
       $this->consume(strlen($matches[0]));
-      return new Token(self::T_S, ' ', $pos);
+      return new Token(self::T_S, ' ', $this->lineno, $position);
     }
   }/*}}}*/
 
   protected function handleComment()
   {/*{{{*/
-    preg_match('@\G/\*[^*]*\*+(?:[^/][^*]*\*+)*/@', $this->text, $matches, 0, $this->position);
-    $token = new Token(self::T_COMMENT, $matches[0], $this->position);
-    $this->consume(strlen($matches[0]));
-    return $token;
+    if(preg_match('@\G/\*[^*]*\*+(?:[^/][^*]*\*+)*/@', $this->text, $matches, 0, $this->position)) {
+      $token = new Token(self::T_COMMENT, $matches[0], $this->lineno, $this->position);
+      $this->consume(strlen($matches[0]));
+      return $token;
+    } else if (preg_match('@\G(?:/\*[^*]*\*+(?:[^/*][^*]*\*+)*)|(?:/\*[^*]*(\*+[^/*][^*]*)*)@', $this->text, $matches, 0, $this->position)) {
+      // Multiline comment
+      $line = $this->lineno;
+      $position = $this->position;
+      $start_str = $matches[0]."\n";
+      while(true) {
+        // EOL
+        if($this->lineno < $this->numlines-1) {
+          $this->nextLine();
+          $this->position = 0;
+        } else {
+          return new Token(self::T_BADCOMMENT, $start_str, $line, $position);
+        }
+        if(preg_match('@[^*]*\*+(?:[^/][^*]*\*+)*/@', $this->text, $submatches)) {
+          // end of comment found
+          $start_str .= $submatches[0];
+          $this->consume(strlen($submatches[0]));
+          return new Token(self::T_COMMENT, $start_str, $line, $position);
+        } else {
+          $start_str .= $this->text;
+        }
+      }
+    }
   }/*}}}*/
 
   protected function handleIdent()
   {/*{{{*/
     if(preg_match('/\G'.self::$regex['ident'].'/i', $this->text, $matches, 0, $this->position)) {
-      $pos = $this->position;
+      $position = $this->position;
       $ident = strtolower(self::cleanupIdent($matches[0]));
       $this->consume(strlen($matches[0]));
       if($this->lookahead === '(') {
@@ -445,8 +446,8 @@ class Lexer extends BaseLexer
           $uri;
           if($this->lookahead === '"' || $this->lookahead === "'") {
             $token = $this->handleString();
-            $uri = $token->getValue();
-            if($token->isOfType(self::T_STRING)) {
+            $uri = $token->value;
+            if($token->type === self::T_STRING) {
               $type = self::T_URI;
             } else {
               $type = self::T_BADURI;
@@ -456,27 +457,27 @@ class Lexer extends BaseLexer
             $uri = $matches[0];
             $type = self::T_URI;
           } else {
-            return new Token(self::T_INVALID, $ident.'(', $pos);
+            return new Token(self::T_INVALID, $ident.'(', $this->lineno, $position);
           }
           $this->handleWhitespace();
           if($this->lookahead === ')') {
             $this->consume();
-            return new Token($type, $uri, $pos);
+            return new Token($type, $uri, $this->lineno, $position);
           }
-          return new Token(self::T_BADURI, $uri, $pos);
+          return new Token(self::T_BADURI, $uri, $this->lineno, $position);
         } else {
-          return new Token(self::T_FUNCTION, $ident, $pos);
+          return new Token(self::T_FUNCTION, $ident, $this->lineno, $position);
         }
       } else {
         switch($ident) {
           case 'and':
-            return new Token(self::T_AND, $ident, $pos);
+            return new Token(self::T_AND, $ident, $this->lineno, $position);
           case 'not':
-            return new Token(self::T_NOT, $ident, $pos);
+            return new Token(self::T_NOT, $ident, $this->lineno, $position);
           case 'only':
-            return new Token(self::T_ONLY, $ident, $pos);
+            return new Token(self::T_ONLY, $ident, $this->lineno, $position);
           default:
-            return new Token(self::T_IDENT, $ident, $pos);
+            return new Token(self::T_IDENT, $ident, $this->lineno, $position);
         }
       }
     }
@@ -485,84 +486,111 @@ class Lexer extends BaseLexer
   protected function handleAtKeyword()
   {/*{{{*/
     preg_match('/\G@((?:'.self::$regex['atkeyword'].')|(?:'.self::$regex['ident'].'))/i', $this->text, $matches, 0, $this->position);
-    $pos = $this->position;
+    $position = $this->position;
     $this->consume(strlen($matches[0]));
     $ident = strtolower(self::cleanupIdent($matches[1]));
     switch($ident) {
       case 'charset':
-        return new Token(self::T_CHARSET_SYM, $ident, $pos);
+        return new Token(self::T_CHARSET_SYM, $ident, $this->lineno, $position);
         break;
       case 'import':
-        return new Token(self::T_IMPORT_SYM, $ident, $pos);
+        return new Token(self::T_IMPORT_SYM, $ident, $this->lineno, $position);
         break;
       case 'namespace':
-        return new Token(self::T_NAMESPACE_SYM, $ident, $pos);
+        return new Token(self::T_NAMESPACE_SYM, $ident, $this->lineno, $position);
         break;
       case 'page':
-        return new Token(self::T_PAGE_SYM, $ident, $pos);
+        return new Token(self::T_PAGE_SYM, $ident, $this->lineno, $position);
         break;
       case 'media':
-        return new Token(self::T_MEDIA_SYM, $ident, $pos);
+        return new Token(self::T_MEDIA_SYM, $ident, $this->lineno, $position);
         break;
       case 'keyframes':
-        return new Token(self::T_KEYFRAMES_SYM, $ident, $pos);
+        return new Token(self::T_KEYFRAMES_SYM, $ident, $this->lineno, $position);
         break;
       case 'keyframe':
-        return new Token(self::T_KEYFRAME_SYM, $ident, $pos);
+        return new Token(self::T_KEYFRAME_SYM, $ident, $this->lineno, $position);
         break;
       default:
-        return new Token(self::T_ATKEYWORD, $ident, $pos);
+        return new Token(self::T_ATKEYWORD, $ident, $this->lineno, $position);
         break;
     }
-  }
+  }/*}}}*/
 
   protected function handleString()
-  {
-    $pos = $this->position;
-    if ($this->lookahead === '"') {
-      if(preg_match('/\G'.self::$regex['string1'].'/', $this->text, $matches, 0, $pos)) {
-        $this->consume(strlen($matches[0]));
-        return new Token(self::T_STRING, $matches[1], $pos);
-      } else if (preg_match('/\G'.self::$regex['badstring1'].'/', $this->text, $matches, 0, $pos)) {
-        $this->consume(strlen($matches[0]));
-        return new Token(self::T_BADSTRING, $matches[0], $pos);
+  {/*{{{*/
+    $position = $this->position;
+    $start_char = $this->lookahead;
+    if ($start_char === '"') {
+      $pattern_id = 'string1';
+    } else if($start_char === "'") {
+      $pattern_id = 'string2';
+    }
+    if(preg_match('/\G'.self::$regex[$pattern_id].'/', $this->text, $matches, 0, $position)) {
+      $this->consume(strlen($matches[0]));
+      return new Token(self::T_STRING, $matches[1], $this->lineno, $position);
+    } else if (preg_match('/\G'.self::$regex['bad'.$pattern_id].'/', $this->text, $matches, 0, $position)) {
+      $this->consume(strlen($matches[0]));
+      if(preg_match('/\\\\$/', $matches[0])) {
+        return $this->handleMultilineString($start_char, $matches[0], $this->lineno, $position);
+      } else {
+        return new Token(self::T_BADSTRING, $matches[0], $this->lineno, $position);
       }
-    } else if($this->lookahead === "'") {
-      if(preg_match('/\G'.self::$regex['string2'].'/', $this->text, $matches, 0, $pos)) {
+    }
+  }/*}}}*/
+
+  public function handleMultilineString($start_char, $start_str, $line, $position)
+  {/*{{{*/
+    $pattern = '([^\\\\'.$start_char.']*)'.$start_char;
+    $start_str = preg_replace('/\\\\$/', "\\\n", $start_str);
+    while(true) {
+      // EOL
+      if($this->lineno < $this->numlines-1) {
+        $this->nextLine();
+        $this->position = 0;
+      } else {
+        return new Token(self::T_BADSTRING, $start_str, $line, $position);
+      }
+      if(preg_match("/^$pattern/", $this->text, $matches)) {
+        // we found the end of string
+        $start_str .= $matches[1];
         $this->consume(strlen($matches[0]));
-        return new Token(self::T_STRING, $matches[1], $pos);
-      } else if (preg_match('/\G'.self::$regex['badstring2'].'/', $this->text, $matches, 0, $pos)) {
-        $this->consume(strlen($matches[0]));
-        return new Token(self::T_BADSTRING, $matches[0], $pos);
+        return new Token(self::T_STRING, $start_str, $line, $position);
+      } else if (preg_match('/\\\\$/', $this->text)) {
+        // the string continues on the next line
+        $start_str .= preg_replace('/\\\\$/', "\\\n", $this->text);
+      } else {
+        // bad string
+        return new Token(self::T_BADSTRING, $start_str, $line, $position);
       }
     }
   }/*}}}*/
 
   public function handleNumber()
   {/*{{{*/
-    $pos = $this->position;
-    if (preg_match('@\G([0-9]+)/([0-9]+)@', $this->text, $matches, 0, $pos)) {
+    $position = $this->position;
+    if (preg_match('@\G([0-9]+)/([0-9]+)@', $this->text, $matches, 0, $position)) {
       $this->consume(strlen($matches[0]));
       $value = array(
         'numerator' => $matches[1],
         'denominator' => $matches[2]
       );
-      return new Token(self::T_RATIO, $value, $pos);
+      return new Token(self::T_RATIO, $value, $this->lineno, $position);
     }
 
-    preg_match('/\G'.self::$regex['num'].'/', $this->text, $matches, 0, $pos);
+    preg_match('/\G'.self::$regex['num'].'/', $this->text, $matches, 0, $position);
     $value = $matches[0];
     $this->consume(strlen($value));
 
     if($this->lookahead === '%') {
       $this->consume();
-      return new Token(self::T_PERCENTAGE, $value, $pos);
+      return new Token(self::T_PERCENTAGE, $value, $this->lineno, $position);
     } else if(!ctype_alpha($this->lookahead)) {
-      return new Token(self::T_NUMBER, $value, $pos);
+      return new Token(self::T_NUMBER, $value, $this->lineno, $position);
     }
 
-    $pos = $this->position;
-    if(preg_match('/\G(?:'.self::$regex['units'].')/i', $this->text, $matches, 0, $pos)) {
+    $position = $this->position;
+    if(preg_match('/\G(?:'.self::$regex['units'].')/i', $this->text, $matches, 0, $position)) {
       $unit = strtolower(self::cleanupIdent($matches[0]));
       $this->consume(strlen($matches[0]));
       $result = array('value' => $value, 'unit' => $unit);
@@ -580,70 +608,70 @@ class Lexer extends BaseLexer
         case 'px':
         case 'pt':
         case 'pc':
-          return new Token(self::T_LENGTH, $result, $pos);
+          return new Token(self::T_LENGTH, $result, $this->lineno, $position);
           break;
         case 'deg':
         case 'rad':
         case 'grad':
         case 'turn':
-          return new Token(self::T_ANGLE, $result, $pos);
+          return new Token(self::T_ANGLE, $result, $this->lineno, $position);
           break;
         case 's':
         case 'ms':
-          return new Token(self::T_TIME, $result, $pos);
+          return new Token(self::T_TIME, $result, $this->lineno, $position);
           break;
         case 'hz':
         case 'khz':
-          return new Token(self::T_FREQ, $result, $pos);
+          return new Token(self::T_FREQ, $result, $this->lineno, $position);
           break;
         case 'dpi':
         case 'dpcm':
         case 'dppx':
-          return new Token(self::T_RESOLUTION, $result, $pos);
+          return new Token(self::T_RESOLUTION, $result, $this->lineno, $position);
           break;
       }
-    } else if(preg_match('/\G'.self::$regex['ident'].'/i', $this->text, $matches, 0, $pos)) {
+    } else if(preg_match('/\G'.self::$regex['ident'].'/i', $this->text, $matches, 0, $position)) {
       $ident = strtolower(self::cleanupIdent($matches[0]));
       $this->consume(strlen($matches[0]));
       $result = array('value' => $value, 'unit' => $ident);
-      return new Token(self::T_DIMENSION, $result, $pos);
+      return new Token(self::T_DIMENSION, $result, $this->lineno, $position);
     }
   }/*}}}*/
 
   public function handleHash()
   {/*{{{*/
-    $pos = $this->position;
-    if(preg_match('/\G#('.self::$regex['name'].')/i', $this->text, $matches, 0, $pos)) {
+    $position = $this->position;
+    if(preg_match('/\G#('.self::$regex['name'].')/i', $this->text, $matches, 0, $position)) {
       $this->consume(strlen($matches[0]));
-      return new Token(self::T_HASH, self::cleanupIdent($matches[1]), $pos);
+      return new Token(self::T_HASH, self::cleanupIdent($matches[1]), $this->lineno, $position);
     }
   }/*}}}*/
 
   public function handleImportant()
   {/*{{{*/
     $pattern = self::getPatternForIdentifier('important');
-    $pos = $this->position;
-    if(preg_match('/\G!\w*'.$pattern.'/i', $this->text, $matches, 0, $pos)) {
+    $position = $this->position;
+    if(preg_match('/\G!\s*'.$pattern.'/i', $this->text, $matches, 0, $position)) {
       $value = $matches[0];
       $this->consume(strlen($matches[0]));
-      return new Token(self::T_IMPORTANT_SYM, 'important', $pos);
+      return new Token(self::T_IMPORTANT_SYM, 'important', $this->lineno, $position);
     }   
   }/*}}}*/
 
   public function handleUnicodeRange()
   {/*{{{*/
-    $pos = $this->position;
-    preg_match('/\GU\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)/i', $this->text, $matches, 0, $pos);
+    $position = $this->position;
+    preg_match('/\GU\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)/i', $this->text, $matches, 0, $position);
     $this->consume(strlen($matches[0]));
-    return new Token(self::T_UNICODERANGE, $matches[1], $pos);
+    return new Token(self::T_UNICODERANGE, $matches[1], $this->lineno, $position);
   }/*}}}*/
 
   public function handleNegation()
   {/*{{{*/
-    $pos = $this->position;
-    preg_match('/\G'.self::$regex['negation'].'/', $this->text, $matches, 0, $pos);
+    $position = $this->position;
+    preg_match('/\G'.self::$regex['negation'].'/', $this->text, $matches, 0, $position);
     $this->consume(strlen($matches[0]));
-    return new Token(self::T_NEGATION, $matches[0], $pos);
+    return new Token(self::T_NEGATION, $matches[0], $this->lineno, $position);
   }/*}}}*/
 
   protected static function getPatternForIdentifier($ident)
@@ -654,7 +682,7 @@ class Lexer extends BaseLexer
     $ident = strtoupper($ident);
     $pattern = '';
     foreach(str_split($ident) as $char) {
-      $pattern .= '(?:'.self::$regex[$char].')';
+      $pattern .= '(?>'.self::$regex[$char].')';
     }
     self::$regex_cache[$ident] = $pattern;
     return $pattern;
@@ -662,8 +690,9 @@ class Lexer extends BaseLexer
 
   protected static function cleanupIdent($ident)
   {/*{{{*/
-    return preg_replace_callback('/\\\\(?:([0-9a-f]{1,5})\s?|([0-9a-f]{6})|([g-z]))/i', function($matches)
+    $ident = preg_replace_callback('/\\\\(?:([0-9a-f]{1,5})\s?|([0-9a-f]{6})|([g-z]))/i', function($matches)
     {
+
       if(isset($matches[3])) {
         return $matches[3];
       }
@@ -673,8 +702,12 @@ class Lexer extends BaseLexer
         // Not an Ascii char, return a normalized unicode escape
         return "\\" . str_pad($codepoint, 6, "0", STR_PAD_LEFT);
       }
-      return chr($unicode_byte); 
+      return chr($unicode_byte);
+
     }, $ident);
+
+    return $ident;
+      
   }/*}}}*/
 
 }
