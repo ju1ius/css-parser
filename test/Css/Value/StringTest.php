@@ -27,7 +27,7 @@ class StringTest extends CssParser_TestCase
         'p{ content: "this is a \"string\""; }',
       ),
       array(
-        'p{ content: \'this is a \\\'string\\\'\' }',
+        "p{ content: 'this is a \\'string\\'' }",
         'p{ content: "this is a \'string\'"; }',
       ),
       array(

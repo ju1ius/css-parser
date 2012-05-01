@@ -3,6 +3,7 @@
 
 namespace ju1ius\Css;
 
+use ju1ius\Text\Source;
 use ju1ius\Text\Parser\LLk;
 use ju1ius\Text\Parser\Exception\UnexpectedTokenException;
 use ju1ius\Text\Parser\Exception\ParseException;
@@ -12,10 +13,22 @@ use ju1ius\Text\Parser\Exception\ParseException;
  **/
 class Parser extends LLk
 {
+  /**
+   * @var boolean Does the parser uses strict mode
+   **/
+  protected
+    $strict;
+  public
+    $errors=array();
 
-  public function __construct(Lexer $lexer)
+  public function __construct(Lexer $lexer, $strict=true)
   {
     parent::__construct($lexer, 2);
+  }
+
+  public function setStrict($strict=true)
+  {
+    $this->strict = (bool)$strict;
   }
 
   /**
@@ -26,7 +39,10 @@ class Parser extends LLk
   public function parseStyleSheet()
   {/*{{{*/
     $this->reset();
-    return $this->_stylesheet();
+    $source = $this->lexer->getSource();
+    $stylesheet = $this->_stylesheet();
+    if($source instanceof Source\File) $stylesheet->setHref($source->getUrl());
+    return $stylesheet;
   }/*}}}*/
 
   /**
@@ -93,6 +109,7 @@ class Parser extends LLk
       $rule_list->append($this->_import());
       $this->_ws();
     }
+
     while ($this->LT()->type === Lexer::T_NAMESPACE_SYM) {
       $rule_list->append($this->_namespace());
       $this->_ws();
@@ -106,18 +123,49 @@ class Parser extends LLk
           $rule_list->append($this->_media());
           break;
 
+        case Lexer::T_PAGE_SYM:
+          $rule_list->append($this->_page());
+          break;
+
+        case Lexer::T_FONT_FACE_SYM:
+          $rule_list->append($this->_font_face());
+          break;
+
         case Lexer::T_S:
           $this->_ws();
           break;
 
+        //case Lexer::T_RCURLY:
+          //if ($this->strict) $this->_unexpectedToken($this->LT(), array(Lexer::T_IDENT));
+          //var_dump($this->lexer->getLiteral($this->LT()));
+          //$this->consume();
+          //$this->skipRuleset();
+          //break;
+
+        case Lexer::T_IDENT:     // type selector
+        case Lexer::T_STAR:      // universal
+        case Lexer::T_PIPE:      // namespace separator
+        case Lexer::T_DOT:       // class
+        case Lexer::T_HASH:      // id
+        case Lexer::T_LBRACK:    // attrib
+        case Lexer::T_COLON:     // pseudo
+        case Lexer::T_NEGATION:  // negation
         default:
           $style_rule = $this->_ruleset();
-          if (!$style_rule) break 2;
-          $rule_list->append($style_rule);
+          if ($style_rule) {
+            $rule_list->append($style_rule);
+          }
           break;
 
+        //default:
+          //if ($this->strict) $this->_unexpectedToken($this->LT(), array(Lexer::T_IDENT));
+          //var_dump($this->lexer->getLiteral($this->LT()));
+          //$this->consume();
+          //$this->skipRuleset();
+          //break;
+
       }
-      //$token = $this->LT();
+
     }
 
     return $stylesheet;
@@ -183,7 +231,425 @@ class Parser extends LLk
       $prefix
     );
   }/*}}}*/
-  /**)
+  /**
+   * font_face
+   *   : FONT_FACE_SYM S* '{' S* declaration [ ';' S* declaration ]* '}' S*
+   *   ;
+   */
+  protected function _font_face()
+  {/*{{{*/
+    $this->match(Lexer::T_FONT_FACE_SYM);
+    $style_declaration = $this->_parseDeclarations(true, false);
+    return new Rule\FontFace($style_declaration);  
+  }/*}}}*/
+  /**
+   * ruleset
+   *   : selectors_group
+   *     '{' S* declaration? [ ';' S* declaration? ]* '}' S*
+   *   ;
+   */ 
+  protected function _ruleset()
+  {/*{{{*/
+    $style_declaration = null;
+    $selector_list = null;
+    /**
+     * Error Recovery: If even a single selector fails to parse,
+     * then the entire ruleset should be thrown away.
+     **/
+    try {
+      $selector_list = $this->_selectors_group();
+    } catch(ParseException $e) {
+      if($this->strict) throw $e;
+      $this->skipRuleset();
+      return;
+    }
+    try {
+      $style_declaration = $this->_parseDeclarations(true, false);
+    } catch (ParseException $e) {
+      if($this->strict) throw $e;
+      $this->skipRuleset();
+      return;
+    }
+    if(null === $style_declaration) return;
+
+    return new Rule\StyleRule($selector_list, $style_declaration);
+  }/*}}}*/
+  /**
+   * declaration
+   *   : property ':' S* expr prio?
+   *   | /( empty )/
+   *   ;
+   */ 
+  protected function _declaration()
+  {/*{{{*/
+    $property = $this->_property();
+    if (null === $property) return;
+
+    $this->match(Lexer::T_COLON);
+    $this->_ws();
+
+    $values = $this->_expr();
+    $values = self::reduceValueList($values, self::_listDelimiterForProperty($property->getName()));
+    if(!$values instanceof PropertyValueList) {
+      $list = new PropertyValueList();
+      $list->append($values);
+      $values = $list;
+    }
+    if($this->_isAsciiCaseInsensitiveMatch($property->getName(), 'background')) {
+      self::fixBackgroundShorthand($values);
+    }
+
+    $property->setValueList($values);
+
+    if ($this->LT()->type === Lexer::T_IMPORTANT_SYM) {
+      $this->_prio();
+      $property->setIsImportant(true);
+    }
+
+    return $property;
+  }/*}}}*/
+  /**
+   *  property
+   *    : IDENT S*
+   *    ;
+   **/
+  protected function _property()
+  {/*{{{*/
+    $token = $this->LT();
+
+    switch ($token->type) {
+      case Lexer::T_INVALID:
+        $this->_unexpectedToken($token, Lexer::T_IDENT);
+        break;
+      case Lexer::T_IDENT:
+        break;
+      default:
+        return null;
+    }
+
+    $name = $token->value;
+    $this->consume();
+    $this->_ws();
+    return new Property($name);
+  }/*}}}*/
+  /**
+   * prio
+   *   : IMPORTANT_SYM S*
+   *   ;
+   **/
+  protected function _prio()
+  {/*{{{*/
+    $this->match(Lexer::T_IMPORTANT_SYM); 
+    $this->_ws();
+  }/*}}}*/
+  /**
+   * expr
+   *   : term [ operator term ]*
+   *   ;
+   **/
+  protected function _expr()
+  {/*{{{*/
+    $values = array();
+    $value = $this->_term();
+
+    if (null === $value) {
+      $this->_parseException("Empty value", $this->LT());
+    }
+    $values[] = $value;
+
+    do {
+      $operator = $this->_operator();
+      $value = $this->_term();
+      if(null === $value) break;
+      // whitespace is the default separator
+      $values[] = $operator ?: ' ';
+      $values[] = $value;
+    } while (true);
+
+    return $values;
+  }/*}}}*/
+  /**
+   * term
+   *   : unary_operator?
+   *     [ NUMBER S* | PERCENTAGE S* | LENGTH S* | ANGLE S* | TIME S* | FREQ S* ]
+   *   | STRING S* | IDENT S* | URI S* | UNICODERANGE S* | hexcolor | function | math
+   *   ;
+   **/
+  protected function _term()
+  {/*{{{*/
+    $token = $this->LT();
+    switch ($token->type) {
+
+      case Lexer::T_NUMBER:
+        $this->consume();
+        $this->_ws();
+        return new Value\Dimension($token->value, null);
+
+      case Lexer::T_DIMENSION:
+        $value = $token->value;
+        $this->consume();
+        $this->_ws();
+        return new Value\Dimension($value['value'], $value['unit']);
+
+      case Lexer::T_RATIO:
+        $value = $token->value;
+        $this->consume();
+        $this->_ws();
+        return new Value\Ratio($value['numerator'], $value['denominator']);
+
+      case Lexer::T_PERCENTAGE:
+        $this->consume();
+        $this->_ws();
+        return new Value\Percentage($token->value);
+
+      case Lexer::T_LENGTH:
+        $value = $token->value;
+        $this->consume();
+        $this->_ws();
+        return new Value\Length($value['value'], $value['unit']);
+
+      case Lexer::T_ANGLE:
+        $value = $token->value;
+        $this->consume();
+        $this->_ws();
+        return new Value\Angle($value['value'], $value['unit']);
+
+      case Lexer::T_TIME:
+        $value = $token->value;
+        $this->consume();
+        $this->_ws();
+        return new Value\Time($value['value'], $value['unit']);
+
+      case Lexer::T_FREQ:
+        $value = $token->value;
+        $this->consume();
+        $this->_ws();
+        return new Value\Frequency($value['value'], $value['unit']);
+
+      case Lexer::T_STRING:
+        $this->consume();
+        $this->_ws();
+        return new Value\String($token->value);
+
+      case Lexer::T_IDENT:
+        $ident = $token->value;
+        $this->consume();
+        $this->_ws();
+        // is it a color name ?
+        if($rgb = Util\Color::x11ToRgb($ident)) {
+          $color = new Value\Color();
+          return $color->fromRgb($rgb);
+        }
+        return $ident;
+
+      case Lexer::T_URI:
+        $this->consume();
+        $this->_ws();
+        return new Value\Url(new Value\String($token->value));
+
+      case Lexer::T_UNICODERANGE:
+        $this->consume();
+        $this->_ws();
+        return new Value\UnicodeRange($token->value);
+
+      case Lexer::T_FUNCTION:
+        return $this->_function();
+
+      case Lexer::T_HASH:
+        return $this->_hexcolor();
+
+      case Lexer::T_INVALID:
+      case Lexer::T_BADSTRING:
+      case Lexer::T_BADURI:
+      case Lexer::T_EOF:
+        $this->_unexpectedToken($token, array(
+          Lexer::T_HASH, Lexer::T_FUNCTION, Lexer::T_UNICODERANGE,
+          Lexer::T_URI, Lexer::T_IDENT, Lexer::T_STRING,
+          Lexer::T_FREQ, Lexer::T_TIME, Lexer::T_ANGLE, Lexer::T_LENGTH,
+          Lexer::T_PERCENTAGE, Lexer::T_RATIO, Lexer::T_DIMENSION,
+          Lexer::T_NUMBER
+        ));
+        break;
+
+      default:
+        break;
+    }
+  }/*}}}*/
+  /**
+   * hexcolor
+   *   : HASH S*
+   *   ; 
+   **/
+  protected function _hexcolor()
+  {/*{{{*/
+    $this->ensure(Lexer::T_HASH);
+    $hex = $this->LT()->value;
+    $this->consume();
+    $this->_ws();
+    if (!preg_match('/[0-9a-f]{6}|[0-9a-f]{3}/i', $hex)) {
+      // throw InvalidColor()
+    }
+    return new Value\Color($hex);
+  }/*}}}*/
+  /**
+   * function
+   *   : FUNCTION S* expr ')' S*
+   *   ;
+   **/
+  protected function _function()
+  {/*{{{*/
+    $this->ensure(Lexer::T_FUNCTION);
+    $name = $this->LT()->value;
+    $this->consume();
+    $this->_ws();
+    // TODO: calc(), attr(), cycle(), image(), gradients ...
+    $args = $this->_expr();
+
+    $this->match(Lexer::T_RPAREN);
+    $this->_ws();
+
+    if (preg_match('/^rgba?$/i', $name)) {
+
+      $channels = array(
+        'r' => $args[0],
+        'g' => $args[2],
+        'b' => $args[4],
+      );
+      if(isset($args[5])) $channels['a'] = $args[5];
+      return new Value\Color($channels);
+
+    } else if (preg_match('/^hsla?$/i', $name)) {
+
+      $channels = array(
+        'h' => $args[0],
+        's' => $args[2],
+        'l' => $args[4],
+      );
+      if(isset($args[5])) $channels['a'] = $args[5];
+      return new Value\Color($channels);
+
+    }
+    return new Value\Func($name, self::reduceValueList($args, array(',', ' ')));
+  }/*}}}*/
+  /**
+   * operator
+   *   : '/' S* | ',' S*
+   *   ;
+   **/
+  protected function _operator()
+  {/*{{{*/
+    $t = $this->LT();
+    if ($t->type === Lexer::T_COMMA || $t->type === Lexer::T_SLASH) {
+      $this->consume();
+      $this->_ws();
+      return $t->value;
+    } 
+  }/*}}}*/
+
+  /**
+   * ------- CSS3 Paged Media ------
+   * http://www.w3.org/TR/css3-page/
+   **/
+
+  /**
+   * page
+   *   : PAGE_SYM S* IDENT? pseudo_page? S* 
+   *     '{' S* [ declaration | margin ]? [ ';' S* [ declaration | margin ]? ]* '}' S*
+   *   ; 
+   **/
+  protected function _page()
+  {/*{{{*/
+    $this->match(Lexer::T_PAGE_SYM);
+    $this->_ws();
+
+    $page_name = null;
+    $pseudo_page = null;
+
+    $token = $this->LT();
+    if($token->type === Lexer::T_IDENT) {
+      $page_name = $token->value;
+      if($page_name === 'auto') {
+        $this->_unexpectedToken($token, Lexer::T_IDENT);
+      }
+      $this->consume();
+    }
+
+    if($this->LT()->type === Lexer::T_COLON) {
+      $pseudo_page = $this->_pseudo_page();
+    }
+
+    $results = $this->_parseDeclarations(true, true);
+
+    return new Rule\Page(
+      new PageSelector($page_name, $pseudo_page),
+      $results['rule_list'],
+      $results['style_declaration']
+    );
+
+  }/*}}}*/
+  /**
+   * pseudo_page
+   *   : ':' [ "left" | "right" | "first" ]
+   *   ;
+   **/
+  protected function _pseudo_page()
+  {/*{{{*/
+    $this->match(Lexer::T_COLON);
+    $this->ensure(Lexer::T_IDENT);
+    $value = $this->LT()->value;
+    $this->consume();
+    return $value;
+  }/*}}}*/
+  /**
+   * margin
+   *   : margin_sym S* '{' declaration [ ';' S* declaration? ]* '}' S*
+   *   ;
+   **/
+  protected function _margin()
+  {/*{{{*/
+    $margin_sym = $this->_margin_sym();
+    $style_declaration = $this->_parseDeclarations(true, false);
+    return new Rule\MarginBox($margin_sym, $style_declaration);
+  }/*}}}*/
+  /**
+   * margin_sym
+   *   : TOPLEFTCORNER_SYM | TOPLEFT_SYM | TOPCENTER_SYM | TOPRIGHT_SYM | TOPRIGHTCORNER_SYM |
+   *     BOTTOMLEFTCORNER_SYM | BOTTOMLEFT_SYM | BOTTOMCENTER_SYM | BOTTOMRIGHT_SYM | BOTTOMRIGHTCORNER_SYM |
+   *     LEFTTOP_SYM | LEFTMIDDLE_SYM | LEFTBOTTOM_SYM |
+   *     RIGHTTOP_SYM | RIGHTMIDDLE_SYM | RIGHTBOTTOM_SYM 
+   *   ;
+   **/
+  protected function _margin_sym()
+  {/*{{{*/
+    $this->ensure(array(
+      Lexer::T_TOPLEFTCORNER_SYM, 
+      Lexer::T_TOPLEFT_SYM,
+      Lexer::T_TOPCENTER_SYM,
+      Lexer::T_TOPRIGHT_SYM,
+      Lexer::T_TOPRIGHTCORNER_SYM,
+      Lexer::T_BOTTOMLEFTCORNER_SYM,
+      Lexer::T_BOTTOMLEFT_SYM,
+      Lexer::T_BOTTOMCENTER_SYM,
+      Lexer::T_BOTTOMRIGHT_SYM,
+      Lexer::T_BOTTOMRIGHTCORNER_SYM,
+      Lexer::T_LEFTTOP_SYM,
+      Lexer::T_LEFTMIDDLE_SYM,
+      Lexer::T_LEFTBOTTOM_SYM,
+      Lexer::T_RIGHTTOP_SYM,
+      Lexer::T_RIGHTMIDDLE_SYM,
+      Lexer::T_RIGHTBOTTOM_SYM
+    ));
+    $value = $this->LT()->value;
+    $this->consume();
+    return $value;
+  }/*}}}*/
+
+  /**
+   * ------------- CSS3 Media Queries -------------
+   * http://www.w3.org/TR/css3-mediaqueries/#syntax
+   **/
+
+  /**
    * media
    *   : MEDIA_SYM S* media_query_list S* '{' S* ruleset* '}' S*
    *   ;
@@ -202,20 +668,32 @@ class Parser extends LLk
       switch ($this->LT()->type) {
       
         case Lexer::T_PAGE_SYM:
+          $rule_list->append($this->_page());
           break;
 
         case Lexer::T_FONT_FACE_SYM:
+          $rule_list->append($this->_font_face());
           break;
+
+        case Lexer::T_KEYFRAMES_SYM:
+          $rule_list->append($this->_keyframes());
+          break;
+
+        case Lexer::T_RCURLY:
+          break 2;
 
         default:
           $style_rule = $this->_ruleset();
-          if (null === $style_rule) break 2;
+          if (null === $style_rule) {
+            break 2;
+          }
           $rule_list->append($style_rule);
           break;
       
       }
     }
-    $this->match(Lexer::R_RCURLY);
+    $this->_ws();
+    $this->match(Lexer::T_RCURLY);
     return new Rule\Media($media_query_list, $rule_list);
   }/*}}}*/
   /**
@@ -228,7 +706,7 @@ class Parser extends LLk
     $this->_ws();
     $media_list = new MediaQueryList();
     $t = $this->LT()->type;
-    
+
     if($t === Lexer::T_ONLY ||
         $t === Lexer::T_NOT ||
         $t === Lexer::T_IDENT ||
@@ -236,6 +714,7 @@ class Parser extends LLk
     ) {
       $media_list->append($this->_media_query());
     }
+
     while($this->LT()->type === Lexer::T_COMMA) {
       $this->consume();
       $this->_ws();
@@ -321,98 +800,83 @@ class Parser extends LLk
       $this->consume();
       $this->_ws();
       $values = $this->_expr();
-      $values = self::reduceValueList($values);
+      $values = self::reduceValueList($values, self::_listDelimiterForProperty($media_feature));
     }
     $this->match(Lexer::T_RPAREN);
     $this->_ws();
     return new MediaQuery\Expression($media_feature, $values);
   }/*}}}*/
+
   /**
-   * ruleset
-   *   : selectors_group
-   *     '{' S* declaration? [ ';' S* declaration? ]* '}' S*
-   *   ;
-   */ 
-  protected function _ruleset()
-  {/*{{{*/
-    $style_declaration = null;
-    $selector_list = null;
-    /**
-     * Error Recovery: If even a single selector fails to parse,
-     * then the entire ruleset should be thrown away.
-     **/
-    try {
-      $selector_list = $this->_selectors_group();
-    } catch(ParseException $e) {
-      throw $e;
-      //$this->consumeUntil(Lexer::T_RCURLY);
-      //$this->match(Lexer::T_RCURLY);
-      return;
-    }
-    $this->match(Lexer::T_LCURLY);
-    $this->_ws();
-    $style_declaration = $this->_parseStyleDeclaration();
-    $this->match(Lexer::T_RCURLY);
-    $this->_ws();
-
-    return new Rule\StyleRule($selector_list, $style_declaration);
-  }/*}}}*/
-  /**
-   * declaration
-   *   : property ':' S* expr prio?
-   *   | /( empty )/
-   *   ;
-   */ 
-  protected function _declaration()
-  {/*{{{*/
-    $property = $this->_property();
-    if (null === $property) return;
-
-    $this->match(Lexer::T_COLON);
-    $this->_ws();
-
-    $values = $this->_expr();
-    $values = self::reduceValueList($values);
-    if(!$values instanceof PropertyValueList) {
-      $list = new PropertyValueList();
-      $list->append($values);
-      $values = $list;
-    }
-    if($this->_isAsciiCaseInsensitiveMatch($property->getName(), 'background')) {
-      self::fixBackgroundShorthand($values);
-    }
-
-    $property->setValueList($values);
-
-    if ($this->LT()->type === Lexer::T_IMPORTANT_SYM) {
-      $this->_prio();
-      $property->setIsImportant(true);
-    }
-
-    return $property;
-  }/*}}}*/
-  /**
-   *  property
-   *    : IDENT S*
-   *    ;
+   * ----------- CSS3 Animation ----------
+   * http://www.w3.org/TR/css3-animations/ 
    **/
-  protected function _property()
+
+  /**
+   * keyframes_rule
+   *   : KEYFRAMES_SYM S+ IDENT S* '{' S* keyframes_blocks '}' S*
+   *   ; 
+   **/
+  protected function _keyframes()
   {/*{{{*/
-    if($this->LT()->type !== Lexer::T_IDENT) return;
+    $this->match(Lexer::T_KEYFRAMES_SYM);
+    $this->_ws();
+
+    $this->ensure(Lexer::T_IDENT);
     $name = $this->LT()->value;
     $this->consume();
     $this->_ws();
-    return new Property($name);
+
+    $this->match(Lexer::T_LCURLY);
+    $this->_ws();
+
+    $rule_list = $this->_keyframes_blocks();
+
+    $this->match(Lexer::T_RCURLY);
+    $this->_ws();
+
+    return new Rule\Keyframes($name, $rule_list);
   }/*}}}*/
   /**
-   * prio
-   *   : IMPORTANT_SYM S*
+   * keyframes_blocks
+   *   : [ keyframe_selector '{' S* declaration? [ ';' S* declaration? ]* '}' S* ]*
    *   ;
    **/
-  protected function _prio()
+  protected function _keyframes_blocks()
   {/*{{{*/
-    $this->match(Lexer::T_IMPORTANT_SYM); 
+    $rule_list = new RuleList();
+    while(true) {
+      if(!in_array($this->LT()->type, array(Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE))) {
+        break;
+      }
+      $selectors = $this->_keyframes_selector();
+      $style_declaration = $this->_parseDeclarations(true, false);
+      $rule_list->append(new Rule\Keyframe($selectors, $style_declaration));
+    }
+    return $rule_list;
+  }/*}}}*/
+  /**
+   * keyframe_selector
+   *   : [ FROM_SYM | TO_SYM | PERCENTAGE ] S*
+   *     [ ',' S* [ FROM_SYM | TO_SYM | PERCENTAGE ] S* ]*
+   *   ;
+   **/
+  protected function _keyframes_selector()
+  {/*{{{*/
+    $selectors = array();
+    $selector_tokens = array(Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE);
+
+    $this->ensure($selector_tokens);
+    $selectors[] = $this->LT()->value;
     $this->_ws();
+
+    while($this->LT()->type === Lexer::T_COMMA) {
+      $this->_ws();
+      $this->ensure($selector_tokens);
+      $selectors[] = $this->LT()->value;
+      $this->_ws();
+    }
+    return $selectors;
   }/*}}}*/
 
   // ============================== CSS3 Selectors
@@ -449,10 +913,29 @@ class Parser extends LLk
   {/*{{{*/
     $selector = $this->_simple_selector_sequence();
     while(true) {
-      $combinator = $this->_combinator();
-      if (null === $combinator) break;
-      $next_selector = $this->_simple_selector_sequence();
-      $selector = new Selector\CombinedSelector($selector, $combinator, $next_selector);
+      switch($this->LT()->type) {
+
+        case Lexer::T_PLUS:
+        case Lexer::T_GREATER:
+        case Lexer::T_TILDE:
+        case Lexer::T_S:
+          $combinator = $this->_combinator();
+          if (null === $combinator) break 2;
+          $next_selector = $this->_simple_selector_sequence();
+          $selector = new Selector\CombinedSelector($selector, $combinator, $next_selector);
+          break;
+
+        case Lexer::T_COMMA:
+        case Lexer::T_LCURLY:
+          break 2;
+
+        default:
+          $this->_unexpectedToken($this->LT(), array(
+            Lexer::T_PLUS, Lexer::T_GREATER, Lexer::T_TILDE, Lexer::T_S,
+          ));
+          break;
+
+      }
     }
     return $selector;
   }/*}}}*/
@@ -495,7 +978,16 @@ class Parser extends LLk
           $selector = $this->_pseudo($selector);
           break;
 
+        case Lexer::T_S:
+        case Lexer::T_COMMA:
+        case Lexer::T_LCURLY:
+          break 2;
+
         default:
+          $this->_unexpectedToken($this->LT(), array(
+            Lexer::T_HASH, Lexer::T_DOT,
+            Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION
+          ));
           break 2;
       
       }
@@ -599,7 +1091,7 @@ class Parser extends LLk
   {/*{{{*/
     $namespace = '*';
     $token = $this->LT();
-    if ($token->type === Lexer::T_PIPE || $this->LA(2) === Lexer::T_PIPE) {
+    if ($token->type === Lexer::T_PIPE || $this->LT(2)->type === Lexer::T_PIPE) {
       if ($token->type === Lexer::T_IDENT || $token->type === Lexer::T_STAR) {
         $namespace = $token->value;
         $this->consume();
@@ -629,7 +1121,8 @@ class Parser extends LLk
    *             SUBSTRINGMATCH |
    *             '=' |
    *             INCLUDES |
-   *             DASHMATCH ] S* [ IDENT | STRING ] S*
+   *             DASHMATCH
+   *            ] S* [ IDENT | STRING ] S*
    *         ]?
    *      ']'
    *   ;
@@ -659,7 +1152,14 @@ class Parser extends LLk
       $this->consume();
       $this->_ws();
       $this->ensure(array(Lexer::T_IDENT, Lexer::T_STRING));
-      $value = $this->LT()->value;
+
+      $token = $this->LT();
+      if($token->type === Lexer::T_STRING) {
+        $value = new Value\String($token->value);
+      } else {
+        $value = $token->value;
+      }
+
       $this->consume();
       $this->_ws();
     }
@@ -793,229 +1293,99 @@ class Parser extends LLk
   }/*}}}*/
 
   // ============================== END CSS3 Selectors
-  
-  /**
-   * expr
-   *   : term [ operator term ]*
-   *   ;
-   **/
-  protected function _expr()
-  {/*{{{*/
-    $values = array();
-    $value = $this->_term();
-
-    if (null === $value) {
-      throw new ParseException(
-        "Null value", $this->lexer->getSource(), $this->current
-      );
-    }
-    $values[] = $value;
-
-    do {
-      $operator = $this->_operator();
-      $value = $this->_term();
-      if(null === $value) break;
-      // whitespace is the default separator
-      $values[] = $operator ? : ' ';
-      $values[] = $value;
-    } while (true);
-
-    return $values;
-  }/*}}}*/
-  /**
-   * term
-   *   : unary_operator?
-   *     [ NUMBER S* | PERCENTAGE S* | LENGTH S* | ANGLE S* |
-   *     TIME S* | FREQ S* ]
-   *   | STRING S* | IDENT S* | URI S* | UNICODERANGE S* | hexcolor |
-   *     function | math
-   *   ;
-   **/
-  protected function _term()
-  {/*{{{*/
-    $token = $this->LT();
-    switch ($token->type) {
-
-      case Lexer::T_NUMBER:
-        $this->consume();
-        $this->_ws();
-        return new Value\Dimension($token->value, null);
-
-      case Lexer::T_DIMENSION:
-        $value = $token->value;
-        $this->consume();
-        $this->_ws();
-        return new Value\Dimension($value['value'], $value['unit']);
-
-      case Lexer::T_RATIO:
-        $value = $token->value;
-        $this->consume();
-        $this->_ws();
-        return new Value\Ratio($value['numerator'], $value['denominator']);
-
-      case Lexer::T_PERCENTAGE:
-        $this->consume();
-        $this->_ws();
-        return new Value\Percentage($token->value);
-
-      case Lexer::T_LENGTH:
-        $value = $token->value;
-        $this->consume();
-        $this->_ws();
-        return new Value\Length($value['value'], $value['unit']);
-
-      case Lexer::T_ANGLE:
-        $value = $token->value;
-        $this->consume();
-        $this->_ws();
-        return new Value\Angle($value['value'], $value['unit']);
-
-      case Lexer::T_TIME:
-        $value = $token->value;
-        $this->consume();
-        $this->_ws();
-        return new Value\Time($value['value'], $value['unit']);
-
-      case Lexer::T_FREQ:
-        $value = $token->value;
-        $this->consume();
-        $this->_ws();
-        return new Value\Frequency($value['value'], $value['unit']);
-
-      case Lexer::T_STRING:
-        $this->consume();
-        $this->_ws();
-        return new Value\String($token->value);
-
-      case Lexer::T_IDENT:
-        $ident = $token->value;
-        $this->consume();
-        $this->_ws();
-        // is it a color name ?
-        if($rgb = Util\Color::x11ToRgb($ident)) {
-          $color = new Value\Color();
-          return $color->fromRgb($rgb);
-        }
-        return $ident;
-
-      case Lexer::T_URI:
-        $this->consume();
-        $this->_ws();
-        return new Value\Url(new Value\String($token->value));
-
-      case Lexer::T_UNICODERANGE:
-        $this->consume();
-        $this->_ws();
-        return new Value\UnicodeRange($token->value);
-
-      case Lexer::T_FUNCTION:
-        return $this->_function();
-
-      case Lexer::T_HASH:
-        return $this->_hexcolor();
-
-      default:
-        // throw Exception ?
-        break;
-    }
-  }/*}}}*/
-  /**
-   * hexcolor
-   *   : HASH S*
-   *   ; 
-   **/
-  protected function _hexcolor()
-  {/*{{{*/
-    $this->ensure(Lexer::T_HASH);
-    $hex = $this->LT()->value;
-    $this->consume();
-    $this->_ws();
-    if (!preg_match('/[0-9a-f]{6}|[0-9a-f]{3}/i', $hex)) {
-      // throw InvalidColor()
-    }
-    return new Value\Color($hex);
-  }/*}}}*/
-  /**
-   * function
-   *   : FUNCTION S* expr ')' S*
-   *   ;
-   **/
-  protected function _function()
-  {/*{{{*/
-    $this->ensure(Lexer::T_FUNCTION);
-    $name = $this->LT()->value;
-    $this->consume();
-    $this->_ws();
-    // TODO: calc(), attr(), cycle(), image(), gradients ...
-    $args = $this->_expr();
-
-    $this->match(Lexer::T_RPAREN);
-    $this->_ws();
-
-    if (preg_match('/^rgba?$/i', $name)) {
-
-      $channels = array(
-        'r' => $args[0],
-        'g' => $args[1],
-        'b' => $args[2],
-        'a' => isset($args[3]) ? $args[3] : 1,
-      );
-      return new Value\Color($channels);
-
-    } else if (preg_match('/^hsla?$/i', $name)) {
-
-      $channels = array(
-        'h' => $args[0],
-        's' => $args[1],
-        'l' => $args[2],
-        'a' => isset($args[3]) ? $args[3] : 1,
-      );
-      return new Value\Color($channels);
-
-    }
-    return new Value\Func($name, $args);
-  }/*}}}*/
-  /**
-   * operator
-   *   : '/' S* | ',' S*
-   *   ;
-   **/
-  protected function _operator()
-  {/*{{{*/
-    $t = $this->LT();
-    if ($t->type === Lexer::T_COMMA || $t->type === Lexer::T_SLASH) {
-      $this->consume();
-      $this->_ws();
-      return $t->value;
-    } 
-  }/*}}}*/
-
 
   /*****************************************************************
    * --------------------- Other internal methods ----------------- *
    *****************************************************************/
 
-  protected function _parseStyleDeclaration()
+  /**
+   * Not part of CSS grammar, but this pattern occurs frequently
+   * in the official CSS grammar. Split out here to eliminate
+   * duplicate code.
+   *
+   * @param boolean $check_start Indicates if the rule should check for the left brace at the beginning.
+   * @param boolean $margins Indicates if the rule should check for @margin-box tokens.
+   **/
+  protected function _parseDeclarations($check_start, $margins)
   {/*{{{*/
+    /**
+     * Reads the pattern:
+     *   S* '{' S* declaration [ ';' S* declaration ]* '}' S*
+     *   or
+     *   S* '{' S* [ declaration | margin ]? [ ';' S* [ declaration | margin ]? ]* '}' S*
+     * Note that this is how it is described in CSS3 Paged Media, but is actually incorrect.
+     * A semicolon is only necessary following a declaration is there's another declaration
+     * or margin afterwards.
+     **/
     $style_declaration = new StyleDeclaration();
-    //$this->_ws();
-    $property = $this->_declaration();
-    
-    if(null !== $property) {
-      $style_declaration->append($property);
-      if ($this->LT()->type === Lexer::T_SEMICOLON) {
-        while (true) {
-          //$this->_ws();
-          $this->match(Lexer::T_SEMICOLON);
-          $this->_ws();
-          $property = $this->_declaration();
-          if(null === $property) break;
-          $style_declaration->append($property);
-        }
-      }
+    if($margins) $margin_rules = new RuleList();
+
+    $this->_ws();
+
+    if($check_start) {
+      $this->match(Lexer::T_LCURLY);
+      //try {
+        //$this->match(Lexer::T_LCURLY);
+      //} catch (UnexpectedTokenException $e) {
+        //if($this->strict) throw $e;
+        //$this->skipRuleset($margins);
+        //return;
+      //}
     }
 
-    return $style_declaration;
+    $this->_ws();
+    
+    while(true) {
+
+      try {
+        $property = $this->_declaration();
+      } catch (ParseException $e) {
+        if($this->strict) throw $e;
+        $this->skipDeclaration();
+        $this->_ws();
+        continue;
+      }
+
+      if(null !== $property) {
+        $style_declaration->append($property);
+        if($this->LT()->type === Lexer::T_SEMICOLON) {
+          $this->consume();
+          $this->_ws();
+          continue;
+        } else {
+          break;
+        }
+      } else if ($margins && in_array($this->LT()->type, array(
+        Lexer::T_TOPLEFTCORNER_SYM, Lexer::T_TOPLEFT_SYM,
+        Lexer::T_TOPCENTER_SYM,
+        Lexer::T_TOPRIGHT_SYM, Lexer::T_TOPRIGHTCORNER_SYM,
+        Lexer::T_BOTTOMLEFTCORNER_SYM, Lexer::T_BOTTOMLEFT_SYM,
+        Lexer::T_BOTTOMCENTER_SYM,
+        Lexer::T_BOTTOMRIGHT_SYM, Lexer::T_BOTTOMRIGHTCORNER_SYM,
+        Lexer::T_LEFTTOP_SYM, Lexer::T_LEFTMIDDLE_SYM, Lexer::T_LEFTBOTTOM_SYM,
+        Lexer::T_RIGHTTOP_SYM, Lexer::T_RIGHTMIDDLE_SYM, Lexer::T_RIGHTBOTTOM_SYM
+      ))) {
+        $margin_rules->append($this->_margin());
+      } else {
+        break;
+      }
+
+    }
+    $this->match(Lexer::T_RCURLY);
+
+    //try {
+      //$this->match(Lexer::T_RCURLY);
+    //} catch (UnexpectedTokenException $e) {
+      //if($this->strict) throw $e;
+      //$this->skipRuleset($margins);
+      //return;
+    //}
+
+    $this->_ws();
+
+    return $margins
+      ? array('style_declaration' => $style_declaration, 'rule_list' => $margin_rules)
+      : $style_declaration;
   }/*}}}*/
 
   protected function _ws()
@@ -1116,8 +1486,79 @@ class Parser extends LLk
   }/*}}}*/
 
   protected function _isAsciiCaseInsensitiveMatch($str, $ascii)
-  {
+  {/*{{{*/
     return preg_match('/'.$str.'/iu', $str);
-  }
+  }/*}}}*/
+
+  /**
+   * Error recovery methods
+   **/
+
+  protected function skipRuleset()
+  {/*{{{*/
+
+    $trace = array(
+      'start' => $this->LT(),
+      'skipped' => array()
+    );
+
+    $opened_curlies = 0;
+    while(true) {
+      switch ($this->LT()->type) {
+
+      case Lexer::T_LCURLY:
+        $opened_curlies++;
+        $this->consume();
+        break;
+
+      case Lexer::T_RCURLY:
+        if($opened_curlies > 0) $opened_curlies--;
+        $this->consume();
+        if($opened_curlies === 0) break 2;
+        break;
+
+      default:
+        $this->consume();
+        break;
+      }
+      $trace['skipped'][] = $this->LT();
+    }
+    $this->errors[] = $trace;
+  }/*}}}*/
+
+  protected function skipDeclaration()
+  {/*{{{*/
+    // Consume everything while we have opened brackets,
+    // or until we meet a semicolon or closing bracket.
+    $opened_curlies = 0;
+    while(true) {
+      switch ($this->LT()->type) {
+
+        case Lexer::T_LCURLY:
+          $opened_curlies++;
+          $this->consume();
+          break;
+
+        case Lexer::T_RCURLY:
+          if(!$opened_curlies) return;
+          $opened_curlies--;
+          $this->consume();
+          break;
+
+        case Lexer::T_SEMICOLON:
+          $this->consume();
+          if(!$opened_curlies) return;
+          break;
+
+        case Lexer::T_EOF:
+          return;
+
+        default:
+          $this->consume();
+          break;
+
+      }
+    }
+  }/*}}}*/
 
 }

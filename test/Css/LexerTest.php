@@ -14,10 +14,10 @@ class LexerTest extends CssParser_TestCase
     $this->lexer->setSource($source);
     $i = 0;
     $token = $this->lexer->nextToken();
-    while (!$token->isOfType(Lexer::T_EOF)) {
+    while ($token->type !== Lexer::T_EOF) {
       $this->assertEquals(
         $this->lexer->getTokenName($expected[$i]),
-        $this->lexer->getTokenName($token->getType())
+        $this->lexer->getTokenName($token->type)
       );
       $i++;
       $token = $this->lexer->nextToken();
@@ -32,6 +32,7 @@ class LexerTest extends CssParser_TestCase
       array('!iM\po\RTAnt', array(Lexer::T_IMPORTANT_SYM)),
       // Identifiers can contain unicode escapes
       array('!\049\006d\00050\00004f\rT\41 NT', array(Lexer::T_IMPORTANT_SYM)),
+      array('@\070 age', array(Lexer::T_PAGE_SYM)),
       // Identifiers can begin by unicode escape
       array('\049\006d\00050\00004f\rT', array(Lexer::T_IDENT)),
       // Longest match
@@ -82,7 +83,7 @@ class LexerTest extends CssParser_TestCase
           Lexer::T_DIMENSION, Lexer::T_PLUS, Lexer::T_NUMBER,
           Lexer::T_RPAREN, Lexer::T_S, Lexer::T_LCURLY, Lexer::T_S,
           Lexer::T_IDENT, Lexer::T_COLON, Lexer::T_NUMBER,
-          Lexer::T_SEMICOLON, Lexer::T_S, Lexer::T_RCURLY
+          Lexer::T_SEMICOLON, Lexer::T_RCURLY
         )
       ),
     );

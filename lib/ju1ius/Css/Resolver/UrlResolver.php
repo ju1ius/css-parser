@@ -48,13 +48,13 @@ class UrlResolver
       if(!$isAbsUrl && !$isAbsPath){
         // $url is not absolute url or absolute path
         $url = $this->base_url->join($url);
-        $value->setUrl(new Value\String((string) $url));
+        $value->setUrl(new Value\String((string)$url));
       } else if($isAbsPath && $bIsAbsBaseUrl) {
         // $url is absolute path and base url is absolute
         // get the base domain from url
         $base_url = $this->base_url->getRootUrl();
         $url = $base_url->join($url);
-        $value->setUrl(new Value\String((string) $url));
+        $value->setUrl(new Value\String((string)$url));
       }
     }
   }

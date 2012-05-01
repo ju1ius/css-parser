@@ -12,7 +12,7 @@ use ju1ius\Css\StyleDeclaration;
  **/
 class AtRule extends Rule
 {
-  private
+  protected
     $name,
     $style_declaration,
     $vendor_prefix;

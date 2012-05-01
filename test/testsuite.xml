@@ -1,6 +1,7 @@
 <phpunit colors="true" verbose="true">
   <testsuites>
     <testsuite name="CSSParser Tests">
+      <file>Css/LexerTest.php</file>
       <file>Css/Rule/CharsetTest.php</file>
       <file>Css/Rule/NSTest.php</file>
       <file>Css/Rule/ImportTest.php</file>

@@ -1,13 +1,12 @@
 README
 
 New Lexer:
-  ASCII pcre + strlen -> DONE
-  UTF8 pcre + mb_strlen -> ALMOST
-  MULTIBYTE mb_ereg + mb_strlen -> NOT YET
+  MULTIBYTE mb_ereg + mb_strlen -> DONE
+  ASCII pcre + strlen -> TBD
   write tests
 
 New Parser:
-  finish the grammar (@page, @media, @keyframes)
+  !!! Error handling in non-strict mode
   rewrite tests
 
 Encoding:
