@@ -10,4 +10,3 @@ $loader->registerNamespace(
 );
 $loader->register();
 mb_internal_encoding("utf-8");
-set_time_limit(10);
