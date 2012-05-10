@@ -31,7 +31,9 @@
   <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
 
+
 <h3>Install</h3>
+
 <p>
   The easiest way is via <a href="http://getcomposer.org/">Composer</a>:
 </p>
@@ -45,22 +47,26 @@ $ composer.phar install
 $ git clone git://github.com/ju1ius/libphp.git ju1ius-libphp
 </code></pre>
 
+
 <h3>Setup</h3>
+
 <p>
     This library is PSR-0 compatible.
     If you installed via Composer, you just need to include:
 </p>
 <pre><code>$autoloader = require '/path/to/css-parser/lib/vendor/.composer/autoload.php';</code></pre>
+
 <p>
-  Otherwise you'll need a PSR-0 compatible autoloder, like the Symfony/CladdLoader component:
+  Otherwise you'll need a PSR-0 compatible autoloder, like the Symfony/ClassLoader component:
 </p>
 <pre><code>require_once '/path/to/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 $loader->registerNamespace('ju1ius', array(
-'/path/to/css-parser/lib',
-'/path/to/ju1ius-libphp/lib',
+  '/path/to/css-parser/lib',
+  '/path/to/ju1ius-libphp/lib',
 ));
 $loader->register();</code></pre>
+
 
 <h3>Basic Usage</h3>
 
@@ -101,8 +107,10 @@ $parser->setStrict(false);
 $lexer->setSource(Css\Loader::load($url_or_path));
 $stylesheet = $parser->parseStyleSheet();</code></pre>
 
+
 <h3>Advanced Usage</h3>
 <p>Coming soon...</p>
+
 
 <h3>Documentation and Support</h3>
 <ul>
@@ -116,6 +124,7 @@ $stylesheet = $parser->parseStyleSheet();</code></pre>
   <a href="https://github.com/ju1ius/css-parser/issues">Bug Tracker</a>
   </li>
 </ul>
+
 
 <h3>Authors and Contributors</h3>
 <ul>
