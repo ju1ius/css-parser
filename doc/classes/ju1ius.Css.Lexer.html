@@ -1,0 +1,877 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>ju1ius\Css Documentation » \ju1ius\Css\Lexer</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">ju1ius\Css Documentation</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">573</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul>
+<li>todo 
+                <span class="label label-info">4</span>
+</li>
+<li>fixme 
+                <span class="label label-info">11</span>
+</li>
+</ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#nextToken" title="nextToken :: "><span class="description">nextToken()
+        </span><pre>nextToken()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#cleanupIdent" title="cleanupIdent :: "><span class="description">cleanupIdent()
+        </span><pre>cleanupIdent()</pre></a></li>
+<li class="method protected "><a href="#getPatternForIdentifier" title="getPatternForIdentifier :: "><span class="description">getPatternForIdentifier()
+        </span><pre>getPatternForIdentifier()</pre></a></li>
+<li class="method protected "><a href="#handleAtKeyword" title="handleAtKeyword :: "><span class="description">handleAtKeyword()
+        </span><pre>handleAtKeyword()</pre></a></li>
+<li class="method protected "><a href="#handleComment" title="handleComment :: "><span class="description">handleComment()
+        </span><pre>handleComment()</pre></a></li>
+<li class="method protected "><a href="#handleHash" title="handleHash :: "><span class="description">handleHash()
+        </span><pre>handleHash()</pre></a></li>
+<li class="method protected "><a href="#handleIdent" title="handleIdent :: "><span class="description">handleIdent()
+        </span><pre>handleIdent()</pre></a></li>
+<li class="method protected "><a href="#handleImportant" title="handleImportant :: "><span class="description">handleImportant()
+        </span><pre>handleImportant()</pre></a></li>
+<li class="method protected "><a href="#handleMultilineString" title="handleMultilineString :: "><span class="description">handleMultilineString()
+        </span><pre>handleMultilineString()</pre></a></li>
+<li class="method protected "><a href="#handleNegation" title="handleNegation :: "><span class="description">handleNegation()
+        </span><pre>handleNegation()</pre></a></li>
+<li class="method protected "><a href="#handleNumber" title="handleNumber :: "><span class="description">handleNumber()
+        </span><pre>handleNumber()</pre></a></li>
+<li class="method protected "><a href="#handleString" title="handleString :: "><span class="description">handleString()
+        </span><pre>handleString()</pre></a></li>
+<li class="method protected "><a href="#handleUnicodeRange" title="handleUnicodeRange :: "><span class="description">handleUnicodeRange()
+        </span><pre>handleUnicodeRange()</pre></a></li>
+<li class="method protected "><a href="#handleWhitespace" title="handleWhitespace :: "><span class="description">handleWhitespace()
+        </span><pre>handleWhitespace()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected "><a href="#%24atkeywords" title="$atkeywords :: "><span class="description">$atkeywords</span><pre>$atkeywords</pre></a></li>
+<li class="property protected "><a href="#%24regex" title="$regex :: "><span class="description">$regex</span><pre>$regex</pre></a></li>
+<li class="property protected "><a href="#%24regex_cache" title="$regex_cache :: "><span class="description">$regex_cache</span><pre>$regex_cache</pre></a></li>
+<li class="property protected "><a href="#%24units" title="$units :: "><span class="description">$units</span><pre>$units</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants</li>
+<li class="constant  "><a href="#T_AND" title="T_AND :: "><span class="description">T_AND</span><pre>T_AND</pre></a></li>
+<li class="constant  "><a href="#T_ANGLE" title="T_ANGLE :: "><span class="description">T_ANGLE</span><pre>T_ANGLE</pre></a></li>
+<li class="constant  "><a href="#T_ATKEYWORD" title="T_ATKEYWORD :: "><span class="description">T_ATKEYWORD</span><pre>T_ATKEYWORD</pre></a></li>
+<li class="constant  "><a href="#T_BADCOMMENT" title="T_BADCOMMENT :: "><span class="description">T_BADCOMMENT</span><pre>T_BADCOMMENT</pre></a></li>
+<li class="constant  "><a href="#T_BADSTRING" title="T_BADSTRING :: "><span class="description">T_BADSTRING</span><pre>T_BADSTRING</pre></a></li>
+<li class="constant  "><a href="#T_BADURI" title="T_BADURI :: "><span class="description">T_BADURI</span><pre>T_BADURI</pre></a></li>
+<li class="constant  "><a href="#T_BOTTOMCENTER_SYM" title="T_BOTTOMCENTER_SYM :: "><span class="description">T_BOTTOMCENTER_SYM</span><pre>T_BOTTOMCENTER_SYM</pre></a></li>
+<li class="constant  "><a href="#T_BOTTOMLEFTCORNER_SYM" title="T_BOTTOMLEFTCORNER_SYM :: "><span class="description">T_BOTTOMLEFTCORNER_SYM</span><pre>T_BOTTOMLEFTCORNER_SYM</pre></a></li>
+<li class="constant  "><a href="#T_BOTTOMLEFT_SYM" title="T_BOTTOMLEFT_SYM :: "><span class="description">T_BOTTOMLEFT_SYM</span><pre>T_BOTTOMLEFT_SYM</pre></a></li>
+<li class="constant  "><a href="#T_BOTTOMRIGHTCORNER_SYM" title="T_BOTTOMRIGHTCORNER_SYM :: "><span class="description">T_BOTTOMRIGHTCORNER_SYM</span><pre>T_BOTTOMRIGHTCORNER_SYM</pre></a></li>
+<li class="constant  "><a href="#T_BOTTOMRIGHT_SYM" title="T_BOTTOMRIGHT_SYM :: "><span class="description">T_BOTTOMRIGHT_SYM</span><pre>T_BOTTOMRIGHT_SYM</pre></a></li>
+<li class="constant  "><a href="#T_CDC" title="T_CDC :: "><span class="description">T_CDC</span><pre>T_CDC</pre></a></li>
+<li class="constant  "><a href="#T_CDO" title="T_CDO :: "><span class="description">T_CDO</span><pre>T_CDO</pre></a></li>
+<li class="constant  "><a href="#T_CHARSET_SYM" title="T_CHARSET_SYM :: "><span class="description">T_CHARSET_SYM</span><pre>T_CHARSET_SYM</pre></a></li>
+<li class="constant  "><a href="#T_COLON" title="T_COLON :: "><span class="description">T_COLON</span><pre>T_COLON</pre></a></li>
+<li class="constant  "><a href="#T_COMMA" title="T_COMMA :: "><span class="description">T_COMMA</span><pre>T_COMMA</pre></a></li>
+<li class="constant  "><a href="#T_COMMENT" title="T_COMMENT :: "><span class="description">T_COMMENT</span><pre>T_COMMENT</pre></a></li>
+<li class="constant  "><a href="#T_DASHMATCH" title="T_DASHMATCH :: "><span class="description">T_DASHMATCH</span><pre>T_DASHMATCH</pre></a></li>
+<li class="constant  "><a href="#T_DIMENSION" title="T_DIMENSION :: "><span class="description">T_DIMENSION</span><pre>T_DIMENSION</pre></a></li>
+<li class="constant  "><a href="#T_DOT" title="T_DOT :: "><span class="description">T_DOT</span><pre>T_DOT</pre></a></li>
+<li class="constant  "><a href="#T_EMS" title="T_EMS :: "><span class="description">T_EMS</span><pre>T_EMS</pre></a></li>
+<li class="constant  "><a href="#T_EQUALS" title="T_EQUALS :: "><span class="description">T_EQUALS</span><pre>T_EQUALS</pre></a></li>
+<li class="constant  "><a href="#T_EXS" title="T_EXS :: "><span class="description">T_EXS</span><pre>T_EXS</pre></a></li>
+<li class="constant  "><a href="#T_FONT_FACE_SYM" title="T_FONT_FACE_SYM :: "><span class="description">T_FONT_FACE_SYM</span><pre>T_FONT_FACE_SYM</pre></a></li>
+<li class="constant  "><a href="#T_FREQ" title="T_FREQ :: "><span class="description">T_FREQ</span><pre>T_FREQ</pre></a></li>
+<li class="constant  "><a href="#T_FROM_SYM" title="T_FROM_SYM :: "><span class="description">T_FROM_SYM</span><pre>T_FROM_SYM</pre></a></li>
+<li class="constant  "><a href="#T_FUNCTION" title="T_FUNCTION :: "><span class="description">T_FUNCTION</span><pre>T_FUNCTION</pre></a></li>
+<li class="constant  "><a href="#T_GREATER" title="T_GREATER :: "><span class="description">T_GREATER</span><pre>T_GREATER</pre></a></li>
+<li class="constant  "><a href="#T_HASH" title="T_HASH :: "><span class="description">T_HASH</span><pre>T_HASH</pre></a></li>
+<li class="constant  "><a href="#T_IDENT" title="T_IDENT :: "><span class="description">T_IDENT</span><pre>T_IDENT</pre></a></li>
+<li class="constant  "><a href="#T_IMPORTANT_SYM" title="T_IMPORTANT_SYM :: "><span class="description">T_IMPORTANT_SYM</span><pre>T_IMPORTANT_SYM</pre></a></li>
+<li class="constant  "><a href="#T_IMPORT_SYM" title="T_IMPORT_SYM :: "><span class="description">T_IMPORT_SYM</span><pre>T_IMPORT_SYM</pre></a></li>
+<li class="constant  "><a href="#T_INCLUDES" title="T_INCLUDES :: "><span class="description">T_INCLUDES</span><pre>T_INCLUDES</pre></a></li>
+<li class="constant  "><a href="#T_KEYFRAMES_SYM" title="T_KEYFRAMES_SYM :: "><span class="description">T_KEYFRAMES_SYM</span><pre>T_KEYFRAMES_SYM</pre></a></li>
+<li class="constant  "><a href="#T_KEYFRAME_SYM" title="T_KEYFRAME_SYM :: "><span class="description">T_KEYFRAME_SYM</span><pre>T_KEYFRAME_SYM</pre></a></li>
+<li class="constant  "><a href="#T_LBRACK" title="T_LBRACK :: "><span class="description">T_LBRACK</span><pre>T_LBRACK</pre></a></li>
+<li class="constant  "><a href="#T_LCURLY" title="T_LCURLY :: "><span class="description">T_LCURLY</span><pre>T_LCURLY</pre></a></li>
+<li class="constant  "><a href="#T_LEFTBOTTOM_SYM" title="T_LEFTBOTTOM_SYM :: "><span class="description">T_LEFTBOTTOM_SYM</span><pre>T_LEFTBOTTOM_SYM</pre></a></li>
+<li class="constant  "><a href="#T_LEFTMIDDLE_SYM" title="T_LEFTMIDDLE_SYM :: "><span class="description">T_LEFTMIDDLE_SYM</span><pre>T_LEFTMIDDLE_SYM</pre></a></li>
+<li class="constant  "><a href="#T_LEFTTOP_SYM" title="T_LEFTTOP_SYM :: "><span class="description">T_LEFTTOP_SYM</span><pre>T_LEFTTOP_SYM</pre></a></li>
+<li class="constant  "><a href="#T_LENGTH" title="T_LENGTH :: "><span class="description">T_LENGTH</span><pre>T_LENGTH</pre></a></li>
+<li class="constant  "><a href="#T_LOWER" title="T_LOWER :: "><span class="description">T_LOWER</span><pre>T_LOWER</pre></a></li>
+<li class="constant  "><a href="#T_LPAREN" title="T_LPAREN :: "><span class="description">T_LPAREN</span><pre>T_LPAREN</pre></a></li>
+<li class="constant  "><a href="#T_MEDIA_SYM" title="T_MEDIA_SYM :: "><span class="description">T_MEDIA_SYM</span><pre>T_MEDIA_SYM</pre></a></li>
+<li class="constant  "><a href="#T_MINUS" title="T_MINUS :: "><span class="description">T_MINUS</span><pre>T_MINUS</pre></a></li>
+<li class="constant  "><a href="#T_MULT" title="T_MULT :: "><span class="description">T_MULT</span><pre>T_MULT</pre></a></li>
+<li class="constant  "><a href="#T_NAMESPACE_SYM" title="T_NAMESPACE_SYM :: "><span class="description">T_NAMESPACE_SYM</span><pre>T_NAMESPACE_SYM</pre></a></li>
+<li class="constant  "><a href="#T_NEGATION" title="T_NEGATION :: "><span class="description">T_NEGATION</span><pre>T_NEGATION</pre></a></li>
+<li class="constant  "><a href="#T_NOT" title="T_NOT :: "><span class="description">T_NOT</span><pre>T_NOT</pre></a></li>
+<li class="constant  "><a href="#T_NUMBER" title="T_NUMBER :: "><span class="description">T_NUMBER</span><pre>T_NUMBER</pre></a></li>
+<li class="constant  "><a href="#T_ONLY" title="T_ONLY :: "><span class="description">T_ONLY</span><pre>T_ONLY</pre></a></li>
+<li class="constant  "><a href="#T_PAGE_SYM" title="T_PAGE_SYM :: "><span class="description">T_PAGE_SYM</span><pre>T_PAGE_SYM</pre></a></li>
+<li class="constant  "><a href="#T_PERCENT" title="T_PERCENT :: "><span class="description">T_PERCENT</span><pre>T_PERCENT</pre></a></li>
+<li class="constant  "><a href="#T_PERCENTAGE" title="T_PERCENTAGE :: "><span class="description">T_PERCENTAGE</span><pre>T_PERCENTAGE</pre></a></li>
+<li class="constant  "><a href="#T_PIPE" title="T_PIPE :: "><span class="description">T_PIPE</span><pre>T_PIPE</pre></a></li>
+<li class="constant  "><a href="#T_PLUS" title="T_PLUS :: "><span class="description">T_PLUS</span><pre>T_PLUS</pre></a></li>
+<li class="constant  "><a href="#T_PREFIXMATCH" title="T_PREFIXMATCH :: "><span class="description">T_PREFIXMATCH</span><pre>T_PREFIXMATCH</pre></a></li>
+<li class="constant  "><a href="#T_RATIO" title="T_RATIO :: "><span class="description">T_RATIO</span><pre>T_RATIO</pre></a></li>
+<li class="constant  "><a href="#T_RBRACK" title="T_RBRACK :: "><span class="description">T_RBRACK</span><pre>T_RBRACK</pre></a></li>
+<li class="constant  "><a href="#T_RCURLY" title="T_RCURLY :: "><span class="description">T_RCURLY</span><pre>T_RCURLY</pre></a></li>
+<li class="constant  "><a href="#T_RESOLUTION" title="T_RESOLUTION :: "><span class="description">T_RESOLUTION</span><pre>T_RESOLUTION</pre></a></li>
+<li class="constant  "><a href="#T_RIGHTBOTTOM_SYM" title="T_RIGHTBOTTOM_SYM :: "><span class="description">T_RIGHTBOTTOM_SYM</span><pre>T_RIGHTBOTTOM_SYM</pre></a></li>
+<li class="constant  "><a href="#T_RIGHTMIDDLE_SYM" title="T_RIGHTMIDDLE_SYM :: "><span class="description">T_RIGHTMIDDLE_SYM</span><pre>T_RIGHTMIDDLE_SYM</pre></a></li>
+<li class="constant  "><a href="#T_RIGHTTOP_SYM" title="T_RIGHTTOP_SYM :: "><span class="description">T_RIGHTTOP_SYM</span><pre>T_RIGHTTOP_SYM</pre></a></li>
+<li class="constant  "><a href="#T_RPAREN" title="T_RPAREN :: "><span class="description">T_RPAREN</span><pre>T_RPAREN</pre></a></li>
+<li class="constant  "><a href="#T_S" title="T_S :: "><span class="description">T_S</span><pre>T_S</pre></a></li>
+<li class="constant  "><a href="#T_SEMICOLON" title="T_SEMICOLON :: "><span class="description">T_SEMICOLON</span><pre>T_SEMICOLON</pre></a></li>
+<li class="constant  "><a href="#T_SLASH" title="T_SLASH :: "><span class="description">T_SLASH</span><pre>T_SLASH</pre></a></li>
+<li class="constant  "><a href="#T_STAR" title="T_STAR :: "><span class="description">T_STAR</span><pre>T_STAR</pre></a></li>
+<li class="constant  "><a href="#T_STRING" title="T_STRING :: "><span class="description">T_STRING</span><pre>T_STRING</pre></a></li>
+<li class="constant  "><a href="#T_SUBSTRINGMATCH" title="T_SUBSTRINGMATCH :: "><span class="description">T_SUBSTRINGMATCH</span><pre>T_SUBSTRINGMATCH</pre></a></li>
+<li class="constant  "><a href="#T_SUFFIXMATCH" title="T_SUFFIXMATCH :: "><span class="description">T_SUFFIXMATCH</span><pre>T_SUFFIXMATCH</pre></a></li>
+<li class="constant  "><a href="#T_TILDE" title="T_TILDE :: "><span class="description">T_TILDE</span><pre>T_TILDE</pre></a></li>
+<li class="constant  "><a href="#T_TIME" title="T_TIME :: "><span class="description">T_TIME</span><pre>T_TIME</pre></a></li>
+<li class="constant  "><a href="#T_TOPCENTER_SYM" title="T_TOPCENTER_SYM :: "><span class="description">T_TOPCENTER_SYM</span><pre>T_TOPCENTER_SYM</pre></a></li>
+<li class="constant  "><a href="#T_TOPLEFTCORNER_SYM" title="T_TOPLEFTCORNER_SYM :: "><span class="description">T_TOPLEFTCORNER_SYM</span><pre>T_TOPLEFTCORNER_SYM</pre></a></li>
+<li class="constant  "><a href="#T_TOPLEFT_SYM" title="T_TOPLEFT_SYM :: "><span class="description">T_TOPLEFT_SYM</span><pre>T_TOPLEFT_SYM</pre></a></li>
+<li class="constant  "><a href="#T_TOPRIGHTCORNER_SYM" title="T_TOPRIGHTCORNER_SYM :: "><span class="description">T_TOPRIGHTCORNER_SYM</span><pre>T_TOPRIGHTCORNER_SYM</pre></a></li>
+<li class="constant  "><a href="#T_TOPRIGHT_SYM" title="T_TOPRIGHT_SYM :: "><span class="description">T_TOPRIGHT_SYM</span><pre>T_TOPRIGHT_SYM</pre></a></li>
+<li class="constant  "><a href="#T_TO_SYM" title="T_TO_SYM :: "><span class="description">T_TO_SYM</span><pre>T_TO_SYM</pre></a></li>
+<li class="constant  "><a href="#T_UNICODERANGE" title="T_UNICODERANGE :: "><span class="description">T_UNICODERANGE</span><pre>T_UNICODERANGE</pre></a></li>
+<li class="constant  "><a href="#T_URI" title="T_URI :: "><span class="description">T_URI</span><pre>T_URI</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5Cju1ius%5CCss%5CLexer" id="\ju1ius\Css\Lexer"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
+<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/ju1ius.Css.Lexer.html">Lexer</a>
+</li>
+</ul>
+<div href="../classes/ju1ius.Css.Lexer.html" class="element class"><div class="details">
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct(String $source) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="nextToken" id="nextToken"></a><div class="element clickable method public nextToken" data-toggle="collapse" data-target=".nextToken .collapse">
+<h2>nextToken()
+        </h2>
+<pre>nextToken() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="cleanupIdent" id="cleanupIdent"></a><div class="element clickable method protected cleanupIdent" data-toggle="collapse" data-target=".cleanupIdent .collapse">
+<h2>cleanupIdent()
+        </h2>
+<pre>cleanupIdent($ident) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ident</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="getPatternForIdentifier" id="getPatternForIdentifier"></a><div class="element clickable method protected getPatternForIdentifier" data-toggle="collapse" data-target=".getPatternForIdentifier .collapse">
+<h2>getPatternForIdentifier()
+        </h2>
+<pre>getPatternForIdentifier($ident) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ident</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="handleAtKeyword" id="handleAtKeyword"></a><div class="element clickable method protected handleAtKeyword" data-toggle="collapse" data-target=".handleAtKeyword .collapse">
+<h2>handleAtKeyword()
+        </h2>
+<pre>handleAtKeyword() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleComment" id="handleComment"></a><div class="element clickable method protected handleComment" data-toggle="collapse" data-target=".handleComment .collapse">
+<h2>handleComment()
+        </h2>
+<pre>handleComment() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleHash" id="handleHash"></a><div class="element clickable method protected handleHash" data-toggle="collapse" data-target=".handleHash .collapse">
+<h2>handleHash()
+        </h2>
+<pre>handleHash() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleIdent" id="handleIdent"></a><div class="element clickable method protected handleIdent" data-toggle="collapse" data-target=".handleIdent .collapse">
+<h2>handleIdent()
+        </h2>
+<pre>handleIdent() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleImportant" id="handleImportant"></a><div class="element clickable method protected handleImportant" data-toggle="collapse" data-target=".handleImportant .collapse">
+<h2>handleImportant()
+        </h2>
+<pre>handleImportant() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleMultilineString" id="handleMultilineString"></a><div class="element clickable method protected handleMultilineString" data-toggle="collapse" data-target=".handleMultilineString .collapse">
+<h2>handleMultilineString()
+        </h2>
+<pre>handleMultilineString($start_char, $start_str, $line, $position) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$start_char</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$start_str</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$line</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$position</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="handleNegation" id="handleNegation"></a><div class="element clickable method protected handleNegation" data-toggle="collapse" data-target=".handleNegation .collapse">
+<h2>handleNegation()
+        </h2>
+<pre>handleNegation() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleNumber" id="handleNumber"></a><div class="element clickable method protected handleNumber" data-toggle="collapse" data-target=".handleNumber .collapse">
+<h2>handleNumber()
+        </h2>
+<pre>handleNumber() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleString" id="handleString"></a><div class="element clickable method protected handleString" data-toggle="collapse" data-target=".handleString .collapse">
+<h2>handleString()
+        </h2>
+<pre>handleString() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleUnicodeRange" id="handleUnicodeRange"></a><div class="element clickable method protected handleUnicodeRange" data-toggle="collapse" data-target=".handleUnicodeRange .collapse">
+<h2>handleUnicodeRange()
+        </h2>
+<pre>handleUnicodeRange() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="handleWhitespace" id="handleWhitespace"></a><div class="element clickable method protected handleWhitespace" data-toggle="collapse" data-target=".handleWhitespace .collapse">
+<h2>handleWhitespace()
+        </h2>
+<pre>handleWhitespace() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24atkeywords" id="$atkeywords"> </a><div class="element clickable property protected $atkeywords" data-toggle="collapse" data-target=".$atkeywords .collapse">
+<h2>$atkeywords</h2>
+<pre>$atkeywords </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24regex" id="$regex"> </a><div class="element clickable property protected $regex" data-toggle="collapse" data-target=".$regex .collapse">
+<h2>$regex</h2>
+<pre>$regex </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24regex_cache" id="$regex_cache"> </a><div class="element clickable property protected $regex_cache" data-toggle="collapse" data-target=".$regex_cache .collapse">
+<h2>$regex_cache</h2>
+<pre>$regex_cache </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="%24units" id="$units"> </a><div class="element clickable property protected $units" data-toggle="collapse" data-target=".$units .collapse">
+<h2>$units</h2>
+<pre>$units </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a name="T_AND" id="T_AND"> </a><div class="element clickable constant  T_AND" data-toggle="collapse" data-target=".T_AND .collapse">
+<h2>T_AND</h2>
+<pre>T_AND </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_ANGLE" id="T_ANGLE"> </a><div class="element clickable constant  T_ANGLE" data-toggle="collapse" data-target=".T_ANGLE .collapse">
+<h2>T_ANGLE</h2>
+<pre>T_ANGLE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_ATKEYWORD" id="T_ATKEYWORD"> </a><div class="element clickable constant  T_ATKEYWORD" data-toggle="collapse" data-target=".T_ATKEYWORD .collapse">
+<h2>T_ATKEYWORD</h2>
+<pre>T_ATKEYWORD </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BADCOMMENT" id="T_BADCOMMENT"> </a><div class="element clickable constant  T_BADCOMMENT" data-toggle="collapse" data-target=".T_BADCOMMENT .collapse">
+<h2>T_BADCOMMENT</h2>
+<pre>T_BADCOMMENT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BADSTRING" id="T_BADSTRING"> </a><div class="element clickable constant  T_BADSTRING" data-toggle="collapse" data-target=".T_BADSTRING .collapse">
+<h2>T_BADSTRING</h2>
+<pre>T_BADSTRING </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BADURI" id="T_BADURI"> </a><div class="element clickable constant  T_BADURI" data-toggle="collapse" data-target=".T_BADURI .collapse">
+<h2>T_BADURI</h2>
+<pre>T_BADURI </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BOTTOMCENTER_SYM" id="T_BOTTOMCENTER_SYM"> </a><div class="element clickable constant  T_BOTTOMCENTER_SYM" data-toggle="collapse" data-target=".T_BOTTOMCENTER_SYM .collapse">
+<h2>T_BOTTOMCENTER_SYM</h2>
+<pre>T_BOTTOMCENTER_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BOTTOMLEFTCORNER_SYM" id="T_BOTTOMLEFTCORNER_SYM"> </a><div class="element clickable constant  T_BOTTOMLEFTCORNER_SYM" data-toggle="collapse" data-target=".T_BOTTOMLEFTCORNER_SYM .collapse">
+<h2>T_BOTTOMLEFTCORNER_SYM</h2>
+<pre>T_BOTTOMLEFTCORNER_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BOTTOMLEFT_SYM" id="T_BOTTOMLEFT_SYM"> </a><div class="element clickable constant  T_BOTTOMLEFT_SYM" data-toggle="collapse" data-target=".T_BOTTOMLEFT_SYM .collapse">
+<h2>T_BOTTOMLEFT_SYM</h2>
+<pre>T_BOTTOMLEFT_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BOTTOMRIGHTCORNER_SYM" id="T_BOTTOMRIGHTCORNER_SYM"> </a><div class="element clickable constant  T_BOTTOMRIGHTCORNER_SYM" data-toggle="collapse" data-target=".T_BOTTOMRIGHTCORNER_SYM .collapse">
+<h2>T_BOTTOMRIGHTCORNER_SYM</h2>
+<pre>T_BOTTOMRIGHTCORNER_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_BOTTOMRIGHT_SYM" id="T_BOTTOMRIGHT_SYM"> </a><div class="element clickable constant  T_BOTTOMRIGHT_SYM" data-toggle="collapse" data-target=".T_BOTTOMRIGHT_SYM .collapse">
+<h2>T_BOTTOMRIGHT_SYM</h2>
+<pre>T_BOTTOMRIGHT_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_CDC" id="T_CDC"> </a><div class="element clickable constant  T_CDC" data-toggle="collapse" data-target=".T_CDC .collapse">
+<h2>T_CDC</h2>
+<pre>T_CDC </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_CDO" id="T_CDO"> </a><div class="element clickable constant  T_CDO" data-toggle="collapse" data-target=".T_CDO .collapse">
+<h2>T_CDO</h2>
+<pre>T_CDO </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_CHARSET_SYM" id="T_CHARSET_SYM"> </a><div class="element clickable constant  T_CHARSET_SYM" data-toggle="collapse" data-target=".T_CHARSET_SYM .collapse">
+<h2>T_CHARSET_SYM</h2>
+<pre>T_CHARSET_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_COLON" id="T_COLON"> </a><div class="element clickable constant  T_COLON" data-toggle="collapse" data-target=".T_COLON .collapse">
+<h2>T_COLON</h2>
+<pre>T_COLON </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_COMMA" id="T_COMMA"> </a><div class="element clickable constant  T_COMMA" data-toggle="collapse" data-target=".T_COMMA .collapse">
+<h2>T_COMMA</h2>
+<pre>T_COMMA </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_COMMENT" id="T_COMMENT"> </a><div class="element clickable constant  T_COMMENT" data-toggle="collapse" data-target=".T_COMMENT .collapse">
+<h2>T_COMMENT</h2>
+<pre>T_COMMENT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_DASHMATCH" id="T_DASHMATCH"> </a><div class="element clickable constant  T_DASHMATCH" data-toggle="collapse" data-target=".T_DASHMATCH .collapse">
+<h2>T_DASHMATCH</h2>
+<pre>T_DASHMATCH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_DIMENSION" id="T_DIMENSION"> </a><div class="element clickable constant  T_DIMENSION" data-toggle="collapse" data-target=".T_DIMENSION .collapse">
+<h2>T_DIMENSION</h2>
+<pre>T_DIMENSION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_DOT" id="T_DOT"> </a><div class="element clickable constant  T_DOT" data-toggle="collapse" data-target=".T_DOT .collapse">
+<h2>T_DOT</h2>
+<pre>T_DOT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_EMS" id="T_EMS"> </a><div class="element clickable constant  T_EMS" data-toggle="collapse" data-target=".T_EMS .collapse">
+<h2>T_EMS</h2>
+<pre>T_EMS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_EQUALS" id="T_EQUALS"> </a><div class="element clickable constant  T_EQUALS" data-toggle="collapse" data-target=".T_EQUALS .collapse">
+<h2>T_EQUALS</h2>
+<pre>T_EQUALS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_EXS" id="T_EXS"> </a><div class="element clickable constant  T_EXS" data-toggle="collapse" data-target=".T_EXS .collapse">
+<h2>T_EXS</h2>
+<pre>T_EXS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_FONT_FACE_SYM" id="T_FONT_FACE_SYM"> </a><div class="element clickable constant  T_FONT_FACE_SYM" data-toggle="collapse" data-target=".T_FONT_FACE_SYM .collapse">
+<h2>T_FONT_FACE_SYM</h2>
+<pre>T_FONT_FACE_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_FREQ" id="T_FREQ"> </a><div class="element clickable constant  T_FREQ" data-toggle="collapse" data-target=".T_FREQ .collapse">
+<h2>T_FREQ</h2>
+<pre>T_FREQ </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_FROM_SYM" id="T_FROM_SYM"> </a><div class="element clickable constant  T_FROM_SYM" data-toggle="collapse" data-target=".T_FROM_SYM .collapse">
+<h2>T_FROM_SYM</h2>
+<pre>T_FROM_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_FUNCTION" id="T_FUNCTION"> </a><div class="element clickable constant  T_FUNCTION" data-toggle="collapse" data-target=".T_FUNCTION .collapse">
+<h2>T_FUNCTION</h2>
+<pre>T_FUNCTION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_GREATER" id="T_GREATER"> </a><div class="element clickable constant  T_GREATER" data-toggle="collapse" data-target=".T_GREATER .collapse">
+<h2>T_GREATER</h2>
+<pre>T_GREATER </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_HASH" id="T_HASH"> </a><div class="element clickable constant  T_HASH" data-toggle="collapse" data-target=".T_HASH .collapse">
+<h2>T_HASH</h2>
+<pre>T_HASH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_IDENT" id="T_IDENT"> </a><div class="element clickable constant  T_IDENT" data-toggle="collapse" data-target=".T_IDENT .collapse">
+<h2>T_IDENT</h2>
+<pre>T_IDENT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_IMPORTANT_SYM" id="T_IMPORTANT_SYM"> </a><div class="element clickable constant  T_IMPORTANT_SYM" data-toggle="collapse" data-target=".T_IMPORTANT_SYM .collapse">
+<h2>T_IMPORTANT_SYM</h2>
+<pre>T_IMPORTANT_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_IMPORT_SYM" id="T_IMPORT_SYM"> </a><div class="element clickable constant  T_IMPORT_SYM" data-toggle="collapse" data-target=".T_IMPORT_SYM .collapse">
+<h2>T_IMPORT_SYM</h2>
+<pre>T_IMPORT_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_INCLUDES" id="T_INCLUDES"> </a><div class="element clickable constant  T_INCLUDES" data-toggle="collapse" data-target=".T_INCLUDES .collapse">
+<h2>T_INCLUDES</h2>
+<pre>T_INCLUDES </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_KEYFRAMES_SYM" id="T_KEYFRAMES_SYM"> </a><div class="element clickable constant  T_KEYFRAMES_SYM" data-toggle="collapse" data-target=".T_KEYFRAMES_SYM .collapse">
+<h2>T_KEYFRAMES_SYM</h2>
+<pre>T_KEYFRAMES_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_KEYFRAME_SYM" id="T_KEYFRAME_SYM"> </a><div class="element clickable constant  T_KEYFRAME_SYM" data-toggle="collapse" data-target=".T_KEYFRAME_SYM .collapse">
+<h2>T_KEYFRAME_SYM</h2>
+<pre>T_KEYFRAME_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LBRACK" id="T_LBRACK"> </a><div class="element clickable constant  T_LBRACK" data-toggle="collapse" data-target=".T_LBRACK .collapse">
+<h2>T_LBRACK</h2>
+<pre>T_LBRACK </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LCURLY" id="T_LCURLY"> </a><div class="element clickable constant  T_LCURLY" data-toggle="collapse" data-target=".T_LCURLY .collapse">
+<h2>T_LCURLY</h2>
+<pre>T_LCURLY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LEFTBOTTOM_SYM" id="T_LEFTBOTTOM_SYM"> </a><div class="element clickable constant  T_LEFTBOTTOM_SYM" data-toggle="collapse" data-target=".T_LEFTBOTTOM_SYM .collapse">
+<h2>T_LEFTBOTTOM_SYM</h2>
+<pre>T_LEFTBOTTOM_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LEFTMIDDLE_SYM" id="T_LEFTMIDDLE_SYM"> </a><div class="element clickable constant  T_LEFTMIDDLE_SYM" data-toggle="collapse" data-target=".T_LEFTMIDDLE_SYM .collapse">
+<h2>T_LEFTMIDDLE_SYM</h2>
+<pre>T_LEFTMIDDLE_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LEFTTOP_SYM" id="T_LEFTTOP_SYM"> </a><div class="element clickable constant  T_LEFTTOP_SYM" data-toggle="collapse" data-target=".T_LEFTTOP_SYM .collapse">
+<h2>T_LEFTTOP_SYM</h2>
+<pre>T_LEFTTOP_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LENGTH" id="T_LENGTH"> </a><div class="element clickable constant  T_LENGTH" data-toggle="collapse" data-target=".T_LENGTH .collapse">
+<h2>T_LENGTH</h2>
+<pre>T_LENGTH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LOWER" id="T_LOWER"> </a><div class="element clickable constant  T_LOWER" data-toggle="collapse" data-target=".T_LOWER .collapse">
+<h2>T_LOWER</h2>
+<pre>T_LOWER </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_LPAREN" id="T_LPAREN"> </a><div class="element clickable constant  T_LPAREN" data-toggle="collapse" data-target=".T_LPAREN .collapse">
+<h2>T_LPAREN</h2>
+<pre>T_LPAREN </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_MEDIA_SYM" id="T_MEDIA_SYM"> </a><div class="element clickable constant  T_MEDIA_SYM" data-toggle="collapse" data-target=".T_MEDIA_SYM .collapse">
+<h2>T_MEDIA_SYM</h2>
+<pre>T_MEDIA_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_MINUS" id="T_MINUS"> </a><div class="element clickable constant  T_MINUS" data-toggle="collapse" data-target=".T_MINUS .collapse">
+<h2>T_MINUS</h2>
+<pre>T_MINUS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_MULT" id="T_MULT"> </a><div class="element clickable constant  T_MULT" data-toggle="collapse" data-target=".T_MULT .collapse">
+<h2>T_MULT</h2>
+<pre>T_MULT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_NAMESPACE_SYM" id="T_NAMESPACE_SYM"> </a><div class="element clickable constant  T_NAMESPACE_SYM" data-toggle="collapse" data-target=".T_NAMESPACE_SYM .collapse">
+<h2>T_NAMESPACE_SYM</h2>
+<pre>T_NAMESPACE_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_NEGATION" id="T_NEGATION"> </a><div class="element clickable constant  T_NEGATION" data-toggle="collapse" data-target=".T_NEGATION .collapse">
+<h2>T_NEGATION</h2>
+<pre>T_NEGATION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_NOT" id="T_NOT"> </a><div class="element clickable constant  T_NOT" data-toggle="collapse" data-target=".T_NOT .collapse">
+<h2>T_NOT</h2>
+<pre>T_NOT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_NUMBER" id="T_NUMBER"> </a><div class="element clickable constant  T_NUMBER" data-toggle="collapse" data-target=".T_NUMBER .collapse">
+<h2>T_NUMBER</h2>
+<pre>T_NUMBER </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_ONLY" id="T_ONLY"> </a><div class="element clickable constant  T_ONLY" data-toggle="collapse" data-target=".T_ONLY .collapse">
+<h2>T_ONLY</h2>
+<pre>T_ONLY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_PAGE_SYM" id="T_PAGE_SYM"> </a><div class="element clickable constant  T_PAGE_SYM" data-toggle="collapse" data-target=".T_PAGE_SYM .collapse">
+<h2>T_PAGE_SYM</h2>
+<pre>T_PAGE_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_PERCENT" id="T_PERCENT"> </a><div class="element clickable constant  T_PERCENT" data-toggle="collapse" data-target=".T_PERCENT .collapse">
+<h2>T_PERCENT</h2>
+<pre>T_PERCENT </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_PERCENTAGE" id="T_PERCENTAGE"> </a><div class="element clickable constant  T_PERCENTAGE" data-toggle="collapse" data-target=".T_PERCENTAGE .collapse">
+<h2>T_PERCENTAGE</h2>
+<pre>T_PERCENTAGE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_PIPE" id="T_PIPE"> </a><div class="element clickable constant  T_PIPE" data-toggle="collapse" data-target=".T_PIPE .collapse">
+<h2>T_PIPE</h2>
+<pre>T_PIPE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_PLUS" id="T_PLUS"> </a><div class="element clickable constant  T_PLUS" data-toggle="collapse" data-target=".T_PLUS .collapse">
+<h2>T_PLUS</h2>
+<pre>T_PLUS </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_PREFIXMATCH" id="T_PREFIXMATCH"> </a><div class="element clickable constant  T_PREFIXMATCH" data-toggle="collapse" data-target=".T_PREFIXMATCH .collapse">
+<h2>T_PREFIXMATCH</h2>
+<pre>T_PREFIXMATCH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RATIO" id="T_RATIO"> </a><div class="element clickable constant  T_RATIO" data-toggle="collapse" data-target=".T_RATIO .collapse">
+<h2>T_RATIO</h2>
+<pre>T_RATIO </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RBRACK" id="T_RBRACK"> </a><div class="element clickable constant  T_RBRACK" data-toggle="collapse" data-target=".T_RBRACK .collapse">
+<h2>T_RBRACK</h2>
+<pre>T_RBRACK </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RCURLY" id="T_RCURLY"> </a><div class="element clickable constant  T_RCURLY" data-toggle="collapse" data-target=".T_RCURLY .collapse">
+<h2>T_RCURLY</h2>
+<pre>T_RCURLY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RESOLUTION" id="T_RESOLUTION"> </a><div class="element clickable constant  T_RESOLUTION" data-toggle="collapse" data-target=".T_RESOLUTION .collapse">
+<h2>T_RESOLUTION</h2>
+<pre>T_RESOLUTION </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RIGHTBOTTOM_SYM" id="T_RIGHTBOTTOM_SYM"> </a><div class="element clickable constant  T_RIGHTBOTTOM_SYM" data-toggle="collapse" data-target=".T_RIGHTBOTTOM_SYM .collapse">
+<h2>T_RIGHTBOTTOM_SYM</h2>
+<pre>T_RIGHTBOTTOM_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RIGHTMIDDLE_SYM" id="T_RIGHTMIDDLE_SYM"> </a><div class="element clickable constant  T_RIGHTMIDDLE_SYM" data-toggle="collapse" data-target=".T_RIGHTMIDDLE_SYM .collapse">
+<h2>T_RIGHTMIDDLE_SYM</h2>
+<pre>T_RIGHTMIDDLE_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RIGHTTOP_SYM" id="T_RIGHTTOP_SYM"> </a><div class="element clickable constant  T_RIGHTTOP_SYM" data-toggle="collapse" data-target=".T_RIGHTTOP_SYM .collapse">
+<h2>T_RIGHTTOP_SYM</h2>
+<pre>T_RIGHTTOP_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_RPAREN" id="T_RPAREN"> </a><div class="element clickable constant  T_RPAREN" data-toggle="collapse" data-target=".T_RPAREN .collapse">
+<h2>T_RPAREN</h2>
+<pre>T_RPAREN </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_S" id="T_S"> </a><div class="element clickable constant  T_S" data-toggle="collapse" data-target=".T_S .collapse">
+<h2>T_S</h2>
+<pre>T_S </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_SEMICOLON" id="T_SEMICOLON"> </a><div class="element clickable constant  T_SEMICOLON" data-toggle="collapse" data-target=".T_SEMICOLON .collapse">
+<h2>T_SEMICOLON</h2>
+<pre>T_SEMICOLON </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_SLASH" id="T_SLASH"> </a><div class="element clickable constant  T_SLASH" data-toggle="collapse" data-target=".T_SLASH .collapse">
+<h2>T_SLASH</h2>
+<pre>T_SLASH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_STAR" id="T_STAR"> </a><div class="element clickable constant  T_STAR" data-toggle="collapse" data-target=".T_STAR .collapse">
+<h2>T_STAR</h2>
+<pre>T_STAR </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_STRING" id="T_STRING"> </a><div class="element clickable constant  T_STRING" data-toggle="collapse" data-target=".T_STRING .collapse">
+<h2>T_STRING</h2>
+<pre>T_STRING </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_SUBSTRINGMATCH" id="T_SUBSTRINGMATCH"> </a><div class="element clickable constant  T_SUBSTRINGMATCH" data-toggle="collapse" data-target=".T_SUBSTRINGMATCH .collapse">
+<h2>T_SUBSTRINGMATCH</h2>
+<pre>T_SUBSTRINGMATCH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_SUFFIXMATCH" id="T_SUFFIXMATCH"> </a><div class="element clickable constant  T_SUFFIXMATCH" data-toggle="collapse" data-target=".T_SUFFIXMATCH .collapse">
+<h2>T_SUFFIXMATCH</h2>
+<pre>T_SUFFIXMATCH </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TILDE" id="T_TILDE"> </a><div class="element clickable constant  T_TILDE" data-toggle="collapse" data-target=".T_TILDE .collapse">
+<h2>T_TILDE</h2>
+<pre>T_TILDE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TIME" id="T_TIME"> </a><div class="element clickable constant  T_TIME" data-toggle="collapse" data-target=".T_TIME .collapse">
+<h2>T_TIME</h2>
+<pre>T_TIME </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TOPCENTER_SYM" id="T_TOPCENTER_SYM"> </a><div class="element clickable constant  T_TOPCENTER_SYM" data-toggle="collapse" data-target=".T_TOPCENTER_SYM .collapse">
+<h2>T_TOPCENTER_SYM</h2>
+<pre>T_TOPCENTER_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TOPLEFTCORNER_SYM" id="T_TOPLEFTCORNER_SYM"> </a><div class="element clickable constant  T_TOPLEFTCORNER_SYM" data-toggle="collapse" data-target=".T_TOPLEFTCORNER_SYM .collapse">
+<h2>T_TOPLEFTCORNER_SYM</h2>
+<pre>T_TOPLEFTCORNER_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TOPLEFT_SYM" id="T_TOPLEFT_SYM"> </a><div class="element clickable constant  T_TOPLEFT_SYM" data-toggle="collapse" data-target=".T_TOPLEFT_SYM .collapse">
+<h2>T_TOPLEFT_SYM</h2>
+<pre>T_TOPLEFT_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TOPRIGHTCORNER_SYM" id="T_TOPRIGHTCORNER_SYM"> </a><div class="element clickable constant  T_TOPRIGHTCORNER_SYM" data-toggle="collapse" data-target=".T_TOPRIGHTCORNER_SYM .collapse">
+<h2>T_TOPRIGHTCORNER_SYM</h2>
+<pre>T_TOPRIGHTCORNER_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TOPRIGHT_SYM" id="T_TOPRIGHT_SYM"> </a><div class="element clickable constant  T_TOPRIGHT_SYM" data-toggle="collapse" data-target=".T_TOPRIGHT_SYM .collapse">
+<h2>T_TOPRIGHT_SYM</h2>
+<pre>T_TOPRIGHT_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_TO_SYM" id="T_TO_SYM"> </a><div class="element clickable constant  T_TO_SYM" data-toggle="collapse" data-target=".T_TO_SYM .collapse">
+<h2>T_TO_SYM</h2>
+<pre>T_TO_SYM </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_UNICODERANGE" id="T_UNICODERANGE"> </a><div class="element clickable constant  T_UNICODERANGE" data-toggle="collapse" data-target=".T_UNICODERANGE .collapse">
+<h2>T_UNICODERANGE</h2>
+<pre>T_UNICODERANGE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+<a name="T_URI" id="T_URI"> </a><div class="element clickable constant  T_URI" data-toggle="collapse" data-target=".T_URI .collapse">
+<h2>T_URI</h2>
+<pre>T_URI </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+</div>
+</div></div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
+            generated on 2012-05-10T20:04:32+02:00.<br></footer></div>
+</div>
+</body>
+</html>

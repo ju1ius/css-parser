@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>ju1ius\Css Documentation » \ju1ius\Css\Value\Url</title>
+<title>ju1ius\Css Documentation » \ju1ius\Css\Loader</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -62,57 +62,132 @@
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods</li>
-<li class="method public "><a href="#__clone" title="__clone :: "><span class="description">__clone()
-        </span><pre>__clone()</pre></a></li>
-<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
-        </span><pre>__construct()</pre></a></li>
-<li class="method public inherited"><a href="#__toString" title="__toString :: "><span class="description">__toString()
-        </span><pre>__toString()</pre></a></li>
-<li class="method public "><a href="#getCssText" title="getCssText :: "><span class="description">getCssText()
-        </span><pre>getCssText()</pre></a></li>
-<li class="method public "><a href="#getUrl" title="getUrl :: "><span class="description">getUrl()
-        </span><pre>getUrl()</pre></a></li>
-<li class="method public "><a href="#setUrl" title="setUrl :: "><span class="description">setUrl()
-        </span><pre>setUrl()</pre></a></li>
-<li class="nav-header">
-<i class="icon-custom icon-property"></i> Properties</li>
+<li class="method public "><a href="#load" title="load :: Loads a Css file or url."><span class="description">Loads a Css file or url.</span><pre>load()</pre></a></li>
+<li class="method public "><a href="#loadFile" title="loadFile :: Loads a CSS file into a Source\File object."><span class="description">Loads a CSS file into a Source\File object.</span><pre>loadFile()</pre></a></li>
+<li class="method public "><a href="#loadString" title="loadString :: Loads a CSS string into a Source\String object."><span class="description">Loads a CSS string into a Source\String object.</span><pre>loadString()</pre></a></li>
+<li class="method public "><a href="#loadUrl" title="loadUrl :: Loads a CSS file into a Source\File object."><span class="description">Loads a CSS file into a Source\File object.</span><pre>loadUrl()</pre></a></li>
 <li class="nav-header private">» Private</li>
-<li class="property private "><a href="#%24url" title="$url :: "><span class="description">$url</span><pre>$url</pre></a></li>
-<li class="nav-header">
-<i class="icon-custom icon-constant"></i> Constants</li>
-<li class="constant  inherited"><a href="#NUMBER" title="NUMBER :: "><span class="description">NUMBER</span><pre>NUMBER</pre></a></li>
-<li class="constant  inherited"><a href="#UNIT_EM" title="UNIT_EM :: "><span class="description">UNIT_EM</span><pre>UNIT_EM</pre></a></li>
+<li class="method private "><a href="#_loadString" title="_loadString :: "><span class="description">_loadString()
+        </span><pre>_loadString()</pre></a></li>
+<li class="method private "><a href="#_loadUrl" title="_loadUrl :: "><span class="description">_loadUrl()
+        </span><pre>_loadUrl()</pre></a></li>
+<li class="method private "><a href="#maybeConvertEncoding" title="maybeConvertEncoding :: "><span class="description">maybeConvertEncoding()
+        </span><pre>maybeConvertEncoding()</pre></a></li>
 </ul>
 </div>
 <div class="span8">
-<a name="%5Cju1ius%5CCss%5CValue%5CUrl" id="\ju1ius\Css\Value\Url"></a><ul class="breadcrumb">
+<a name="%5Cju1ius%5CCss%5CLoader" id="\ju1ius\Css\Loader"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/ju1ius.html">ju1ius</a></li>
 <span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.html">Css</a></li>
-<span class="divider">\</span><li><a href="../namespaces/ju1ius.Css.Value.html">Value</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/ju1ius.Css.Value.Url.html">Url</a>
+<span class="divider">\</span><a href="../classes/ju1ius.Css.Loader.html">Loader</a>
 </li>
 </ul>
-<div href="../classes/ju1ius.Css.Value.Url.html" class="element class">
-<p class="short_description">Base class for Css values</p>
+<div href="../classes/ju1ius.Css.Loader.html" class="element class">
+<p class="short_description">Handles loading of stylesheets.</p>
 <div class="details">
-<p class="long_description"></p>
+<p class="long_description"><p>If the source is not ASCII or UTF-8 encoded, it will be converted to UTF-8.</p>
+
+<p>Relies on the CURL extension to load network urls</p></p>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a name="__clone" id="__clone"></a><div class="element clickable method public __clone" data-toggle="collapse" data-target=".__clone .collapse">
-<h2>__clone()
-        </h2>
-<pre>__clone() </pre>
+<a name="load" id="load"></a><div class="element clickable method public load" data-toggle="collapse" data-target=".load .collapse">
+<h2>Loads a Css file or url.</h2>
+<pre>load(string | \ju1ius\Uri $url) : \ju1ius\Text\Source\File</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code>string\ju1ius\Uri</code>
 </div>
-<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
-<h2>__construct()
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/ju1ius.Css.Exception.StyleSheetNotFoundException.html">\ju1ius\Css\Exception\StyleSheetNotFoundException</a></code></th>
+<td>if file doesn't exist or is not readable</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Text\Source\File</code></div>
+</div></div>
+</div>
+<a name="loadFile" id="loadFile"></a><div class="element clickable method public loadFile" data-toggle="collapse" data-target=".loadFile .collapse">
+<h2>Loads a CSS file into a Source\File object.</h2>
+<pre>loadFile(string | \ju1ius\Uri $url) : \ju1ius\Text\Source\File</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code>string\ju1ius\Uri</code><p>The path to the file</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/ju1ius.Css.Exception.StyleSheetNotFoundException.html">\ju1ius\Css\Exception\StyleSheetNotFoundException</a></code></th>
+<td>if file doesn't exist or is not readable</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Text\Source\File</code></div>
+</div></div>
+</div>
+<a name="loadString" id="loadString"></a><div class="element clickable method public loadString" data-toggle="collapse" data-target=".loadString .collapse">
+<h2>Loads a CSS string into a Source\String object.</h2>
+<pre>loadString(string $str, $encoding) : \ju1ius\Text\Source\String</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code>string</code><p>The CSS string</p></div>
+<div class="subelement argument">
+<h4>$encoding</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Text\Source\String</code></div>
+</div></div>
+</div>
+<a name="loadUrl" id="loadUrl"></a><div class="element clickable method public loadUrl" data-toggle="collapse" data-target=".loadUrl .collapse">
+<h2>Loads a CSS file into a Source\File object.</h2>
+<pre>loadUrl(string | \ju1ius\Uri $url) : \ju1ius\Text\Source\File</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"><p>Relies on the CURL extension to load network urls</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code>string\ju1ius\Uri</code><p>The url of the file</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/ju1ius.Css.Exception.StyleSheetNotFoundException.html">\ju1ius\Css\Exception\StyleSheetNotFoundException</a></code></th>
+<td>if file doesn't exist or is not readable</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>\ju1ius\Text\Source\File</code></div>
+</div></div>
+</div>
+<a name="_loadString" id="_loadString"></a><div class="element clickable method private _loadString" data-toggle="collapse" data-target="._loadString .collapse">
+<h2>_loadString()
         </h2>
-<pre>__construct(String $url) </pre>
+<pre>_loadString($str) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="span8">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_loadUrl" id="_loadUrl"></a><div class="element clickable method private _loadUrl" data-toggle="collapse" data-target="._loadUrl .collapse">
+<h2>_loadUrl()
+        </h2>
+<pre>_loadUrl(Uri $url) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="span8">
 <p class="long_description"></p>
@@ -123,92 +198,22 @@
 </div>
 </div></div>
 </div>
-<a name="__toString" id="__toString"></a><div class="element clickable method public __toString" data-toggle="collapse" data-target=".__toString .collapse">
-<h2>__toString()
+<a name="maybeConvertEncoding" id="maybeConvertEncoding"></a><div class="element clickable method private maybeConvertEncoding" data-toggle="collapse" data-target=".maybeConvertEncoding .collapse">
+<h2>maybeConvertEncoding()
         </h2>
-<pre>__toString() </pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="span8">
-<p class="long_description"></p>
-<table class="table table-bordered">
-<tr>
-<th>inherited_from</th>
-<td>\ju1ius\Css\Value::__toString()</td>
-</tr>
-<tr>
-<th>inherited_from</th>
-<td>\ju1ius\Css\Value\PrimitiveValue::__toString()</td>
-</tr>
-</table>
-</div></div>
-</div>
-<a name="getCssText" id="getCssText"></a><div class="element clickable method public getCssText" data-toggle="collapse" data-target=".getCssText .collapse">
-<h2>getCssText()
-        </h2>
-<pre>getCssText($options) </pre>
+<pre>maybeConvertEncoding(array $infos, $to_encoding) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="span8">
 <p class="long_description"></p>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$options</h4>
+<h4>$infos</h4>
 <code></code>
 </div>
-</div></div>
-</div>
-<a name="getUrl" id="getUrl"></a><div class="element clickable method public getUrl" data-toggle="collapse" data-target=".getUrl .collapse">
-<h2>getUrl()
-        </h2>
-<pre>getUrl() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
-</div>
-<a name="setUrl" id="setUrl"></a><div class="element clickable method public setUrl" data-toggle="collapse" data-target=".setUrl .collapse">
-<h2>setUrl()
-        </h2>
-<pre>setUrl(String $url) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="span8">
-<p class="long_description"></p>
-<h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$url</h4>
+<h4>$to_encoding</h4>
 <code></code>
 </div>
-</div></div>
-</div>
-<h3>
-<i class="icon-custom icon-property"></i> Properties</h3>
-<a name="%24url" id="$url"> </a><div class="element clickable property private $url" data-toggle="collapse" data-target=".$url .collapse">
-<h2>$url</h2>
-<pre>$url </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="span8"><p class="long_description"></p></div></div>
-</div>
-<h3>
-<i class="icon-custom icon-constant"></i> Constants</h3>
-<a name="NUMBER" id="NUMBER"> </a><div class="element clickable constant  NUMBER" data-toggle="collapse" data-target=".NUMBER .collapse">
-<h2>NUMBER</h2>
-<pre>NUMBER </pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="span8">
-<p class="long_description"></p>
-<table class="table table-bordered"><tr>
-<th>inherited_from</th>
-<td>\ju1ius\Css\Value\PrimitiveValue::NUMBER</td>
-</tr></table>
-</div></div>
-</div>
-<a name="UNIT_EM" id="UNIT_EM"> </a><div class="element clickable constant  UNIT_EM" data-toggle="collapse" data-target=".UNIT_EM .collapse">
-<h2>UNIT_EM</h2>
-<pre>UNIT_EM </pre>
-<div class="labels"><span class="label">Inherited</span></div>
-<div class="row collapse"><div class="span8">
-<p class="long_description"></p>
-<table class="table table-bordered"><tr>
-<th>inherited_from</th>
-<td>\ju1ius\Css\Value\PrimitiveValue::UNIT_EM</td>
-</tr></table>
 </div></div>
 </div>
 </div>
@@ -218,7 +223,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
-            generated on 2012-05-10T20:04:33+02:00.<br></footer></div>
+            generated on 2012-05-10T20:04:32+02:00.<br></footer></div>
 </div>
 </body>
 </html>

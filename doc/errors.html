@@ -21,9 +21,6 @@
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Namespaces</a></li>
 <li><a href="namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
-<li><a>Packages</a></li>
-<li><a href="packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
-<li><a href="packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -34,11 +31,11 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">615</span></a></li>
+                <span class="label label-info">573</span></a></li>
 <li><a href="markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul>
 <li>todo 
-                <span class="label label-info">3</span>
+                <span class="label label-info">4</span>
 </li>
 <li>fixme 
                 <span class="label label-info">11</span>
@@ -68,12 +65,9 @@
 <li><a href="#Css/StyleDeclaration/CreateShorthands.php"><i class="icon-file"></i>Css/StyleDeclaration/CreateShorthands.php</a></li>
 <li><a href="#Css/StyleDeclaration/ExpandShorthands.php"><i class="icon-file"></i>Css/StyleDeclaration/ExpandShorthands.php</a></li>
 <li><a href="#Css/ValueList.php"><i class="icon-file"></i>Css/ValueList.php</a></li>
-<li><a href="#Css/AbstractParser.php"><i class="icon-file"></i>Css/AbstractParser.php</a></li>
-<li><a href="#Css/AsciiParser.php"><i class="icon-file"></i>Css/AsciiParser.php</a></li>
-<li><a href="#Css/StyleSheetInfo.php"><i class="icon-file"></i>Css/StyleSheetInfo.php</a></li>
+<li><a href="#Css/Loader.php"><i class="icon-file"></i>Css/Loader.php</a></li>
 <li><a href="#Css/XPath/Expression.php"><i class="icon-file"></i>Css/XPath/Expression.php</a></li>
 <li><a href="#Css/XPath/OrExpression.php"><i class="icon-file"></i>Css/XPath/OrExpression.php</a></li>
-<li><a href="#Css/StyleSheetLoader.php"><i class="icon-file"></i>Css/StyleSheetLoader.php</a></li>
 <li><a href="#Css/Selector/CombinedSelector.php"><i class="icon-file"></i>Css/Selector/CombinedSelector.php</a></li>
 <li><a href="#Css/Selector/ClassSelector.php"><i class="icon-file"></i>Css/Selector/ClassSelector.php</a></li>
 <li><a href="#Css/Selector/IDSelector.php"><i class="icon-file"></i>Css/Selector/IDSelector.php</a></li>
@@ -89,6 +83,7 @@
 <li><a href="#Css/Util/Object.php"><i class="icon-file"></i>Css/Util/Object.php</a></li>
 <li><a href="#Css/PageSelector.php"><i class="icon-file"></i>Css/PageSelector.php</a></li>
 <li><a href="#Css/StyleSheetList.php"><i class="icon-file"></i>Css/StyleSheetList.php</a></li>
+<li><a href="#Css/Lexer.php"><i class="icon-file"></i>Css/Lexer.php</a></li>
 <li><a href="#Css/Property.php"><i class="icon-file"></i>Css/Property.php</a></li>
 <li><a href="#Css/Parser.php"><i class="icon-file"></i>Css/Parser.php</a></li>
 <li><a href="#Css/Value.php"><i class="icon-file"></i>Css/Value.php</a></li>
@@ -101,10 +96,8 @@
 <li><a href="#Css/MediaQuery.php"><i class="icon-file"></i>Css/MediaQuery.php</a></li>
 <li><a href="#Css/CssList.php"><i class="icon-file"></i>Css/CssList.php</a></li>
 <li><a href="#Css/MediaQuery/Expression.php"><i class="icon-file"></i>Css/MediaQuery/Expression.php</a></li>
+<li><a href="#Css/Exception/StyleSheetNotFoundException.php"><i class="icon-file"></i>Css/Exception/StyleSheetNotFoundException.php</a></li>
 <li><a href="#Css/Exception/UnsupportedSelectorException.php"><i class="icon-file"></i>Css/Exception/UnsupportedSelectorException.php</a></li>
-<li><a href="#Css/Exception/RecoveredParseException.php"><i class="icon-file"></i>Css/Exception/RecoveredParseException.php</a></li>
-<li><a href="#Css/Exception/ParseException.php"><i class="icon-file"></i>Css/Exception/ParseException.php</a></li>
-<li><a href="#Css/ParserState.php"><i class="icon-file"></i>Css/ParserState.php</a></li>
 <li><a href="#Css/StyleSheet.php"><i class="icon-file"></i>Css/StyleSheet.php</a></li>
 <li><a href="#Css/XPathable.php"><i class="icon-file"></i>Css/XPathable.php</a></li>
 <li><a href="#Css/Rule/Keyframes.php"><i class="icon-file"></i>Css/Rule/Keyframes.php</a></li>
@@ -145,7 +138,7 @@
 </ul>
 <div class="package-contents">
 <a name="Css/StyleDeclaration.php" id="Css/StyleDeclaration.php"></a><h3>
-<i class="icon-file"></i>Css/StyleDeclaration.php<small style="float: right;padding-right: 10px;">24</small>
+<i class="icon-file"></i>Css/StyleDeclaration.php<small style="float: right;padding-right: 10px;">20</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -161,117 +154,97 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>11</td>
 <td>No DocBlock was found for property $properties</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>11</td>
+<td>12</td>
 <td>No DocBlock was found for property $parentRule</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>13</td>
+<td>14</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>38</td>
+<td>39</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $property in append()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>51</td>
+<td>52</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $property in prepend()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>64</td>
+<td>65</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $oldProp in insertAfter()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>80</td>
+<td>81</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $oldProp in insertBefore()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>96</td>
+<td>97</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $oldProp in replace()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>112</td>
-<td>Name of argument $wildcard does not match with the DocBlock's name $bWildcard in remove()</td>
-</tr>
-<tr class="notice">
-<td>notice</td>
-<td>112</td>
-<td>Parameter $bWildcard could not be found in remove()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>144</td>
+<td>145</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $property in getPropertyIndex()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>155</td>
-<td>Name of argument $wildcard does not match with the DocBlock's name $bWildcard in getProperties()</td>
-</tr>
-<tr class="notice">
-<td>notice</td>
-<td>155</td>
-<td>Parameter $bWildcard could not be found in getProperties()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>213</td>
+<td>214</td>
 <td>No DocBlock was found for method getAppliedProperties()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>283</td>
+<td>284</td>
 <td>No DocBlock was found for method getParentRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>287</td>
+<td>288</td>
 <td>No DocBlock was found for method setParentRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>328</td>
+<td>329</td>
 <td>No DocBlock was found for method expandBackgroundShorthands()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>351</td>
+<td>352</td>
 <td>No short description for method expandListStyleShorthands()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>392</td>
+<td>393</td>
 <td>No DocBlock was found for method createBackgroundShorthand()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>400</td>
+<td>401</td>
 <td>No DocBlock was found for method createListStyleShorthand()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>452</td>
+<td>453</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>465</td>
+<td>466</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>470</td>
+<td>471</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -295,57 +268,57 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for property $styleDeclaration</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>20</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $styleDeclaration in __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>45</td>
+<td>43</td>
 <td>No short description for method createBackgroundShorthand()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>121</td>
+<td>119</td>
 <td>No DocBlock was found for method createListStyleShorthand()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>268</td>
+<td>266</td>
 <td>No DocBlock was found for method _createShorthandProperties()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>300</td>
+<td>298</td>
 <td>No DocBlock was found for method _mergeLayers()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>313</td>
+<td>311</td>
 <td>No DocBlock was found for method _mergeValues()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>322</td>
+<td>320</td>
 <td>Argument $aProperties is missing from the Docblock of _destructiveCleanup()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>322</td>
+<td>320</td>
 <td>Argument $sShorthand is missing from the Docblock of _destructiveCleanup()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>367</td>
+<td>365</td>
 <td>Argument $aProperties is missing from the Docblock of _safeCleanup()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>367</td>
+<td>365</td>
 <td>Argument $sShorthand is missing from the Docblock of _safeCleanup()</td>
 </tr>
 </tbody>
@@ -369,17 +342,17 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for property $styleDeclaration</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $styleDeclaration in __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>46</td>
+<td>44</td>
 <td>No DocBlock was found for method expandBackgroundShorthands()</td>
 </tr>
 <tr class="error">
@@ -433,40 +406,40 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>9</td>
 <td>No DocBlock was found for property $separator</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>11</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>21</td>
 <td>No DocBlock was found for method getSeparator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>25</td>
 <td>No DocBlock was found for method setSeparator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>31</td>
+<td>30</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>45</td>
+<td>44</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <div class="package-contents">
-<a name="Css/AbstractParser.php" id="Css/AbstractParser.php"></a><h3>
-<i class="icon-file"></i>Css/AbstractParser.php<small style="float: right;padding-right: 10px;">16</small>
+<a name="Css/Loader.php" id="Css/Loader.php"></a><h3>
+<i class="icon-file"></i>Css/Loader.php<small style="float: right;padding-right: 10px;">5</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -478,145 +451,27 @@
 <tr class="error">
 <td>error</td>
 <td>1</td>
-<td>No page-level DocBlock was found in file Css/AbstractParser.php</td>
+<td>No page-level DocBlock was found in file Css/Loader.php</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
-<td>No DocBlock was found for property $options</td>
+<td>88</td>
+<td>Argument $encoding is missing from the Docblock of loadString()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
-<td>No DocBlock was found for property $source</td>
+<td>101</td>
+<td>No DocBlock was found for method _loadString()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>23</td>
-<td>No DocBlock was found for property $text</td>
+<td>122</td>
+<td>No DocBlock was found for method _loadUrl()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
-<td>No DocBlock was found for property $current_position</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>25</td>
-<td>No DocBlock was found for property $backtracking_position</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>26</td>
-<td>No DocBlock was found for property $length</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>27</td>
-<td>No DocBlock was found for property $state</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>28</td>
-<td>No DocBlock was found for property $strict_parsing</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>29</td>
-<td>No DocBlock was found for property $errors</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>56</td>
-<td>No DocBlock was found for method getErrors()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>98</td>
-<td>No DocBlock was found for method _pushError()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>102</td>
-<td>No DocBlock was found for method _setBacktrackingPosition()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>106</td>
-<td>No DocBlock was found for method _backtrack()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>111</td>
-<td>No DocBlock was found for method _isAsciiCaseInsensitiveMatch()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>281</td>
-<td>No DocBlock was found for method _consumeComment()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
-<a name="Css/AsciiParser.php" id="Css/AsciiParser.php"></a><h3>
-<i class="icon-file"></i>Css/AsciiParser.php<small style="float: right;padding-right: 10px;">4</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>1</td>
-<td>No page-level DocBlock was found in file Css/AsciiParser.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>9</td>
-<td>No DocBlock was found for AsciiParser</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>41</td>
-<td>No DocBlock was found for method _parseColorValue()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>66</td>
-<td>No DocBlock was found for method _isAsciiCaseInsensitiveMatch()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
-<a name="Css/StyleSheetInfo.php" id="Css/StyleSheetInfo.php"></a><h3>
-<i class="icon-file"></i>Css/StyleSheetInfo.php<small style="float: right;padding-right: 10px;">3</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>1</td>
-<td>No page-level DocBlock was found in file Css/StyleSheetInfo.php</td>
-</tr>
-<tr class="critical">
-<td>critical</td>
-<td>6</td>
-<td>No short description for class StyleSheetInfo</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>11</td>
-<td>No DocBlock was found for method getCharset()</td>
+<td>152</td>
+<td>No DocBlock was found for method maybeConvertEncoding()</td>
 </tr>
 </tbody>
 </table></div>
@@ -639,27 +494,27 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for property $prefix</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for property $path</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for property $element</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for property $condition</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>20</td>
 <td>No DocBlock was found for property $starPrefix</td>
 </tr>
 </tbody>
@@ -683,50 +538,6 @@
 </table></div>
 </div>
 <div class="package-contents">
-<a name="Css/StyleSheetLoader.php" id="Css/StyleSheetLoader.php"></a><h3>
-<i class="icon-file"></i>Css/StyleSheetLoader.php<small style="float: right;padding-right: 10px;">6</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>1</td>
-<td>No page-level DocBlock was found in file Css/StyleSheetLoader.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>16</td>
-<td>No DocBlock was found for property $options</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>18</td>
-<td>No DocBlock was found for method __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>120</td>
-<td>No DocBlock was found for method _loadString()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>136</td>
-<td>No DocBlock was found for method _loadUrl()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>166</td>
-<td>No DocBlock was found for method maybeConvertEncoding()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
 <a name="Css/Selector/CombinedSelector.php" id="Css/Selector/CombinedSelector.php"></a><h3>
 <i class="icon-file"></i>Css/Selector/CombinedSelector.php<small style="float: right;padding-right: 10px;">7</small>
 </h3>
@@ -744,32 +555,32 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for property $methodMapping</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>24</td>
 <td>No DocBlock was found for property $selector</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>27</td>
+<td>25</td>
 <td>No DocBlock was found for property $combinator</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>28</td>
+<td>26</td>
 <td>No DocBlock was found for property $subselector</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>44</td>
+<td>42</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>49</td>
+<td>47</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -793,37 +604,37 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for property $selector</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for property $className</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>23</td>
+<td>21</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>27</td>
 <td>No DocBlock was found for method getClassName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>33</td>
+<td>31</td>
 <td>No DocBlock was found for method setClassName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>38</td>
+<td>36</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>43</td>
+<td>41</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -847,37 +658,37 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for property $selector</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for property $id</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>23</td>
+<td>21</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>27</td>
 <td>No DocBlock was found for method getId()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>33</td>
+<td>31</td>
 <td>No DocBlock was found for method setId()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>38</td>
+<td>36</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>43</td>
+<td>41</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -901,47 +712,47 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>20</td>
 <td>No DocBlock was found for property $unsupported</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>28</td>
+<td>26</td>
 <td>No DocBlock was found for property $element</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>27</td>
 <td>No DocBlock was found for property $type</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>30</td>
+<td>28</td>
 <td>No DocBlock was found for property $ident</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>53</td>
+<td>51</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>59</td>
+<td>57</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>89</td>
+<td>87</td>
 <td>No short description for method xpath_checked()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>89</td>
+<td>87</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $xpath in xpath_checked()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>101</td>
+<td>99</td>
 <td>No short description for method xpath_root()</td>
 </tr>
 </tbody>
@@ -965,22 +776,22 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for property $namespace</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for property $element</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>35</td>
+<td>33</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>40</td>
+<td>38</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -1004,92 +815,92 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>20</td>
 <td>No DocBlock was found for property $unsupported</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>22</td>
 <td>No DocBlock was found for property $selector</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>23</td>
 <td>No DocBlock was found for property $type</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>24</td>
 <td>No DocBlock was found for property $name</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>27</td>
+<td>25</td>
 <td>No DocBlock was found for property $expr</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>45</td>
+<td>43</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>58</td>
+<td>53</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>88</td>
+<td>83</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $xpath in _xpath_nth_child()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>160</td>
+<td>155</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $xpath in _xpath_nth_last_child()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>160</td>
+<td>155</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expr in _xpath_nth_last_child()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>172</td>
+<td>167</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $xpath in _xpath_nth_of_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>172</td>
+<td>167</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expr in _xpath_nth_of_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>188</td>
+<td>183</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $xpath in _xpath_nth_last_of_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>188</td>
+<td>183</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expr in _xpath_nth_last_of_type()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>200</td>
+<td>195</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $xpath in _xpath_contains()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>200</td>
+<td>195</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expr in _xpath_contains()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>224</td>
+<td>219</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $xpath in _xpath_not()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>224</td>
+<td>219</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expr in _xpath_not()</td>
 </tr>
 </tbody>
@@ -1113,42 +924,42 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for property $selector</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>20</td>
 <td>No DocBlock was found for property $namespace</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>23</td>
+<td>21</td>
 <td>No DocBlock was found for property $attrib</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>22</td>
 <td>No DocBlock was found for property $operator</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>23</td>
 <td>No DocBlock was found for property $value</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>27</td>
+<td>25</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>36</td>
+<td>34</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>41</td>
+<td>39</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -1172,42 +983,42 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>11</td>
+<td>10</td>
 <td>No DocBlock was found for method prepend()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>15</td>
 <td>No DocBlock was found for method append()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>21</td>
 <td>No DocBlock was found for method remove()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>27</td>
+<td>26</td>
 <td>No DocBlock was found for method getRules()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>31</td>
+<td>30</td>
 <td>No DocBlock was found for method setRules()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>36</td>
+<td>35</td>
 <td>No DocBlock was found for method getRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>188</td>
+<td>187</td>
 <td>Argument $options is missing from the Docblock of getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>206</td>
+<td>205</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -1231,47 +1042,47 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>9</td>
 <td>No DocBlock was found for property $parentStyleSheet</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>11</td>
+<td>10</td>
 <td>No DocBlock was found for property $parentRule</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>13</td>
+<td>12</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>13</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>15</td>
 <td>No DocBlock was found for method getParentStyleSheet()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>19</td>
 <td>No DocBlock was found for method setParentStylesheet()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>24</td>
 <td>No DocBlock was found for method getParentRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>28</td>
 <td>No DocBlock was found for method setParentRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>34</td>
+<td>33</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -1293,29 +1104,29 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Util/Color.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class Color</td>
+<td>No DocBlock was found for Color</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for property $X11_COLORS_MAP</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>179</td>
+<td>175</td>
 <td>No DocBlock was found for method x11ToHsl()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>208</td>
+<td>204</td>
 <td>No DocBlock was found for method hslToX11()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>314</td>
+<td>310</td>
 <td>No DocBlock was found for method hueToRgb()</td>
 </tr>
 </tbody>
@@ -1337,19 +1148,19 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Util/Charset.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>6</td>
-<td>No short description for class Charset</td>
+<td>No DocBlock was found for Charset</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>8</td>
 <td>No DocBlock was found for property $CHARSET_DETECTION_MAP</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>166</td>
+<td>162</td>
 <td>No DocBlock was found for method detectFile()</td>
 </tr>
 </tbody>
@@ -1357,7 +1168,7 @@
 </div>
 <div class="package-contents">
 <a name="Css/Util/String.php" id="Css/Util/String.php"></a><h3>
-<i class="icon-file"></i>Css/Util/String.php<small style="float: right;padding-right: 10px;">4</small>
+<i class="icon-file"></i>Css/Util/String.php<small style="float: right;padding-right: 10px;">3</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -1381,11 +1192,6 @@
 <td>6</td>
 <td>No DocBlock was found for method in_array_ci()</td>
 </tr>
-<tr class="error">
-<td>error</td>
-<td>17</td>
-<td>No DocBlock was found for method compare_ci()</td>
-</tr>
 </tbody>
 </table></div>
 </div>
@@ -1405,14 +1211,14 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Util/Object.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>6</td>
-<td>No short description for class Object</td>
+<td>No DocBlock was found for Object</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>8</td>
 <td>No DocBlock was found for method getClone()</td>
 </tr>
 </tbody>
@@ -1537,6 +1343,125 @@
 </table></div>
 </div>
 <div class="package-contents">
+<a name="Css/Lexer.php" id="Css/Lexer.php"></a><h3>
+<i class="icon-file"></i>Css/Lexer.php<small style="float: right;padding-right: 10px;">21</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Css/Lexer.php</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>9</td>
+<td>No DocBlock was found for Lexer</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>100</td>
+<td>No DocBlock was found for property $regex</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>135</td>
+<td>No DocBlock was found for property $regex_cache</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>137</td>
+<td>No DocBlock was found for property $units</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>142</td>
+<td>No DocBlock was found for property $atkeywords</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>147</td>
+<td>No DocBlock was found for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>184</td>
+<td>No DocBlock was found for method nextToken()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>426</td>
+<td>No DocBlock was found for method handleWhitespace()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>435</td>
+<td>No DocBlock was found for method handleComment()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>470</td>
+<td>No DocBlock was found for method handleIdent()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>534</td>
+<td>No DocBlock was found for method handleAtKeyword()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>622</td>
+<td>No DocBlock was found for method handleString()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>647</td>
+<td>No DocBlock was found for method handleMultilineString()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>680</td>
+<td>No DocBlock was found for method handleNumber()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>758</td>
+<td>No DocBlock was found for method handleHash()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>768</td>
+<td>No DocBlock was found for method handleImportant()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>780</td>
+<td>No DocBlock was found for method handleUnicodeRange()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>789</td>
+<td>No DocBlock was found for method handleNegation()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>798</td>
+<td>No DocBlock was found for method getPatternForIdentifier()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>812</td>
+<td>No DocBlock was found for method cleanupIdent()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
 <a name="Css/Property.php" id="Css/Property.php"></a><h3>
 <i class="icon-file"></i>Css/Property.php<small style="float: right;padding-right: 10px;">16</small>
 </h3>
@@ -1554,77 +1479,77 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>9</td>
 <td>No DocBlock was found for property $name</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>11</td>
+<td>10</td>
 <td>No DocBlock was found for property $valueList</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>11</td>
 <td>No DocBlock was found for property $isImportant</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>13</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>23</td>
 <td>No DocBlock was found for method getName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>28</td>
+<td>27</td>
 <td>No DocBlock was found for method setName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>33</td>
+<td>32</td>
 <td>No DocBlock was found for method getValueList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>37</td>
+<td>36</td>
 <td>No DocBlock was found for method setValueList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>42</td>
+<td>41</td>
 <td>No DocBlock was found for method getIsImportant()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>46</td>
+<td>45</td>
 <td>No DocBlock was found for method setIsImportant()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>51</td>
+<td>50</td>
 <td>Argument $value is missing from the Docblock of addValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>51</td>
+<td>50</td>
 <td>Argument $type is missing from the Docblock of addValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>78</td>
+<td>77</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>85</td>
+<td>84</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>90</td>
+<td>89</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -1632,7 +1557,7 @@
 </div>
 <div class="package-contents">
 <a name="Css/Parser.php" id="Css/Parser.php"></a><h3>
-<i class="icon-file"></i>Css/Parser.php<small style="float: right;padding-right: 10px;">40</small>
+<i class="icon-file"></i>Css/Parser.php<small style="float: right;padding-right: 10px;">27</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -1648,198 +1573,133 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
-<td>No DocBlock was found for property $MARGIN_BOX_IDENTIFIERS</td>
+<td>16</td>
+<td>No DocBlock was found for property $strict</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>43</td>
-<td>No DocBlock was found for method getParserForSource()</td>
+<td>18</td>
+<td>No DocBlock was found for property $errors</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>51</td>
-<td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $source in parse()</td>
+<td>20</td>
+<td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>69</td>
-<td>No DocBlock was found for method parseStyleSheet()</td>
+<td>219</td>
+<td>No DocBlock was found for method _charset()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>77</td>
-<td>No DocBlock was found for method parseStyleRule()</td>
+<td>863</td>
+<td>No DocBlock was found for method _media_feature()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>83</td>
-<td>No DocBlock was found for method parseStyleDeclaration()</td>
+<td>875</td>
+<td>No DocBlock was found for method _media_expression()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>91</td>
-<td>No DocBlock was found for method parseSelector()</td>
+<td>975</td>
+<td>No DocBlock was found for method _selectors_group()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>101</td>
-<td>No DocBlock was found for method parseMediaQuery()</td>
+<td>998</td>
+<td>No DocBlock was found for method _selector()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>108</td>
-<td>No DocBlock was found for method _parseStyleSheet()</td>
+<td>1035</td>
+<td>No DocBlock was found for method _simple_selector_sequence()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>114</td>
-<td>No DocBlock was found for method _parseRuleList()</td>
+<td>1125</td>
+<td>No DocBlock was found for method _type_selector()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>183</td>
-<td>No DocBlock was found for method _parseAtRule()</td>
+<td>1131</td>
+<td>Argument $selector is missing from the Docblock of _id()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>326</td>
-<td>No DocBlock was found for method _isMarginBoxIdentifier()</td>
+<td>1148</td>
+<td>No DocBlock was found for method _class()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>336</td>
-<td>No DocBlock was found for method _parseMediaQueryList()</td>
+<td>1161</td>
+<td>No DocBlock was found for method _element_name()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>352</td>
-<td>No DocBlock was found for method _parseMediaQuery()</td>
+<td>1176</td>
+<td>No DocBlock was found for method _namespace_prefix()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>379</td>
-<td>No DocBlock was found for method _parseMediaQueryExpression()</td>
+<td>1202</td>
+<td>Argument $selector is missing from the Docblock of _attrib()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>400</td>
-<td>No DocBlock was found for method _parseKeyframeRule()</td>
+<td>1260</td>
+<td>No DocBlock was found for method _pseudo()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>424</td>
-<td>No DocBlock was found for method _parsePageRule()</td>
+<td>1337</td>
+<td>No DocBlock was found for method _negation()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>445</td>
-<td>No DocBlock was found for method _parsePageSelector()</td>
+<td>1465</td>
+<td>No DocBlock was found for method _ws()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>460</td>
-<td>No DocBlock was found for method _parseStyleRule()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>473</td>
-<td>No DocBlock was found for method _parseSelectorList()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>490</td>
-<td>No DocBlock was found for method _parseSelector()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>646</td>
-<td>No DocBlock was found for method _parseStyleDeclaration()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>656</td>
-<td>Argument $style_declaration is missing from the Docblock of _parseProperty()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>678</td>
-<td>No DocBlock was found for method _doParseProperty()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>712</td>
-<td>No DocBlock was found for method _fixBackgroundShorthand()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>725</td>
-<td>No DocBlock was found for method _fixBackgroundLayer()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>754</td>
-<td>No DocBlock was found for method _parseValue()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>808</td>
+<td>1509</td>
 <td>No DocBlock was found for method _listDelimiterForProperty()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>818</td>
-<td>No DocBlock was found for method _parsePrimitiveValue()</td>
+<td>1519</td>
+<td>No DocBlock was found for method fixBackgroundShorthand()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>844</td>
-<td>No DocBlock was found for method _parseNumericValue()</td>
+<td>1533</td>
+<td>No DocBlock was found for method fixBackgroundLayer()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>894</td>
-<td>No DocBlock was found for method _parseColorValue()</td>
+<td>1562</td>
+<td>Argument $inside_braces is missing from the Docblock of skipRuleset()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>919</td>
-<td>No DocBlock was found for method _parseUrlValue()</td>
+<td>1624</td>
+<td>No DocBlock was found for method skipDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>937</td>
-<td>No DocBlock was found for method _parseUnicodeRange()</td>
+<td>1687</td>
+<td>No DocBlock was found for method skipAtRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>944</td>
-<td>No DocBlock was found for method _parseIdentifier()</td>
+<td>1749</td>
+<td>No DocBlock was found for method skipUntil()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>973</td>
-<td>No DocBlock was found for method _parseStringValue()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1011</td>
-<td>No DocBlock was found for method _skipAtRule()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1026</td>
-<td>No DocBlock was found for method _skipStyleRule()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1044</td>
-<td>No DocBlock was found for method _skipNextRule()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>1061</td>
-<td>No DocBlock was found for method _skipProperty()</td>
+<td>1783</td>
+<td>No DocBlock was found for method skipUntilOneOf()</td>
 </tr>
 </tbody>
 </table></div>
@@ -1862,12 +1722,12 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>9</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>11</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -1891,7 +1751,7 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>9</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 </tbody>
@@ -1915,12 +1775,12 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>9</td>
 <td>No DocBlock was found for method getSpecificity()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>11</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -1944,12 +1804,12 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>9</td>
+<td>6</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>7</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -1973,17 +1833,17 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>23</td>
+<td>24</td>
 <td>No DocBlock was found for property $stylesheet</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>26</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>31</td>
+<td>32</td>
 <td>No DocBlock was found for method resolve()</td>
 </tr>
 </tbody>
@@ -2041,27 +1901,27 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>11</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>16</td>
 <td>No DocBlock was found for method append()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>23</td>
 <td>No DocBlock was found for method prepend()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>31</td>
+<td>30</td>
 <td>No DocBlock was found for method remove()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>36</td>
+<td>35</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -2085,77 +1945,77 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>15</td>
+<td>14</td>
 <td>No DocBlock was found for property $restrictor</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>15</td>
 <td>No DocBlock was found for property $media_type</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>16</td>
 <td>No DocBlock was found for property $expressions</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>19</td>
 <td>No DocBlock was found for property $RESTRICTORS</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>23</td>
 <td>No short description for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>36</td>
+<td>35</td>
 <td>No DocBlock was found for method getRestrictor()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>40</td>
+<td>39</td>
 <td>No DocBlock was found for method setRestrictor()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>45</td>
+<td>44</td>
 <td>No DocBlock was found for method getMediaType()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>49</td>
+<td>48</td>
 <td>No DocBlock was found for method setMediaType()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>54</td>
+<td>53</td>
 <td>No DocBlock was found for method getExpressions()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>58</td>
+<td>57</td>
 <td>No DocBlock was found for method setExpressions()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>63</td>
+<td>62</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expr in append()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>72</td>
+<td>71</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expr in remove()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>87</td>
+<td>86</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>102</td>
+<td>101</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -2179,127 +2039,127 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>9</td>
 <td>No DocBlock was found for property $items</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>11</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>16</td>
 <td>No DocBlock was found for method isEmpty()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>21</td>
 <td>No DocBlock was found for method getItems()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>25</td>
 <td>No DocBlock was found for method setItems()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>35</td>
+<td>34</td>
 <td>No DocBlock was found for method getFirst()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>39</td>
+<td>38</td>
 <td>No DocBlock was found for method getLast()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>45</td>
+<td>44</td>
 <td>No DocBlock was found for method contains()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>50</td>
+<td>49</td>
 <td>No DocBlock was found for method prepend()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>55</td>
+<td>54</td>
 <td>No DocBlock was found for method append()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>60</td>
+<td>59</td>
 <td>No DocBlock was found for method extend()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>67</td>
+<td>66</td>
 <td>No DocBlock was found for method remove()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>73</td>
+<td>72</td>
 <td>No DocBlock was found for method removeItemAt()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>78</td>
+<td>77</td>
 <td>No DocBlock was found for method insertItemAt()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>115</td>
+<td>114</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>125</td>
+<td>124</td>
 <td>No DocBlock was found for method offsetExists()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>129</td>
+<td>128</td>
 <td>No DocBlock was found for method offsetGet()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>133</td>
+<td>132</td>
 <td>No DocBlock was found for method offsetSet()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>141</td>
+<td>140</td>
 <td>No DocBlock was found for method offsetUnset()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>146</td>
+<td>145</td>
 <td>No DocBlock was found for method rewind()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>150</td>
+<td>149</td>
 <td>No DocBlock was found for method current()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>154</td>
+<td>153</td>
 <td>No DocBlock was found for method key()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>158</td>
+<td>157</td>
 <td>No DocBlock was found for method next()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>162</td>
+<td>161</td>
 <td>No DocBlock was found for method valid()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>166</td>
+<td>165</td>
 <td>No DocBlock was found for method count()</td>
 </tr>
 </tbody>
@@ -2323,48 +2183,77 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $media_feature</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>15</td>
 <td>No DocBlock was found for property $value</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>23</td>
 <td>No DocBlock was found for method getMediaFeature()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>27</td>
 <td>No DocBlock was found for method setMediaFeature()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>34</td>
+<td>32</td>
 <td>No DocBlock was found for method getValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>38</td>
+<td>36</td>
 <td>No DocBlock was found for method setValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>43</td>
+<td>41</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>49</td>
+<td>47</td>
 <td>No DocBlock was found for method __toString()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Css/Exception/StyleSheetNotFoundException.php" id="Css/Exception/StyleSheetNotFoundException.php"></a><h3>
+<i class="icon-file"></i>Css/Exception/StyleSheetNotFoundException.php<small style="float: right;padding-right: 10px;">3</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Css/Exception/StyleSheetNotFoundException.php</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No DocBlock was found for StyleSheetNotFoundException</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>7</td>
+<td>No DocBlock was found for method __construct()</td>
 </tr>
 </tbody>
 </table></div>
@@ -2385,162 +2274,10 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Exception/UnsupportedSelectorException.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class UnsupportedSelectorException</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
-<a name="Css/Exception/RecoveredParseException.php" id="Css/Exception/RecoveredParseException.php"></a><h3>
-<i class="icon-file"></i>Css/Exception/RecoveredParseException.php<small style="float: right;padding-right: 10px;">6</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>1</td>
-<td>No page-level DocBlock was found in file Css/Exception/RecoveredParseException.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>6</td>
-<td>No DocBlock was found for RecoveredParseException</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>9</td>
-<td>No DocBlock was found for property $source_range</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>11</td>
-<td>No DocBlock was found for method __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>33</td>
-<td>No DocBlock was found for method getSourceRange()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>38</td>
-<td>No DocBlock was found for method __toString()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
-<a name="Css/Exception/ParseException.php" id="Css/Exception/ParseException.php"></a><h3>
-<i class="icon-file"></i>Css/Exception/ParseException.php<small style="float: right;padding-right: 10px;">13</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>1</td>
-<td>No page-level DocBlock was found in file Css/Exception/ParseException.php</td>
-</tr>
-<tr class="critical">
-<td>critical</td>
-<td>6</td>
-<td>No short description for class ParseException</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>13</td>
-<td>No DocBlock was found for property $source</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>14</td>
-<td>No DocBlock was found for property $source_file</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>15</td>
-<td>No DocBlock was found for property $source_position</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>16</td>
-<td>No DocBlock was found for property $source_line</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>17</td>
-<td>No DocBlock was found for property $source_column</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>19</td>
-<td>No DocBlock was found for method __construct()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>33</td>
-<td>No DocBlock was found for method getSource()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>37</td>
-<td>No DocBlock was found for method getSourceFile()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>41</td>
-<td>No DocBlock was found for method getSourcePosition()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>45</td>
-<td>No DocBlock was found for method getSourceLine()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>49</td>
-<td>No DocBlock was found for method getSourceColumn()</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<div class="package-contents">
-<a name="Css/ParserState.php" id="Css/ParserState.php"></a><h3>
-<i class="icon-file"></i>Css/ParserState.php<small style="float: right;padding-right: 10px;">3</small>
-</h3>
-<div><table class="table markers table-bordered">
-<thead><tr>
-<th>Type</th>
-<th>Line</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="error">
-<td>error</td>
-<td>1</td>
-<td>No page-level DocBlock was found in file Css/ParserState.php</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>24</td>
-<td>No DocBlock was found for property $state</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>26</td>
-<td>No DocBlock was found for method __construct()</td>
+<td>No DocBlock was found for UnsupportedSelectorException</td>
 </tr>
 </tbody>
 </table></div>
@@ -2563,87 +2300,87 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>11</td>
+<td>10</td>
 <td>No DocBlock was found for property $href</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>11</td>
 <td>No DocBlock was found for property $media_list</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>13</td>
+<td>12</td>
 <td>No DocBlock was found for property $rule_list</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>13</td>
 <td>No DocBlock was found for property $charset</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>15</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>24</td>
 <td>No DocBlock was found for method getHref()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>28</td>
 <td>No DocBlock was found for method setHref()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>34</td>
+<td>33</td>
 <td>No DocBlock was found for method getCharset()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>39</td>
+<td>38</td>
 <td>No DocBlock was found for method getMediaQueryList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>43</td>
+<td>42</td>
 <td>No DocBlock was found for method setMediaQueryList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>48</td>
+<td>47</td>
 <td>No DocBlock was found for method getRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>52</td>
+<td>51</td>
 <td>No DocBlock was found for method setRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>57</td>
+<td>56</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>61</td>
+<td>60</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>66</td>
+<td>65</td>
 <td>No DocBlock was found for method getFirstRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>71</td>
+<td>70</td>
 <td>No DocBlock was found for method getLastRule()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>86</td>
+<td>85</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -2667,7 +2404,7 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>13</td>
 <td>No short description for method toXPath()</td>
 </tr>
 </tbody>
@@ -2691,62 +2428,62 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $rule_list</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>15</td>
 <td>No DocBlock was found for property $name</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for property $vendor_prefix</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>30</td>
+<td>28</td>
 <td>No DocBlock was found for method getName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>34</td>
+<td>32</td>
 <td>No DocBlock was found for method setName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>39</td>
+<td>37</td>
 <td>No DocBlock was found for method getVendorPrefix()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>43</td>
+<td>41</td>
 <td>No DocBlock was found for method setVendorPrefix()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>48</td>
+<td>46</td>
 <td>No DocBlock was found for method getRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>52</td>
+<td>50</td>
 <td>No DocBlock was found for method setRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>57</td>
+<td>55</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>84</td>
+<td>82</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -2770,47 +2507,47 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $uri</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>15</td>
 <td>No DocBlock was found for property $prefix</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>23</td>
 <td>No DocBlock was found for method getUri()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>27</td>
 <td>No DocBlock was found for method setUri()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>34</td>
+<td>32</td>
 <td>No DocBlock was found for method getPrefix()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>38</td>
+<td>36</td>
 <td>No DocBlock was found for method setPrefix()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>43</td>
+<td>41</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>51</td>
+<td>49</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -2834,67 +2571,67 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>15</td>
 <td>No DocBlock was found for property $selector</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for property $margin_rules</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for property $style_declaration</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>38</td>
+<td>36</td>
 <td>No DocBlock was found for method getSelector()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>42</td>
+<td>40</td>
 <td>No DocBlock was found for method setSelector()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>47</td>
+<td>45</td>
 <td>No DocBlock was found for method getRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>51</td>
+<td>49</td>
 <td>No DocBlock was found for method setRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>56</td>
+<td>54</td>
 <td>No DocBlock was found for method getStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>60</td>
+<td>58</td>
 <td>No DocBlock was found for method setStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>70</td>
+<td>68</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>89</td>
+<td>87</td>
 <td>No DocBlock was found for method getSelectorText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>94</td>
+<td>92</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -2918,32 +2655,32 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>12</td>
 <td>No DocBlock was found for property $styleDeclaration</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for method getStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>25</td>
+<td>23</td>
 <td>No DocBlock was found for method setStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>30</td>
+<td>28</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>44</td>
+<td>42</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -2967,27 +2704,27 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>12</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for method getEncoding()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>23</td>
+<td>21</td>
 <td>No DocBlock was found for method setEncoding()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>28</td>
+<td>26</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>33</td>
+<td>31</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3035,67 +2772,67 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $href</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>15</td>
 <td>No DocBlock was found for property $media_list</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for property $styleSheet</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>24</td>
 <td>No DocBlock was found for method getHref()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>30</td>
+<td>28</td>
 <td>No DocBlock was found for method setHref()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>35</td>
+<td>33</td>
 <td>No DocBlock was found for method getMediaQueryList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>39</td>
+<td>37</td>
 <td>No DocBlock was found for method setMediaQueryList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>44</td>
+<td>42</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>52</td>
+<td>50</td>
 <td>No DocBlock was found for method getStyleSheet()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>61</td>
+<td>59</td>
 <td>No DocBlock was found for method getType()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>66</td>
+<td>64</td>
 <td>No DocBlock was found for method loadStyleSheet()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>71</td>
+<td>69</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3119,47 +2856,47 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>15</td>
+<td>13</td>
 <td>No DocBlock was found for property $selectors</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $styleDeclaration</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>22</td>
 <td>No DocBlock was found for method getSelectors()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>28</td>
+<td>26</td>
 <td>No DocBlock was found for method setSelectors()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>33</td>
+<td>31</td>
 <td>No DocBlock was found for method getStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>37</td>
+<td>35</td>
 <td>No DocBlock was found for method setStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>47</td>
+<td>45</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>66</td>
+<td>64</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3183,57 +2920,57 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $name</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>15</td>
 <td>No DocBlock was found for property $style_declaration</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for property $vendor_prefix</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>24</td>
 <td>No DocBlock was found for method getName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>31</td>
+<td>29</td>
 <td>No DocBlock was found for method getStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>35</td>
+<td>33</td>
 <td>No DocBlock was found for method setStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>40</td>
+<td>38</td>
 <td>No DocBlock was found for method getVendorPrefix()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>44</td>
+<td>42</td>
 <td>No DocBlock was found for method setVendorPrefix()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>49</td>
+<td>47</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>66</td>
+<td>64</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3257,57 +2994,57 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for property $selectorList</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for property $styleDeclaration</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>19</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>35</td>
+<td>33</td>
 <td>No DocBlock was found for method getSelectorList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>39</td>
+<td>37</td>
 <td>No DocBlock was found for method setSelectorList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>44</td>
+<td>42</td>
 <td>No DocBlock was found for method getStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>48</td>
+<td>46</td>
 <td>No DocBlock was found for method setStyleDeclaration()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>58</td>
+<td>56</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $rules in merge()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>137</td>
+<td>135</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>153</td>
+<td>151</td>
 <td>No DocBlock was found for method getSelectorText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>158</td>
+<td>156</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3331,52 +3068,52 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>15</td>
+<td>13</td>
 <td>No DocBlock was found for property $media_list</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $rule_list</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>15</td>
 <td>No DocBlock was found for property $parentStyleSheet</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>19</td>
+<td>17</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>27</td>
 <td>No DocBlock was found for method getMediaQueryList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>33</td>
+<td>31</td>
 <td>No DocBlock was found for method setMediaQueryList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>38</td>
+<td>36</td>
 <td>No DocBlock was found for method getRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>42</td>
+<td>40</td>
 <td>No DocBlock was found for method setRuleList()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>47</td>
+<td>45</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>73</td>
+<td>71</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3400,32 +3137,32 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>10</td>
 <td>No DocBlock was found for property $name</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>12</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>18</td>
 <td>No DocBlock was found for method getName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>22</td>
 <td>No DocBlock was found for method setName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>27</td>
 <td>No DocBlock was found for method getArguments()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>34</td>
+<td>32</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -3447,79 +3184,79 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Color.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>6</td>
-<td>No short description for class Color</td>
+<td>No DocBlock was found for Color</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>13</td>
+<td>9</td>
 <td>No DocBlock was found for property $channels</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>12</td>
 <td>No DocBlock was found for property $mode</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>14</td>
 <td>No short description for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>41</td>
+<td>37</td>
 <td>No DocBlock was found for method getMode()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>46</td>
+<td>42</td>
 <td>No DocBlock was found for method fromRgb()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>63</td>
+<td>59</td>
 <td>No DocBlock was found for method fromHsl()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>74</td>
+<td>70</td>
 <td>No DocBlock was found for method fromHex()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>80</td>
+<td>76</td>
 <td>No DocBlock was found for method fromX11()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>86</td>
+<td>82</td>
 <td>No DocBlock was found for method toRgb()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>115</td>
+<td>111</td>
 <td>No DocBlock was found for method toHsl()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>147</td>
+<td>143</td>
 <td>No DocBlock was found for method getX11Color()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>167</td>
+<td>163</td>
 <td>No DocBlock was found for method getHexValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>187</td>
+<td>183</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>210</td>
+<td>206</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3541,19 +3278,19 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Time.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class Time</td>
+<td>No DocBlock was found for Time</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for property $UNITS</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>10</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 </tbody>
@@ -3575,39 +3312,39 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Url.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class Url</td>
+<td>No DocBlock was found for Url</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for property $url</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>8</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>13</td>
 <td>No DocBlock was found for method getUrl()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>17</td>
 <td>No DocBlock was found for method setUrl()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>22</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>31</td>
+<td>27</td>
 <td>No DocBlock was found for method __clone()</td>
 </tr>
 </tbody>
@@ -3629,24 +3366,24 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Percentage.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class Percentage</td>
+<td>No DocBlock was found for Percentage</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>15</td>
+<td>11</td>
 <td>No DocBlock was found for method setUnit()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>13</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -3668,40 +3405,40 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/String.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class String</td>
+<td>No DocBlock was found for String</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>7</td>
 <td>No DocBlock was found for property $string</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>9</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>14</td>
 <td>No DocBlock was found for method getString()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>18</td>
 <td>No DocBlock was found for method setString()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>23</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>32</td>
-<td>No DocBlock was found for method getValueType()</td>
+<td>28</td>
+<td>No DocBlock was found for method escapeQuotes()</td>
 </tr>
 </tbody>
 </table></div>
@@ -3724,52 +3461,52 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>13</td>
+<td>11</td>
 <td>No DocBlock was found for property $value</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>12</td>
 <td>No DocBlock was found for property $unit</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $VALID_UNITS</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>31</td>
+<td>29</td>
 <td>No DocBlock was found for method getValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>35</td>
+<td>33</td>
 <td>No DocBlock was found for method setValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>40</td>
+<td>38</td>
 <td>No DocBlock was found for method getUnit()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>44</td>
+<td>42</td>
 <td>No DocBlock was found for method setUnit()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>49</td>
+<td>47</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>54</td>
+<td>52</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -3791,14 +3528,14 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Frequency.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class Frequency</td>
+<td>No DocBlock was found for Frequency</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for property $VALID_UNITS</td>
 </tr>
 </tbody>
@@ -3820,10 +3557,10 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/PrimitiveValue.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>5</td>
-<td>No short description for class PrimitiveValue</td>
+<td>No DocBlock was found for PrimitiveValue</td>
 </tr>
 </tbody>
 </table></div>
@@ -3844,14 +3581,14 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Resolution.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>5</td>
-<td>No short description for class Resolution</td>
+<td>No DocBlock was found for Resolution</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>11</td>
+<td>7</td>
 <td>No DocBlock was found for property $VALID_UNITS</td>
 </tr>
 </tbody>
@@ -3873,19 +3610,19 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Length.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class Length</td>
+<td>No DocBlock was found for Length</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for property $VALID_UNITS</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>22</td>
+<td>18</td>
 <td>No DocBlock was found for method isRelative()</td>
 </tr>
 </tbody>
@@ -3909,42 +3646,42 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>15</td>
+<td>13</td>
 <td>No DocBlock was found for property $numerator</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>16</td>
+<td>14</td>
 <td>No DocBlock was found for property $denominator</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>16</td>
 <td>No short description for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>28</td>
+<td>26</td>
 <td>No short description for method getNumerator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>35</td>
+<td>33</td>
 <td>No DocBlock was found for method setNumerator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>40</td>
+<td>38</td>
 <td>No short description for method getDenominator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>47</td>
+<td>45</td>
 <td>No DocBlock was found for method setDenominator()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>52</td>
+<td>50</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -3966,34 +3703,34 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/UnicodeRange.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class UnicodeRange</td>
+<td>No DocBlock was found for UnicodeRange</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for property $value</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>8</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>17</td>
+<td>13</td>
 <td>No DocBlock was found for method getValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>21</td>
+<td>17</td>
 <td>No DocBlock was found for method setValue()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>26</td>
+<td>22</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 </tbody>
@@ -4015,14 +3752,14 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Value/Angle.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
+<tr class="error">
+<td>error</td>
 <td>4</td>
-<td>No short description for class Angle</td>
+<td>No DocBlock was found for Angle</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>10</td>
+<td>6</td>
 <td>No DocBlock was found for property $VALID_UNITS</td>
 </tr>
 </tbody>
@@ -4030,7 +3767,7 @@
 </div>
 <div class="package-contents">
 <a name="Css/Iterator/SelectorIterator.php" id="Css/Iterator/SelectorIterator.php"></a><h3>
-<i class="icon-file"></i>Css/Iterator/SelectorIterator.php<small style="float: right;padding-right: 10px;">12</small>
+<i class="icon-file"></i>Css/Iterator/SelectorIterator.php<small style="float: right;padding-right: 10px;">11</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -4043,11 +3780,6 @@
 <td>error</td>
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Iterator/SelectorIterator.php</td>
-</tr>
-<tr class="critical">
-<td>critical</td>
-<td>4</td>
-<td>No short description for class SelectorIterator</td>
 </tr>
 <tr class="error">
 <td>error</td>
@@ -4104,7 +3836,7 @@
 </div>
 <div class="package-contents">
 <a name="Css/Iterator/ValueIterator.php" id="Css/Iterator/ValueIterator.php"></a><h3>
-<i class="icon-file"></i>Css/Iterator/ValueIterator.php<small style="float: right;padding-right: 10px;">12</small>
+<i class="icon-file"></i>Css/Iterator/ValueIterator.php<small style="float: right;padding-right: 10px;">11</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -4118,59 +3850,54 @@
 <td>1</td>
 <td>No page-level DocBlock was found in file Css/Iterator/ValueIterator.php</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
-<td>6</td>
-<td>No short description for class ValueIterator</td>
-</tr>
 <tr class="error">
 <td>error</td>
-<td>12</td>
+<td>13</td>
 <td>No DocBlock was found for property $values</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>14</td>
+<td>15</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>21</td>
 <td>No DocBlock was found for method getValues()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>24</td>
+<td>25</td>
 <td>No DocBlock was found for method getObject()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>29</td>
+<td>30</td>
 <td>No DocBlock was found for method getValuesForObject()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>82</td>
+<td>83</td>
 <td>No DocBlock was found for method rewind()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>86</td>
+<td>87</td>
 <td>No DocBlock was found for method current()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>90</td>
+<td>91</td>
 <td>No DocBlock was found for method key()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>94</td>
+<td>95</td>
 <td>No DocBlock was found for method next()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>98</td>
+<td>99</td>
 <td>No DocBlock was found for method valid()</td>
 </tr>
 </tbody>
@@ -4194,17 +3921,17 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>13</td>
+<td>12</td>
 <td>No DocBlock was found for method __construct()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>33</td>
+<td>32</td>
 <td>No DocBlock was found for method getCssText()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>41</td>
+<td>40</td>
 <td>No DocBlock was found for method __toString()</td>
 </tr>
 </tbody>
@@ -4215,7 +3942,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
-            generated on 2012-04-10T19:22:22+02:00.<br></footer></div>
+            generated on 2012-05-10T20:04:33+02:00.<br></footer></div>
 </div>
 </body>
 </html>

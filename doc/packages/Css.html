@@ -21,9 +21,6 @@
                                     API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a>Namespaces</a></li>
 <li><a href="../namespaces/ju1ius.html"><i class="icon-th"></i> ju1ius</a></li>
-<li><a>Packages</a></li>
-<li><a href="../packages/Css.html"><i class="icon-folder-open"></i> Css</a></li>
-<li><a href="../packages/ju1ius.html"><i class="icon-folder-open"></i> ju1ius</a></li>
 </ul>
 </li>
 <li class="dropdown" id="charts-menu">
@@ -34,11 +31,11 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">615</span></a></li>
+                <span class="label label-info">573</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul>
 <li>todo 
-                <span class="label label-info">3</span>
+                <span class="label label-info">4</span>
 </li>
 <li>fixme 
                 <span class="label label-info">11</span>
@@ -66,35 +63,7 @@
 <li class="nav-header">
 <i class="icon-map-marker"></i> Packages</li>
 <li>
-<a href="../packages/Css.html" title="Css"><i class="icon-folder-open"></i>Css</a><ul class="nav nav-list nav-packages">
-<li>
-<a href="../packages/Css.Exception.html" title="Exception"><i class="icon-folder-open"></i>Exception</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.MediaQuery.html" title="MediaQuery"><i class="icon-folder-open"></i>MediaQuery</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.Resolver.html" title="Resolver"><i class="icon-folder-open"></i>Resolver</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.Rule.html" title="Rule"><i class="icon-folder-open"></i>Rule</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.Selector.html" title="Selector"><i class="icon-folder-open"></i>Selector</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.StyleDeclaration.html" title="StyleDeclaration"><i class="icon-folder-open"></i>StyleDeclaration</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.Util.html" title="Util"><i class="icon-folder-open"></i>Util</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.Value.html" title="Value"><i class="icon-folder-open"></i>Value</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-<li>
-<a href="../packages/Css.XPath.html" title="XPath"><i class="icon-folder-open"></i>XPath</a><ul class="nav nav-list nav-packages"></ul>
-</li>
-</ul>
+<a href="../packages/Css.html" title="Css"><i class="icon-folder-open"></i>Css</a><ul class="nav nav-list nav-packages"></ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-interface"></i> Interfaces</li>
@@ -102,33 +71,74 @@
 <li><a href="#XPathable" title="">XPathable</a></li>
 <li class="nav-header">
 <i class="icon-custom icon-class"></i> Classes</li>
-<li><a href="#StyleDeclaration" title="Represents a Css style declaration">StyleDeclaration</a></li>
+<li><a href="#StyleDeclaration" title="Represents a Css style declaration
+(the part between curly braces in a style rule, media rule, etc...)">StyleDeclaration</a></li>
+<li><a href="#CreateShorthands" title="Utility class to create shorthand properties from a StyleDeclaration">CreateShorthands</a></li>
+<li><a href="#ExpandShorthands" title="Expands shorthand properties to their longhand form in a StyleDeclaration">ExpandShorthands</a></li>
 <li><a href="#ValueList" title="Manages a list of Css values">ValueList</a></li>
-<li><a href="#AbstractParser" title="Provides generic parsing methods for Css\Parser">AbstractParser</a></li>
-<li><a href="#AsciiParser" title="Parses Css text into a data structure.">AsciiParser</a></li>
-<li><a href="#StyleSheetInfo" title="">StyleSheetInfo</a></li>
-<li><a href="#StyleSheetLoader" title="Handles loading of stylesheets.">StyleSheetLoader</a></li>
+<li><a href="#Loader" title="Handles loading of stylesheets.">Loader</a></li>
+<li><a href="#Expression" title="Represents an XPath expression.">Expression</a></li>
+<li><a href="#OrExpression" title="Represents XPath |'d expressions.">OrExpression</a></li>
+<li><a href="#CombinedSelector" title="Represents a combined selector">CombinedSelector</a></li>
+<li><a href="#ClassSelector" title="Represents a class selector">ClassSelector</a></li>
+<li><a href="#IDSelector" title="Represents an ID selector">IDSelector</a></li>
+<li><a href="#PseudoSelector" title="Represents an pseudo class/element selector">PseudoSelector</a></li>
+<li><a href="#ElementSelector" title="Represents an element selector">ElementSelector</a></li>
+<li><a href="#FunctionSelector" title='Represents a "selector:name(expr)" selector'>FunctionSelector</a></li>
+<li><a href="#AttributeSelector" title="Represents an attribute selector">AttributeSelector</a></li>
 <li><a href="#RuleList" title="Manages a list of ju1ius\Css\Rule objects">RuleList</a></li>
 <li><a href="#Rule" title="Represents a Css rule">Rule</a></li>
+<li><a href="#Color" title="">Color</a></li>
+<li><a href="#Charset" title="">Charset</a></li>
 <li><a href="#String" title="">String</a></li>
+<li><a href="#Object" title="">Object</a></li>
 <li><a href="#PageSelector" title="">PageSelector</a></li>
 <li><a href="#StyleSheetList" title="General purpose list class">StyleSheetList</a></li>
+<li><a href="#Lexer" title="">Lexer</a></li>
 <li><a href="#Property" title="Represents a Css property">Property</a></li>
-<li><a href="#Parser" title="Parses Css text into a data structure.">Parser</a></li>
+<li><a href="#Parser" title="Css parser">Parser</a></li>
 <li><a href="#Value" title="Base class for Css values">Value</a></li>
 <li><a href="#PropertyValueList" title="Stores list(s) of values for a ju1ius\Css\Property">PropertyValueList</a></li>
 <li><a href="#Selector" title="Base Selector class">Selector</a></li>
+<li><a href="#ImportResolver" title="Recursively resolve @import rules
+and merge their associated stylesheets into the main StyleSheet">ImportResolver</a></li>
 <li><a href="#UrlResolver" title="Resolves relative urls in a stylesheet,
 using a base url or the stylesheet's href">UrlResolver</a></li>
 <li><a href="#MediaQueryList" title="Represents a list of media queries">MediaQueryList</a></li>
 <li><a href="#MediaQuery" title="Represents a single Css MediaQuery">MediaQuery</a></li>
 <li><a href="#CssList" title="General purpose list class">CssList</a></li>
-<li><a href="#RecoveredParseException" title="">RecoveredParseException</a></li>
-<li><a href="#ParserState" title="A Bitmask storing the ju1ius\Css\Parser's states">ParserState</a></li>
+<li><a href="#Expression" title="Represents a Css MediaQuery expression, like (max-width: 300px) or (device-ratio: 16/9)">Expression</a></li>
+<li><a href="#StyleSheetNotFoundException" title="">StyleSheetNotFoundException</a></li>
+<li><a href="#UnsupportedSelectorException" title="">UnsupportedSelectorException</a></li>
 <li><a href="#StyleSheet" title="Represents a Css StyleSheet">StyleSheet</a></li>
+<li><a href="#Keyframes" title="Represents an @keyframes rule">Keyframes</a></li>
+<li><a href="#NS" title="Represents an @namespace rule
+It's called NS because namespace is a PHP reserved word">NS</a></li>
+<li><a href="#Page" title="Represents an @page rule">Page</a></li>
+<li><a href="#FontFace" title="Represents an @font-face rule">FontFace</a></li>
+<li><a href="#Charset" title="Represents an @charset rule">Charset</a></li>
 <li><a href="#MarginBox" title="Represents an unknown @ rule (unused)">MarginBox</a></li>
-<li><a href="#SelectorIterator" title="">SelectorIterator</a></li>
-<li><a href="#ValueIterator" title="">ValueIterator</a></li>
+<li><a href="#Import" title="Represents an @import rule">Import</a></li>
+<li><a href="#Keyframe" title="Represents an @keyframe rule">Keyframe</a></li>
+<li><a href="#AtRule" title="Represents an unknown @ rule (unused)">AtRule</a></li>
+<li><a href="#StyleRule" title="Represents a Css style rule">StyleRule</a></li>
+<li><a href="#Media" title="Represents an @media rule">Media</a></li>
+<li><a href="#Func" title="Represents a Css Function, like linear-gradient(), attr(), counter()...">Func</a></li>
+<li><a href="#Color" title="Base class for Css values">Color</a></li>
+<li><a href="#Time" title="Represents a dimension (an object that has a value and a unit)">Time</a></li>
+<li><a href="#Url" title="Base class for Css values">Url</a></li>
+<li><a href="#Percentage" title="Represents a dimension (an object that has a value and a unit)">Percentage</a></li>
+<li><a href="#String" title="Base class for Css values">String</a></li>
+<li><a href="#Dimension" title="Represents a dimension (an object that has a value and a unit)">Dimension</a></li>
+<li><a href="#Frequency" title="Represents a dimension (an object that has a value and a unit)">Frequency</a></li>
+<li><a href="#PrimitiveValue" title="Base class for Css values">PrimitiveValue</a></li>
+<li><a href="#Resolution" title="Represents a dimension (an object that has a value and a unit)">Resolution</a></li>
+<li><a href="#Length" title="Represents a dimension (an object that has a value and a unit)">Length</a></li>
+<li><a href="#Ratio" title="Represents a ratio value in the form x/y (used only in media queries)">Ratio</a></li>
+<li><a href="#UnicodeRange" title="Base class for Css values">UnicodeRange</a></li>
+<li><a href="#Angle" title="Represents a dimension (an object that has a value and a unit)">Angle</a></li>
+<li><a href="#SelectorIterator" title="Iterates over all selectors of a Css object (stylesheet, media rule...)">SelectorIterator</a></li>
+<li><a href="#ValueIterator" title="Iterates over all values of a Css object (stylesheet, media rule...)">ValueIterator</a></li>
 <li><a href="#SelectorList" title="Manages a list of Css selectors">SelectorList</a></li>
 </ul>
 </div>
@@ -156,20 +166,6 @@ using a base url or the stylesheet's href">UrlResolver</a></li>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.XPathable.html" class="more">« More »</a>
 </div>
-<a name="AbstractParser" id="AbstractParser"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.AbstractParser.html">
-<h1>AbstractParser<a href="../classes/ju1ius.Css.AbstractParser.html">¶</a>
-</h1>
-<p class="short_description">Provides generic parsing methods for Css\Parser</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.AbstractParser.html" class="more">« More »</a>
-</div>
-<a name="AsciiParser" id="AsciiParser"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.AsciiParser.html">
-<h1>AsciiParser<a href="../classes/ju1ius.Css.AsciiParser.html">¶</a>
-</h1>
-<p class="short_description">Parses Css text into a data structure.</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.AsciiParser.html" class="more">« More »</a>
-</div>
 <a name="CssList" id="CssList"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.CssList.html">
 <h1>CssList<a href="../classes/ju1ius.Css.CssList.html">¶</a>
 </h1>
@@ -177,26 +173,47 @@ using a base url or the stylesheet's href">UrlResolver</a></li>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.CssList.html" class="more">« More »</a>
 </div>
-<a name="RecoveredParseException" id="RecoveredParseException"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Exception.RecoveredParseException.html">
-<h1>RecoveredParseException<a href="../classes/ju1ius.Css.Exception.RecoveredParseException.html">¶</a>
+<a name="StyleSheetNotFoundException" id="StyleSheetNotFoundException"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Exception.StyleSheetNotFoundException.html">
+<h1>StyleSheetNotFoundException<a href="../classes/ju1ius.Css.Exception.StyleSheetNotFoundException.html">¶</a>
 </h1>
 <p class="short_description"></p>
 <div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Exception.RecoveredParseException.html" class="more">« More »</a>
+<a href="../classes/ju1ius.Css.Exception.StyleSheetNotFoundException.html" class="more">« More »</a>
+</div>
+<a name="UnsupportedSelectorException" id="UnsupportedSelectorException"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Exception.UnsupportedSelectorException.html">
+<h1>UnsupportedSelectorException<a href="../classes/ju1ius.Css.Exception.UnsupportedSelectorException.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Exception.UnsupportedSelectorException.html" class="more">« More »</a>
 </div>
 <a name="SelectorIterator" id="SelectorIterator"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Iterator.SelectorIterator.html">
 <h1>SelectorIterator<a href="../classes/ju1ius.Css.Iterator.SelectorIterator.html">¶</a>
 </h1>
-<p class="short_description"></p>
+<p class="short_description">Iterates over all selectors of a Css object (stylesheet, media rule...)</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Iterator.SelectorIterator.html" class="more">« More »</a>
 </div>
 <a name="ValueIterator" id="ValueIterator"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Iterator.ValueIterator.html">
 <h1>ValueIterator<a href="../classes/ju1ius.Css.Iterator.ValueIterator.html">¶</a>
 </h1>
-<p class="short_description"></p>
+<p class="short_description">Iterates over all values of a Css object (stylesheet, media rule...)</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Iterator.ValueIterator.html" class="more">« More »</a>
+</div>
+<a name="Lexer" id="Lexer"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Lexer.html">
+<h1>Lexer<a href="../classes/ju1ius.Css.Lexer.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Lexer.html" class="more">« More »</a>
+</div>
+<a name="Loader" id="Loader"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Loader.html">
+<h1>Loader<a href="../classes/ju1ius.Css.Loader.html">¶</a>
+</h1>
+<p class="short_description">Handles loading of stylesheets.</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Loader.html" class="more">« More »</a>
 </div>
 <a name="MediaQuery" id="MediaQuery"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.MediaQuery.html">
 <h1>MediaQuery<a href="../classes/ju1ius.Css.MediaQuery.html">¶</a>
@@ -212,6 +229,13 @@ using a base url or the stylesheet's href">UrlResolver</a></li>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.MediaQueryList.html" class="more">« More »</a>
 </div>
+<a name="Expression" id="Expression"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.MediaQuery.Expression.html">
+<h1>Expression<a href="../classes/ju1ius.Css.MediaQuery.Expression.html">¶</a>
+</h1>
+<p class="short_description">Represents a Css MediaQuery expression, like (max-width: 300px) or (device-ratio: 16/9)</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.MediaQuery.Expression.html" class="more">« More »</a>
+</div>
 <a name="PageSelector" id="PageSelector"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.PageSelector.html">
 <h1>PageSelector<a href="../classes/ju1ius.Css.PageSelector.html">¶</a>
 </h1>
@@ -222,16 +246,9 @@ using a base url or the stylesheet's href">UrlResolver</a></li>
 <a name="Parser" id="Parser"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Parser.html">
 <h1>Parser<a href="../classes/ju1ius.Css.Parser.html">¶</a>
 </h1>
-<p class="short_description">Parses Css text into a data structure.</p>
+<p class="short_description">Css parser</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Parser.html" class="more">« More »</a>
-</div>
-<a name="ParserState" id="ParserState"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.ParserState.html">
-<h1>ParserState<a href="../classes/ju1ius.Css.ParserState.html">¶</a>
-</h1>
-<p class="short_description">A Bitmask storing the ju1ius\Css\Parser's states</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.ParserState.html" class="more">« More »</a>
 </div>
 <a name="Property" id="Property"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Property.html">
 <h1>Property<a href="../classes/ju1ius.Css.Property.html">¶</a>
@@ -246,6 +263,14 @@ using a base url or the stylesheet's href">UrlResolver</a></li>
 <p class="short_description">Stores list(s) of values for a ju1ius\Css\Property</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.PropertyValueList.html" class="more">« More »</a>
+</div>
+<a name="ImportResolver" id="ImportResolver"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Resolver.ImportResolver.html">
+<h1>ImportResolver<a href="../classes/ju1ius.Css.Resolver.ImportResolver.html">¶</a>
+</h1>
+<p class="short_description">Recursively resolve @import rules
+and merge their associated stylesheets into the main StyleSheet</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Resolver.ImportResolver.html" class="more">« More »</a>
 </div>
 <a name="UrlResolver" id="UrlResolver"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Resolver.UrlResolver.html">
 <h1>UrlResolver<a href="../classes/ju1ius.Css.Resolver.UrlResolver.html">¶</a>
@@ -269,155 +294,6 @@ using a base url or the stylesheet's href</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.RuleList.html" class="more">« More »</a>
 </div>
-<a name="MarginBox" id="MarginBox"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Rule.MarginBox.html">
-<h1>MarginBox<a href="../classes/ju1ius.Css.Rule.MarginBox.html">¶</a>
-</h1>
-<p class="short_description">Represents an unknown @ rule (unused)</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Rule.MarginBox.html" class="more">« More »</a>
-</div>
-<a name="Selector" id="Selector"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Selector.html">
-<h1>Selector<a href="../classes/ju1ius.Css.Selector.html">¶</a>
-</h1>
-<p class="short_description">Base Selector class</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Selector.html" class="more">« More »</a>
-</div>
-<a name="SelectorList" id="SelectorList"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.SelectorList.html">
-<h1>SelectorList<a href="../classes/ju1ius.Css.SelectorList.html">¶</a>
-</h1>
-<p class="short_description">Manages a list of Css selectors</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.SelectorList.html" class="more">« More »</a>
-</div>
-<a name="StyleDeclaration" id="StyleDeclaration"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleDeclaration.html">
-<h1>StyleDeclaration<a href="../classes/ju1ius.Css.StyleDeclaration.html">¶</a>
-</h1>
-<p class="short_description">Represents a Css style declaration</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.StyleDeclaration.html" class="more">« More »</a>
-</div>
-<a name="StyleSheet" id="StyleSheet"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleSheet.html">
-<h1>StyleSheet<a href="../classes/ju1ius.Css.StyleSheet.html">¶</a>
-</h1>
-<p class="short_description">Represents a Css StyleSheet</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.StyleSheet.html" class="more">« More »</a>
-</div>
-<a name="StyleSheetInfo" id="StyleSheetInfo"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleSheetInfo.html">
-<h1>StyleSheetInfo<a href="../classes/ju1ius.Css.StyleSheetInfo.html">¶</a>
-</h1>
-<p class="short_description"></p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.StyleSheetInfo.html" class="more">« More »</a>
-</div>
-<a name="StyleSheetList" id="StyleSheetList"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleSheetList.html">
-<h1>StyleSheetList<a href="../classes/ju1ius.Css.StyleSheetList.html">¶</a>
-</h1>
-<p class="short_description">General purpose list class</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.StyleSheetList.html" class="more">« More »</a>
-</div>
-<a name="StyleSheetLoader" id="StyleSheetLoader"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleSheetLoader.html">
-<h1>StyleSheetLoader<a href="../classes/ju1ius.Css.StyleSheetLoader.html">¶</a>
-</h1>
-<p class="short_description">Handles loading of stylesheets.</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.StyleSheetLoader.html" class="more">« More »</a>
-</div>
-<a name="String" id="String"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Util.String.html">
-<h1>String<a href="../classes/ju1ius.Css.Util.String.html">¶</a>
-</h1>
-<p class="short_description"></p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Util.String.html" class="more">« More »</a>
-</div>
-<a name="Value" id="Value"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Value.html">
-<h1>Value<a href="../classes/ju1ius.Css.Value.html">¶</a>
-</h1>
-<p class="short_description">Base class for Css values</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Value.html" class="more">« More »</a>
-</div>
-<a name="ValueList" id="ValueList"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.ValueList.html">
-<h1>ValueList<a href="../classes/ju1ius.Css.ValueList.html">¶</a>
-</h1>
-<p class="short_description">Manages a list of Css values</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.ValueList.html" class="more">« More »</a>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.Exception.html">Exception</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<a name="ParseException" id="ParseException"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Exception.ParseException.html">
-<h1>ParseException<a href="../classes/ju1ius.Css.Exception.ParseException.html">¶</a>
-</h1>
-<p class="short_description"></p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Exception.ParseException.html" class="more">« More »</a>
-</div>
-<a name="UnsupportedSelectorException" id="UnsupportedSelectorException"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Exception.UnsupportedSelectorException.html">
-<h1>UnsupportedSelectorException<a href="../classes/ju1ius.Css.Exception.UnsupportedSelectorException.html">¶</a>
-</h1>
-<p class="short_description"></p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Exception.UnsupportedSelectorException.html" class="more">« More »</a>
-</div>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.MediaQuery.html">MediaQuery</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<a name="Expression" id="Expression"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.MediaQuery.Expression.html">
-<h1>Expression<a href="../classes/ju1ius.Css.MediaQuery.Expression.html">¶</a>
-</h1>
-<p class="short_description">Represents a Css MediaQuery expression, like (max-width: 300px) or (device-ratio: 16/9)</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.MediaQuery.Expression.html" class="more">« More »</a>
-</div>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.Resolver.html">Resolver</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<a name="ImportResolver" id="ImportResolver"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Resolver.ImportResolver.html">
-<h1>ImportResolver<a href="../classes/ju1ius.Css.Resolver.ImportResolver.html">¶</a>
-</h1>
-<p class="short_description">Recursively resolve @import rules
-and merge their associated stylesheets into the main StyleSheet</p>
-<div class="details collapse"></div>
-<a href="../classes/ju1ius.Css.Resolver.ImportResolver.html" class="more">« More »</a>
-</div>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.Rule.html">Rule</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
 <a name="AtRule" id="AtRule"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Rule.AtRule.html">
 <h1>AtRule<a href="../classes/ju1ius.Css.Rule.AtRule.html">¶</a>
 </h1>
@@ -460,6 +336,13 @@ and merge their associated stylesheets into the main StyleSheet</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Rule.Keyframes.html" class="more">« More »</a>
 </div>
+<a name="MarginBox" id="MarginBox"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Rule.MarginBox.html">
+<h1>MarginBox<a href="../classes/ju1ius.Css.Rule.MarginBox.html">¶</a>
+</h1>
+<p class="short_description">Represents an unknown @ rule (unused)</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Rule.MarginBox.html" class="more">« More »</a>
+</div>
 <a name="Media" id="Media"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Rule.Media.html">
 <h1>Media<a href="../classes/ju1ius.Css.Rule.Media.html">¶</a>
 </h1>
@@ -489,17 +372,20 @@ It's called NS because namespace is a PHP reserved word</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Rule.StyleRule.html" class="more">« More »</a>
 </div>
+<a name="Selector" id="Selector"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Selector.html">
+<h1>Selector<a href="../classes/ju1ius.Css.Selector.html">¶</a>
+</h1>
+<p class="short_description">Base Selector class</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Selector.html" class="more">« More »</a>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.Selector.html">Selector</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<a name="SelectorList" id="SelectorList"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.SelectorList.html">
+<h1>SelectorList<a href="../classes/ju1ius.Css.SelectorList.html">¶</a>
+</h1>
+<p class="short_description">Manages a list of Css selectors</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.SelectorList.html" class="more">« More »</a>
+</div>
 <a name="AttributeSelector" id="AttributeSelector"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Selector.AttributeSelector.html">
 <h1>AttributeSelector<a href="../classes/ju1ius.Css.Selector.AttributeSelector.html">¶</a>
 </h1>
@@ -549,17 +435,14 @@ It's called NS because namespace is a PHP reserved word</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Selector.PseudoSelector.html" class="more">« More »</a>
 </div>
+<a name="StyleDeclaration" id="StyleDeclaration"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleDeclaration.html">
+<h1>StyleDeclaration<a href="../classes/ju1ius.Css.StyleDeclaration.html">¶</a>
+</h1>
+<p class="short_description">Represents a Css style declaration
+(the part between curly braces in a style rule, media rule, etc...)</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.StyleDeclaration.html" class="more">« More »</a>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.StyleDeclaration.html">StyleDeclaration</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
 <a name="CreateShorthands" id="CreateShorthands"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleDeclaration.CreateShorthands.html">
 <h1>CreateShorthands<a href="../classes/ju1ius.Css.StyleDeclaration.CreateShorthands.html">¶</a>
 </h1>
@@ -574,17 +457,20 @@ It's called NS because namespace is a PHP reserved word</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.StyleDeclaration.ExpandShorthands.html" class="more">« More »</a>
 </div>
+<a name="StyleSheet" id="StyleSheet"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleSheet.html">
+<h1>StyleSheet<a href="../classes/ju1ius.Css.StyleSheet.html">¶</a>
+</h1>
+<p class="short_description">Represents a Css StyleSheet</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.StyleSheet.html" class="more">« More »</a>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.Util.html">Util</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<a name="StyleSheetList" id="StyleSheetList"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.StyleSheetList.html">
+<h1>StyleSheetList<a href="../classes/ju1ius.Css.StyleSheetList.html">¶</a>
+</h1>
+<p class="short_description">General purpose list class</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.StyleSheetList.html" class="more">« More »</a>
+</div>
 <a name="Charset" id="Charset"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Util.Charset.html">
 <h1>Charset<a href="../classes/ju1ius.Css.Util.Charset.html">¶</a>
 </h1>
@@ -606,17 +492,27 @@ It's called NS because namespace is a PHP reserved word</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Util.Object.html" class="more">« More »</a>
 </div>
+<a name="String" id="String"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Util.String.html">
+<h1>String<a href="../classes/ju1ius.Css.Util.String.html">¶</a>
+</h1>
+<p class="short_description"></p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Util.String.html" class="more">« More »</a>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.Value.html">Value</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<a name="Value" id="Value"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Value.html">
+<h1>Value<a href="../classes/ju1ius.Css.Value.html">¶</a>
+</h1>
+<p class="short_description">Base class for Css values</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Value.html" class="more">« More »</a>
+</div>
+<a name="ValueList" id="ValueList"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.ValueList.html">
+<h1>ValueList<a href="../classes/ju1ius.Css.ValueList.html">¶</a>
+</h1>
+<p class="short_description">Manages a list of Css values</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.ValueList.html" class="more">« More »</a>
+</div>
 <a name="Angle" id="Angle"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Value.Angle.html">
 <h1>Angle<a href="../classes/ju1ius.Css.Value.Angle.html">¶</a>
 </h1>
@@ -658,6 +554,13 @@ It's called NS because namespace is a PHP reserved word</p>
 <p class="short_description">Represents a dimension (an object that has a value and a unit)</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Value.Length.html" class="more">« More »</a>
+</div>
+<a name="Percentage" id="Percentage"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Value.Percentage.html">
+<h1>Percentage<a href="../classes/ju1ius.Css.Value.Percentage.html">¶</a>
+</h1>
+<p class="short_description">Represents a dimension (an object that has a value and a unit)</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.Value.Percentage.html" class="more">« More »</a>
 </div>
 <a name="PrimitiveValue" id="PrimitiveValue"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.Value.PrimitiveValue.html">
 <h1>PrimitiveValue<a href="../classes/ju1ius.Css.Value.PrimitiveValue.html">¶</a>
@@ -708,17 +611,6 @@ It's called NS because namespace is a PHP reserved word</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.Value.Url.html" class="more">« More »</a>
 </div>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../packages/Css.html">Css</a></li>
-<span class="divider">\</span><li class="active"><a href="../packages/Css.XPath.html">XPath</a></li>
-</ul>
-<div class="package-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
 <a name="Expression" id="Expression"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.XPath.Expression.html">
 <h1>Expression<a href="../classes/ju1ius.Css.XPath.Expression.html">¶</a>
 </h1>
@@ -726,6 +618,12 @@ It's called NS because namespace is a PHP reserved word</p>
 <div class="details collapse"></div>
 <a href="../classes/ju1ius.Css.XPath.Expression.html" class="more">« More »</a>
 </div>
+<a name="OrExpression" id="OrExpression"></a><div class="element ajax clickable class" href="../classes/ju1ius.Css.XPath.OrExpression.html">
+<h1>OrExpression<a href="../classes/ju1ius.Css.XPath.OrExpression.html">¶</a>
+</h1>
+<p class="short_description">Represents XPath |'d expressions.</p>
+<div class="details collapse"></div>
+<a href="../classes/ju1ius.Css.XPath.OrExpression.html" class="more">« More »</a>
 </div>
 </div>
 </div>
@@ -733,7 +631,7 @@ It's called NS because namespace is a PHP reserved word</p>
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a2</a> and<br>
-            generated on 2012-04-10T19:22:21+02:00.<br></footer></div>
+            generated on 2012-05-10T20:04:32+02:00.<br></footer></div>
 </div>
 </body>
 </html>
