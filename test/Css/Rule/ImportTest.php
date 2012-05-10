@@ -25,7 +25,7 @@ class ImportTest extends CssParser_TestCase
   }
 
   /**
-   * @expectedException ju1ius\Css\Exception\ParseException
+   * @expectedException ju1ius\Text\Parser\Exception\ParseException
    * @dataProvider testImportsAllowedOnlyAfterCharsetProvider
    **/
   public function testImportsAllowedOnlyAfterCharset($input)

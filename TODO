@@ -9,7 +9,6 @@ New Lexer:
       Would allow using pcre only and ease inlining calls to match(),
       along with other internal string comparisons
   performance:
-    - inline calls to match() ?
     - long lines (for pre-optimized css):
       write a css splitter that adds newlines after each {, }, and ;
       that are not part of a string (and not followed by a newline ?).

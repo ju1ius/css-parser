@@ -8,6 +8,7 @@ use ju1ius\Css\Exception\StyleSheetNotFoundException;
 
 /**
  * Handles loading of stylesheets.
+ * If the source is not ASCII or UTF-8 encoded, it will be converted to UTF-8.
  *
  * Relies on the CURL extension to load network urls
  **/
@@ -18,32 +19,30 @@ class StyleSheetLoader
    * Loads a Css file or url.
    *
    * @param string|ju1ius\Uri $url
-   * @param string|null $encoding Force the file encoding
    *
    * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
    *
    * @return Source\File
    **/
-  static public function load($url, $encoding=null)
+  public static function load($url)
   {
     $uri = Uri::parse($url);
     if($uri->isAbsoluteUrl()) {
-      return self::loadUrl($uri, $encoding);
+      return self::loadUrl($uri);
     }
-    return self::loadFile($uri, $encoding);
+    return self::loadFile($uri);
   }
 
   /**
    * Loads a CSS file into a Source\File object.
    *
    * @param string|ju1ius\Uri $url The path to the file
-   * @param string|null $encoding Force the file encoding
    *
    * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
    *
    * @return Source\File
    **/
-  static public function loadFile($url, $encoding=null)
+  public static function loadFile($url)
   {
     $uri = Uri::parse($url);
     $path = realpath($uri);
@@ -55,8 +54,6 @@ class StyleSheetLoader
       throw new StyleSheetNotFoundException($path);
     }
     $infos = self::_loadString($content);
-    // Convert encoding if encoding option has been set
-    self::maybeConvertEncoding($infos, $encoding);
     return new Source\File($path, $infos['contents'], $infos['charset']);
   }
 
@@ -66,13 +63,12 @@ class StyleSheetLoader
    * Relies on the CURL extension to load network urls
    *
    * @param string|ju1ius\Uri $url The url of the file
-   * @param string|null $encoding Force the file encoding
    *
    * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
    *
    * @return Source\File
    **/
-  static public function loadUrl($url, $encoding=null)
+  public static function loadUrl($url)
   {
     $uri = Uri::parse($url);
     $response = self::_loadUrl($uri);
@@ -86,8 +82,6 @@ class StyleSheetLoader
       $infos['charset'] = $response['charset'];
     }
      */
-    // Convert encoding if encoding option has been set
-    self::maybeConvertEncoding($infos, $encoding);
     return new Source\File($url, $infos['contents'], $infos['charset']);
   }
 
@@ -95,27 +89,29 @@ class StyleSheetLoader
    * Loads a CSS string into a Source\String object.
    *
    * @param string $str  The CSS string
-   * @param string|null $encoding Force the string encoding
    *
    * @return Source\String
    **/
-  static public function loadString($str, $encoding=null)
+  public static function loadString($str, $encoding=null)
   {
     $infos = self::_loadString($str);
-    // Convert encoding if encoding option has been set
-    self::maybeConvertEncoding($infos, $encoding);
     return new Source\String($infos['contents'], $infos['charset']);
   }
 
-  static private function _loadString($str)
+  private static function _loadString($str)
   {
     // detect charset from BOM and/or @charset rule
     $charset = Util\Charset::detect($str);
     // Or defaults to utf-8
-    if(!$charset) {
+    if(!$charset) $charset = 'utf-8';
+    $str = Util\Charset::removeBOM($str);
+
+    if (!Util\Charset::isSameEncoding($charset, 'ascii')
+        || !Util\Charset::isSameEncoding($charset, 'utf-8')
+    ) {
+      $str = Util\Charset::convert($str, 'utf-8', $charset);
       $charset = 'utf-8';
     }
-    $str = Util\Charset::removeBOM($str);
 
     return array(
       'contents' => $str,
@@ -123,7 +119,7 @@ class StyleSheetLoader
     );
   }
 
-  static private function _loadUrl(Uri $url)
+  private static function _loadUrl(Uri $url)
   {
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -153,11 +149,12 @@ class StyleSheetLoader
     return $results;
   }
 
-  static private function maybeConvertEncoding(array &$infos, $to_encoding=null)
+  private static function maybeConvertEncoding(array &$infos, $to_encoding=null)
   {
-    if($to_encoding && !Util\Charset::isSameEncoding($infos['charset'], $to_encoding)) {
-      $infos['contents'] = Util\Charset::convert($infos['contents'], $to_encoding, $infos['charset']);
-      $infos['charset'] = $to_encoding;
+    if (Util\Charset::isSameEncoding($infos['charset'], 'ascii')) return;
+    if (!Util\Charset::isSameEncoding($infos['charset'], 'utf-8')) {
+      $infos['contents'] = Util\Charset::convert($infos['contents'], 'utf-8', $infos['charset']);
+      $infos['charset'] = 'utf-8';
     }
   }
 }

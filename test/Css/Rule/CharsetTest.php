@@ -8,9 +8,8 @@ class CharsetTest extends CssParser_TestCase
    **/
   public function testOutput($input, $expected)
   {
-    $styleSheet = $this->parseStyleSheet($input);
-    $rule = $styleSheet->getFirstRule();
-    $this->assertEquals($expected, $rule->getCssText());
+    $stylesheet = $this->parseStyleSheet($input);
+    $this->assertEquals($expected, $stylesheet->getCssText());
   }
   public function testOutputProvider()
   {
@@ -25,11 +24,11 @@ class CharsetTest extends CssParser_TestCase
   }
 
   /**
-   * @expectedException ju1ius\Css\Exception\ParseException
+   * @expectedException ju1ius\Text\Parser\Exception\ParseException
    **/
   public function testOnlyOneCharsetAllowed()
   {
     $css = "@charset 'utf-8'; @charset 'UTF-32LE';";
-    $styleSheet = $this->parseStyleSheet($css);
+    $stylesheet = $this->parseStyleSheet($css);
   }
 }

@@ -16,20 +16,20 @@ class Parser extends LLk
   /**
    * @var boolean Does the parser uses strict mode
    **/
-  protected
-    $strict;
-  public
-    $errors=array();
+  protected $strict;
+
+  public $errors=array();
 
   public function __construct(Lexer $lexer, $strict=true)
-  {
+  {/*{{{*/
+    $this->strict = $strict;
     parent::__construct($lexer, 2);
-  }
+  }/*}}}*/
 
   public function setStrict($strict=true)
-  {
+  {/*{{{*/
     $this->strict = (bool)$strict;
-  }
+  }/*}}}*/
 
   /**
    * Parses a Css stylesheet
@@ -335,7 +335,7 @@ class Parser extends LLk
       $list->append($values);
       $values = $list;
     }
-    if($this->_isAsciiCaseInsensitiveMatch($property->getName(), 'background')) {
+    if(0 === strcasecmp($property->getName(), 'background')) {
       self::fixBackgroundShorthand($values);
     }
 
@@ -1503,10 +1503,10 @@ class Parser extends LLk
 
   protected static function _listDelimiterForProperty($name)
   {/*{{{*/
-    if(preg_match('/^font(?:$|-family)/iSu', $name)) {
-      return array(',', '/', ' ');
-    } else if (preg_match('/^background$/iSu', $name)) {
+    if (0 === strcasecmp('background', $name)) {
       return array('/', ' ', ',');
+    } else if(preg_match('/^font(?:-family)?$/iu', $name)) {
+      return array(',', '/', ' ');
     }
     return array(' ', ',', '/');
   }/*}}}*/
@@ -1552,11 +1552,6 @@ class Parser extends LLk
       }
     }
     $value_list->resetKeys();
-  }/*}}}*/
-
-  protected function _isAsciiCaseInsensitiveMatch($str, $ascii)
-  {/*{{{*/
-    return preg_match('/'.$str.'/iu', $str);
   }/*}}}*/
 
   /**

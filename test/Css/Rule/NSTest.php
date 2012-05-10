@@ -8,9 +8,8 @@ class NSTest extends CssParser_TestCase
    **/
   public function testOutput($input, $expected)
   {
-    $styleSheet = $this->parseStyleSheet($input);
-    $rule = $styleSheet->getFirstRule();
-    $this->assertEquals($expected, $rule->getCssText());
+    $stylesheet = $this->parseStyleSheet($input);
+    $this->assertEquals($expected, $stylesheet->getCssText());
   }
   public function testOutputProvider()
   {
@@ -27,17 +26,21 @@ class NSTest extends CssParser_TestCase
   }
 
   /**
-   * @expectedException ju1ius\Css\Exception\ParseException
+   * @expectedException ju1ius\Text\Parser\Exception\ParseException
    * @dataProvider testAllowedOnlyAfterCharsetAndImportsProvider
    **/
   public function testAllowedOnlyAfterCharsetAndImports($input)
   {
-    $styleSheet = $this->parseStyleSheet($input);
+    try{
+      $stylesheet = $this->parseStyleSheet($input);
+    } catch (PHPUnit_Framework_Error_Warning $w) {
+      echo $w;
+    }
   }
   public function testAllowedOnlyAfterCharsetAndImportsProvider()
   {
     return array(
-      array('@charset "utf-16"; @namespace foobar "http://foo.bar"; @import "foobar.css";'),
+      array('@charset "UTF-16"; @namespace foobar "http://foo.bar"; @import "foobar.css";'),
       array('@font-face{ foo: bar; } @namespace foobar "http://foo.bar";'),
       array('#foobar{ foo: bar; } @namespace foobar "http://foo.bar";')
     );
