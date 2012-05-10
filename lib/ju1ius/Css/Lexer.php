@@ -8,95 +8,94 @@ use ju1ius\Text\Source;
 
 class Lexer extends BaseLexer
 {
-  const
-    T_STRING  = 1,
-    T_NUMBER  = 2,
-    T_IDENT   = 3,
-    T_HASH = 4,
-    T_S = 5,
-    T_CDO = 6,
-    T_CDC = 7,
-    T_PLUS = 8,
-    T_MINUS = 9,
-    T_GREATER = 10,
-    T_COMMA = 11,
-    T_TILDE = 12,
-    T_MULT = 13,
-    T_LPAREN = 14,
-    T_RPAREN = 15,
-    T_LBRACK = 16,
-    T_RBRACK = 17,
-    T_LCURLY = 18,
-    T_RCURLY = 19,
-    T_COLON = 20,
-    T_SEMICOLON = 21,
-    T_COMMENT = 22,
-    T_STAR = 23,
-    T_PIPE = 24,
-    T_SLASH = 25,
-    T_PERCENT = 26,
-    T_DOT = 27,
-    T_LOWER = 28,
-    T_EQUALS = 29,
-    // AT RULES
-    T_CHARSET_SYM = 100,
-    T_NAMESPACE_SYM = 101,
-    T_IMPORT_SYM = 102,
-    T_PAGE_SYM = 103,
-    T_MEDIA_SYM = 104,
-    T_KEYFRAMES_SYM = 105,
-    T_KEYFRAME_SYM = 106,
-    T_FONT_FACE_SYM = 107,
-    T_ATKEYWORD = 108,
-    T_TOPLEFTCORNER_SYM = 109,
-    T_TOPLEFT_SYM = 110,
-    T_TOPCENTER_SYM = 111,
-    T_TOPRIGHT_SYM = 112,
-    T_TOPRIGHTCORNER_SYM = 113,
-    T_BOTTOMLEFTCORNER_SYM = 114,
-    T_BOTTOMLEFT_SYM = 115,
-    T_BOTTOMCENTER_SYM = 116,
-    T_BOTTOMRIGHT_SYM = 117,
-    T_BOTTOMRIGHTCORNER_SYM = 118,
-    T_LEFTTOP_SYM = 119,
-    T_LEFTMIDDLE_SYM = 120,
-    T_LEFTBOTTOM_SYM = 121,
-    T_RIGHTTOP_SYM = 122,
-    T_RIGHTMIDDLE_SYM = 123,
-    T_RIGHTBOTTOM_SYM = 124,
-    T_FROM_SYM = 125,
-    T_TO_SYM = 126,
-    //
-    T_IMPORTANT_SYM = 200,
-    T_AND = 404,
-    T_ONLY = 405,
-    T_NOT = 406,
-    //
-    T_DIMENSION = 300,
-    T_LENGTH = 301,
-    T_PERCENTAGE = 302,
-    T_ANGLE = 303,
-    T_TIME = 304,
-    T_FREQ = 305,
-    T_EMS = 306,
-    T_EXS = 307,
-    T_RESOLUTION = 308,
-    T_RATIO = 309,
-    //
-    T_FUNCTION = 400,
-    T_URI = 401,
-    T_UNICODERANGE = 402,
-    T_NEGATION = 403,
-    // Attributes selector
-    T_INCLUDES = 500,
-    T_DASHMATCH = 501,
-    T_PREFIXMATCH = 502,
-    T_SUFFIXMATCH = 503,
-    T_SUBSTRINGMATCH = 505,
-    //
-    T_BADSTRING = 600,
-    T_BADCOMMENT = 601,
-    T_BADURI = 602;
+  const T_STRING  = 1;
+  const T_NUMBER  = 2;
+  const T_IDENT   = 3;
+  const T_HASH = 4;
+  const T_S = 5;
+  const T_CDO = 6;
+  const T_CDC = 7;
+  const T_PLUS = 8;
+  const T_MINUS = 9;
+  const T_GREATER = 10;
+  const T_COMMA = 11;
+  const T_TILDE = 12;
+  const T_MULT = 13;
+  const T_LPAREN = 14;
+  const T_RPAREN = 15;
+  const T_LBRACK = 16;
+  const T_RBRACK = 17;
+  const T_LCURLY = 18;
+  const T_RCURLY = 19;
+  const T_COLON = 20;
+  const T_SEMICOLON = 21;
+  const T_COMMENT = 22;
+  const T_STAR = 23;
+  const T_PIPE = 24;
+  const T_SLASH = 25;
+  const T_PERCENT = 26;
+  const T_DOT = 27;
+  const T_LOWER = 28;
+  const T_EQUALS = 29;
+  // AT RULES
+  const T_CHARSET_SYM = 100;
+  const T_NAMESPACE_SYM = 101;
+  const T_IMPORT_SYM = 102;
+  const T_PAGE_SYM = 103;
+  const T_MEDIA_SYM = 104;
+  const T_KEYFRAMES_SYM = 105;
+  const T_KEYFRAME_SYM = 106;
+  const T_FONT_FACE_SYM = 107;
+  const T_ATKEYWORD = 108;
+  const T_TOPLEFTCORNER_SYM = 109;
+  const T_TOPLEFT_SYM = 110;
+  const T_TOPCENTER_SYM = 111;
+  const T_TOPRIGHT_SYM = 112;
+  const T_TOPRIGHTCORNER_SYM = 113;
+  const T_BOTTOMLEFTCORNER_SYM = 114;
+  const T_BOTTOMLEFT_SYM = 115;
+  const T_BOTTOMCENTER_SYM = 116;
+  const T_BOTTOMRIGHT_SYM = 117;
+  const T_BOTTOMRIGHTCORNER_SYM = 118;
+  const T_LEFTTOP_SYM = 119;
+  const T_LEFTMIDDLE_SYM = 120;
+  const T_LEFTBOTTOM_SYM = 121;
+  const T_RIGHTTOP_SYM = 122;
+  const T_RIGHTMIDDLE_SYM = 123;
+  const T_RIGHTBOTTOM_SYM = 124;
+  const T_FROM_SYM = 125;
+  const T_TO_SYM = 126;
+  //
+  const T_IMPORTANT_SYM = 200;
+  const T_AND = 404;
+  const T_ONLY = 405;
+  const T_NOT = 406;
+  //
+  const T_DIMENSION = 300;
+  const T_LENGTH = 301;
+  const T_PERCENTAGE = 302;
+  const T_ANGLE = 303;
+  const T_TIME = 304;
+  const T_FREQ = 305;
+  const T_EMS = 306;
+  const T_EXS = 307;
+  const T_RESOLUTION = 308;
+  const T_RATIO = 309;
+  //
+  const T_FUNCTION = 400;
+  const T_URI = 401;
+  const T_UNICODERANGE = 402;
+  const T_NEGATION = 403;
+  // Attributes selectors
+  const T_INCLUDES = 500;
+  const T_DASHMATCH = 501;
+  const T_PREFIXMATCH = 502;
+  const T_SUFFIXMATCH = 503;
+  const T_SUBSTRINGMATCH = 505;
+  //
+  const T_BADSTRING = 600;
+  const T_BADCOMMENT = 601;
+  const T_BADURI = 602;
 
   protected static $regex = array(
     'ws' => '\s',
@@ -132,16 +131,17 @@ class Lexer extends BaseLexer
     'Y' => 'y|\\\\0{0,4}(?>59|79)(?>\r\n|[ \t\r\n\f])?|\\\\y',
     'Z' => 'z|\\\\0{0,4}(?>5a|7a)(?>\r\n|[ \t\r\n\f])?|\\\\z',
   );
-  protected static
-    $regex_cache = array(),
-    $units = array(
-      'em','rem','ex','px','cm','mm','in','pt','pc',
-      'deg','rad','grad','ms','s','Hz','kHz','dpi','dpcm',
-      'vw','vh','vmin'
-    ),
-    $atkeywords = array(
-      'namespace', 'import', 'media', 'page', 'keyframes', 'keyframe'
-    );
+
+  protected static $regex_cache = array();
+
+  protected static $units = array(
+    'em','rem','ex','px','cm','mm','in','pt','pc',
+    'deg','rad','grad','ms','s','Hz','kHz','dpi','dpcm',
+    'vw','vh','vmin'
+  );
+  protected static $atkeywords = array(
+    'namespace', 'import', 'media', 'page', 'keyframes', 'keyframe'
+  );
 
 
   public function __construct(Source\String $source=null)
@@ -644,7 +644,7 @@ class Lexer extends BaseLexer
     }
   }/*}}}*/
 
-  public function handleMultilineString($start_char, $start_str, $line, $position)
+  protected function handleMultilineString($start_char, $start_str, $line, $position)
   {/*{{{*/
     $pattern = '([^\\\\'.$start_char.']*)'.$start_char;
     $start_str = preg_replace('/\\\\$/u', '', $start_str);
@@ -677,7 +677,7 @@ class Lexer extends BaseLexer
     }
   }/*}}}*/
 
-  public function handleNumber()
+  protected function handleNumber()
   {/*{{{*/
     $position = $this->position;
     //if ($matches = $this->match('([0-9]+)/([0-9]+)')) {
@@ -755,7 +755,7 @@ class Lexer extends BaseLexer
     }
   }/*}}}*/
 
-  public function handleHash()
+  protected function handleHash()
   {/*{{{*/
     $position = $this->position;
     //if($matches = $this->match('#('.self::$regex['name'].')')) {
@@ -765,7 +765,7 @@ class Lexer extends BaseLexer
     }
   }/*}}}*/
 
-  public function handleImportant()
+  protected function handleImportant()
   {/*{{{*/
     $pattern = self::getPatternForIdentifier('important');
     $position = $this->position;
@@ -777,7 +777,7 @@ class Lexer extends BaseLexer
     }   
   }/*}}}*/
 
-  public function handleUnicodeRange()
+  protected function handleUnicodeRange()
   {/*{{{*/
     $position = $this->position;
     //$matches = $this->match('U\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)');
@@ -786,7 +786,7 @@ class Lexer extends BaseLexer
     return new Token(self::T_UNICODERANGE, $matches[1], $this->lineno, $position);
   }/*}}}*/
 
-  public function handleNegation()
+  protected function handleNegation()
   {/*{{{*/
     $position = $this->position;
     //$matches = $this->match(self::$regex['negation']);

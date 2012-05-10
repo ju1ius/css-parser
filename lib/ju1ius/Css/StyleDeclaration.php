@@ -1,8 +1,10 @@
 <?php
+
 namespace ju1ius\Css;
 
 /**
  * Represents a Css style declaration
+ * (the part between curly braces in a style rule, media rule, etc...)
  **/
 class StyleDeclaration implements Serializable
 {
@@ -115,8 +117,8 @@ class StyleDeclaration implements Serializable
    *                                  If int, removes the property at given position.
    *                                  If ju1ius\Css\Property, removes the specified property.
    *                                  If string, all matching properties will be removed.
-   * @param bool           $bWildcard If true, all properties starting with the pattern are returned.
-   *                                  If false only properties wich strictly match the pattern.
+   * @param boolean $wildcard If true, all properties starting with the pattern are returned.
+   *                           If false only properties wich strictly match the pattern.
    **/
   public function remove($search, $wildcard=false)
   {
@@ -157,8 +159,8 @@ class StyleDeclaration implements Serializable
    * @param (null|string|ju1ius\Css\Property) $property     Pattern to search for.
    *                                         If null, returns all rules.
    *                                         If ju1ius\Css\Property, the property name is used for searching.
-   * @param bool                  $bWildcard If true, all rules starting with the pattern are returned.
-   *                                         If false only rules wich strictly match the pattern.
+   * @param boolean $wildcard If true, all rules starting with the pattern are returned.
+   *                          If false only rules wich strictly match the pattern.
    *
    * @return array An array of matching properties
    *

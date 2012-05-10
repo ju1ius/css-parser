@@ -3,8 +3,9 @@ namespace ju1ius\Css\Iterator;
 
 use ju1ius\Css;
 use ju1ius\Css\Rule;
+
 /**
- * 
+ * Iterates over all values of a Css object (stylesheet, media rule...)
  */
 class ValueIterator implements \Iterator
 {

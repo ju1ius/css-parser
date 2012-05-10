@@ -12,9 +12,7 @@ use ju1ius\Text\Parser\Exception\ParseException;
  **/
 class Parser extends LLk
 {
-  /**
-   * @var boolean Does the parser uses strict mode
-   **/
+
   protected $strict;
 
   public $errors=array();
@@ -25,6 +23,14 @@ class Parser extends LLk
     parent::__construct($lexer, 2);
   }/*}}}*/
 
+  /**
+   * Toggles strict parsing mode.
+   *
+   * In strict mode, every parsing error triggers an exception.
+   * In non-strict mode, error recovery is performed as stated by the specification.
+   *
+   * @param boolean $strict
+   **/
   public function setStrict($strict=true)
   {/*{{{*/
     $this->strict = (bool)$strict;

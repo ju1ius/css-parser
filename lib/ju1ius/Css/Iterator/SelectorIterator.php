@@ -2,7 +2,7 @@
 namespace ju1ius\Css\Iterator;
 
 /**
- * 
+ * Iterates over all selectors of a Css object (stylesheet, media rule...)
  */
 class SelectorIterator implements \Iterator
 {
