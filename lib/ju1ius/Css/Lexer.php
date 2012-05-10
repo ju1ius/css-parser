@@ -191,12 +191,17 @@ class Lexer extends BaseLexer
       while ($this->lookahead !== null) {
 
         $position = $this->position;
+        $bytepos = $this->bytepos;
 
         switch ($this->lookahead) {
 
+          case '':
+            // EOL
+            break 2;
+
           case '/':
             if($this->peek() === '*') {
-              $this->handleComment();
+              return $this->handleComment();
             } else {
               $this->consumeCharacters();
               return new Token(self::T_SLASH, '/', $this->lineno, $position);
@@ -272,7 +277,7 @@ class Lexer extends BaseLexer
           case '*':
             $next = $this->peek();
             if($next === '=') {
-              $this->consume(2);
+              $this->consumeCharacters(2);
               return new Token(self::T_SUBSTRINGMATCH, '*=', $this->lineno, $position);
             } else {
               $this->consumeCharacters();
@@ -283,7 +288,7 @@ class Lexer extends BaseLexer
           case '|':
             $next = $this->peek();
             if($next === '=') {
-              $this->consume(2);
+              $this->consumeCharacters(2);
               return new Token(self::T_DASHMATCH, '|=', $this->lineno, $position);
             } else {
               $this->consumeCharacters();
@@ -294,7 +299,7 @@ class Lexer extends BaseLexer
           case '$':
             $next = $this->peek();
             if($next === '=') {
-              $this->consume(2);
+              $this->consumeCharacters(2);
               return new Token(self::T_SUFFIXMATCH, '$=', $this->lineno, $position);
             } else {
               $this->consumeCharacters();
@@ -305,7 +310,7 @@ class Lexer extends BaseLexer
           case '^':
             $next = $this->peek();
             if($next === '=') {
-              $this->consume(2);
+              $this->consumeCharacters(2);
               return new Token(self::T_PREFIXMATCH, '^=', $this->lineno, $position);
             } else {
               $this->consumeCharacters();
@@ -356,7 +361,7 @@ class Lexer extends BaseLexer
           case '~':
             $next = $this->peek();
             if($next === '=') {
-              $this->consume(2);
+              $this->consumeCharacters(2);
               return new Token(self::T_INCLUDES, '~=', $this->lineno, $position);
             } else {
               $this->consumeCharacters();
@@ -383,9 +388,10 @@ class Lexer extends BaseLexer
             break;
 
           default:
-
             //if(preg_match('/\G\s+/', $this->text, $matches, 0, $position)) {
-            if($matches = $this->match('\s+', $position)){
+            //if($matches = $this->match('\s+')){
+            if(ctype_space($this->lookahead)) {
+              return $this->handleWhitespace();
               $this->consumeString($matches[0]);
               return new Token(self::T_S, ' ', $this->lineno, $position);
             } else if (ctype_digit($this->lookahead)) {
@@ -394,8 +400,9 @@ class Lexer extends BaseLexer
               return $this->handleIdent();
             } else {
               // Invalid character ?
-              //var_dump($this->lookahead);
-              $this->consumeCharacters();
+              $char = $this->lookahead;
+              $this->consumeString($char);
+              return new Token(self::T_INVALID, $char, $this->lineno, $position);
             }
             break;
         }
@@ -438,6 +445,7 @@ class Lexer extends BaseLexer
         if($this->lineno < $this->numlines-1) {
           $this->nextLine();
           $this->position = 0;
+          $this->bytepos = 0;
         } else {
           return new Token(self::T_BADCOMMENT, $start_str, $line, $position);
         }
@@ -445,7 +453,7 @@ class Lexer extends BaseLexer
         if($submatches = $this->match('[^*]*\*+(?:[^/][^*]*\*+)*/')) {
           // end of comment found
           $start_str .= $submatches[0];
-          $this->consume(strlen($submatches[0]));
+          $this->consumeString($submatches[0]);
           return new Token(self::T_COMMENT, $start_str, $line, $position);
         } else {
           $start_str .= $this->text;
@@ -461,8 +469,10 @@ class Lexer extends BaseLexer
       $position = $this->position;
       $ident = mb_strtolower($this->cleanupIdent($matches[0]), $this->encoding);
       $this->consumeString($matches[0]);
+      // functions
       if($this->lookahead === '(') {
         $this->consumeCharacters();
+        // uris
         if($ident === "url") {
           $this->handleWhitespace();
           $uri;
@@ -508,6 +518,10 @@ class Lexer extends BaseLexer
         }
       }
     }
+    throw new \LogicException(sprintf(
+      'Unmatched ident for lookahead "%s" at position %s with pattern "%s"',
+      $this->lookahead, $this->position, self::$regex['ident']
+    ));
   }/*}}}*/
 
   protected function handleAtKeyword()
@@ -629,6 +643,7 @@ class Lexer extends BaseLexer
       if($this->lineno < $this->numlines-1) {
         $this->nextLine();
         $this->position = 0;
+        $this->bytepos = 0;
       } else {
         return new Token(self::T_BADSTRING, $start_str, $line, $position);
       }

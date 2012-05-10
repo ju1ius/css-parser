@@ -101,68 +101,108 @@ class Parser extends LLk
     $stylesheet = new StyleSheet(null, $this->lexer->getEncoding());
     $rule_list = $stylesheet->getRuleList();
 
-    $charset = $this->_charset();
-    if($charset) $rule_list->append($charset);
-    $this->_ws();
+    try { 
+      $charset = $this->_charset();
+      if($charset) $rule_list->append($charset);
+      $this->_ws();
+    } catch (ParseException $e) {
+      if ($this->strict) throw $e;
+      $this->skipAtRule();
+    }
 
     while ($this->LT()->type === Lexer::T_IMPORT_SYM) {
-      $rule_list->append($this->_import());
-      $this->_ws();
+      try {
+        $rule_list->append($this->_import());
+        $this->_ws();
+      } catch (ParseException $e) {
+        if ($this->strict) throw $e;
+        $this->skipAtRule();
+      }
     }
 
     while ($this->LT()->type === Lexer::T_NAMESPACE_SYM) {
-      $rule_list->append($this->_namespace());
-      $this->_ws();
+      try {
+        $rule_list->append($this->_namespace());
+        $this->_ws();
+      } catch (ParseException $e) {
+        if ($this->strict) throw $e;
+        $this->skipAtRule();
+      }
     }
 
     while ($this->LT()->type !== Lexer::T_EOF) {
       
       switch ($this->LT()->type) {
       
-        case Lexer::T_MEDIA_SYM:
-          $rule_list->append($this->_media());
-          break;
-
-        case Lexer::T_PAGE_SYM:
-          $rule_list->append($this->_page());
-          break;
-
-        case Lexer::T_FONT_FACE_SYM:
-          $rule_list->append($this->_font_face());
-          break;
-
         case Lexer::T_S:
           $this->_ws();
           break;
 
-        //case Lexer::T_RCURLY:
-          //if ($this->strict) $this->_unexpectedToken($this->LT(), array(Lexer::T_IDENT));
-          //var_dump($this->lexer->getLiteral($this->LT()));
-          //$this->consume();
-          //$this->skipRuleset();
-          //break;
+        case Lexer::T_MEDIA_SYM:
+          try {
+            $rule = $this->_media();
+            if($rule) $rule_list->append($rule);
+          } catch (ParseException $e) {
+            if ($this->strict) throw $e;
+            $this->skipRuleset();
+          }
+          break;
+
+        case Lexer::T_PAGE_SYM:
+          try {
+            $rule = $this->_page();
+            if($rule) $rule_list->append($rule);
+          } catch (ParseException $e) {
+            if ($this->strict) throw $e;
+            $this->skipRuleset();
+          }
+          break;
+
+        case Lexer::T_FONT_FACE_SYM:
+          try {
+            $rule = $this->_font_face();
+            if($rule) $rule_list->append($rule);
+          } catch (ParseException $e) {
+            if ($this->strict) throw $e;
+            $this->skipRuleset();
+          }
+          break;
+
+        case Lexer::T_KEYFRAMES_SYM:
+          try {
+            $rule = $this->_keyframes();
+            if($rule) $rule_list->append($rule);
+          } catch (ParseException $e) {
+            if ($this->strict) throw $e;
+            $this->skipRuleset();
+          }
+          break;
 
         case Lexer::T_IDENT:     // type selector
+        case Lexer::T_HASH:      // id
+        case Lexer::T_DOT:       // class
         case Lexer::T_STAR:      // universal
         case Lexer::T_PIPE:      // namespace separator
-        case Lexer::T_DOT:       // class
-        case Lexer::T_HASH:      // id
         case Lexer::T_LBRACK:    // attrib
         case Lexer::T_COLON:     // pseudo
         case Lexer::T_NEGATION:  // negation
-        default:
           $style_rule = $this->_ruleset();
           if ($style_rule) {
             $rule_list->append($style_rule);
           }
           break;
 
-        //default:
-          //if ($this->strict) $this->_unexpectedToken($this->LT(), array(Lexer::T_IDENT));
-          //var_dump($this->lexer->getLiteral($this->LT()));
-          //$this->consume();
-          //$this->skipRuleset();
-          //break;
+        default:
+          if ($this->strict) {
+            $this->_unexpectedToken($this->LT(), array(
+              Lexer::T_MEDIA_SYM, Lexer::T_PAGE_SYM, Lexer::T_FONT_FACE_SYM, Lexer::T_KEYFRAMES_SYM,
+              Lexer::T_IDENT, Lexer::T_STAR, Lexer::T_PIPE, Lexer::T_DOT,
+              Lexer::T_HASH, Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
+              Lexer::T_S
+            ));
+          }
+          $this->skipRuleset();
+          break;
 
       }
 
@@ -668,31 +708,72 @@ class Parser extends LLk
       switch ($this->LT()->type) {
       
         case Lexer::T_PAGE_SYM:
-          $rule_list->append($this->_page());
+          try {
+            $rule_list->append($this->_page());
+          } catch (ParseException $e) {
+            if ($this->strict) throw $e;
+            $this->skipRuleset(true);
+          }
           break;
 
         case Lexer::T_FONT_FACE_SYM:
-          $rule_list->append($this->_font_face());
+          try {
+            $rule_list->append($this->_font_face());
+          } catch (ParseException $e) {
+            if ($this->strict) throw $e;
+            $this->skipRuleset(true);
+          }
           break;
 
         case Lexer::T_KEYFRAMES_SYM:
-          $rule_list->append($this->_keyframes());
+          try {
+            $rule_list->append($this->_keyframes());
+          } catch (ParseException $e) {
+            if ($this->strict) throw $e;
+            $this->skipRuleset(true);
+          }
           break;
 
         case Lexer::T_RCURLY:
           break 2;
 
-        default:
+        case Lexer::T_IDENT:     // type selector
+        case Lexer::T_HASH:      // id
+        case Lexer::T_DOT:       // class
+        case Lexer::T_STAR:      // universal
+        case Lexer::T_PIPE:      // namespace separator
+        case Lexer::T_LBRACK:    // attrib
+        case Lexer::T_COLON:     // pseudo
+        case Lexer::T_NEGATION:  // negation
           $style_rule = $this->_ruleset();
-          if (null === $style_rule) {
-            break 2;
+          if ($style_rule) {
+            $rule_list->append($style_rule);
           }
-          $rule_list->append($style_rule);
           break;
-      
+
+        case Lexer::T_EOF:
+          break 2;
+
+        default:
+          if ($this->strict) {
+            $this->_unexpectedToken($this->LT(), array(
+              Lexer::T_PAGE_SYM, Lexer::T_FONT_FACE_SYM, Lexer::T_KEYFRAMES_SYM,
+              Lexer::T_IDENT, Lexer::T_STAR, Lexer::T_PIPE, Lexer::T_DOT,
+              Lexer::T_HASH, Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
+              Lexer::T_S, Lexer::T_RCURLY
+            ));
+          }
+          $this->skipRuleset(true);
+          break;
       }
     }
     $this->_ws();
+    
+    // Unexpected EOF
+    if(!$this->strict && $this->LT()->type === Lexer::T_EOF) {
+      return new Rule\Media($media_query_list, $rule_list);
+    }
+
     $this->match(Lexer::T_RCURLY);
     return new Rule\Media($media_query_list, $rule_list);
   }/*}}}*/
@@ -1324,13 +1405,6 @@ class Parser extends LLk
 
     if($check_start) {
       $this->match(Lexer::T_LCURLY);
-      //try {
-        //$this->match(Lexer::T_LCURLY);
-      //} catch (UnexpectedTokenException $e) {
-        //if($this->strict) throw $e;
-        //$this->skipRuleset($margins);
-        //return;
-      //}
     }
 
     $this->_ws();
@@ -1342,7 +1416,6 @@ class Parser extends LLk
       } catch (ParseException $e) {
         if($this->strict) throw $e;
         $this->skipDeclaration();
-        $this->_ws();
         continue;
       }
 
@@ -1365,22 +1438,18 @@ class Parser extends LLk
         Lexer::T_LEFTTOP_SYM, Lexer::T_LEFTMIDDLE_SYM, Lexer::T_LEFTBOTTOM_SYM,
         Lexer::T_RIGHTTOP_SYM, Lexer::T_RIGHTMIDDLE_SYM, Lexer::T_RIGHTBOTTOM_SYM
       ))) {
-        $margin_rules->append($this->_margin());
+        try {
+          $margin_rules->append($this->_margin());
+        } catch (ParseException $e) {
+          if ($this->strict) throw $e;
+          $this->skipRuleset(true);
+        }
       } else {
         break;
       }
 
     }
     $this->match(Lexer::T_RCURLY);
-
-    //try {
-      //$this->match(Lexer::T_RCURLY);
-    //} catch (UnexpectedTokenException $e) {
-      //if($this->strict) throw $e;
-      //$this->skipRuleset($margins);
-      //return;
-    //}
-
     $this->_ws();
 
     return $margins
@@ -1494,64 +1563,53 @@ class Parser extends LLk
    * Error recovery methods
    **/
 
-  protected function skipRuleset()
+  protected function skipRuleset($inside_braces=false)
   {/*{{{*/
-
     $trace = array(
       'start' => $this->LT(),
-      'skipped' => array()
+      'end' => null
     );
 
-    $opened_curlies = 0;
-    while(true) {
-      switch ($this->LT()->type) {
-
-      case Lexer::T_LCURLY:
-        $opened_curlies++;
-        $this->consume();
-        break;
-
-      case Lexer::T_RCURLY:
-        if($opened_curlies > 0) $opened_curlies--;
-        $this->consume();
-        if($opened_curlies === 0) break 2;
-        break;
-
-      default:
-        $this->consume();
-        break;
-      }
-      $trace['skipped'][] = $this->LT();
-    }
-    $this->errors[] = $trace;
-  }/*}}}*/
-
-  protected function skipDeclaration()
-  {/*{{{*/
-    // Consume everything while we have opened brackets,
-    // or until we meet a semicolon or closing bracket.
-    $opened_curlies = 0;
     while(true) {
       switch ($this->LT()->type) {
 
         case Lexer::T_LCURLY:
-          $opened_curlies++;
+          $this->consume();
+          $this->skipUntil(Lexer::T_RCURLY);
+          $trace['end'] = $this->LT();
+          $this->consume();
+          break 2;
+
+        case Lexer::T_LPAREN:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RPAREN);
+          $this->consume();
+          break;
+
+        case Lexer::T_LBRACK:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RBRACK);
+          $this->consume();
+          break;
+
+        case Lexer::T_FUNCTION:
+        case Lexer::T_BADURI:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RPAREN);
           $this->consume();
           break;
 
         case Lexer::T_RCURLY:
-          if(!$opened_curlies) return;
-          $opened_curlies--;
+          if($inside_braces) {
+            $trace['end'] = $this->LT();
+            break 2;
+          }
           $this->consume();
-          break;
-
-        case Lexer::T_SEMICOLON:
-          $this->consume();
-          if(!$opened_curlies) return;
           break;
 
         case Lexer::T_EOF:
-          return;
+          $trace['end'] = $this->LT();
+          break 2;
 
         default:
           $this->consume();
@@ -1559,6 +1617,200 @@ class Parser extends LLk
 
       }
     }
+    $this->_ws();
+    $this->errors[] = $trace;
   }/*}}}*/
 
+  protected function skipDeclaration($check_braces=true)
+  {/*{{{*/
+    $trace = array(
+      'start' => $this->LT(),
+      'end' => null
+    );
+    while(true) {
+
+      switch ($this->LT()->type) {
+
+        case Lexer::T_LCURLY:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RCURLY);
+          $this->consume();
+          break;
+
+        case Lexer::T_LPAREN:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RPAREN);
+          $this->consume();
+          break;
+
+        case Lexer::T_LBRACK:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RBRACK);
+          $this->consume();
+          break;
+
+        case Lexer::T_FUNCTION:
+        case Lexer::T_BADURI:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RPAREN);
+          $this->consume();
+          break;
+
+        case Lexer::T_RCURLY:
+          if($check_braces) {
+            $trace['end'] = $this->LT();
+            //$this->consume();
+            break 2;
+          }
+          $this->consume();
+          break;
+
+        case Lexer::T_SEMICOLON:
+          $trace['end'] = $this->LT();
+          $this->consume();
+          break 2;
+
+        case Lexer::T_EOF:
+          $trace['end'] = $this->LT();
+          break 2;
+
+        default:
+          $this->consume();
+          break;
+
+      }
+    }
+    $this->_ws();
+    $this->errors[] = $trace;
+  }/*}}}*/
+
+  protected function skipAtRule($inside_block=false)
+  {/*{{{*/
+    $trace = array(
+      'start' => $this->LT(),
+      'end' => null
+    );
+    while(true) {
+
+      switch ($this->LT()->type) {
+
+        case Lexer::T_LCURLY:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RCURLY);
+          $this->consume();
+          break;
+
+        case Lexer::T_LPAREN:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RPAREN);
+          $this->consume();
+          break;
+
+        case Lexer::T_LBRACK:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RBRACK);
+          $this->consume();
+          break;
+
+        case Lexer::T_FUNCTION:
+        case Lexer::T_BADURI:
+          $this->consume();
+          $this->skipUntil(Lexer::T_RPAREN);
+          $this->consume();
+          break;
+
+        case Lexer::T_RCURLY:
+          if($inside_block) {
+            $trace['end'] = $this->LT();
+            break 2;
+          }
+          $this->consume();
+          break;
+
+        case Lexer::T_SEMICOLON:
+          $trace['end'] = $this->LT();
+          $this->consume();
+          break 2;
+
+        case Lexer::T_EOF:
+          $trace['end'] = $this->LT();
+          break 2;
+
+        default:
+          $this->consume();
+          break;
+
+      }
+    }
+    $this->_ws();
+    $this->errors[] = $trace;
+  }/*}}}*/
+
+  protected function skipUntil($type)
+  {/*{{{*/
+    $stack = new \SplStack();
+    $stack->push($type);
+
+    while (true) {
+
+      $t = $this->LT()->type;
+
+      if ($t === Lexer::T_EOF) {
+        break;
+      } else if ($t === Lexer::T_FUNCTION || $t === Lexer::T_BADURI) {
+        $stack->push(Lexer::T_RPAREN);
+      }
+
+      if ($t === $stack->top()) {
+        $stack->pop();
+        if ($stack->isEmpty()) break;
+
+      // Just handle out-of-memory by parsing incorrectly.
+      // It's highly unlikely we're dealing with a legitimate stylesheet anyway.
+      } else if ($t === Lexer::T_LCURLY) {
+        $stack->push(Lexer::T_RCURLY);
+      } else if ($t === Lexer::T_LBRACK) {
+        $stack->push(Lexer::T_RBRACK);
+      } else if ($t === Lexer::T_LPAREN) {
+        $stack->push(Lexer::T_RPAREN);
+      }
+
+      $this->consume();
+
+    }
+  }/*}}}*/
+
+  protected function skipUntilOneOf(array $types)
+  {/*{{{*/
+    while (true) {
+
+      $t = $this->LT()->type;
+
+      if ($t === Lexer::T_EOF) break;
+      if (in_array($t, $types)) break;
+
+      switch ($t) {
+
+        case Lexer::T_LCURLY:
+          $this->skipUntil(Lexer::T_RCURLY);
+          break;
+
+        case Lexer::T_LPAREN:
+          $this->skipUntil(Lexer::T_RPAREN);
+          break;
+
+        case Lexer::T_LBRACK:
+          $this->skipUntil(Lexer::T_RBRACK);
+          break;
+
+        case Lexer::T_FUNCTION:
+        case Lexer::T_BADURI:
+          $this->skipUntil(Lexer::T_RPAREN);
+          break;
+
+      }
+      $this->consume();
+
+    }
+  }/*}}}*/
 }

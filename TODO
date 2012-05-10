@@ -4,6 +4,10 @@ New Lexer:
   MULTIBYTE mb_ereg + mb_strlen -> DONE
   ASCII pcre + strlen -> TBD
   write tests
+  performance:
+    write a css splitter that adds newlines after each {, }, and ;
+    that are not part of a string (and not followed by a newline ?).
+    This involves a proper lexer.
 
 New Parser:
   !!! Error handling in non-strict mode
