@@ -16,7 +16,7 @@ class PageTest extends CssParser_TestCase
     return array(
       array(
         <<<EOS
-@\\0070 age MyPage:first {
+@page MyPage:first {
   size: auto;
   margin: 2cm;
   @top-left-corner{

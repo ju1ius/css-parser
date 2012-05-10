@@ -6,6 +6,7 @@ use ju1ius\Text\Source;
 
 use ju1ius\Css\StyleSheet;
 use ju1ius\Css\StyleSheetLoader;
+use ju1ius\Css\Lexer;
 use ju1ius\Css\Parser;
 use ju1ius\Css\Rule;
 use ju1ius\Css\Util;
@@ -36,7 +37,8 @@ class ImportResolver
       $imported_files[] = $this->stylesheet->getHref();
     }
     $encoding = $this->stylesheet->getCharset();
-    $parser = new Parser();
+    $lexer = new Lexer();
+    $parser = new Parser($lexer);
     $url_resolver = new UrlResolver($this->stylesheet, $this->base_url);
     $url_resolver->resolve();
 
@@ -56,7 +58,8 @@ class ImportResolver
           continue;
         }
         // Do the parsing
-        $stylesheet = $parser->parse($source);
+        $lexer->setSource($source);
+        $stylesheet = $parser->parseStyleSheet();
 
         // Remove charset rules
         $rule_list = $stylesheet->getRuleList();

@@ -10,7 +10,8 @@ input, button, textarea {
     margin: 0;
     padding: 0;
 }
-button {
+button::after {
+  content: "e";
 }
 html, body {
     height: 100%;
@@ -9702,7 +9703,7 @@ ol.list-tip, ul.list-tip {
 }
 ol.list-tip:before, ul.list-tip:before {
     color: #FFFFFF;
-    content: "▲";
+    content: "@";
     display: block;
     font-size: 14px;
     margin: -13px auto 0;

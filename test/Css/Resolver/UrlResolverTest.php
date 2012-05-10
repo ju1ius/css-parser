@@ -11,8 +11,7 @@ class UrlResolverTest extends CssParser_TestCase
    **/
   public function testResolveUrls($input, $base_url, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $resolver = new UrlResolver($styleSheet, $base_url);
     $resolver->resolve();
     $this->assertEquals($expected, $styleSheet->getCssText());

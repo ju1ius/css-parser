@@ -8,8 +8,7 @@ class CreateShorthandsTest extends CssParser_TestCase
    **/
   public function testCreateBackgroundShorthand($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->createBackgroundShorthand();
@@ -69,8 +68,7 @@ class CreateShorthandsTest extends CssParser_TestCase
    **/
   public function testCreateDimensionsShorthand($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->createDimensionsShorthands();
@@ -111,8 +109,7 @@ class CreateShorthandsTest extends CssParser_TestCase
    **/
   public function testCreateFontShorthand($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->createFontShorthand();
@@ -156,8 +153,7 @@ class CreateShorthandsTest extends CssParser_TestCase
    **/
   public function testCreateBorderShorthand($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $rule = $styleSheet->getFirstRule();
     $styleDeclaration = $rule->getStyleDeclaration();
     $styleDeclaration->createBorderShorthand();

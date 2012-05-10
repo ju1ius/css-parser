@@ -8,7 +8,7 @@ class ErrorHandlingTest extends CssParser_TestCase
    **/
   public function testMalformedProperty($input, $expected)
   {
-    $this->css_parser->getOptions()->set('strict_parsing', false);
+    $this->css_parser->setStrict(false);
     $stylesheet = $this->parseStyleSheet($input);
     $this->assertEquals($expected, $stylesheet->getCssText());
     //foreach($this->css_parser->getErrors() as $error) {
@@ -68,13 +68,13 @@ class ErrorHandlingTest extends CssParser_TestCase
         'p{ color: rgb(0,128,0); }'
       ),
       array(
-        'p { color:red;   color{;color:maroon}; color:green }',
+        'p { color:red; color{;color:maroon}; color:green }',
         'p{ color: rgb(255,0,0); color: rgb(0,128,0); }'
       ),
-      array(
-        'p{ foo:bar; foo{;bar("baz)};"; baz:boo }',
-        'p{ foo: bar; baz: boo; }'
-      ),
+      //array(
+        //'p{ foo:bar; foo{;bar("baz)};"; baz:boo }',
+        //'p{ foo: bar; baz: boo; }'
+      //),
       // FIXME: this shouldn't pass as calc accepts mathematical expressions
       array(
         'p{ foo:bar; bar:calc(2 + 5 * (3-6)); baz:boo }',
@@ -88,7 +88,7 @@ class ErrorHandlingTest extends CssParser_TestCase
    **/
   public function testMalformedStatement($input, $expected)
   {
-    $this->css_parser->getOptions()->set('strict_parsing', false);
+    $this->css_parser->setStrict(false);
     $stylesheet = $this->parseStyleSheet($input);
     $this->assertEquals($expected, $stylesheet->getCssText());
     //foreach($this->css_parser->getErrors() as $error) {

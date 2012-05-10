@@ -11,8 +11,7 @@ class ValueIteratorTest extends CssParser_TestCase
    **/
   public function testGetAllValues($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $it = new ValueIterator($styleSheet);
     $this->assertEquals($expected, $it->getValues());
   }
@@ -47,8 +46,7 @@ p{ content: attr("data-content"); }',
    **/
   public function testGetAllUrls($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $it = new ValueIterator($styleSheet, 'ju1ius\Css\Value\Url');
     $this->assertEquals($expected, $it->getValues());
   }
@@ -72,8 +70,7 @@ p{ color: white; background: url(foobar.png) }',
    **/
   public function testFuncArgs($input, $expected)
   {
-    $parser = $this->createParser();
-    $styleSheet = $parser->parseStyleSheet($input);
+    $styleSheet = $this->parseStyleSheet($input);
     $it = new ValueIterator($styleSheet, null, true);
     $this->assertEquals($expected, $it->getValues());
   }

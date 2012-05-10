@@ -2,6 +2,7 @@
 namespace ju1ius\Css\Exception;
 
 use ju1ius\Text\Source;
+use ju1ius\Text\Lexer\Token;
 
 /**
  * @package Css
@@ -11,18 +12,20 @@ class ParseException extends \Exception
 {
   protected
     $source,
+    $token,
     $source_file,
     $source_position,
     $source_line,
     $source_column;
 
-  public function __construct($msg, Source\String $source, $position)
+  public function __construct($msg, Source\String $source, Token $token)
   {
     $this->source = $source;
+    $this->token = $token;
     $this->source_file = $source instanceof Source\File ? $source->getUrl() : 'internal_string';
-    $this->source_position = $position;
-    $this->source_line = $source->getLine($position);
-    $this->source_column = $source->getColumn($position, $this->source_line);
+    $this->source_position = $token->getPosition();
+    $this->source_line = $source->getLine($this->source_position);
+    $this->source_column = $source->getColumn($this->source_position, $this->source_line);
     $msg = sprintf(
       "%s in %s on line %s, column %s",
       $msg, $this->source_file, $this->source_line, $this->source_column
@@ -33,6 +36,10 @@ class ParseException extends \Exception
   public function getSource()
   {
     return $this->source;  
+  }
+  public function getToken()
+  {
+    return $this->token;
   }
   public function getSourceFile()
   {

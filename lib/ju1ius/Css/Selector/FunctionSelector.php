@@ -44,12 +44,9 @@ class FunctionSelector extends Selector
 
   public function getSpecificity()
   {
-    if($this->name === 'not')
-    {
+    if($this->name === 'not') {
       $spec = $this->expr->getSpecificity();
-    }
-    else
-    {
+    } else {
       $spec = $this->type === ':' ? 10 : 1;
     }
     return $this->selector->getSpecificity() + $spec;
@@ -247,8 +244,7 @@ class FunctionSelector extends Selector
    */
   protected function parseSeries($s)
   {
-    if ($s instanceof ElementSelector)
-    {
+    if ($s instanceof ElementSelector) {
       $s = $s->getCssText();
     }
 

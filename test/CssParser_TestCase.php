@@ -1,17 +1,9 @@
 <?php
 
-require_once __DIR__.'/../lib/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
-$loader->registerNamespace(
-  'ju1ius',
-  array(
-    __DIR__.'/../lib',
-    __DIR__.'/../lib/vendor/ju1ius/libphp/lib',
-  )
-);
-$loader->register();
+require_once __DIR__.'/autoload.php';
 
 use ju1ius\Css\StyleSheetLoader;
+use ju1ius\Css\Lexer;
 use ju1ius\Css\Parser;
 
 class CssParser_TestCase extends PHPUnit_Framework_TestCase
@@ -22,9 +14,8 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
 
   public function __construct($name=null, $data=array(), $dataName='')
   {
-    $this->css_parser = new Parser(array(
-      'strict_parsing' => true
-    ));
+    $this->lexer = new Lexer();
+    $this->css_parser = new Parser($this->lexer);
     parent::__construct($name, $data, $dataName);
   }
 
@@ -43,13 +34,16 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
   public function parseFile($file)
   {
     $source = StyleSheetLoader::load(__DIR__.'/files/'.$file);
-    return $this->css_parser->parse($source);
+    $this->lexer->setSource($source);
+    return $this->css_parser->parseStyleSheet();
+    //return $this->css_parser->parse($source);
   }
 
   public function parseStyleSheet($str)
   {
     $source = StyleSheetLoader::loadString($str);
-    return $this->css_parser->parseStyleSheet($source);
+    $this->lexer->setSource($source);
+    return $this->css_parser->parseStyleSheet();
   }
 
   public function loadString($str)
