@@ -68,7 +68,7 @@ class Parser extends LLk
   public function parseStyleDeclaration()
   {/*{{{*/
     $this->reset();
-    return $this->_parseStyleDeclaration();
+    return $this->_parseDeclarations(false, false);
   }/*}}}*/
 
   /**

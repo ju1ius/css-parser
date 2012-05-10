@@ -12,7 +12,7 @@ use ju1ius\Css\Exception\StyleSheetNotFoundException;
  *
  * Relies on the CURL extension to load network urls
  **/
-class StyleSheetLoader
+class Loader
 {
 
   /**

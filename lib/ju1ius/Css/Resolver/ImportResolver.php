@@ -4,10 +4,10 @@ namespace ju1ius\Css\Resolver;
 use ju1ius\Uri;
 use ju1ius\Text\Source;
 
-use ju1ius\Css\StyleSheet;
-use ju1ius\Css\StyleSheetLoader;
+use ju1ius\Css\Loader;
 use ju1ius\Css\Lexer;
 use ju1ius\Css\Parser;
+use ju1ius\Css\StyleSheet;
 use ju1ius\Css\Rule;
 use ju1ius\Css\Util;
 
@@ -52,7 +52,7 @@ class ImportResolver
           $imported_files[] = $url;
         }
         try {
-          $source = StyleSheetLoader::load($url, $encoding);
+          $source = Loader::load($url, $encoding);
         } catch(StyleSheetNotFoundException $e) {
           // FIXME: should we remove the rule ?
           continue;

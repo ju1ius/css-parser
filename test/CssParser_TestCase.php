@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/autoload.php';
 
-use ju1ius\Css\StyleSheetLoader;
+use ju1ius\Css\Loader;
 use ju1ius\Css\Lexer;
 use ju1ius\Css\Parser;
 
@@ -33,7 +33,7 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
 
   public function parseFile($file)
   {
-    $source = StyleSheetLoader::load(__DIR__.'/files/'.$file);
+    $source = Loader::load(__DIR__.'/files/'.$file);
     $this->lexer->setSource($source);
     return $this->css_parser->parseStyleSheet();
     //return $this->css_parser->parse($source);
@@ -41,13 +41,13 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
 
   public function parseStyleSheet($str)
   {
-    $source = StyleSheetLoader::loadString($str);
+    $source = Loader::loadString($str);
     $this->lexer->setSource($source);
     return $this->css_parser->parseStyleSheet();
   }
 
   public function loadString($str)
   {
-    return StyleSheetLoader::loadString($str);
+    return Loader::loadString($str);
   }
 }
