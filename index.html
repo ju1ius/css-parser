@@ -63,8 +63,46 @@ $loader->registerNamespace('ju1ius', array(
 $loader->register();</code></pre>
 
 <h3>Basic Usage</h3>
-<p>Coming soon...</p>
 
+<p>
+  Loading of stylesheets is done via the <code>ju1ius\Css\Loader</code> class.
+  All methods return an instance of ju1ius\Text\Source\String or ju1ius\Text\Source\File,
+  which can be fed to the lexer.
+</p>
+<pre><code>// returns ju1ius\Text\Source\File
+$source = ju1ius\Css\Loader::loadFile('path/to/file.css');
+// returns ju1ius\Text\Source\File
+$source = ju1ius\Css\Loader::loadUrl('http://url.to/file.css');
+// returns ju1ius\Text\Source\File
+$source = ju1ius\Css\Loader::load($url_or_path);
+// returns ju1ius\Text\Source\String
+$source = ju1ius\Css\Loader::loadString($css_string);</code></pre>
+
+<p>
+  The loaded source can now be passed to the lexer via it's constructor, or it's setSource method.
+</p>
+<pre><code>$lexer = new ju1ius\Css\Lexer($source);
+$lexer->setSource($source);</code></pre>
+
+<p>
+  We can now instantiate our parser:
+</p>
+<pre><code>$parser = new ju1ius\Css\Parser($lexer);
+$stylesheet = $parser->parseStyleSheet();</code></pre>
+
+<p>Here's a complete example:</p>
+<pre><code>use ju1ius\Css;
+
+$lexer = new Css\Lexer();
+$parser = new Css\Parser($lexer);
+// The following line turns on error recovery mode, conforming to the w3c specification.
+$parser->setStrict(false);
+
+$lexer->setSource(Css\Loader::load($url_or_path));
+$stylesheet = $parser->parseStyleSheet();</code></pre>
+
+<h3>Advanced Usage</h3>
+<p>Coming soon...</p>
 
 <h3>Documentation and Support</h3>
 <ul>
@@ -82,7 +120,6 @@ $loader->register();</code></pre>
 <h3>Authors and Contributors</h3>
 <ul>
   <li><a href="https://github.com/ju1ius" class="user-mention">@ju1ius</a></li>
-  <li><a href="https://github.com/sabberworm" class="user-mention">@sabberworm</a></li>
   <li><a href="https://github.com/alexdunae" class="user-mention">@alexdunae</a></li>
   <li><a href="https://github.com/fabpot" class="user-mention">@fabpot</a></li>
 </ul>
