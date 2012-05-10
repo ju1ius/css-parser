@@ -10,8 +10,6 @@ use ju1ius\Css\Util\Object;
 /**
  * Represents a Css style rule
  *
- * @package Css
- * @subpackage Rule
  **/
 class StyleRule extends Rule
 {

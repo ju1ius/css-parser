@@ -2,10 +2,6 @@
 namespace ju1ius\Css\Value;
 use ju1ius\Css\Value;
 
-/**
- * @package Css
- * @subpackage Value
- **/
 abstract class PrimitiveValue extends Value
 {
   const

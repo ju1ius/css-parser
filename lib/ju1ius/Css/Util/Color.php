@@ -1,10 +1,6 @@
 <?php
 namespace ju1ius\Css\Util;
 
-/**
- * @package Css
- * @subpackage Util
- **/
 class Color
 {
   static $X11_COLORS_MAP = array(

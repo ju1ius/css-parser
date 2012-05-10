@@ -8,8 +8,6 @@ use ju1ius\Css\StyleDeclaration;
 
 /**
  * Represents an @page rule
- * @package Css
- * @subpackage Rule
  **/
 class Page extends Rule
 {

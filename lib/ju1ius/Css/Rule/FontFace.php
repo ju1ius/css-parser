@@ -6,8 +6,6 @@ use ju1ius\Css\StyleDeclaration;
 
 /**
  * Represents an @font-face rule
- * @package Css
- * @subpackage Rule
  **/
 class FontFace extends Rule
 {

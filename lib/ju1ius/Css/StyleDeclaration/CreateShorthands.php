@@ -12,8 +12,6 @@ use ju1ius\Css\Value;
 /**
  * Utility class to create shorthand properties from a StyleDeclaration
  *
- * @package Css
- * @subpackage StyleDeclaration
  **/
 class CreateShorthands
 {

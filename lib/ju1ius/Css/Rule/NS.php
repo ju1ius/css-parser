@@ -8,8 +8,6 @@ use ju1ius\Css\Value\Url;
  * Represents an @namespace rule
  * It's called NS because namespace is a PHP reserved word
  *
- * @package Css
- * @subpackage Rule
  **/
 class NS extends Rule
 {

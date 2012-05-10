@@ -1,10 +1,6 @@
 <?php
 namespace ju1ius\Css\Value;
 
-/**
- * @package ju1ius\Css
- * @subpackage Value
- **/
 class Percentage extends Dimension
 {
   public function __construct($value)

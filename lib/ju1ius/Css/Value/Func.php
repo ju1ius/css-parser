@@ -4,8 +4,6 @@ use ju1ius\Css\ValueList;
 
 /**
  * Represents a Css Function, like linear-gradient(), attr(), counter()...
- * @package Css
- * @subpackage Value
  **/
 class Func extends ValueList
 {

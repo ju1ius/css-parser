@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * Represents a Css property
- * @package Css
  **/
 class Property implements Serializable
 {

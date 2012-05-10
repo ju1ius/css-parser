@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * Manages a list of ju1ius\Css\Rule objects
- * @package Css
  **/
 class RuleList extends CssList implements Serializable
 {

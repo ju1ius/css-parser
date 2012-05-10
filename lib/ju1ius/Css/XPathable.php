@@ -1,10 +1,6 @@
 <?php
 namespace ju1ius\Css;
 
-/**
- * @package Css
- * @author ju1ius [http://github.com/ju1ius]
- **/
 interface XPathable
 {
   /**

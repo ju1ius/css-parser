@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * Represents a Css StyleSheet
- * @package Css
  **/
 class StyleSheet implements Serializable
 {

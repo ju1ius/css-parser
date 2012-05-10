@@ -7,8 +7,6 @@ use ju1ius\Css\Value\String;
 
 /**
  * Represents an @keyframes rule
- * @package Css
- * @subpackage Rule
  **/
 class Keyframes extends Rule
 {

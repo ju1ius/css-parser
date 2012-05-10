@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * Represents a Css rule
- * @package Css
  **/
 abstract class Rule implements Serializable
 {

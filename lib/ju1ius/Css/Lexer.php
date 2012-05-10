@@ -1,5 +1,4 @@
 <?php
-/* vim: set fdm=marker : */
 
 namespace ju1ius\Css;
 

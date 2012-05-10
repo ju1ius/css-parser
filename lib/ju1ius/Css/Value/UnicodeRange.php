@@ -1,10 +1,6 @@
 <?php
 namespace ju1ius\Css\Value;
 
-/**
- * @package Css
- * @subpackage Value
- **/
 class UnicodeRange extends PrimitiveValue
 {
   private $value;

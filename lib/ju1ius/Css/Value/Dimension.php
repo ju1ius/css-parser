@@ -4,8 +4,6 @@ namespace ju1ius\Css\Value;
 /**
  * Represents a dimension (an object that has a value and a unit)
  *
- * @package Css
- * @subpackage Value
  **/
 class Dimension extends PrimitiveValue
 {

@@ -9,8 +9,6 @@ namespace ju1ius\Css\XPath;
  * This component is a port of the Python lxml library,
  * which is copyright Infrae and distributed under the BSD license.
  *
- * @package ju1ius\Css
- * @subpackage XPath
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class OrExpression extends Expression

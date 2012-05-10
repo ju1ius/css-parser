@@ -7,8 +7,6 @@ use ju1ius\Css\Value\Percentage;
 
 /**
  * Represents an @keyframe rule
- * @package Css
- * @subpackage Rule
  **/
 class Keyframe extends Rule
 {

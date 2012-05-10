@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * Stores list(s) of values for a ju1ius\Css\Property
- * @package Css
  **/
 class PropertyValueList extends ValueList
 {

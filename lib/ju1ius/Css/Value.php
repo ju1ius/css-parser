@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * Base class for Css values
- * @package Css
  **/
 abstract class Value implements Serializable
 {

@@ -8,8 +8,6 @@ use ju1ius\Css\StyleSheet;
 
 /**
  * Represents an @import rule
- * @package Css
- * @subpackage Rule
  **/
 class Import extends Rule
 {

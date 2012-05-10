@@ -7,8 +7,6 @@ use ju1ius\Css\Serializable;
 /**
  * Represents a Css MediaQuery expression, like (max-width: 300px) or (device-ratio: 16/9)
  *
- * @package Css
- * @subpackage MediaQuery
  */
 class Expression implements Serializable
 {

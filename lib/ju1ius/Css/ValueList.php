@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * Manages a list of Css values
- * @package Css
  **/
 class ValueList extends CssList implements Serializable
 {

@@ -3,10 +3,6 @@ namespace ju1ius\Css\Value;
 
 use ju1ius\Css\Util;
 
-/**
- * @package Css
- * @subpackage Value
- **/
 class Color extends PrimitiveValue
 {
   private

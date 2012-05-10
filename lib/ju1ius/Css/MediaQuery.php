@@ -7,7 +7,6 @@ use ju1ius\Css\MediaQuery;
 /**
  * Represents a single Css MediaQuery
  *
- * @package Css
  **/
 class MediaQuery implements Serializable
 {

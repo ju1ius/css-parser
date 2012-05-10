@@ -3,7 +3,6 @@ namespace ju1ius\Css;
 
 /**
  * General purpose list class
- * @package Css
  **/
 abstract class CssList implements \ArrayAccess, \Countable, \Iterator
 {

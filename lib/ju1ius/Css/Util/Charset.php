@@ -3,10 +3,6 @@ namespace ju1ius\Css\Util;
 
 use ju1ius\Text\Encoding;
 
-/**
- * @package Css
- * @subpackage Util
- **/
 class Charset extends Encoding
 {
   private static $CHARSET_DETECTION_MAP = array(

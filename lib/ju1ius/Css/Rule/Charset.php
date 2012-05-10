@@ -6,8 +6,6 @@ use ju1ius\Css\Value\String;
 
 /**
  * Represents an @charset rule
- * @package Css
- * @subpackage Rule
  **/
 class Charset extends Rule
 {

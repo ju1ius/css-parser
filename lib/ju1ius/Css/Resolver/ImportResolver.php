@@ -17,8 +17,6 @@ use ju1ius\Css\Exception\StyleSheetNotFoundException;
  * Recursively resolve @import rules
  * and merge their associated stylesheets into the main StyleSheet
  *
- * @package Css
- * @subpackage Resolver
  **/
 class ImportResolver
 {

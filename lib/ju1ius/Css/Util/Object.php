@@ -3,10 +3,6 @@ namespace ju1ius\Css\Util;
 
 use ju1ius\Css\Serializable;
 
-/**
- * @package Css
- * @subpackage Util
- **/
 class Object
 {
   public static function getClone($value)

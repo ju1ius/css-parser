@@ -1,10 +1,6 @@
 <?php
 namespace ju1ius\Css\Value;
 
-/**
- * @package Css
- * @subpackage Value
- **/
 class Url extends PrimitiveValue
 {
   private $url;

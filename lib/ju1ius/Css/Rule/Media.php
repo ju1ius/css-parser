@@ -7,8 +7,6 @@ use ju1ius\Css\MediaQueryList;
 
 /**
  * Represents an @media rule
- * @package Css
- * @subpackage Rule
  **/
 class Media extends Rule
 {

@@ -7,8 +7,6 @@ use ju1ius\Css\StyleDeclaration;
 /**
  * Represents an unknown @ rule (unused)
  *
- * @package Css
- * @subpackage Rule
  **/
 class AtRule extends Rule
 {

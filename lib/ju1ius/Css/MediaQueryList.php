@@ -5,7 +5,6 @@ use ju1ius\Css\Value\String;
 
 /**
  * Represents a list of media queries
- * @package Css
  **/
 class MediaQueryList extends ValueList
 {

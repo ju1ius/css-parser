@@ -5,7 +5,6 @@ use ju1ius\Css\XPath;
 
 /**
  * Manages a list of Css selectors
- * @package Css
  **/
 class SelectorList extends CssList implements Serializable, XPathable
 {
