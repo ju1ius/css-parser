@@ -81,18 +81,25 @@ class FunctionSelector extends Selector
   }
 
   /**
-   * undocumented function
+   * an+b means every-a, plus b, e.g., 2n+1 means odd
+   * 0n+b means b
+   * n+0 means a=1, i.e., all elements
+   * an means every a elements, i.e., 2n means even
+   * -n means -1n
+   * -1n+6 means elements 6 and previous
    *
    * @param XPath\Expression $xpath
    * @param mixed     $expr
-   * @param Boolean   $last
-   * @param Boolean   $addNameTest
+   * @param boolean   $last
+   * @param boolean   $addNameTest
+   *
    * @return XPath\Expression
    */
   protected function _xpath_nth_child(XPath\Expression $xpath, $expr, $last = false, $addNameTest = true)
   {
     list($a, $b) = $this->parseSeries($expr);
-    if (!$a && !$b && !$last) {
+    
+    if (!$a && !$b /*&& !$last*/) {
       // a=0 means nothing is returned...
       $xpath->addCondition('false() and position() = 0');
 
@@ -102,54 +109,32 @@ class FunctionSelector extends Selector
     if ($addNameTest) {
       $xpath->addNameTest();
     }
-
     $xpath->addStarPrefix();
-    if ($a == 0) {
+
+    if ($a === 0) {
       if ($last) {
-        $b = sprintf('last() - %s', $b);
+        $b = sprintf('last() - %s', $b - 1);
       }
       $xpath->addCondition(sprintf('position() = %s', $b));
-
       return $xpath;
     }
 
-    if ($last) {
-      // FIXME: I'm not sure if this is right
-      $a = -$a;
-      $b = -$b;
+    $position = $last ? "(last() - position() + 1)" : "position()";
+    $compare = ($a < 0) ? "<=" : ">=";
+
+    if ($b === 0) {
+      $xpath->addCondition(sprintf('(%s mod %s) = 0', $position, $a));
+      return $xpath;
     }
 
-    if ($b > 0) {
-      $bNeg = -$b;
-    } else {
-      $bNeg = sprintf('+%s', -$b);
-    }
-
-    if ($a != 1) {
-      $expr = array(sprintf('(position() %s) mod %s = 0', $bNeg, $a));
-    } else {
-      $expr = array();
-    }
-
-    if ($b >= 0) {
-      $expr[] = sprintf('position() >= %s', $b);
-    } elseif ($b < 0 && $last) {
-      $expr[] = sprintf('position() < (last() %s)', $b);
-    }
-    $expr = implode($expr, ' and ');
-
-    if ($expr) {
-      $xpath->addCondition($expr);
-    }
+    $xpath->addCondition(sprintf(
+      "(%s %s %s) and (((%s - %s) mod %s) = 0)",
+      $position, $compare, $b,
+      $position, $b, abs($a)
+    ));
 
     return $xpath;
-        /* FIXME: handle an+b, odd, even
-             an+b means every-a, plus b, e.g., 2n+1 means odd
-             0n+b means b
-             n+0 means a=1, i.e., all elements
-             an means every a elements, i.e., 2n means even
-             -n means -1n
-        -1n+6 means elements 6 and previous */
+
   }
 
   /**
@@ -159,7 +144,7 @@ class FunctionSelector extends Selector
    * @param XPath\Expression $expr
    * @return XPath\Expression
    */
-  protected function _xpath_nth_last_child(XPath\Expression $xpath, XPath\Expression $expr)
+  protected function _xpath_nth_last_child(XPath\Expression $xpath, $expr)
   {
     return $this->_xpath_nth_child($xpath, $expr, true);
   }
@@ -168,10 +153,10 @@ class FunctionSelector extends Selector
    * undocumented function
    *
    * @param XPath\Expression $xpath
-   * @param XPath\Expression $expr
+   * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_nth_of_type(XPath\Expression $xpath, XPath\Expression $expr)
+  protected function _xpath_nth_of_type(XPath\Expression $xpath, $expr)
   {
     if ($xpath->getElement() == '*') {
       throw new ParseException('*:nth-of-type() is not implemented');
@@ -184,10 +169,10 @@ class FunctionSelector extends Selector
    * undocumented function
    *
    * @param XPath\Expression $xpath
-   * @param XPath\Expression $expr
+   * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_nth_last_of_type(XPath\Expression $xpath, XPath\Expression $expr)
+  protected function _xpath_nth_last_of_type(XPath\Expression $xpath, $expr)
   {
     return $this->_xpath_nth_child($xpath, $expr, true, false);
   }
@@ -196,10 +181,10 @@ class FunctionSelector extends Selector
    * undocumented function
    *
    * @param XPath\Expression $xpath
-   * @param XPath\Expression $expr
+   * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_contains(XPath\Expression $xpath, XPath\Expression $expr)
+  protected function _xpath_contains(XPath\Expression $xpath, $expr)
   {
     // text content, minus tags, must contain expr
     if ($expr instanceof ElementSelector)
@@ -220,12 +205,16 @@ class FunctionSelector extends Selector
    * undocumented function
    *
    * @param XPath\Expression $xpath
-   * @param XPath\Expression $expr
+   * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_not(XPath\Expression $xpath, XPath\Expression $expr)
+  protected function _xpath_not(XPath\Expression $xpath, $expr)
   {
     // everything for which not expr applies
+    if ($expr instanceof ElementSelector) {
+      $xpath->addCondition(sprintf("not(name() = '%s')", $expr->toXpath()));
+      return $xpath;
+    }
     $expr = $expr->toXPath();
     $cond = $expr->getCondition();
     // FIXME: should I do something about element_path?
@@ -251,11 +240,11 @@ class FunctionSelector extends Selector
       return array(0, 0);
     }
 
-    if (is_string($s)) {
+    if (ctype_digit($s)) {
       // Happens when you just get a number
       return array(0, $s);
     }
-
+ 
     if ('odd' == $s) {
       return array(2, 1);
     }
@@ -270,14 +259,13 @@ class FunctionSelector extends Selector
 
     if (false === strpos($s, 'n')) {
       // Just a b
-
       return array(0, intval((string) $s));
     }
 
     list($a, $b) = explode('n', $s);
     if (!$a) {
       $a = 1;
-    } elseif ('-' == $a || '+' == $a) {
+    } elseif ('-' === $a || '+' === $a) {
       $a = intval($a.'1');
     } else {
       $a = intval($a);

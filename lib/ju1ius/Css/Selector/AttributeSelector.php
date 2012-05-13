@@ -3,7 +3,7 @@ namespace ju1ius\Css\Selector;
 
 use ju1ius\Css\Exception\ParseException;
 use ju1ius\Css\Selector;
-use Css\XPath;
+use ju1ius\Css\XPath;
 
 /**
  * Represents an attribute selector
@@ -50,58 +50,85 @@ class AttributeSelector extends Selector
    */
   public function toXPath()
   {
-    $path = $this->selector->toXPath();
+    $xpath = $this->selector->toXPath();
     $attrib = $this->xpathAttrib();
     $value = $this->value;
-    if($this->operator == 'exists')
-    {
-      $path->addCondition($attrib);
+
+    switch ($this->operator) {
+
+      case 'exists':
+        $xpath->addCondition($attrib);
+        break;
+      
+      case '=':
+        $xpath->addCondition(sprintf(
+          '%s = %s',
+          $attrib, XPath\Expression::xpathLiteral($value)
+        ));
+        break;
+
+      case '!=':
+        // FIXME: this seems like a weird hack...
+        if ($value) {
+          $xpath->addCondition(sprintf(
+            'not(%s) or %s != %s',
+            $attrib, $attrib, XPath\Expression::xpathLiteral($value)
+          ));
+        } else {
+          $xpath->addCondition(sprintf(
+            '%s != %s',
+            $attrib, XPath\Expression::xpathLiteral($value)
+          ));
+        }
+        break;
+
+      case '^=':
+        $xpath->addCondition(sprintf(
+          'starts-with(%s, %s)',
+          $attrib, XPath\Expression::xpathLiteral($value)
+        ));
+        break;
+
+      case '*=':
+        // FIXME: case sensitive?
+        $xpath->addCondition(sprintf(
+          'contains(%s, %s)',
+          $attrib, XPath\Expression::xpathLiteral($value)
+        ));
+        break;
+
+      case '$=':
+        // Oddly there is a starts-with in XPath 1.0, but not ends-with
+        $value = XPath\Expression::xpathLiteral($value);
+        $xpath->addCondition(sprintf(
+          'substring(%s, string-length(%s) - string-length(%s) + 1, string-length(%s)) = %s',
+          $attrib, $attrib, $value, $value, $value
+        ));
+        break;
+
+      case '|=':
+        // Weird, but true...
+        $value = XPath\Expression::xpathLiteral($value);
+        $xpath->addCondition(sprintf(
+          '%s = %s or starts-with(%s, concat(%s, "-"))',
+          $attrib, $value, $attrib, $value
+        ));
+        break;
+
+      case '~=':
+        $xpath->addCondition(sprintf(
+          "contains(concat(' ', normalize-space(%s), ' '), concat(' ', %s, ' '))",
+          $attrib, XPath\Expression::xpathLiteral($value)
+        ));
+        break;
+
+      default:
+        throw new ParseException(sprintf('Unknown operator: %s', $this->operator));
+        break;
+
     }
-    elseif($this->operator == '=')
-    {
-      $path->addCondition(sprintf('%s = %s', $attrib, XPath\Expression::xpathLiteral($value)));
-    }
-    elseif($this->operator == '!=')
-    {
-      // FIXME: this seems like a weird hack...
-      if ($value)
-      {
-        $path->addCondition(sprintf('not(%s) or %s != %s', $attrib, $attrib, XPath\Expression::xpathLiteral($value)));
-      }
-      else
-      {
-        $path->addCondition(sprintf('%s != %s', $attrib, XPath\Expression::xpathLiteral($value)));
-      }
-      // path.addCondition('%s != %s' % (attrib, xpathLiteral(value)))
-    }
-    elseif ($this->operator == '~=')
-    {
-      $path->addCondition(sprintf("contains(concat(' ', normalize-space(%s), ' '), %s)", $attrib, XPath\Expression::xpathLiteral(' '.$value.' ')));
-    }
-    elseif ($this->operator == '|=')
-    {
-      // Weird, but true...
-      $path->addCondition(sprintf('%s = %s or starts-with(%s, %s)', $attrib, XPath\Expression::xpathLiteral($value), $attrib, XPath\Expression::xpathLiteral($value.'-')));
-    }
-    elseif ($this->operator == '^=')
-    {
-      $path->addCondition(sprintf('starts-with(%s, %s)', $attrib, XPath\Expression::xpathLiteral($value)));
-    }
-    elseif ($this->operator == '$=')
-    {
-      // Oddly there is a starts-with in XPath 1.0, but not ends-with
-      $path->addCondition(sprintf('substring(%s, string-length(%s)-%s) = %s', $attrib, $attrib, strlen($value) - 1, XPath\Expression::xpathLiteral($value)));
-    }
-    elseif ($this->operator == '*=')
-    {
-      // FIXME: case sensitive?
-      $path->addCondition(sprintf('contains(%s, %s)', $attrib, XPath\Expression::xpathLiteral($value)));
-    }
-    else
-    {
-      throw new ParseException(sprintf('Unknown operator: %s', $this->operator));
-    }
-    return $path;
+
+    return $xpath;
   }
 
   /**

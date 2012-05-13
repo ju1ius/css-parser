@@ -1,6 +1,8 @@
 <?php
 namespace ju1ius\Css\Iterator;
 
+use ju1ius\Css;
+
 /**
  * Iterates over all selectors of a Css object (stylesheet, media rule...)
  */
@@ -9,6 +11,10 @@ class SelectorIterator implements \Iterator
   private
     $selectors = array();
   
+  /**
+   * @param Serializable $object A css serializable object
+   * @param string|null  $type_filter A fully qualified classname to filter the selectors
+   **/
   public function __construct($object, $type_filter=null)
   {
     $this->object = $object;
@@ -24,16 +30,16 @@ class SelectorIterator implements \Iterator
     return $this->object;
   }
 
-  public static function getSelectorsForObject($object, $type_filter=null)
+  private static function getSelectorsForObject($object, $type_filter=null)
   {
     $selectors = array();
 
-    if(method_exists($obj, 'getSelectorList')) {
-      foreach($obj->getSelectorList()->getItems() as $selector) {
+    if(method_exists($object, 'getSelectorList')) {
+      foreach($object->getSelectorList()->getItems() as $selector) {
         $selectors[] = $selector;
       }
-    } else if(method_exists($obj, 'getRuleList')) {
-      foreach($obj->getRuleList()->getRules() as $rule) {
+    } else if(method_exists($object, 'getRuleList')) {
+      foreach($object->getRuleList()->getRules() as $rule) {
         $selectors = array_merge(
           $selectors,
           self::getSelectorsForObject($rule, $type)
@@ -41,10 +47,10 @@ class SelectorIterator implements \Iterator
       }
     }
 
-    if($type) {
-      return array_filter($selectors, function($item) use($type)
+    if($type_filter) {
+      return array_filter($selectors, function($item) use($type_filter)
       {
-        return $item instanceof $type;
+        return $item instanceof $type_filter;
       });
     }
     return $selectors;

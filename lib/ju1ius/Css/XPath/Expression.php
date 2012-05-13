@@ -1,8 +1,8 @@
 <?php
 namespace ju1ius\Css\XPath;
 
+use ju1ius\Css\Value;
 use ju1ius\Css\Selector\ElementSelector;
-
 /**
  * Represents an XPath expression.
  *
@@ -215,44 +215,43 @@ class Expression
   /**
    * Gets an XPath literal for $s.
    *
-   * @param  mixed $s Can either be a Node\ElementNode or a string.
+   * @param  mixed $s A Selector\ElementSelector or a string.
    *
    * @return string
    */
   static public function xpathLiteral($s)
   {
-    if ($s instanceof ElementSelector)
-    {
+    if ($s instanceof ElementSelector) {
       // This is probably a symbol that looks like an expression...
       $s = $s->getCssText();
-    }
-    else
-    {
+    } else if ($s instanceof Value\String) {
+      $s = $s->getString();
+    } else {
       $s = (string) $s;
     }
-    if (false === strpos($s, "'"))
-    {
+    //return "'".Value\String::escapeQuotes($s, false)."'";
+
+    if (false === strpos($s, "'")) {
       return sprintf("'%s'", $s);
     }
-    if (false === strpos($s, '"'))
-    {
+    if (false === strpos($s, '"')) {
       return sprintf('"%s"', $s);
     }
+
     $string = $s;
     $parts = array();
-    while (true)
-    {
-      if (false !== $pos = strpos($string, "'"))
-      {
+
+    while (true) {
+
+      if (false !== $pos = strpos($string, "'")) {
         $parts[] = sprintf("'%s'", substr($string, 0, $pos));
         $parts[] = "\"'\"";
         $string = substr($string, $pos + 1);
-      }
-      else
-      {
+      } else {
         $parts[] = "'$string'";
         break;
       }
+
     }
 
     return sprintf('concat(%s)', implode($parts, ', '));

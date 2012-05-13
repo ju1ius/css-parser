@@ -160,7 +160,7 @@ class Lexer extends BaseLexer
     self::$regex['badstring']  = '(?:'.self::$regex['badstring1'].')|(?:'.self::$regex['badstring2'].')';
     self::$regex['url']        = '((?:[^()\v])|\\\\(?:[()\v])|(?:'.self::$regex['nonascii'].')|(?:'.self::$regex['escape'].'))*';
     self::$regex['important']  = self::getPatternForIdentifier('important');
-    self::$regex['negation']   = '(?:'.self::getPatternForIdentifier('not').'\()';
+    self::$regex['negation']   = '(?::'.self::getPatternForIdentifier('not').'\()';
 
     $units = array();
     foreach(self::$units as $unit) {
@@ -792,7 +792,7 @@ class Lexer extends BaseLexer
     //$matches = $this->match(self::$regex['negation']);
     preg_match('/\G'.self::$regex['negation'].'/iu', $this->text, $matches, 0, $this->bytepos);
     $this->consumeString($matches[0]);
-    return new Token(self::T_NEGATION, $matches[0], $this->lineno, $position);
+    return new Token(self::T_NEGATION, ':not(', $this->lineno, $position);
   }/*}}}*/
 
   protected static function getPatternForIdentifier($ident)

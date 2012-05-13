@@ -25,14 +25,28 @@ class String extends PrimitiveValue
     return '"' . $this->string . '"';
   }
 
-  public static function escapeQuotes($string)
+  public static function escapeQuotes($string, $double_quotes=true)
   {
+    $quotechar = $double_quotes ? '"' : "'";
+    $alt_quote = $double_quotes ? "'" : '"';
     // Replaces an even number of backslashes followed by a double-quote
     // by this number of backslashes and an escaped double-quote
-    $string = preg_replace('@(?<!\\\\)((?:\\\\\\\\)*)"@u', '$1\"', $string);
+    $string = preg_replace(
+      '@(?<!\\\\)((?:\\\\\\\\)*)'.$quotechar.'@u',
+      '$1\\'.$quotechar,
+      //'@(?<!\\\\)((?:\\\\\\\\)*)"@u',
+      //'$1\"',
+      $string
+    );
     // Replaces an odd number of backslashes followed by a single-quote
     // by this number of backslashes minus one and an escaped single-quote
-    $string = preg_replace("@(?<!\\\\)\\\\((?:\\\\\\\\)*)'@u", '$1\'', $string);
+    $string = preg_replace(
+      "@(?<!\\\\)\\\\((?:\\\\\\\\)*)".$alt_quote."@u",
+      '$1'.$alt_quote,
+      //"@(?<!\\\\)\\\\((?:\\\\\\\\)*)'@u",
+      //'$1\'',
+      $string
+    );
     return $string;
   }
 }

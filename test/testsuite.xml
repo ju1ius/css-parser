@@ -16,6 +16,9 @@
       <file>Css/Resolver/UrlResolverTest.php</file>
       <file>Css/Resolver/ImportResolverTest.php</file>
       <file>Css/Exception/ErrorHandlingTest.php</file>
+      <file>Css/Selector/CombinedSelectorTest.php</file>
+      <file>Css/Selector/FunctionSelectorTest.php</file>
+      <file>Css/SelectorMatchingTest.php</file>
     </testsuite>
     <testsuite name="CSSParser Bugs">
       <directory>bugs</directory>

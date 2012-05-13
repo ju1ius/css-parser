@@ -45,6 +45,12 @@ class CssParser_TestCase extends PHPUnit_Framework_TestCase
     $this->lexer->setSource($source);
     return $this->css_parser->parseStyleSheet();
   }
+  public function parseSelector($str)
+  {
+    $source = Loader::loadString($str);
+    $this->lexer->setSource($source);
+    return $this->css_parser->parseSelector();
+  }
 
   public function loadString($str)
   {

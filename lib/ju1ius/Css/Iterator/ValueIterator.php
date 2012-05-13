@@ -27,7 +27,7 @@ class ValueIterator implements \Iterator
     return $this->object;
   }
 
-  public static function getValuesForObject($obj, $type=null, $returnFuncArgs=false)
+  private static function getValuesForObject($obj, $type=null, $returnFuncArgs=false)
   {
     $values = array();
     if($obj instanceof Css\Value\Func) {

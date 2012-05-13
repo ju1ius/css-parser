@@ -30,6 +30,15 @@ class ElementSelector extends Selector
     $this->element = $element;
   }
 
+  public function getNamespace()
+  {
+    return $this->namespace;  
+  }
+  public function getElement()
+  {
+    return $this->element;  
+  }
+
   public function getSpecificity()
   {
     return $this->element === '*' ? 0 : 1;
@@ -49,12 +58,9 @@ class ElementSelector extends Selector
    */
   public function toXPath()
   {
-    if($this->namespace == '*')
-    {
+    if($this->namespace === '*') {
       $el = strtolower($this->element);
-    }
-    else
-    {
+    } else {
       // FIXME: Should we lowercase here?
       $el = sprintf('%s:%s', $this->namespace, $this->element);
     }

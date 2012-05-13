@@ -1013,6 +1013,7 @@ class Parser extends LLk
 
         case Lexer::T_COMMA:
         case Lexer::T_LCURLY:
+        case Lexer::T_EOF:
           break 2;
 
         default:
@@ -1064,9 +1065,16 @@ class Parser extends LLk
           $selector = $this->_pseudo($selector);
           break;
 
+        // Combinators
         case Lexer::T_S:
+        case Lexer::T_PLUS:
+        case Lexer::T_GREATER:
+        case Lexer::T_TILDE:
+        // Separator
         case Lexer::T_COMMA:
+        // End of selector list
         case Lexer::T_LCURLY:
+        case Lexer::T_EOF:
           break 2;
 
         default:
@@ -1103,11 +1111,16 @@ class Parser extends LLk
       case Lexer::T_S:
         $this->_ws();
         $next = $this->LT()->type;
-        if($next === Lexer::T_COMMA || 
-           $next === Lexer::T_LCURLY ||
-           $next === Lexer::T_EOF
+        if($next === Lexer::T_COMMA
+          || $next === Lexer::T_LCURLY
+          || $next === Lexer::T_EOF
         ) {
           return null;
+        } else if ($next === Lexer::T_PLUS
+          || $next === Lexer::T_GREATER
+          || $next === Lexer::T_TILDE
+        ) {
+          return $this->_combinator();
         }
         return ' ';
 
@@ -1168,7 +1181,7 @@ class Parser extends LLk
     }
     return $element;
   }/*}}}*/
-  /*
+  /**
    * namespace_prefix
    *   : [ IDENT | '*' ]? '|'
    *   ;
@@ -1370,8 +1383,14 @@ class Parser extends LLk
         $selector = $this->_pseudo($selector);
         break;
 
+      case Lexer::T_RPAREN:
+        break;
+
       default:
-        throw new UnexpectedTokenException($this->current);
+        $this->_unexpectedToken($this->LT(), array(
+          Lexer::T_HASH, Lexer::T_DOT, Lexer::T_LBRACK, Lexer::T_COLON,
+          Lexer::T_RPAREN
+        ));
         break;
     
     }

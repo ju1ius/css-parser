@@ -104,7 +104,8 @@ class PseudoSelector extends Selector
   protected function xpath_root($xpath)
   {
     // if this element is the root element
-    throw new ParseException();
+    $xpath->addCondition("not(parent::*)");
+    return $xpath;
   }
 
   /**

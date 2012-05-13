@@ -75,7 +75,7 @@ class CombinedSelector extends Selector
   protected function _xpath_descendant($xpath, $sub)
   {
     // when sub is a descendant in any way of xpath
-    $xpath->join('/descendant::', $sub->toXPath());
+    $xpath->join('//', $sub->toXPath());
 
     return $xpath;
   }
@@ -103,9 +103,8 @@ class CombinedSelector extends Selector
   protected function _xpath_direct_adjacent($xpath, $sub)
   {
     // when sub immediately follows xpath
-    $xpath->join('/following-sibling::', $sub->toXPath());
+    $xpath->join('/following-sibling::*[1]/self::', $sub->toXPath());
     $xpath->addNameTest();
-    $xpath->addCondition('position() = 1');
 
     return $xpath;
   }
