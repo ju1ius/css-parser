@@ -9,7 +9,7 @@ use ju1ius\Css;
 $timer = new Benchmark_Timer();
 $timer->start();
 
-$source = Css\StyleSheetLoader::load(__DIR__.'/../files/full/02.css');
+$source = Css\Loader::load(__DIR__.'/../files/full/02.css');
 $timer->setMarker(sprintf("Source init: %s", $source->getEncoding()));
 
 $lexer = new Css\Lexer($source);

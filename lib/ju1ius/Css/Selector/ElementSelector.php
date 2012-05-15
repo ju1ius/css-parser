@@ -46,8 +46,7 @@ class ElementSelector extends Selector
 
   public function getCssText($options=array())
   {
-    if($this->namespace === '*')
-    {
+    if($this->namespace === '*') {
       return $this->element === '*' ? '' : $this->element;
     }
     return sprintf('%s|%s', $this->namespace, $this->element);

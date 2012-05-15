@@ -17,7 +17,7 @@ use ju1ius\Css\XPath;
  **/
 class FunctionSelector extends Selector
 {
-  static protected $unsupported = array('target', 'lang', 'enabled', 'disabled');
+  static protected $unsupported = array('lang');
 
   protected $selector;
   protected $type;
@@ -70,7 +70,7 @@ class FunctionSelector extends Selector
         sprintf('The pseudo-class %s is not supported', $this->name)
       );
     }
-    $method = '_xpath_'.str_replace('-', '_', $this->name);
+    $method = 'xpath_'.str_replace('-', '_', $this->name);
     if (!method_exists($this, $method))
     {
       throw new UnsupportedSelectorException(
@@ -78,6 +78,16 @@ class FunctionSelector extends Selector
       );
     }
     return $this->$method($selPath, $this->expr);
+  }
+
+  protected function xpath_lang($xpath, $expr)
+  {
+    $lang = strtolower($expr);
+    # XPath 1.0 has no lower-case function...
+    $xpath->addCondition(sprintf(
+      "ancestor-or-self::*[@lang][1][starts-with(concat(translate(@lang, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'-'), %s)]",
+      XPath\Expression::xpathLiteral($expr)
+    ));
   }
 
   /**
@@ -95,7 +105,7 @@ class FunctionSelector extends Selector
    *
    * @return XPath\Expression
    */
-  protected function _xpath_nth_child(XPath\Expression $xpath, $expr, $last = false, $addNameTest = true)
+  protected function xpath_nth_child(XPath\Expression $xpath, $expr, $last = false, $addNameTest = true)
   {
     list($a, $b) = $this->parseSeries($expr);
     
@@ -106,10 +116,10 @@ class FunctionSelector extends Selector
       return $xpath;
     }
 
-    if ($addNameTest) {
-      $xpath->addNameTest();
-    }
-    $xpath->addStarPrefix();
+    //if ($addNameTest) {
+      //$xpath->addNameTest();
+      //$xpath->addStarPrefix();
+    //}
 
     if ($a === 0) {
       if ($last) {
@@ -144,9 +154,9 @@ class FunctionSelector extends Selector
    * @param XPath\Expression $expr
    * @return XPath\Expression
    */
-  protected function _xpath_nth_last_child(XPath\Expression $xpath, $expr)
+  protected function xpath_nth_last_child(XPath\Expression $xpath, $expr)
   {
-    return $this->_xpath_nth_child($xpath, $expr, true);
+    return $this->xpath_nth_child($xpath, $expr, true);
   }
 
   /**
@@ -156,13 +166,13 @@ class FunctionSelector extends Selector
    * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_nth_of_type(XPath\Expression $xpath, $expr)
+  protected function xpath_nth_of_type(XPath\Expression $xpath, $expr)
   {
     if ($xpath->getElement() == '*') {
       throw new ParseException('*:nth-of-type() is not implemented');
     }
 
-    return $this->_xpath_nth_child($xpath, $expr, false, false);
+    return $this->xpath_nth_child($xpath, $expr, false, false);
   }
 
   /**
@@ -172,9 +182,9 @@ class FunctionSelector extends Selector
    * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_nth_last_of_type(XPath\Expression $xpath, $expr)
+  protected function xpath_nth_last_of_type(XPath\Expression $xpath, $expr)
   {
-    return $this->_xpath_nth_child($xpath, $expr, true, false);
+    return $this->xpath_nth_child($xpath, $expr, true, false);
   }
 
   /**
@@ -184,19 +194,16 @@ class FunctionSelector extends Selector
    * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_contains(XPath\Expression $xpath, $expr)
+  protected function xpath_contains(XPath\Expression $xpath, $expr)
   {
     // text content, minus tags, must contain expr
-    if ($expr instanceof ElementSelector)
-    {
+    if ($expr instanceof ElementSelector) {
       $expr = $expr->getCssText();
     }
 
     // FIXME: lower-case is only available with XPath 2
     //$xpath->addCondition(sprintf('contains(lower-case(string(.)), %s)', XPath\Expression::xpathLiteral(strtolower($expr))));
     $xpath->addCondition(sprintf('contains(string(.), %s)', XPath\Expression::xpathLiteral($expr)));
-
-    // FIXME: Currently case insensitive matching doesn't seem to be happening
 
     return $xpath;
   }
@@ -208,7 +215,7 @@ class FunctionSelector extends Selector
    * @param mixed $expr
    * @return XPath\Expression
    */
-  protected function _xpath_not(XPath\Expression $xpath, $expr)
+  protected function xpath_not(XPath\Expression $xpath, $expr)
   {
     // everything for which not expr applies
     if ($expr instanceof ElementSelector) {
@@ -217,8 +224,12 @@ class FunctionSelector extends Selector
     }
     $expr = $expr->toXPath();
     $cond = $expr->getCondition();
-    // FIXME: should I do something about element_path?
-    $xpath->addCondition(sprintf('not(%s)', $cond));
+    if ($cond) {
+      // FIXME: should I do something about element_path?
+      $xpath->addCondition(sprintf('not(%s)', $cond));
+    } else {
+      $xpath->addCondition('0');
+    }
 
     return $xpath;
   }
@@ -231,11 +242,10 @@ class FunctionSelector extends Selector
    */
   protected function parseSeries($s)
   {
-    if ($s instanceof ElementSelector) {
-      $s = $s->getCssText();
-    }
+    // cast to string as $s could be an instance of ElementSelector
+    $s = (string) $s;
 
-    if (!$s || '*' == $s) {
+    if (!$s || '*' === $s) {
       // Happens when there's nothing, which the Css parser thinks of as *
       return array(0, 0);
     }
@@ -245,15 +255,15 @@ class FunctionSelector extends Selector
       return array(0, $s);
     }
  
-    if ('odd' == $s) {
+    if ('odd' === $s) {
       return array(2, 1);
     }
 
-    if ('even' == $s) {
+    if ('even' === $s) {
       return array(2, 0);
     }
 
-    if ('n' == $s) {
+    if ('n' === $s) {
       return array(1, 0);
     }
 
@@ -263,6 +273,7 @@ class FunctionSelector extends Selector
     }
 
     list($a, $b) = explode('n', $s);
+
     if (!$a) {
       $a = 1;
     } elseif ('-' === $a || '+' === $a) {
@@ -273,7 +284,7 @@ class FunctionSelector extends Selector
 
     if (!$b) {
       $b = 0;
-    } elseif ('-' == $b || '+' == $b) {
+    } elseif ('-' === $b || '+' === $b) {
       $b = intval($b.'1');
     } else {
       $b = intval($b);

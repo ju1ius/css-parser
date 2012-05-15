@@ -95,19 +95,17 @@ class Expression
   public function __toString()
   {
     $path = '';
-    if (null !== $this->prefix)
-    {
+    if (null !== $this->prefix) {
       $path .= $this->prefix;
     }
-    if (null !== $this->path)
-    {
+    if (null !== $this->path) {
       $path .= $this->path;
     }
     $path .= $this->element;
-    if ($this->condition)
-    {
+    if ($this->condition) {
       $path .= sprintf('[%s]', $this->condition);
     }
+
     return $path;
   }
 
@@ -119,12 +117,9 @@ class Expression
    */
   public function addCondition($condition)
   {
-    if ($this->condition)
-    {
+    if ($this->condition) {
       $this->condition = sprintf('%s and (%s)', $this->condition, $condition);
-    }
-    else
-    {
+    } else {
       $this->condition = $condition;
     }
   }
@@ -137,12 +132,9 @@ class Expression
    */
   public function addPrefix($prefix)
   {
-    if ($this->prefix)
-    {
+    if ($this->prefix) {
       $this->prefix = $prefix.$this->prefix;
-    }
-    else
-    {
+    } else {
       $this->prefix = $prefix;
     }
   }
@@ -154,8 +146,7 @@ class Expression
    */
   public function addNameTest()
   {
-    if ($this->element == '*')
-    {
+    if ($this->element == '*') {
       // We weren't doing a test anyway
       return;
     }
@@ -174,12 +165,9 @@ class Expression
       Adds a /* prefix if there is no prefix.  This is when you need
       to keep context's constrained to a single parent.
     */
-    if ($this->path)
-    {
+    if ($this->path) {
       $this->path .= '*/';
-    }
-    else
-    {
+    } else {
       $this->path = '*/';
     }
     $this->starPrefix = true;
@@ -202,8 +190,7 @@ class Expression
 
     /* We don't need a star prefix if we are joining to this other
       prefix; so we'll get rid of it */
-    if ($other->hasStarPrefix() && '*/' == $path)
-    {
+    if ($other->hasStarPrefix() && '*/' == $path) {
       $path = '';
     }
     $this->prefix = $prefix;

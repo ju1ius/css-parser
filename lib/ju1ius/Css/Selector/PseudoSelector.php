@@ -19,8 +19,8 @@ class PseudoSelector extends Selector
 {
   static protected $unsupported = array(
     'indeterminate', 'first-line', 'first-letter',
-    'selection', 'before', 'after', 'link', 'visited',
-    'active', 'focus', 'hover',
+    'selection', 'before', 'after',
+    'visited', 'active', 'focus', 'hover', 'target'
   );
 
   protected $element;
@@ -38,7 +38,7 @@ class PseudoSelector extends Selector
   public function __construct($element, $type, $ident)
   {
     $this->element = $element;
-    if (!in_array($type, array(':', '::')))
+    if (':' !== $type && '::' !== $type)
     {
       throw new ParseException(sprintf(
         'The PseudoSelector type can only be : or :: (%s given).', $type
@@ -66,10 +66,11 @@ class PseudoSelector extends Selector
    */
   public function toXPath()
   {
-    $elXpath = $this->element->toXPath();
+    $xpath = $this->element->toXPath();
 
     if (in_array($this->ident, self::$unsupported))
     {
+      return $this->xpath_never_matches($xpath);
       throw new UnsupportedSelectorException(sprintf(
         'The pseudo-class %s is unsupported', $this->ident
       ));
@@ -81,19 +82,112 @@ class PseudoSelector extends Selector
         sprintf('The pseudo-class %s is unknown', $this->ident)
       );
     }
-    return $this->$method($elXpath);
+    return $this->$method($xpath);
   }
 
   /**
-   *
    * @param XPath\Expression $xpath The XPath expression
+   *
    * @return XPath\Expression The modified XPath expression
    */
   protected function xpath_checked(XPath\Expression $xpath)
   {
     // FIXME: is this really all the elements?
-    $xpath->addCondition("(@selected or @checked) and (name(.) = 'input' or name(.) = 'option')");
+    $xpath->addCondition(<<<EOS
+(@selected and name(.) = 'option')
+or (
+  @checked
+  and (name(.) = 'input' or name(.) = 'command')
+  and (@type = 'checkbox' or @type = 'radio')
+)
+EOS
+    );
+
     return $xpath;
+  }
+
+  protected function xpath_link(XPath\Expression $xpath)
+  {
+    $xpath->addCondition(
+      "@href and (name(.) = 'a' or name(.) = 'link' or name(.) = 'area')"
+    );
+
+    return $xpath;
+  }
+
+  protected function xpath_disabled(XPath\Expression $xpath)
+  {
+    //$xpath->addCondition("@disabled or ancestor::fieldset[@disabled]");
+    $xpath->addCondition(<<<EOS
+(
+  @disabled and (
+    (name(.) = 'input' and (@type != 'hidden' or not(@type))) or
+    name(.) = 'button' or
+    name(.) = 'select' or
+    name(.) = 'textarea' or
+    name(.) = 'command' or
+    name(.) = 'fieldset' or
+    name(.) = 'optgroup' or
+    name(.) = 'option'
+  )
+) or (
+  (
+    (name(.) = 'input' and (@type != 'hidden' or not(@type))) or
+    name(.) = 'button' or
+    name(.) = 'select' or
+    name(.) = 'textarea'
+  )
+  and ancestor::fieldset[@disabled]
+)
+EOS
+    );
+    
+    return $xpath;
+  }
+
+  protected function xpath_enabled(XPath\Expression $xpath)
+  {
+    //$xpath->addCondition("not(@disabled) and not(ancestor::fieldset[@disabled] or ancestor::optgroup[@disabled])");
+    $xpath->addCondition(<<<EOS
+(
+  @href and (
+    name(.) = 'a' or
+    name(.) = 'link' or
+    name(.) = 'area'
+  )
+) or (
+  (
+    name(.) = 'command' or
+    name(.) = 'fieldset' or
+    name(.) = 'optgroup'
+  )
+  and not(@disabled)
+) or (
+  (
+    (name(.) = 'input' and (@type != 'hidden' or not(@type))) or
+    name(.) = 'button' or
+    name(.) = 'select' or
+    name(.) = 'textarea' or
+    name(.) = 'keygen'
+  )
+  and not (@disabled or ancestor::fieldset[@disabled])
+) or (
+  name(.) = 'option' and not(
+    @disabled or ancestor::optgroup[@disabled]
+  )
+)
+EOS
+    );
+
+    return $xpath;
+    /**
+     * FIXME: ... or "li elements that are children of menu elements,
+     * and that have a child element that defines a command, if the first
+     * such element's Disabled State facet is false (not disabled)".
+     * FIXME: after ancestor::fieldset[@disabled], add "and is not a
+     * descendant of that fieldset element's first legend element child,
+     * if any."
+     **/
   }
 
   /**
@@ -116,8 +210,8 @@ class PseudoSelector extends Selector
    */
   protected function xpath_first_child($xpath)
   {
-    $xpath->addStarPrefix();
-    $xpath->addNameTest();
+    //$xpath->addStarPrefix();
+    //$xpath->addNameTest();
     $xpath->addCondition('position() = 1');
 
     return $xpath;
@@ -131,8 +225,8 @@ class PseudoSelector extends Selector
    */
   protected function xpath_last_child($xpath)
   {
-    $xpath->addStarPrefix();
-    $xpath->addNameTest();
+    //$xpath->addStarPrefix();
+    //$xpath->addNameTest();
     $xpath->addCondition('position() = last()');
 
     return $xpath;
@@ -146,11 +240,10 @@ class PseudoSelector extends Selector
    */
   protected function xpath_first_of_type($xpath)
   {
-    if ($xpath->getElement() == '*')
-    {
+    if ($xpath->getElement() == '*') {
       throw new UnsupportedSelectorException('*:first-of-type is not implemented');
     }
-    $xpath->addStarPrefix();
+    //$xpath->addStarPrefix();
     $xpath->addCondition('position() = 1');
     return $xpath;
   }
@@ -164,11 +257,10 @@ class PseudoSelector extends Selector
    */
   protected function xpath_last_of_type($xpath)
   {
-    if ($xpath->getElement() == '*')
-    {
+    if ($xpath->getElement() == '*') {
       throw new UnsupportedSelectorException('*:last-of-type is not implemented');
     }
-    $xpath->addStarPrefix();
+    //$xpath->addStarPrefix();
     $xpath->addCondition('position() = last()');
     return $xpath;
   }
@@ -181,9 +273,10 @@ class PseudoSelector extends Selector
    */
   protected function xpath_only_child($xpath)
   {
-    $xpath->addNameTest();
-    $xpath->addStarPrefix();
+    //$xpath->addNameTest();
+    //$xpath->addStarPrefix();
     $xpath->addCondition('last() = 1');
+
     return $xpath;
   }
 
@@ -196,11 +289,13 @@ class PseudoSelector extends Selector
    */
   protected function xpath_only_of_type($xpath)
   {
-    if ($xpath->getElement() == '*')
-    {
+    if ($xpath->getElement() == '*') {
+      //$xpath->addStarPrefix();
+      //$xpath->addCondition("count(../child::*[name(current()) = name(*)]) = 1");
       throw new UnsupportedSelectorException('*:only-of-type is not implemented');
+    } else {
+      $xpath->addCondition('last() = 1');
     }
-    $xpath->addCondition('last() = 1');
 
     return $xpath;
   }
@@ -214,6 +309,13 @@ class PseudoSelector extends Selector
   protected function xpath_empty($xpath)
   {
     $xpath->addCondition('not(*) and not(normalize-space())');
+
+    return $xpath;
+  }
+
+  protected function xpath_never_matches($xpath)
+  {
+    $xpath->addCondition('0');
 
     return $xpath;
   }

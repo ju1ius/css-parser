@@ -56,11 +56,10 @@ class CombinedSelector extends Selector
    */
   public function toXPath()
   {
-    if (!isset(self::$methodMapping[$this->combinator]))
-    {
+    if (!isset(self::$methodMapping[$this->combinator])) {
       throw new ParseException(sprintf('Unknown combinator: %s', $this->combinator));
     }
-    $method = '_xpath_'.self::$methodMapping[$this->combinator];
+    $method = 'xpath_'.self::$methodMapping[$this->combinator];
     $path = $this->selector->toXPath();
 
     return $this->$method($path, $this->subselector);
@@ -72,7 +71,7 @@ class CombinedSelector extends Selector
    * @param XPath\Expression $xpath The XPath expression for this object
    * @param Selector $sub The Selector object to add
    */
-  protected function _xpath_descendant($xpath, $sub)
+  protected function xpath_descendant($xpath, $sub)
   {
     // when sub is a descendant in any way of xpath
     $xpath->join('//', $sub->toXPath());
@@ -86,7 +85,7 @@ class CombinedSelector extends Selector
    * @param XPath\Expression $xpath The parent XPath expression
    * @param Selector $sub The Selector object to add
    */
-  protected function _xpath_child($xpath, $sub)
+  protected function xpath_child($xpath, $sub)
   {
     // when sub is an immediate child of xpath
     $xpath->join('/', $sub->toXPath());
@@ -100,11 +99,11 @@ class CombinedSelector extends Selector
    * @param XPath\Expression $xpath The parent XPath expression
    * @param Selector $sub The adjacent XPath expression
    */
-  protected function _xpath_direct_adjacent($xpath, $sub)
+  protected function xpath_direct_adjacent($xpath, $sub)
   {
     // when sub immediately follows xpath
     $xpath->join('/following-sibling::*[1]/self::', $sub->toXPath());
-    $xpath->addNameTest();
+    //$xpath->addNameTest();
 
     return $xpath;
   }
@@ -115,7 +114,7 @@ class CombinedSelector extends Selector
    * @param XPath\Expression $xpath The parent XPath expression
    * @param Selector $sub The indirect adjacent Selector object
    */
-  protected function _xpath_indirect_adjacent($xpath, $sub)
+  protected function xpath_indirect_adjacent($xpath, $sub)
   {
     // when sub comes somewhere after xpath as a sibling
     $xpath->join('/following-sibling::', $sub->toXPath());

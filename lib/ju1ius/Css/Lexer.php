@@ -97,40 +97,7 @@ class Lexer extends BaseLexer
   const T_BADCOMMENT = 601;
   const T_BADURI = 602;
 
-  protected static $regex = array(
-    'ws' => '\s',
-    'nl' => '\v',
-    'hexdigit' => '[0-9a-fA-F]',
-    'nonascii' => '[\240-\377]',
-    'num' => '[-+]?[0-9]*\.?[0-9]+',
-
-    'A' => 'a|\\\\0{0,4}(?>41|61)(?>\r\n|[ \t\r\n\f])?',
-    'B' => 'b|\\\\0{0,4}(?>42|62)(?>\r\n|[ \t\r\n\f])?',
-    'C' => 'c|\\\\0{0,4}(?>43|63)(?>\r\n|[ \t\r\n\f])?',
-    'D' => 'd|\\\\0{0,4}(?>44|64)(?>\r\n|[ \t\r\n\f])?',
-    'E' => 'e|\\\\0{0,4}(?>45|65)(?>\r\n|[ \t\r\n\f])?',
-    'F' => 'f|\\\\0{0,4}(?>46|66)(?>\r\n|[ \t\r\n\f])?',
-    'G' => 'g|\\\\0{0,4}(?>47|67)(?>\r\n|[ \t\r\n\f])?|\\\\g',
-    'H' => 'h|\\\\0{0,4}(?>48|68)(?>\r\n|[ \t\r\n\f])?|\\\\h',
-    'I' => 'i|\\\\0{0,4}(?>49|69)(?>\r\n|[ \t\r\n\f])?|\\\\i',
-    'J' => 'j|\\\\0{0,4}(?>4a|6a)(?>\r\n|[ \t\r\n\f])?|\\\\j',
-    'K' => 'k|\\\\0{0,4}(?>4b|6b)(?>\r\n|[ \t\r\n\f])?|\\\\k',
-    'L' => 'l|\\\\0{0,4}(?>4c|6c)(?>\r\n|[ \t\r\n\f])?|\\\\l',
-    'M' => 'm|\\\\0{0,4}(?>4d|6d)(?>\r\n|[ \t\r\n\f])?|\\\\m',
-    'N' => 'n|\\\\0{0,4}(?>4e|6e)(?>\r\n|[ \t\r\n\f])?|\\\\n',
-    'O' => 'o|\\\\0{0,4}(?>4f|6f)(?>\r\n|[ \t\r\n\f])?|\\\\o',
-    'P' => 'p|\\\\0{0,4}(?>50|70)(?>\r\n|[ \t\r\n\f])?|\\\\p',
-    'Q' => 'q|\\\\0{0,4}(?>51|71)(?>\r\n|[ \t\r\n\f])?|\\\\q',
-    'R' => 'r|\\\\0{0,4}(?>52|72)(?>\r\n|[ \t\r\n\f])?|\\\\r',
-    'S' => 's|\\\\0{0,4}(?>53|73)(?>\r\n|[ \t\r\n\f])?|\\\\s',
-    'T' => 't|\\\\0{0,4}(?>54|74)(?>\r\n|[ \t\r\n\f])?|\\\\t',
-    'U' => 'u|\\\\0{0,4}(?>55|75)(?>\r\n|[ \t\r\n\f])?|\\\\u',
-    'V' => 'v|\\\\0{0,4}(?>56|76)(?>\r\n|[ \t\r\n\f])?|\\\\v',
-    'W' => 'w|\\\\0{0,4}(?>57|77)(?>\r\n|[ \t\r\n\f])?|\\\\w',
-    'X' => 'x|\\\\0{0,4}(?>58|78)(?>\r\n|[ \t\r\n\f])?|\\\\x',
-    'Y' => 'y|\\\\0{0,4}(?>59|79)(?>\r\n|[ \t\r\n\f])?|\\\\y',
-    'Z' => 'z|\\\\0{0,4}(?>5a|7a)(?>\r\n|[ \t\r\n\f])?|\\\\z',
-  );
+  protected static $regex;
 
   protected static $regex_cache = array();
 
@@ -146,38 +113,7 @@ class Lexer extends BaseLexer
 
   public function __construct(Source\String $source=null)
   {/*{{{*/
-    self::$regex['unicode']    = '\\\\'.self::$regex['hexdigit'].'{1,6}\s?';
-    self::$regex['escape']     = self::$regex['unicode'].'|\\\\[ -~\200-\377]';
-    self::$regex['nmstart']    = '[_a-z]|'.self::$regex['nonascii'].'|(?:'.self::$regex['escape'].')';
-    self::$regex['nmchar']     = '[_a-z0-9-]|'.self::$regex['nonascii'].'|(?:'.self::$regex['escape'].')';
-    self::$regex['name']       = '(?:'.self::$regex['nmchar'].')+';
-    self::$regex['ident']      = '-?(?:'.self::$regex['nmstart'].')(?:'.self::$regex['nmchar'].')*';
-    self::$regex['string1']    = '"((?:[^\v\\\\"]|\\\\(?:\v)|(?:'.self::$regex['nonascii'].')|(?:'.self::$regex['escape'].'))*)"';
-    self::$regex['badstring1'] = '"((?:[^\v\\\\"]|\\\\(?:\v)|(?:'.self::$regex['nonascii'].')|(?:'.self::$regex['escape'].'))*\\\\?)';
-    self::$regex['string2']    = "'((?:[^\v\\\\']|\\\\(?:\v)|(?:".self::$regex['nonascii'].")|(?:".self::$regex['escape']."))*)'";
-    self::$regex['badstring2'] = "'((?:[^\v\\\\']|\\\\(?:\v)|(?:".self::$regex['nonascii'].")|(?:".self::$regex['escape']."))*\\\\?)";
-    self::$regex['string']     = '(?:'.self::$regex['string1'].')|(?:'.self::$regex['string2'].')';
-    self::$regex['badstring']  = '(?:'.self::$regex['badstring1'].')|(?:'.self::$regex['badstring2'].')';
-    self::$regex['url']        = '((?:[^()\v])|\\\\(?:[()\v])|(?:'.self::$regex['nonascii'].')|(?:'.self::$regex['escape'].'))*';
-    self::$regex['important']  = self::getPatternForIdentifier('important');
-    self::$regex['negation']   = '(?::'.self::getPatternForIdentifier('not').'\()';
-
-    $units = array();
-    foreach(self::$units as $unit) {
-      $pattern = self::getPatternForIdentifier($unit);
-      //self::$regex[$unit] = $pattern;
-      $units[] = '(?:'.$pattern.')';
-    }
-    //self::$regex['units'] = implode('|', $units);
-    self::$regex['units'] = '(?>'.implode('|', $units).')(?!'.self::$regex['nmchar'].')';
-
-    $at_pattern = 'charset';
-    foreach(self::$atkeywords as $keyword) {
-      $pattern = self::getPatternForIdentifier($keyword);
-      $at_pattern .= '|(?:'.$pattern.')';
-    }
-    self::$regex['atkeyword'] = '(?>'.$at_pattern .')(?!'.self::$regex['nmchar'].')';
-
+    self::buildPatterns();
     parent::__construct($source);
   }/*}}}*/
 
@@ -795,20 +731,6 @@ class Lexer extends BaseLexer
     return new Token(self::T_NEGATION, ':not(', $this->lineno, $position);
   }/*}}}*/
 
-  protected static function getPatternForIdentifier($ident)
-  {/*{{{*/
-    if(isset(self::$regex_cache[$ident])) {
-      return self::$regex_cache[$ident];
-    }
-    $ident = strtoupper($ident);
-    $pattern = '';
-    foreach(str_split($ident) as $char) {
-      $pattern .= '(?>'.self::$regex[$char].')';
-    }
-    self::$regex_cache[$ident] = $pattern;
-    return $pattern;
-  }/*}}}*/
-
   protected function cleanupIdent($ident)
   {/*{{{*/
     $ident = preg_replace_callback(
@@ -852,4 +774,90 @@ class Lexer extends BaseLexer
     */
   }/*}}}*/
 
+  protected static function getPatternForIdentifier($ident)
+  {/*{{{*/
+    if(isset(self::$regex_cache[$ident])) {
+      return self::$regex_cache[$ident];
+    }
+    $ident = strtoupper($ident);
+    $pattern = '';
+    foreach(str_split($ident) as $char) {
+      $pattern .= '(?>'.self::$regex[$char].')';
+    }
+    self::$regex_cache[$ident] = $pattern;
+    return $pattern;
+  }/*}}}*/
+
+  protected static function buildPatterns()
+  {/*{{{*/
+    if(null === self::$regex) {
+
+      self::$regex = array(
+        'ws' => '\s',
+        'nl' => '\v',
+        'hexdigit' => '[0-9a-fA-F]',
+        'nonascii' => '[\240-\377]',
+        'num' => '[-+]?[0-9]*\.?[0-9]+',
+
+        'A' => 'a|\\\\0{0,4}(?>41|61)(?>\r\n|[ \t\r\n\f])?',
+        'B' => 'b|\\\\0{0,4}(?>42|62)(?>\r\n|[ \t\r\n\f])?',
+        'C' => 'c|\\\\0{0,4}(?>43|63)(?>\r\n|[ \t\r\n\f])?',
+        'D' => 'd|\\\\0{0,4}(?>44|64)(?>\r\n|[ \t\r\n\f])?',
+        'E' => 'e|\\\\0{0,4}(?>45|65)(?>\r\n|[ \t\r\n\f])?',
+        'F' => 'f|\\\\0{0,4}(?>46|66)(?>\r\n|[ \t\r\n\f])?',
+        'G' => 'g|\\\\0{0,4}(?>47|67)(?>\r\n|[ \t\r\n\f])?|\\\\g',
+        'H' => 'h|\\\\0{0,4}(?>48|68)(?>\r\n|[ \t\r\n\f])?|\\\\h',
+        'I' => 'i|\\\\0{0,4}(?>49|69)(?>\r\n|[ \t\r\n\f])?|\\\\i',
+        'J' => 'j|\\\\0{0,4}(?>4a|6a)(?>\r\n|[ \t\r\n\f])?|\\\\j',
+        'K' => 'k|\\\\0{0,4}(?>4b|6b)(?>\r\n|[ \t\r\n\f])?|\\\\k',
+        'L' => 'l|\\\\0{0,4}(?>4c|6c)(?>\r\n|[ \t\r\n\f])?|\\\\l',
+        'M' => 'm|\\\\0{0,4}(?>4d|6d)(?>\r\n|[ \t\r\n\f])?|\\\\m',
+        'N' => 'n|\\\\0{0,4}(?>4e|6e)(?>\r\n|[ \t\r\n\f])?|\\\\n',
+        'O' => 'o|\\\\0{0,4}(?>4f|6f)(?>\r\n|[ \t\r\n\f])?|\\\\o',
+        'P' => 'p|\\\\0{0,4}(?>50|70)(?>\r\n|[ \t\r\n\f])?|\\\\p',
+        'Q' => 'q|\\\\0{0,4}(?>51|71)(?>\r\n|[ \t\r\n\f])?|\\\\q',
+        'R' => 'r|\\\\0{0,4}(?>52|72)(?>\r\n|[ \t\r\n\f])?|\\\\r',
+        'S' => 's|\\\\0{0,4}(?>53|73)(?>\r\n|[ \t\r\n\f])?|\\\\s',
+        'T' => 't|\\\\0{0,4}(?>54|74)(?>\r\n|[ \t\r\n\f])?|\\\\t',
+        'U' => 'u|\\\\0{0,4}(?>55|75)(?>\r\n|[ \t\r\n\f])?|\\\\u',
+        'V' => 'v|\\\\0{0,4}(?>56|76)(?>\r\n|[ \t\r\n\f])?|\\\\v',
+        'W' => 'w|\\\\0{0,4}(?>57|77)(?>\r\n|[ \t\r\n\f])?|\\\\w',
+        'X' => 'x|\\\\0{0,4}(?>58|78)(?>\r\n|[ \t\r\n\f])?|\\\\x',
+        'Y' => 'y|\\\\0{0,4}(?>59|79)(?>\r\n|[ \t\r\n\f])?|\\\\y',
+        'Z' => 'z|\\\\0{0,4}(?>5a|7a)(?>\r\n|[ \t\r\n\f])?|\\\\z',
+      );
+      self::$regex['unicode']    = '\\\\'.self::$regex['hexdigit'].'{1,6}\s?';
+      self::$regex['escape']     = self::$regex['unicode'].'|\\\\[ -~\200-\377]';
+      self::$regex['nmstart']    = '[_a-z]|'.self::$regex['nonascii'].'|(?:'.self::$regex['escape'].')';
+      self::$regex['nmchar']     = '[_a-z0-9-]|'.self::$regex['nonascii'].'|(?:'.self::$regex['escape'].')';
+      self::$regex['name']       = '(?:'.self::$regex['nmchar'].')+';
+      self::$regex['ident']      = '-?(?:'.self::$regex['nmstart'].')(?:'.self::$regex['nmchar'].')*';
+      self::$regex['string1']    = '"((?:[^\v\\\\"]|\\\\(?:\v)|(?:'.self::$regex['nonascii'].')|(?:'.self::$regex['escape'].'))*)"';
+      self::$regex['badstring1'] = '"((?:[^\v\\\\"]|\\\\(?:\v)|(?:'.self::$regex['nonascii'].')|(?:'.self::$regex['escape'].'))*\\\\?)';
+      self::$regex['string2']    = "'((?:[^\v\\\\']|\\\\(?:\v)|(?:".self::$regex['nonascii'].")|(?:".self::$regex['escape']."))*)'";
+      self::$regex['badstring2'] = "'((?:[^\v\\\\']|\\\\(?:\v)|(?:".self::$regex['nonascii'].")|(?:".self::$regex['escape']."))*\\\\?)";
+      self::$regex['string']     = '(?:'.self::$regex['string1'].')|(?:'.self::$regex['string2'].')';
+      self::$regex['badstring']  = '(?:'.self::$regex['badstring1'].')|(?:'.self::$regex['badstring2'].')';
+      self::$regex['url']        = '((?:[^()\v])|\\\\(?:[()\v])|(?:'.self::$regex['nonascii'].')|(?:'.self::$regex['escape'].'))*';
+      self::$regex['important']  = self::getPatternForIdentifier('important');
+      self::$regex['negation']   = '(?::'.self::getPatternForIdentifier('not').'\()';
+
+      $units = array();
+      foreach(self::$units as $unit) {
+        $pattern = self::getPatternForIdentifier($unit);
+        //self::$regex[$unit] = $pattern;
+        $units[] = '(?:'.$pattern.')';
+      }
+      //self::$regex['units'] = implode('|', $units);
+      self::$regex['units'] = '(?>'.implode('|', $units).')(?!'.self::$regex['nmchar'].')';
+
+      $at_pattern = 'charset';
+      foreach(self::$atkeywords as $keyword) {
+        $pattern = self::getPatternForIdentifier($keyword);
+        $at_pattern .= '|(?:'.$pattern.')';
+      }
+      self::$regex['atkeyword'] = '(?>'.$at_pattern .')(?!'.self::$regex['nmchar'].')';
+
+    }
+  }/*}}}*/
 }

@@ -17,11 +17,10 @@ class CombinedSelectorTest extends CssParser_TestCase
   public function testToXpathProvider()
   {
     return array(
-      array('div p', 'div//p'),
-      array('div > p', 'div/p'),
-      //array('div + p', "div/following-sibling::*[name() = 'p' and (position() = 1)]"),
-      array('div + p', "div/following-sibling::*[1]/self::*[name() = 'p']"),
-      array('div ~ p', 'div/following-sibling::p'),
+      array('div p', '//div//p'),
+      array('div > p', '//div/p'),
+      array('div + p', "//div/following-sibling::*[1]/self::p"),
+      array('div ~ p', '//div/following-sibling::p'),
     );
   }
 

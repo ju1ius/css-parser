@@ -53,15 +53,15 @@ class Parser extends LLk
   /**
    * Parses a single selector or a list of selectors
    *
-   * @return Selector|SelectorList
+   * @return SelectorList
    **/
   public function parseSelector()
   {/*{{{*/
     $this->reset();
     $selector_list = $this->_selectors_group();
-    if (count($selector_list) === 1) {
-      return $selector_list->getFirst();
-    }
+    //if (count($selector_list) === 1) {
+      //return $selector_list->getFirst();
+    //}
     return $selector_list;
   }/*}}}*/
 

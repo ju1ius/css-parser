@@ -11,20 +11,13 @@ class SelectorList extends CssList implements Serializable, XPathable
 
   public function __construct($selectors=array())
   {
-    if($selectors instanceof SelectorList)
-    {
+    if($selectors instanceof SelectorList) {
       $this->items = $selectors->getItems();
-    }
-    else if($selectors instanceof Selector)
-    {
+    } else if($selectors instanceof Selector) {
       $this->items = array($selectors);
-    }
-    else if(is_array($selectors))
-    {
+    } else if(is_array($selectors)) {
       $this->items = $selectors;
-    }
-    else
-    {
+    } else {
       throw new \InvalidArgumentException();
     }
   }
@@ -48,10 +41,10 @@ class SelectorList extends CssList implements Serializable, XPathable
   public function toXPath()
   {
     $paths = array();
-    foreach ($this->items as $item)
-    {
+    foreach ($this->items as $item) {
       $paths[] = $item->toXPath();
     }
-    return new XPath\OrExpression($paths);
+
+    return new XPath\OrExpression($paths, '//');
   }
 }

@@ -14,6 +14,7 @@ use ju1ius\Css\Exception\StyleSheetNotFoundException;
  **/
 class Loader
 {
+  const MAX_AVG_LINE_LENGTH = 1024;
 
   /**
    * Loads a Css file or url.
@@ -113,6 +114,8 @@ class Loader
       $charset = 'utf-8';
     }
 
+    $str = self::splitStringIfNeeded($str);
+
     return array(
       'contents' => $str,
       'charset' => $charset
@@ -149,12 +152,50 @@ class Loader
     return $results;
   }
 
-  private static function maybeConvertEncoding(array &$infos, $to_encoding=null)
+  /**
+   * FIXME: this should handle T_BADSTRING tokens
+   **/
+  private static function splitStringIfNeeded($input)
   {
-    if (Util\Charset::isSameEncoding($infos['charset'], 'ascii')) return;
-    if (!Util\Charset::isSameEncoding($infos['charset'], 'utf-8')) {
-      $infos['contents'] = Util\Charset::convert($infos['contents'], 'utf-8', $infos['charset']);
-      $infos['charset'] = 'utf-8';
+    // estimate average line length
+    $len = strlen($input);
+    $numlines = substr_count($input, "\n") + 1;
+    $avg_line_length = round($len / $numlines);
+    if ($avg_line_length < self::MAX_AVG_LINE_LENGTH) return $input;
+
+    // quick & dirty tokenizer:
+    // finds position of all '}' not inside a string literal
+    $pos = 0;
+    $tokens = array();
+    while($pos < $len) {
+      $chr = $input[$pos];
+      if('"' === $chr) {
+        if (preg_match('/\G"(?:\\\\"|[^"])*?"/u', $input, $matches, 0, $pos)) {
+          $pos += strlen($matches[0]);
+        }
+      } else if ("'" === $chr) {
+        if (preg_match("/\G'(?:\\\\'|[^'])*?'/u", $input, $matches, 0, $pos)) {
+          $pos += strlen($matches[0]);
+        }
+      } else if ("}" === $chr) {
+        $pos++;
+        $tokens[] = $pos;
+        $pos++;
+      } else {
+        $pos++;
+      }
     }
+
+    // add a newline character after each '}'
+    $output = substr($input, 0, $tokens[0]) . "\n";
+    foreach ($tokens as $i => $pos) {
+      $next = $i + 1;
+      if (!isset($tokens[$next])) break;
+      $output .= substr($input, $tokens[$i], $tokens[$next] - $tokens[$i]) . "\n";
+    }
+    $last = end($tokens);
+    $output .= substr($input, $last, $len - $last);
+
+    return $output;
   }
 }

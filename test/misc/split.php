@@ -2,9 +2,55 @@
 
 $css = <<<EOS
 machin { truc: bidule; }
-p{color:red} foo{ bar: "haha{}ha"; baz: "bico}co}nut" } i{foo:bar}
-baz{moo:foo}
+p{color:red} foo{ bar: "hàhà{}hà"; baz: "bico}co}nut" } i{foo:bar}
+baz{moo:foo; str:"djhkei\
+lmqdop\
+kdlm"; fjo:sjkld} dkjqs{jskl:sjkd}
 EOS;
+
+
+$len = strlen($css);
+$numlines = substr_count($css, "\n");
+$avg_line_length = round($len / $numlines);
+var_dump($avg_line_length);
+
+$pos = 0;
+$tokens = array();
+
+while($pos < $len) {
+  $chr = $css[$pos];
+  if('"' === $chr) {
+    if (preg_match('/\G"(?:\\\\"|[^"])*?"/u', $css, $matches, 0, $pos)) {
+      $pos += strlen($matches[0]);
+    }
+  } else if ("'" === $chr) {
+    if (preg_match("/\G'(?:\\\\'|[^'])*?'/u", $css, $matches, 0, $pos)) {
+      $pos += strlen($matches[0]);
+    }
+  } else if ("}" === $chr) {
+    $pos++;
+    $tokens[] = $pos;
+    $pos++;
+  } else {
+    $pos++;
+  }
+}
+var_dump($tokens);
+
+$parts = array(
+  substr($css, 0, $tokens[0])
+);
+
+foreach ($tokens as $i => $pos) {
+  $next = $i + 1;
+  if (!isset($tokens[$next])) break;
+
+  $parts[] = substr($css, $tokens[$i], $tokens[$next] - $tokens[$i]);
+}
+$parts[] = substr($css, end($tokens), $len - end($tokens));
+
+var_dump(implode("\n", $parts));
+
 
 //var_dump(css_split($css));
 
