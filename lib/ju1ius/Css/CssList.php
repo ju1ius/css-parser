@@ -4,7 +4,7 @@ namespace ju1ius\Css;
 /**
  * General purpose list class
  **/
-abstract class CssList implements \ArrayAccess, \Countable, \Iterator
+class CssList implements ListInterface
 {
   protected $items;
 
@@ -24,10 +24,14 @@ abstract class CssList implements \ArrayAccess, \Countable, \Iterator
   }
   public function setItems($items)
   {
-    if($items instanceof CssList) {
+    if($items instanceof ListInterface) {
       $this->items = $items->getItems();
-    } else {
+    } else if (is_array($items)){
       $this->items = $items;
+    } else {
+      throw new \InvalidArgumentException(
+        "Parameter must be an array or an instance of ListInterface"
+      );
     }
   }
 
@@ -56,7 +60,7 @@ abstract class CssList implements \ArrayAccess, \Countable, \Iterator
 		$this->items[] = $item;
 	}
 
-  public function extend(CssList $items)
+  public function extend($items)
   {
     foreach($items as $item) {
       $this->items[] = $item;

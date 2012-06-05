@@ -7,6 +7,7 @@ class Time extends Dimension
     PrimitiveValue::UNIT_MS,
     PrimitiveValue::UNIT_S,
   );
+
   public function __construct($value, $unit)
   {
     if(!in_array($unit, self::$UNITS))
@@ -17,4 +18,5 @@ class Time extends Dimension
     }
     parent::__construct($value, $unit);
   }
+
 }

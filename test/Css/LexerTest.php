@@ -40,6 +40,12 @@ class LexerTest extends CssParser_TestCase
       array('@important', array(Lexer::T_ATKEYWORD)),
       array('1em', array(Lexer::T_LENGTH)),
       array('1email', array(Lexer::T_DIMENSION)),
+      // Identifiers can contain unicode chars
+      array('hüsker-dû', array(Lexer::T_IDENT)),
+      array(
+        'œâô€ê‘äßûæäßŀ: "féàœr¨üœ‘ßîê‘ðëßü"',
+        array(Lexer::T_IDENT,Lexer::T_COLON, Lexer::T_S, Lexer::T_STRING)
+      ),
       //
       array(
         '@charset "utf-8";',

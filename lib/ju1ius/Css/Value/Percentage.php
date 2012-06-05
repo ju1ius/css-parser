@@ -8,7 +8,13 @@ class Percentage extends Dimension
     parent::__construct($value, '%');
 	}
 
-	public function setUnit() { return; }
+  public function setUnit($unit) {
+    return;
+  }
+  public function getUnit()
+  {
+    return null;  
+  }
 
 	public function getCssText($options=array())
 	{

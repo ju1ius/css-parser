@@ -37,6 +37,14 @@ class Parser extends LLk
   }/*}}}*/
 
   /**
+   * @see parseStyleSheet
+   **/
+  public function parse()
+  {/*{{{*/
+    return $this->parseStyleSheet();
+  }/*}}}*/
+
+  /**
    * Parses a Css stylesheet
    *
    * @return StyleSheet
@@ -232,7 +240,8 @@ class Parser extends LLk
   /**
    * import
    *  : IMPORT_SYM S*
-   *  [STRING|URI] S* media_query_list? ';' S*
+   *    [STRING|URI] S* media_query_list? ';' S*
+   *  ;
    **/ 
   protected function _import()
   {/*{{{*/
@@ -417,7 +426,8 @@ class Parser extends LLk
    * term
    *   : unary_operator?
    *     [ NUMBER S* | PERCENTAGE S* | LENGTH S* | ANGLE S* | TIME S* | FREQ S* ]
-   *   | STRING S* | IDENT S* | URI S* | UNICODERANGE S* | hexcolor | function | math
+   *   | STRING S* | IDENT S* | URI S* | UNICODERANGE S* | FROM_SYM S* | TO_SYM S*
+   *   | hexcolor | function | math
    *   ;
    **/
   protected function _term()
@@ -476,6 +486,13 @@ class Parser extends LLk
         $this->_ws();
         return new Value\String($token->value);
 
+      case Lexer::T_FROM_SYM:
+      case Lexer::T_TO_SYM:
+        $ident = $token->value;
+        $this->consume();
+        $this->_ws();
+        return $ident;
+
       case Lexer::T_IDENT:
         $ident = $token->value;
         $this->consume();
@@ -512,6 +529,7 @@ class Parser extends LLk
           Lexer::T_URI, Lexer::T_IDENT, Lexer::T_STRING,
           Lexer::T_FREQ, Lexer::T_TIME, Lexer::T_ANGLE, Lexer::T_LENGTH,
           Lexer::T_PERCENTAGE, Lexer::T_RATIO, Lexer::T_DIMENSION,
+          Lexer::T_FROM_SYM, Lexer::T_TO_SYM,
           Lexer::T_NUMBER
         ));
         break;
@@ -595,7 +613,7 @@ class Parser extends LLk
    * ------- CSS3 Paged Media ------
    * http://www.w3.org/TR/css3-page/
    **/
-
+/*{{{*/
   /**
    * page
    *   : PAGE_SYM S* IDENT? pseudo_page? S* 
@@ -688,12 +706,13 @@ class Parser extends LLk
     $this->consume();
     return $value;
   }/*}}}*/
+/*}}}*/
 
   /**
    * ------------- CSS3 Media Queries -------------
    * http://www.w3.org/TR/css3-mediaqueries/#syntax
    **/
-
+/*{{{*/
   /**
    * media
    *   : MEDIA_SYM S* media_query_list S* '{' S* ruleset* '}' S*
@@ -892,12 +911,13 @@ class Parser extends LLk
     $this->_ws();
     return new MediaQuery\Expression($media_feature, $values);
   }/*}}}*/
+/*}}}*/
 
   /**
    * ----------- CSS3 Animation ----------
    * http://www.w3.org/TR/css3-animations/ 
    **/
-
+/*{{{*/
   /**
    * keyframes_rule
    *   : KEYFRAMES_SYM S+ IDENT S* '{' S* keyframes_blocks '}' S*
@@ -964,9 +984,13 @@ class Parser extends LLk
     }
     return $selectors;
   }/*}}}*/
+/*}}}*/
 
-  // ============================== CSS3 Selectors
-
+  /**
+   * ----------- CSS3 Selectors ----------
+   *
+   **/
+/*{{{*/
   /*
    * selectors_group
    *   : selector [ COMMA S* selector ]*
@@ -1190,6 +1214,7 @@ class Parser extends LLk
   {/*{{{*/
     $namespace = '*';
     $token = $this->LT();
+
     if ($token->type === Lexer::T_PIPE || $this->LT(2)->type === Lexer::T_PIPE) {
       if ($token->type === Lexer::T_IDENT || $token->type === Lexer::T_STAR) {
         $namespace = $token->value;
@@ -1197,6 +1222,7 @@ class Parser extends LLk
       }
       $this->match(Lexer::T_PIPE);
     }
+
     //return $namespace . '|';
     return $namespace;
   }/*}}}*/
@@ -1396,8 +1422,8 @@ class Parser extends LLk
     }
     return $selector;
   }/*}}}*/
+/*}}}*/
 
-  // ============================== END CSS3 Selectors
 
   /*****************************************************************
    * --------------------- Other internal methods ----------------- *

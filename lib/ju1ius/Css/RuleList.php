@@ -7,19 +7,27 @@ namespace ju1ius\Css;
 class RuleList extends CssList implements Serializable
 {
 
-  public function prepend(Rule $rule)
+  public function prepend($rule)
   {
+    if (!$rule instanceof Rule) {
+      throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
+    }
     parent::prepend($rule);
   }
 	
-  public function append(Rule $rule)
+  public function append($rule)
   {
+    if (!$rule instanceof Rule) {
+      throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
+    }
     parent::append($rule);
 	}
 
-
-  public function remove(Rule $rule)
+  public function remove($rule)
   {
+    if (!$rule instanceof Rule) {
+      throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
+    }
     parent::remove($rule);
   }
 
@@ -27,9 +35,9 @@ class RuleList extends CssList implements Serializable
   {
 		return $this->items;
   }
-  public function setRules(Array $rules)
+  public function setRules($rules)
   {
-    $this->items = $rules;
+    $this->setItems($rules);
   }
 
   public function getRule($index)

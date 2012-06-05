@@ -5,6 +5,7 @@ use ju1ius\Uri;
 use ju1ius\Text\Source;
 
 use ju1ius\Css\Exception\StyleSheetNotFoundException;
+use ju1ius\Css\Lexer;
 
 /**
  * Handles loading of stylesheets.
@@ -26,13 +27,15 @@ class Loader
    * @return Source\File
    **/
   public static function load($url)
-  {
+  {/*{{{*/
     $uri = Uri::parse($url);
+
     if($uri->isAbsoluteUrl()) {
       return self::loadUrl($uri);
     }
+
     return self::loadFile($uri);
-  }
+  }/*}}}*/
 
   /**
    * Loads a CSS file into a Source\File object.
@@ -44,19 +47,23 @@ class Loader
    * @return Source\File
    **/
   public static function loadFile($url)
-  {
+  {/*{{{*/
     $uri = Uri::parse($url);
     $path = realpath($uri);
+
     if(false === $path || !is_file($path) || !is_readable($path)) {
       throw new StyleSheetNotFoundException($path);
     }
+
     $content = file_get_contents($path);
     if(false === $content) {
       throw new StyleSheetNotFoundException($path);
     }
+
     $infos = self::_loadString($content);
+
     return new Source\File($path, $infos['contents'], $infos['charset']);
-  }
+  }/*}}}*/
 
   /**
    * Loads a CSS file into a Source\File object.
@@ -70,12 +77,11 @@ class Loader
    * @return Source\File
    **/
   public static function loadUrl($url)
-  {
+  {/*{{{*/
     $uri = Uri::parse($url);
     $response = self::_loadUrl($uri);
     $content = $response['body'];
     $charset = $response['charset'];
-
     $infos = self::_loadString($response['body']);
     // FIXME: Http header sometimes return wrong results
     /*
@@ -84,7 +90,7 @@ class Loader
     }
      */
     return new Source\File($url, $infos['contents'], $infos['charset']);
-  }
+  }/*}}}*/
 
   /**
    * Loads a CSS string into a Source\String object.
@@ -94,13 +100,14 @@ class Loader
    * @return Source\String
    **/
   public static function loadString($str, $encoding=null)
-  {
+  {/*{{{*/
     $infos = self::_loadString($str);
+
     return new Source\String($infos['contents'], $infos['charset']);
-  }
+  }/*}}}*/
 
   private static function _loadString($str)
-  {
+  {/*{{{*/
     // detect charset from BOM and/or @charset rule
     $charset = Util\Charset::detect($str);
     // Or defaults to utf-8
@@ -114,16 +121,16 @@ class Loader
       $charset = 'utf-8';
     }
 
-    $str = self::splitStringIfNeeded($str);
+    $str = self::normalizeLineLength($str);
 
     return array(
       'contents' => $str,
       'charset' => $charset
     );
-  }
+  }/*}}}*/
 
   private static function _loadUrl(Uri $url)
-  {
+  {/*{{{*/
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
     //curl_setopt($curl, CURLOPT_HEADER, true);
@@ -149,14 +156,12 @@ class Loader
         $results['charset'] = $matches[0];
       }
     }
-    return $results;
-  }
 
-  /**
-   * FIXME: this should handle T_BADSTRING tokens
-   **/
-  private static function splitStringIfNeeded($input)
-  {
+    return $results;
+  }/*}}}*/
+
+  private static function normalizeLineLength($input)
+  {/*{{{*/
     // estimate average line length
     $len = strlen($input);
     $numlines = substr_count($input, "\n") + 1;
@@ -165,19 +170,19 @@ class Loader
 
     // quick & dirty tokenizer:
     // finds position of all '}' not inside a string literal
+    $patterns = Lexer::getPatterns();
     $pos = 0;
     $tokens = array();
     while($pos < $len) {
       $chr = $input[$pos];
-      if('"' === $chr) {
-        if (preg_match('/\G"(?:\\\\"|[^"])*?"/u', $input, $matches, 0, $pos)) {
+      if ('"' === $chr || "'" === $chr) {
+        if (preg_match('/\G'.$patterns['string'].'/iu', $input, $matches, 0, $pos)) {
+          $pos += strlen($matches[0]);
+        } else {
+          preg_match('/\G'.$patterns['badstring'].'/iu', $input, $matches, 0, $pos);
           $pos += strlen($matches[0]);
         }
-      } else if ("'" === $chr) {
-        if (preg_match("/\G'(?:\\\\'|[^'])*?'/u", $input, $matches, 0, $pos)) {
-          $pos += strlen($matches[0]);
-        }
-      } else if ("}" === $chr) {
+      } else if ('}' === $chr) {
         $pos++;
         $tokens[] = $pos;
         $pos++;
@@ -197,5 +202,5 @@ class Loader
     $output .= substr($input, $last, $len - $last);
 
     return $output;
-  }
+  }/*}}}*/
 }

@@ -1,46 +1,22 @@
 README
 
-New Lexer:
-  cleanup mb_* functions when in ascii mode
-  write tests
-  encoding:
-    - consider supporting only ascii and utf-8, eg by converting to utf-8
-      when it's neither ascii nor utf-8 ?
-      Would allow using pcre only and ease inlining calls to match(),
-      along with other internal string comparisons
-  performance:
-    - long lines (for pre-optimized css):
-      write a css splitter that adds newlines after each {, }, and ;
-      that are not part of a string (and not followed by a newline ?).
-      This involves a proper lexer.
-
-
-New Parser:
+Parser:
+  Grammar:
+    background-size syntax in background shorthand
   Error handling in non-strict mode:
     keyframes
     nested rulesets
-  Fix _isAsciiCaseInsensitiveMatch()
-  rewrite tests
-
-Encoding:
-  figure out what to do with unicode escapes:
-    should they be left as is in strings ? => YES
-    should they be left as is in identifiers ? => CONVERT IF POSSIBLE
-
-API:
-  ParserFactory:
-    determines which lexer to use from source encoding
 
 Tests:
-  selectors
+  keyframes
+  gradients
   list-style shorthands
 
+Shorthands:
+  background: background-size
+  border-image
 
 CSSOM:
   setCssText() methods ?
   DOMDocument extensions ?
 
-
-Parser:
-  background-size syntax in background shorthand
-  border-radius

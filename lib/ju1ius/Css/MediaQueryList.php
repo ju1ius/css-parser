@@ -13,22 +13,36 @@ class MediaQueryList extends ValueList
     parent::__construct($media_queries, ',');
   }
 
-  public function append(MediaQuery $media_query)
-  {
+  public function append($media_query)
+  { 
+    if (!$media_query instanceof MediaQuery) {
+      throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\MediaQuery");
+    }
+
     if(!$this->contains($media_query))
     {
       parent::append($media_query);
     }
   }
-  public function prepend(MediaQuery $media_query)
+
+  public function prepend($media_query)
   {
+    if (!$media_query instanceof MediaQuery) {
+      throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\MediaQuery");
+    }
+
     if(!$this->contains($media_query))
     {
       parent::prepend($media_query);
     }
   }
-  public function remove(MediaQuery $media_query)
+
+  public function remove($media_query)
   {
+    if (!$media_query instanceof MediaQuery) {
+      throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\MediaQuery");
+    }
+
     parent::remove($media_query);
   }
 
