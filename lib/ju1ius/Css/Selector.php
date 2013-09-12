@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 /**
@@ -6,10 +7,10 @@ namespace ju1ius\Css;
  **/
 abstract class Selector implements Serializable, XPathable
 {
-  abstract public function getSpecificity();
+    abstract public function getSpecificity();
 
-  public function __toString()
-  {
-		return $this->getCssText();
-	}
+    public function __toString()
+    {
+        return $this->getCssText();
+    }
 }

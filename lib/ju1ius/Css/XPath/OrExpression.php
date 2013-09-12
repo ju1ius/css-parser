@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\XPath;
 
 /**
@@ -13,32 +14,32 @@ namespace ju1ius\Css\XPath;
  */
 class OrExpression extends Expression
 {
-  /**
-   * Constructor.
-   *
-   * @param array  $items  The items in the expression.
-   * @param string $prefix Optional prefix for the expression.
-   */
-  public function __construct($items, $prefix = null)
-  {
-    $this->items = $items;
-    $this->prefix = $prefix;
-  }
-
-  /**
-   * Gets a string representation of this |'d expression.
-   *
-   * @return string
-   */
-  public function __toString()
-  {
-    $prefix = $this->prefix;
-    $tmp = array();
-    foreach ($this->items as $i) {
-      $tmp[] = sprintf('%s%s', $prefix, $i);
+    /**
+     * Constructor.
+     *
+     * @param array  $items  The items in the expression.
+     * @param string $prefix Optional prefix for the expression.
+     */
+    public function __construct($items, $prefix = null)
+    {
+        $this->items = $items;
+        $this->prefix = $prefix;
     }
 
-    return implode($tmp, ' | ');
-  }
+    /**
+     * Gets a string representation of this |'d expression.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $prefix = $this->prefix;
+        $tmp = array();
+        foreach ($this->items as $i) {
+            $tmp[] = sprintf('%s%s', $prefix, $i);
+        }
+
+        return implode($tmp, ' | ');
+    }
 }
 

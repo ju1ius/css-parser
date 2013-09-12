@@ -16,17 +16,17 @@ $lexer = new Css\Lexer($source);
 $timer->setMarker("Lexer init");
 
 set_time_limit(10);
-$token = $lexer->nextToken();
-while ($token->type !== Css\Lexer::T_EOF) {
-  //echo Css\Lexer::getLiteral($token) . PHP_EOL;
-  $token = $lexer->nextToken();
-}
-//echo Css\Lexer::getLiteral($token) . PHP_EOL;
-$lexer->reset();
-$timer->setMarker("Tokenization end");
+//$token = $lexer->nextToken();
+//while ($token->type !== Css\Lexer::T_EOF) {
+  ////echo Css\Lexer::getLiteral($token) . PHP_EOL;
+  //$token = $lexer->nextToken();
+//}
+////echo Css\Lexer::getLiteral($token) . PHP_EOL;
+//$lexer->reset();
+//$timer->setMarker("Tokenization end");
 
 $parser = new Css\Parser($lexer);
-//$parser->setStrict(false);
+$parser->setStrict(false);
 $stylesheet = $parser->parseStyleSheet();
 $timer->setMarker("Parsing end");
 

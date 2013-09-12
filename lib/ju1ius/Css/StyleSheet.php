@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 /**
@@ -6,86 +7,88 @@ namespace ju1ius\Css;
  **/
 class StyleSheet implements Serializable
 {
-  private
-    $href,
-    $media_list,
-    $rule_list,
-    $charset;
+    private
+        $href,
+        $media_list,
+        $rule_list,
+        $charset;
 
-  public function __construct(RuleList $rule_list=null, $charset="utf-8")
-  {
-    if($rule_list === null)
+    public function __construct(RuleList $rule_list=null, $charset="utf-8")
     {
-      $this->rule_list = new RuleList(); 
+        if ($rule_list === null) {
+            $this->rule_list = new RuleList(); 
+        }
+        $this->charset = $charset;
     }
-    $this->charset = $charset;
-  }
 
-  public function getHref()
-  {
-    return $this->href;
-  }
-  public function setHref($href)
-  {
-    $this->href = $href;
-  }
+    public function getHref()
+    {
+        return $this->href;
+    }
 
-  public function getCharset()
-  {
-    return $this->charset;
-  }
+    public function setHref($href)
+    {
+        $this->href = $href;
+    }
 
-  public function getMediaQueryList()
-  {
-    return $this->media_list;
-  }
-  public function setMediaQueryList(MediaQueryList $media_list)
-  {
-    $this->media_list = $media_list;
-  }
+    public function getCharset()
+    {
+        return $this->charset;
+    }
 
-  public function getRuleList()
-  {
-    return $this->rule_list;
-  }
-  public function setRuleList(RuleList $rule_list)
-  {
-    $this->rule_list = $rule_list;
-  }
+    public function getMediaQueryList()
+    {
+        return $this->media_list;
+    }
 
-  public function getCssText($options=array())
-  {
-    return $this->rule_list->getCssText($options);
-  }
-  public function __toString()
-  {
-    return $this->getCssText();
-  }
+    public function setMediaQueryList(MediaQueryList $media_list)
+    {
+        $this->media_list = $media_list;
+    }
 
-  public function getFirstRule()
-  {
-    return $this->rule_list->getFirst();
-  }
+    public function getRuleList()
+    {
+        return $this->rule_list;
+    }
+    public function setRuleList(RuleList $rule_list)
+    {
+        $this->rule_list = $rule_list;
+    }
 
-  public function getLastRule()
-  {
-    return $this->rule_list->getLast();
-  }
+    public function getCssText($options=array())
+    {
+        return $this->rule_list->getCssText($options);
+    }
+
+    public function __toString()
+    {
+        return $this->getCssText();
+    }
+
+    public function getFirstRule()
+    {
+        return $this->rule_list->getFirst();
+    }
+
+    public function getLastRule()
+    {
+        return $this->rule_list->getLast();
+    }
 
   /*
   public function __call($method, $args)
   {
-    if(method_exists($this->rule_list, $method))
+    if (method_exists($this->rule_list, $method))
     {
       return call_user_func_array(array($this->rule_list, $method), $args);
     }
   }
    */
 
-  public function __clone()
-  {
-    $this->media_list = clone $this->media_list;
-    $this->rule_list = clone $this->rule_list;
-  }
+    public function __clone()
+    {
+        $this->media_list = clone $this->media_list;
+        $this->rule_list = clone $this->rule_list;
+    }
 
 }

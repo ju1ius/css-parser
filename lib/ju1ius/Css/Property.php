@@ -6,88 +6,83 @@ namespace ju1ius\Css;
  **/
 class Property implements Serializable
 {
-  private $name;
-  private $valueList;
-  private $isImportant;
+    private $name;
+    private $valueList;
+    private $isImportant;
 
-  public function __construct($name, PropertyValueList $valueList=null)
-  {
-    $this->name = $name;
-    if($valueList === null)
+    public function __construct($name, PropertyValueList $valueList=null)
     {
-      $this->valueList = new PropertyValueList();
+        $this->name = $name;
+        if (null === $valueList) {
+            $this->valueList = new PropertyValueList();
+        }
+        $this->valueList = $valueList;
     }
-    $this->valueList = $valueList;
-  }
 
-  public function getName()
-  {
-    return $this->name;
-  }
-  public function setName($name)
-  {
-    $this->name = $name;
-  }
-
-  public function getValueList()
-  {
-    return $this->valueList;
-  }
-  public function setValueList(PropertyValueList $valueList)
-  {
-    $this->valueList = $valueList;
-  }
-
-  public function getIsImportant()
-  {
-    return $this->isImportant;
-  }
-  public function setIsImportant($isImportant)
-  {
-    $this->isImportant = $isImportant;
-  }
-
-	/**
-   * Adds a value to the existing value.
-   * Value will be appended if a PropertyValueList exists of the given type.
-   * Otherwise, the existing value will be wrapped by one.
-	 */
-  public function addValue($value, $type = ' ')
-  {
-    //$this->value->append($value);
-    if(!is_array($value))
+    public function getName()
     {
-      $value = array($value);
+        return $this->name;
     }
-    if(!$this->valueList instanceof PropertyValueList || $this->valueList->getSeparator() !== $type)
+    public function setName($name)
     {
-      $currentValue = $this->valueList;
-      $this->valueList = new PropertyValueList($type);
-      if($currentValue)
-      {
-        $this->valueList->append($currentValue);
-      }
+        $this->name = $name;
     }
-    foreach($value as $valueItem)
+
+    public function getValueList()
     {
-      $this->valueList->append($valueItem);
+        return $this->valueList;
     }
-	}
+    public function setValueList(PropertyValueList $valueList)
+    {
+        $this->valueList = $valueList;
+    }
 
-  public function getCssText($options=array())
-  {
-    return $this->name . ': '
-      . $this->valueList->getCssText($options)
-      . ($this->isImportant ? ' !important' : '')
-      . ';';
-  }
-  public function __toString()
-  {
-    return $this->getCssText();
-  }
+    public function getIsImportant()
+    {
+        return $this->isImportant;
+    }
+    public function setIsImportant($isImportant)
+    {
+        $this->isImportant = $isImportant;
+    }
 
-  public function __clone()
-  {
-    $this->valueList = clone $this->valueList;
-  }
+    /**
+     * Adds a value to the existing value.
+     * Value will be appended if a PropertyValueList exists of the given type.
+     * Otherwise, the existing value will be wrapped by one.
+     */
+    public function addValue($value, $type = ' ')
+    {
+        //$this->value->append($value);
+        if (!is_array($value)) {
+            $value = array($value);
+        }
+        if (!$this->valueList instanceof PropertyValueList || $this->valueList->getSeparator() !== $type) {
+            $currentValue = $this->valueList;
+            $this->valueList = new PropertyValueList($type);
+            if ($currentValue) {
+                $this->valueList->append($currentValue);
+            }
+        }
+        foreach ($value as $valueItem) {
+            $this->valueList->append($valueItem);
+        }
+    }
+
+    public function getCssText($options=array())
+    {
+        return $this->name . ': '
+            . $this->valueList->getCssText($options)
+            . ($this->isImportant ? ' !important' : '')
+            . ';';
+    }
+    public function __toString()
+    {
+        return $this->getCssText();
+    }
+
+    public function __clone()
+    {
+        $this->valueList = clone $this->valueList;
+    }
 }
