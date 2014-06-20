@@ -195,7 +195,7 @@ class Color extends PrimitiveValue
     public function getCssText($options=array())
     {
         if (isset($options['color_mode'])) {
-            switch($options['color_mode']) {
+            switch ($options['color_mode']) {
                 case 'hex':
                     if ($value = $this->getHexValue()) {
                         return $value;

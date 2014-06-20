@@ -35,7 +35,7 @@ class PageSelector implements Serializable
     {
         $specificity = 0;
         if ($this->page_name) $specificity += 100;
-        switch($this->pseudo_class) {
+        switch ($this->pseudo_class) {
             case 'first':
                 $specificity += 10;
                 break;

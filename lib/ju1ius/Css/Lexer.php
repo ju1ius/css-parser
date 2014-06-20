@@ -487,7 +487,7 @@ class Lexer extends BaseLexer
                 return new Token(self::T_FUNCTION, $ident, $this->lineno, $charpos);
             }
         } else {
-            switch($ident) {
+            switch ($ident) {
                 case 'and':
                     return new Token(self::T_AND, $ident, $this->lineno, $charpos);
                 case 'not':
@@ -511,7 +511,7 @@ class Lexer extends BaseLexer
         $charpos = $this->charpos;
         $this->consumeString($matches[0]);
         $ident = $this->cleanupIdent($matches[1], true);
-        switch($ident) {
+        switch ($ident) {
             case 'charset':
                 return new Token(self::T_CHARSET_SYM, $ident, $this->lineno, $charpos);
                 break;
@@ -680,7 +680,7 @@ class Lexer extends BaseLexer
             $unit = $this->cleanupIdent($matches[0], true);
             $this->consumeString($matches[0]);
             $result = array('value' => $value, 'unit' => $unit);
-            switch($unit) {
+            switch ($unit) {
                 case 'em':
                 case 'rem':
                 case 'ex':

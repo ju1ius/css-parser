@@ -1113,7 +1113,7 @@ class Parser extends LLk
     {/*{{{*/
         $selector = $this->_simple_selector_sequence();
         while (true) {
-            switch($this->LT()->type) {
+            switch ($this->LT()->type) {
 
                 case Lexer::T_PLUS:
                 case Lexer::T_GREATER:
@@ -1635,7 +1635,7 @@ class Parser extends LLk
     protected function _ws()
     {/*{{{*/
         while (true) {
-            switch($this->LT()->type) {
+            switch ($this->LT()->type) {
                 case Lexer::T_S:
                 case Lexer::T_COMMENT:
                 case Lexer::T_CDO:
