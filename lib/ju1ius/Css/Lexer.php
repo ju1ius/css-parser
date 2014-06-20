@@ -414,7 +414,7 @@ class Lexer extends BaseLexer
             $line = $this->lineno;
             $charpos = $this->charpos;
             $start_str = $matches[0]."\n";
-            while(true) {
+            while (true) {
                 // EOL
                 if ($this->lineno < $this->numlines-1) {
                     $this->nextLine();
@@ -615,7 +615,7 @@ class Lexer extends BaseLexer
     {/*{{{*/
         $pattern = '([^\\\\'.$start_char.']*)'.$start_char;
         $start_str = preg_replace('/\\\\$/u', '', $start_str);
-        while(true) {
+        while (true) {
             // EOL
             if ($this->lineno < $this->numlines-1) {
                 $this->nextLine();

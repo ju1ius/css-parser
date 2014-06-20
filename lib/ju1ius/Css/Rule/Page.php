@@ -22,10 +22,10 @@ class Page extends Rule
   {
     $this->selector = $selector;
     $this->margin_rules = $margin_rules;
-    if($style_declaration)
+    if ($style_declaration)
     {
       $style_declaration->setParentRule($this);
-      if($parentStyleSheet = $this->getParentStyleSheet())
+      if ($parentStyleSheet = $this->getParentStyleSheet())
       {
         $style_declaration->setParentStyleSheet($parentStyleSheet);
       }
@@ -58,7 +58,7 @@ class Page extends Rule
   public function setStyleDeclaration(StyleDeclaration $style_declaration)
   {
     $style_declaration->setParentRule($this);
-    if($parentStyleSheet = $this->getParentStyleSheet())
+    if ($parentStyleSheet = $this->getParentStyleSheet())
     {
       $style_declaration->setParentStyleSheet($parentStyleSheet);
     }
@@ -68,7 +68,7 @@ class Page extends Rule
   public function getCssText($options=array())
   {
 		$indent = $nl = '';
-		if(isset($options['indent_level'])) {
+		if (isset($options['indent_level'])) {
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$options['indent_level']++;
 			$nl = "\n";

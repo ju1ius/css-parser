@@ -46,8 +46,8 @@ class ExpandShorthands
     $aProperties = $this->styleDeclaration->getProperties('background');
     // don't expand if several shorthands are present,
     // as it is generally done on purpose, ie for vendor specific values.
-    if(count($aProperties) !== 1) return;
-    foreach($aProperties as $iPos => $oProperty) {
+    if (count($aProperties) !== 1) return;
+    foreach ($aProperties as $iPos => $oProperty) {
       $this->_expandBackgroundShorthand($iPos, $oProperty);
     }
   }
@@ -60,8 +60,8 @@ class ExpandShorthands
   public function expandFontShorthands()
   {/*{{{*/
     $aProperties = $this->styleDeclaration->getProperties('font');
-    if(empty($aProperties)) return;
-		foreach($aProperties as $iPos => $oProperty) {
+    if (empty($aProperties)) return;
+		foreach ($aProperties as $iPos => $oProperty) {
 			// reset properties to 'normal' per http://www.w3.org/TR/CSS21/fonts.html#font-shorthand
 			$aFontProperties = array(
 				'font-style'   => 'normal',
@@ -71,29 +71,29 @@ class ExpandShorthands
 				'line-height'  => 'normal'
 			);    
 			$aValues = $oProperty->getValueList()->getItems();
-      foreach($aValues as $mValue) { 
+      foreach ($aValues as $mValue) { 
 				$mValue = Object::getClone($mValue);
-				if(in_array($mValue, array('normal', 'inherit'))) {
-					foreach(array('font-style', 'font-weight', 'font-variant') as $sProperty) {
-						if(!isset($aFontProperties[$sProperty])) {
+				if (in_array($mValue, array('normal', 'inherit'))) {
+					foreach (array('font-style', 'font-weight', 'font-variant') as $sProperty) {
+						if (!isset($aFontProperties[$sProperty])) {
 							$aFontProperties[$sProperty] = $mValue;
 						}
 					}
-				} else if(in_array($mValue, array('italic', 'oblique'))) {
+				} else if (in_array($mValue, array('italic', 'oblique'))) {
 					$aFontProperties['font-style'] = $mValue;
-				} else if($mValue == 'small-caps') {
+				} else if ($mValue == 'small-caps') {
 					$aFontProperties['font-variant'] = $mValue;
-				} else if(
+				} else if (
 					in_array($mValue, array('bold', 'bolder', 'lighter'))
 					|| ($mValue instanceof Value\Dimension
 							&& in_array($mValue->getValue(), range(100, 900, 100)))
 				) {
 					$aFontProperties['font-weight'] = $mValue;
-				} else if($mValue instanceof PropertyValueList && $mValue->getSeparator() === '/') {
+				} else if ($mValue instanceof PropertyValueList && $mValue->getSeparator() === '/') {
 					list($oSize, $oHeight) = $mValue->getItems();
 					$aFontProperties['font-size'] = $oSize;
 					$aFontProperties['line-height'] = $oHeight;
-        } else if(
+        } else if (
           ($mValue instanceof Value\Dimension && $mValue->getUnit() !== null)
           || in_array($mValue, array('xx-small','x-small','small','medium','large','x-large','xx-large','larger','smaller'))
         ) {
@@ -124,19 +124,19 @@ class ExpandShorthands
     );
     foreach ($aBorderProperties as $sBorderProperty) {
 			$aProperties = $this->styleDeclaration->getProperties($sBorderProperty);
-			if(empty($aProperties)) continue;
-			foreach($aProperties as $iPos => $oProperty) {
+			if (empty($aProperties)) continue;
+			foreach ($aProperties as $iPos => $oProperty) {
 				$aValues = $oProperty->getValueList()->getItems();
 				foreach ($aValues as $mValue) {
           $mValue = Object::getClone($mValue);
-					if($mValue instanceof Value\Dimension) {
+					if ($mValue instanceof Value\Dimension) {
 						$sNewPropertyName = $sBorderProperty."-width";
-					} else if($mValue instanceof Value\Color) {
+					} else if ($mValue instanceof Value\Color) {
 						$sNewPropertyName = $sBorderProperty."-color";
 					} else {
-						if(in_array($mValue, $aBorderSizes)) {
+						if (in_array($mValue, $aBorderSizes)) {
 							$sNewPropertyName = $sBorderProperty."-width";
-						} else/* if(in_array($mValue, $aBorderStyles))*/ {
+						} else/* if (in_array($mValue, $aBorderStyles))*/ {
 							$sNewPropertyName = $sBorderProperty."-style";
 						}
 					}
@@ -164,8 +164,8 @@ class ExpandShorthands
     foreach ($aExpansions as $sProperty => $sExpanded) {
       $aProperties = $this->styleDeclaration->getProperties($sProperty);
       //$aProperties = $this->styleDeclaration->getAppliedProperty($sProperty, true);
-			if(empty($aProperties)) continue;
-			foreach($aProperties as $iPos => $oProperty) {
+			if (empty($aProperties)) continue;
+			foreach ($aProperties as $iPos => $oProperty) {
 				$aValues = $oProperty->getValueList()->getItems();
 				$top = $right = $bottom = $left = null;
 				switch(count($aValues)) {
@@ -202,7 +202,7 @@ class ExpandShorthands
             );
 						break;
 				}
-				foreach($result as $sPosition => $mValue) {
+				foreach ($result as $sPosition => $mValue) {
 					$sNewPropertyName = sprintf($sExpanded, $sPosition);
           $this->_addPropertyExpansion($iPos, $oProperty, $sNewPropertyName, $mValue);
 				}
@@ -223,29 +223,29 @@ class ExpandShorthands
 			'inside', 'outside'
 		);
     $aProperties = $this->styleDeclaration->getProperties('list-style');
-		if(empty($aProperties)) return;
-		foreach($aProperties as $iPos => $oProperty) {
+		if (empty($aProperties)) return;
+		foreach ($aProperties as $iPos => $oProperty) {
 			$aListProperties = array(
 				'list-style-type'     => 'disc',
 				'list-style-position' => 'outside',
 				'list-style-image'    => 'none'
 			);
 			$aValues = $oProperty->getValueList()->getItems();
-			if(count($aValues) === 1 && $aValues[0] === 'inherit') {
+			if (count($aValues) === 1 && $aValues[0] === 'inherit') {
 				foreach ($aListProperties as $sProperty => $mValue) {
 					$this->_addPropertyExpansion($iPos, $oProperty, $sProperty, 'inherit');
-          if($cleanup) $this->_cleanupProperty($sNewPropertyName);
+          if ($cleanup) $this->_cleanupProperty($sNewPropertyName);
 				}
         $this->styleDeclaration->remove($iPos);
 				return;
 			}
-      foreach($aValues as $mValue) {
+      foreach ($aValues as $mValue) {
         $mValue = Object::getClone($mValue);
-				if($mValue instanceof Value\Url) {
+				if ($mValue instanceof Value\Url) {
 					$aListProperties['list-style-image'] = $mValue;
-				} else if(in_array($mValue, $aListStyleTypes)) {
+				} else if (in_array($mValue, $aListStyleTypes)) {
 					$aListProperties['list-style-type'] = $mValue;
-				} else if(in_array($mValue, $aListStylePositions)) {
+				} else if (in_array($mValue, $aListStylePositions)) {
 					$aListProperties['list-style-position'] = $mValue;
 				}
 			}
@@ -258,10 +258,10 @@ class ExpandShorthands
 
   private function _addPropertyExpansion($iShorthandPosition, $oShorthandProperty, $sNewPropertyName, $mValue)
   {/*{{{*/
-    if(!$this->_canAddShorthandExpansion($oShorthandProperty, $sNewPropertyName/*, $iShorthandPosition*/)) {
+    if (!$this->_canAddShorthandExpansion($oShorthandProperty, $sNewPropertyName/*, $iShorthandPosition*/)) {
       return;
     }
-    if(is_array($mValue)) $separator = ' ';
+    if (is_array($mValue)) $separator = ' ';
     else $separator = ',';
     $oNewProperty = new Property(
       $sNewPropertyName, new PropertyValueList($mValue, $separator)
@@ -277,15 +277,15 @@ class ExpandShorthands
    **/
   private function _canAddShorthandExpansion($oShorthandProperty, $sNewPropertyName, $iShorthandPosition=null)
   {/*{{{*/
-    if($iShorthandPosition === null) {
+    if ($iShorthandPosition === null) {
       $iShorthandPosition = $this->styleDeclaration->getPropertyIndex($oShorthandProperty);
     }
     $bShorthandIsImportant = $oShorthandProperty->getIsImportant();
 		$aExistingProperties = $this->styleDeclaration->getProperties($sNewPropertyName);
-    if(!empty($aExistingProperties)) {
-      foreach($aExistingProperties as $iPos => $oProperty) {
+    if (!empty($aExistingProperties)) {
+      foreach ($aExistingProperties as $iPos => $oProperty) {
         $bPropertyIsImportant = $oProperty->getIsImportant();
-        if($iPos > $iShorthandPosition
+        if ($iPos > $iShorthandPosition
            && ($bShorthandIsImportant == $bPropertyIsImportant
                 || ($bPropertyIsImportant && !$bShorthandIsImportant)
               ) 
@@ -299,7 +299,7 @@ class ExpandShorthands
   {/*{{{*/
     $oValueList = $oProperty->getValueList();
     // Get a normalized array
-    if($oValueList->getSeparator() === ',' && count($oValueList) > 1) {
+    if ($oValueList->getSeparator() === ',' && count($oValueList) > 1) {
       // we have multiple layers
       $aValueList = $oValueList->getItems();
     } else {
@@ -311,19 +311,19 @@ class ExpandShorthands
     // background-color only allowed on final layer;
     $color = null;
 
-    foreach($aValueList as $iLayerIndex => $aValues) {
+    foreach ($aValueList as $iLayerIndex => $aValues) {
 
       // if we have multiple layers, get the values for this layer
-      if($aValues instanceof PropertyValueList) {
+      if ($aValues instanceof PropertyValueList) {
         $aValues = $aValues->getItems();
-      } else if(!is_array($aValues)) {
+      } else if (!is_array($aValues)) {
         $aValues = array($aValues);
       }
 
       $aBgProperties = array();
       $iNumBgPos = 0;
       $iNumBoxValues = 0;
-      foreach($aValues as $mValue) {
+      foreach ($aValues as $mValue) {
 
         $mValue = Object::getClone($mValue);
         if ($mValue instanceof Value\Url || $mValue instanceof Value\Func || $mValue == "none") {
@@ -331,7 +331,7 @@ class ExpandShorthands
         } else if ($mValue instanceof PropertyValueList) {
           // bg-pos bg-pos? / bg-size bg-size?
           $oBgPosValues = $mValue->getFirst();
-          if($oBgPosValues instanceof PropertyValueList) {
+          if ($oBgPosValues instanceof PropertyValueList) {
             $aBgPosValues = $oBgPosValues->getItems();
           } else {
             $aBgPosValues = array($oBgPosValues);
@@ -340,13 +340,13 @@ class ExpandShorthands
             array($aBgPosValues[0], 'center'),
             ' '
           );
-          if(count($aBgPosValues) > 1) {
+          if (count($aBgPosValues) > 1) {
             $bgpos_valuelist->replace(1, $aBgPosValues[1]);
           }
           $aBgProperties['background-position'] = $bgpos_valuelist;
           //
           $oBgSizeValues = $mValue->getLast();
-          if($oBgSizeValues instanceof PropertyValueList) {
+          if ($oBgSizeValues instanceof PropertyValueList) {
             $aBgSizeValues = $oBgSizeValues->getItems();
           } else {
             $aBgSizeValues = array($oBgSizeValues);
@@ -355,16 +355,16 @@ class ExpandShorthands
             array($aBgSizeValues[0], $aBgSizeValues[0]),
             ' '
           );
-          if(count($aBgSizeValues) > 1) {
+          if (count($aBgSizeValues) > 1) {
             $bgsize_valuelist->replace(1, $aBgSizeValues[1]);
           }
           $aBgProperties['background-size'] = $bgsize_valuelist;
 
-        } else if(in_array($mValue, array('left','center','right','top','bottom'))
+        } else if (in_array($mValue, array('left','center','right','top','bottom'))
           || $mValue instanceof Value\Dimension
         ){
-          //if($mValue instanceof Value\Dimension) $mValue = clone $mValue;
-          if($iNumBgPos === 0) {
+          //if ($mValue instanceof Value\Dimension) $mValue = clone $mValue;
+          if ($iNumBgPos === 0) {
             $aBgProperties['background-position'] = new PropertyValueList(
               array($mValue, 'center'), ' '
             );
@@ -372,23 +372,23 @@ class ExpandShorthands
             $aBgProperties['background-position']->replace(1, $mValue);
           }
           $iNumBgPos++;
-        } else if(in_array($mValue, array('repeat','no-repeat','repeat-x','repeat-y','space','round'))) {
+        } else if (in_array($mValue, array('repeat','no-repeat','repeat-x','repeat-y','space','round'))) {
           $aBgProperties['background-repeat'] = $mValue;
-        } else if(in_array($mValue, array('scroll','fixed','local'))) {
+        } else if (in_array($mValue, array('scroll','fixed','local'))) {
           $aBgProperties['background-attachment'] = $mValue;
-        } else if(in_array($mValue, array('border-box','padding-box','content-box'))) {
-          if($iNumBoxValues === 0) {
+        } else if (in_array($mValue, array('border-box','padding-box','content-box'))) {
+          if ($iNumBoxValues === 0) {
             $aBgProperties['background-origin'] = $mValue;
             $aBgProperties['background-clip'] = $mValue;
           } else {
             $aBgProperties['background-clip'] = $mValue;
           }
           $iNumBoxValues++;
-        } else if($mValue instanceof Value\Color) {
-          if($iLayerIndex == $iNumLayers-1) {
+        } else if ($mValue instanceof Value\Color) {
+          if ($iLayerIndex == $iNumLayers-1) {
             $color = $mValue;
           } else {
-            if(empty($aBgProperties)) $aBgProperties['background-image'] = "none";
+            if (empty($aBgProperties)) $aBgProperties['background-image'] = "none";
           }
         }
       }
@@ -398,13 +398,13 @@ class ExpandShorthands
       $aUnfoldedResults[$iNumLayers-1]['background-color'] = $color;
     }
     $aFoldedResults = array();
-    foreach($aUnfoldedResults as $i => $result) {
-      foreach($result as $propname => $propval) {
+    foreach ($aUnfoldedResults as $i => $result) {
+      foreach ($result as $propname => $propval) {
         $aFoldedResults[$propname][$i] = $propval;
       }
     }
-    foreach($aFoldedResults as $propname => $aValues) {
-      if($this->_canAddShorthandExpansion($oProperty, $propname)) {
+    foreach ($aFoldedResults as $propname => $aValues) {
+      if ($this->_canAddShorthandExpansion($oProperty, $propname)) {
         $separator = count($aValues) === 0 ? ' ' : ',';
         $oValueList = new PropertyValueList($aValues, $separator);
         $oNewProp = new Property($propname, $oValueList);

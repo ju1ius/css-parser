@@ -79,7 +79,7 @@ class MediaQuery implements Serializable
         $idx = array_search($expr, $this->expressions);
         if (false !== $idx) {
             unset($this->expressions[$idx]);
-            if($reset_keys) $this->expressions = array_values($this->expressions);
+            if ($reset_keys) $this->expressions = array_values($this->expressions);
         }
     }
 
@@ -91,7 +91,7 @@ class MediaQuery implements Serializable
         $expressions = array();
         foreach ($this->expressions as $expr) {
             $expr_text = $expr->getCssText();
-            if($expr_text) $expressions[] = $expr_text;
+            if ($expr_text) $expressions[] = $expr_text;
         }
         $expressions = empty($expressions) ? '' : implode(' and ', $expressions);
 

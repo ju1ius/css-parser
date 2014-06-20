@@ -10,7 +10,7 @@ class Time extends Dimension
 
   public function __construct($value, $unit)
   {
-    if(!in_array($unit, self::$UNITS))
+    if (!in_array($unit, self::$UNITS))
     {
       throw new \InvalidArgumentException(
         sprintf("%s is not a valid Css Time unit", $unit)  

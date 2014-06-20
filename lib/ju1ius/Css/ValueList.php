@@ -31,7 +31,7 @@ class ValueList extends CssList implements Serializable
     public function getCssText($options=array())
     {
         return implode($this->separator, array_map(function($item) use($options) {
-            if($item instanceof Serializable) {
+            if ($item instanceof Serializable) {
                 return $item->getCssText($options);
             } else {
                 return (string) $item;

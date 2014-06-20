@@ -19,7 +19,7 @@ class MediaQueryList extends ValueList
             throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\MediaQuery");
         }
 
-        if(!$this->contains($media_query)) {
+        if (!$this->contains($media_query)) {
             parent::append($media_query);
         }
     }
@@ -30,7 +30,7 @@ class MediaQueryList extends ValueList
             throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\MediaQuery");
         }
 
-        if(!$this->contains($media_query))
+        if (!$this->contains($media_query))
         {
             parent::prepend($media_query);
         }

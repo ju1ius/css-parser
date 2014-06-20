@@ -96,7 +96,7 @@ class CssList implements ListInterface
             $oldItem = array_search($oldItem, $this->items);
             if ($oldItem === false) return;
         }
-        //if($newItems instanceof CssList) {
+        //if ($newItems instanceof CssList) {
         //$newItems = $newItems->getItems();
         /*} else */
         if (!is_array($newItems)) {

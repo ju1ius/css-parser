@@ -17,7 +17,7 @@ class Keyframes extends Rule
 
   public function __construct(String $name, RuleList $rule_list=null)
   {
-    if($rule_list === null)
+    if ($rule_list === null)
     {
       $rule_list = new RuleList();
     }
@@ -56,7 +56,7 @@ class Keyframes extends Rule
   {
 		$indent = '';
 		$nl = ' ';
-		if(isset($options['indent_level']))
+		if (isset($options['indent_level']))
 		{
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$options['indent_level']++;
@@ -72,7 +72,7 @@ class Keyframes extends Rule
   /*
   public function __call($method, $args)
   {
-    if(method_exists($this->rule_list, $method))
+    if (method_exists($this->rule_list, $method))
     {
       return call_user_func_array(array($this->rule_list, $method), $args);
     }

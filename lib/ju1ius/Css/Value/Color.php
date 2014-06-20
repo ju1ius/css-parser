@@ -19,16 +19,16 @@ class Color extends PrimitiveValue
    **/
   public function __construct($color=null)
   {
-    if(is_array($color)) {
-      if(isset($color['r'], $color['g'], $color['b'])) {
+    if (is_array($color)) {
+      if (isset($color['r'], $color['g'], $color['b'])) {
         $this->fromRgb($color);
-      } else if(isset($color['h'], $color['s'], $color['l'])) {
+      } else if (isset($color['h'], $color['s'], $color['l'])) {
         $this->fromHsl($color);
       }
-    } else if(is_string($color)) {
-      if($rgb = Util\Color::x11ToRgb($color)) {
+    } else if (is_string($color)) {
+      if ($rgb = Util\Color::x11ToRgb($color)) {
         $this->fromRgb($rgb);
-      } else if($rgb = Util\Color::hexToRgb($color)) {
+      } else if ($rgb = Util\Color::hexToRgb($color)) {
         $this->fromRgb($rgb);
       }
     }
@@ -42,10 +42,10 @@ class Color extends PrimitiveValue
   public function fromRgb(Array $rgb)
   {
     $mode = 'rgb';
-    foreach($rgb as $channel => $value) {
-      if($channel === 'a') {
+    foreach ($rgb as $channel => $value) {
+      if ($channel === 'a') {
 				$value = Util\Color::constrainValue((string)$value, 0, 1);
-				if($value === 1) continue;
+				if ($value === 1) continue;
 				$mode .= 'a';
 			} else {
 				$value = Util\Color::normalizeRgbValue((string)$value);
@@ -84,10 +84,10 @@ class Color extends PrimitiveValue
     $mode = $this->mode;
     $channels = $this->channels;
     
-    if(!$mode || $mode === 'rgb') return;
-    if($mode === 'rgba') {
+    if (!$mode || $mode === 'rgb') return;
+    if ($mode === 'rgba') {
       // If we don't need alpha channel, drop it
-      if($channels['a']->getValue() >= 1) {
+      if ($channels['a']->getValue() >= 1) {
         unset($this->channels['a']);
         $this->mode = 'rgb';
       }
@@ -101,7 +101,7 @@ class Color extends PrimitiveValue
     );
 		
     $this->channels = array();
-    foreach($rgb as $key => $val) {
+    foreach ($rgb as $key => $val) {
       $this->channels[$key] = new Dimension($val);
     }
     $this->mode = isset($rgb['a']) ? 'rgba' : 'rgb';
@@ -113,10 +113,10 @@ class Color extends PrimitiveValue
     $mode = $this->mode;
     $channels = $this->channels;
 
-    if(!$mode || $mode == 'hsl') return;
-    if($mode == 'hsla') {
+    if (!$mode || $mode == 'hsl') return;
+    if ($mode == 'hsla') {
       // If we don't need alpha channel, drop it
-      if($channels['a']->getValue() >= 1) {
+      if ($channels['a']->getValue() >= 1) {
         unset($this->channels['a']);
         $this->mode = 'hsl';
       }
@@ -133,7 +133,7 @@ class Color extends PrimitiveValue
     $this->channels['s'] = new Percentage($hsl['s']);
     $this->channels['l'] = new Percentage($hsl['l']);
 		$this->mode = 'hsl';
-    if(isset($hsl['a'])) {
+    if (isset($hsl['a'])) {
       $this->channels['a'] = new Dimension($hsl['a']);
       $this->mode = 'hsla';
 		}
@@ -143,9 +143,9 @@ class Color extends PrimitiveValue
   public function getX11Color()
   {
     $channels = $this->channels;
-    if(isset($channels['a']) && $channels['a']->getValue() !== 1) return null;
+    if (isset($channels['a']) && $channels['a']->getValue() !== 1) return null;
 
-    if($this->mode == 'rgb') {
+    if ($this->mode == 'rgb') {
       return Util\Color\rgbToX11(
         $channels['r']->getValue(),
         $channels['g']->getValue(),
@@ -163,15 +163,15 @@ class Color extends PrimitiveValue
   public function getHexValue()
   {
     $channels = $this->channels;
-    if(isset($channels['a']) && $channels['a']->getValue() !== 1) return null;
+    if (isset($channels['a']) && $channels['a']->getValue() !== 1) return null;
 
-    if($this->mode === 'rgb') {
+    if ($this->mode === 'rgb') {
       return Util\Color::rgbToHex(
         $channels['r']->getValue(),
         $channels['g']->getValue(),
         $channels['b']->getValue()
       );
-    } else if($this->mode === 'hsl') {
+    } else if ($this->mode === 'hsl') {
       return Util\Color::hslToX11(
         $channels['h']->getValue(),
         $channels['s']->getValue(),
@@ -182,13 +182,13 @@ class Color extends PrimitiveValue
 
   public function getCssText($options=array())
   {
-		if(isset($options['color_mode'])) {
+		if (isset($options['color_mode'])) {
 			switch($options['color_mode']) {
 				case 'hex':
-					if($value = $this->getHexValue()) return $value;
+					if ($value = $this->getHexValue()) return $value;
 					break;
 				case 'X11':
-					if($value = $this->getX11Color()) return $value;
+					if ($value = $this->getX11Color()) return $value;
 					break;
 				case 'rgb':
 				case 'rgba':
@@ -205,7 +205,7 @@ class Color extends PrimitiveValue
 
   public function __clone()
   {
-    foreach($this->channels as $key => $value)
+    foreach ($this->channels as $key => $value)
     {
       $this->channels[$key] = clone $value;
     }

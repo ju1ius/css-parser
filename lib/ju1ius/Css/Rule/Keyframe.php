@@ -35,7 +35,7 @@ class Keyframe extends Rule
   public function setStyleDeclaration(StyleDeclaration $styleDeclaration)
   {
     $styleDeclaration->setParentRule($this);
-    if($parentStyleSheet = $this->getParentStyleSheet())
+    if ($parentStyleSheet = $this->getParentStyleSheet())
     {
       $styleDeclaration->setParentStyleSheet($parentStyleSheet);
     }
@@ -46,7 +46,7 @@ class Keyframe extends Rule
   {
 		$indent = '';
 		$nl = ' ';
-		if(isset($options['indent_level']))
+		if (isset($options['indent_level']))
 		{
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$options['indent_level']++;

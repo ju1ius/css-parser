@@ -19,10 +19,10 @@ class StyleRule extends Rule
   public function __construct(SelectorList $selectorList, StyleDeclaration $styleDeclaration=null)
   {
     $this->selectorList = $selectorList;
-    if($styleDeclaration)
+    if ($styleDeclaration)
     {
       $styleDeclaration->setParentRule($this);
-      if($parentStyleSheet = $this->getParentStyleSheet())
+      if ($parentStyleSheet = $this->getParentStyleSheet())
       {
         $styleDeclaration->setParentStyleSheet($parentStyleSheet);
       }
@@ -46,7 +46,7 @@ class StyleRule extends Rule
   public function setStyleDeclaration(StyleDeclaration $styleDeclaration)
   {
     $styleDeclaration->setParentRule($this);
-    if($parentStyleSheet = $this->getParentStyleSheet())
+    if ($parentStyleSheet = $this->getParentStyleSheet())
     {
       $styleDeclaration->setParentStyleSheet($parentStyleSheet);
     }
@@ -74,17 +74,17 @@ class StyleRule extends Rule
    **/
   public static function merge(Array $rules)
   {
-    if(1 === count($rules)) {
-      if(!$rules[0] instanceof StyleRule) {
+    if (1 === count($rules)) {
+      if (!$rules[0] instanceof StyleRule) {
         throw new \InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
       }
       return clone $rules[0];
     }
     // Internal storage of Css properties that we will keep
     $aProperties = array();
-    foreach($rules as $rule)
+    foreach ($rules as $rule)
     {
-      if(!$rule instanceof StyleRule) {
+      if (!$rule instanceof StyleRule) {
         throw new \InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
       }
       $styleDeclaration = $rule->getStyleDeclaration();
@@ -92,28 +92,28 @@ class StyleRule extends Rule
       $specificity = 0;
       //
       $styleDeclaration->expandShorthands();
-      if(1 === count($selectorList)) {
+      if (1 === count($selectorList)) {
         $specificity = $selectorList[0]->getSpecificity();
       }
       //
-      foreach($styleDeclaration->getAppliedProperties() as $name => $property)
+      foreach ($styleDeclaration->getAppliedProperties() as $name => $property)
       {
         // Add the property to the list to be folded per
         // http://www.w3.org/TR/css3-cascade/#cascading
         $override = false;
         $isImportant = $property->getIsImportant();
-        if(isset($aProperties[$name])) {
+        if (isset($aProperties[$name])) {
           $oldProp = $aProperties[$name];
           // properties have same weight so we consider specificity
-          if($isImportant === $oldProp['property']->getIsImportant()) {
-            if($specificity >= $oldProp['specificity']) $override = true;
-          } else if($isImportant) {
+          if ($isImportant === $oldProp['property']->getIsImportant()) {
+            if ($specificity >= $oldProp['specificity']) $override = true;
+          } else if ($isImportant) {
             $override = true;
           }
         } else {
           $override = true;
         }
-        if($override) {
+        if ($override) {
           $aProperties[$name] = array(
             'property' => Object::getClone($property),
             'specificity' => $specificity
@@ -122,7 +122,7 @@ class StyleRule extends Rule
       }
     }
     $merged = new StyleDeclaration();
-    foreach($aProperties as $name => $details) {
+    foreach ($aProperties as $name => $details) {
       $merged->append($details['property']);
     }
     $merged->createShorthands();
@@ -136,7 +136,7 @@ class StyleRule extends Rule
   {
 		$indent = '';
 		$nl = ' ';
-		if(isset($options['indent_level']))
+		if (isset($options['indent_level']))
 		{
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$options['indent_level']++;

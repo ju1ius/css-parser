@@ -48,7 +48,7 @@ class AtRule extends Rule
   {
 		$indent = '';
 		$nl = ' ';
-		if(isset($options['indent_level']))
+		if (isset($options['indent_level']))
 		{
 			$indent = str_repeat($options['indent_char'], $options['indent_level']);
 			$options['indent_level']++;

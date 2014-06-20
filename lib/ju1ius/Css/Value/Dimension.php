@@ -15,7 +15,7 @@ class Dimension extends PrimitiveValue
 
   public function __construct($value, $unit=null)
   {
-    if(!empty(self::$VALID_UNITS) && !in_array($unit, self::$VALID_UNITS))
+    if (!empty(self::$VALID_UNITS) && !in_array($unit, self::$VALID_UNITS))
     {
       throw new \InvalidArgumentException(
         sprintf("%s is not a valid %s unit", get_class($this), $unit)  

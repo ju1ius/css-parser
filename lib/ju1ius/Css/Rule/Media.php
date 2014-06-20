@@ -61,7 +61,7 @@ class Media extends Rule
   /*
   public function __call($method, $args)
   {
-    if(method_exists($this->rule_list, $method))
+    if (method_exists($this->rule_list, $method))
     {
       return call_user_func_array(array($this->rule_list, $method), $args);
     }

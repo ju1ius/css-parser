@@ -12,11 +12,11 @@ class SelectorList extends CssList implements Serializable, XPathable
 
     public function __construct($selectors=array())
     {
-        if($selectors instanceof SelectorList) {
+        if ($selectors instanceof SelectorList) {
             $this->items = $selectors->getItems();
-        } else if($selectors instanceof Selector) {
+        } else if ($selectors instanceof Selector) {
             $this->items = array($selectors);
-        } else if(is_array($selectors)) {
+        } else if (is_array($selectors)) {
             $this->items = $selectors;
         } else {
             throw new \InvalidArgumentException();

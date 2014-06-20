@@ -49,7 +49,7 @@ class Import extends Rule
 
 	public function getStyleSheet()
 	{
-		if($this->styleSheet === null)
+		if ($this->styleSheet === null)
 		{
 			$this->styleSheet = $this->loadStyleSheet();
 		}

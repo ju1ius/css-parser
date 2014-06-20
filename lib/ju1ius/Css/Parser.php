@@ -852,7 +852,7 @@ class Parser extends LLk
             $media_list->append($this->_media_query());
         }
 
-        while($this->LT()->type === Lexer::T_COMMA) {
+        while ($this->LT()->type === Lexer::T_COMMA) {
             $this->consume();
             $this->_ws();
             $media_list->append($this->_media_query());
@@ -991,7 +991,7 @@ class Parser extends LLk
     protected function _keyframes_blocks()
     {/*{{{*/
         $rule_list = new RuleList();
-        while(true) {
+        while (true) {
             if (!in_array($this->LT()->type, array(Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE))) {
                 break;
             }
@@ -1018,7 +1018,7 @@ class Parser extends LLk
         $selectors[] = $this->LT()->value;
         $this->_ws();
 
-        while($this->LT()->type === Lexer::T_COMMA) {
+        while ($this->LT()->type === Lexer::T_COMMA) {
             $this->_ws();
             $this->ensure($selector_tokens);
             $selectors[] = $this->LT()->value;
@@ -1068,7 +1068,7 @@ class Parser extends LLk
     protected function _selector()
     {/*{{{*/
         $selector = $this->_simple_selector_sequence();
-        while(true) {
+        while (true) {
             switch($this->LT()->type) {
 
                 case Lexer::T_PLUS:
@@ -1110,7 +1110,7 @@ class Parser extends LLk
         $selector = $this->_type_selector();
         $has_hash = false;
 
-        while(true) {
+        while (true) {
 
             switch ($this->LT()->type) {
 
@@ -1529,7 +1529,7 @@ class Parser extends LLk
 
         $this->_ws();
 
-        while(true) {
+        while (true) {
 
             try {
                 $property = $this->_declaration();
@@ -1581,7 +1581,7 @@ class Parser extends LLk
 
     protected function _ws()
     {/*{{{*/
-        while(true) {
+        while (true) {
             switch($this->LT()->type) {
                 case Lexer::T_S:
                 case Lexer::T_COMMENT:
@@ -1689,7 +1689,7 @@ class Parser extends LLk
             'end' => null
         );
 
-        while(true) {
+        while (true) {
             switch ($this->LT()->type) {
 
                 case Lexer::T_LCURLY:
@@ -1746,7 +1746,7 @@ class Parser extends LLk
             'start' => $this->LT(),
             'end' => null
         );
-        while(true) {
+        while (true) {
 
             switch ($this->LT()->type) {
 
@@ -1809,7 +1809,7 @@ class Parser extends LLk
             'start' => $this->LT(),
             'end' => null
         );
-        while(true) {
+        while (true) {
 
             switch ($this->LT()->type) {
 

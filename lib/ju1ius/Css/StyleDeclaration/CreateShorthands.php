@@ -57,48 +57,48 @@ class CreateShorthands
     $oBgImageProperty = $this->styleDeclaration->getAppliedProperty('background-image');
     $oBgColorProperty = $this->styleDeclaration->getAppliedProperty('background-color');
     // we need at least a background-image or a background-color
-    if(!$oBgImageProperty && !$oBgColorProperty) return;
+    if (!$oBgImageProperty && !$oBgColorProperty) return;
     // get the number of layers from background-image property
     $iNumLayers = 1;
-    if($oBgImageProperty) {
+    if ($oBgImageProperty) {
       $oBgImageValueList = $oBgImageProperty->getValueList();
-      if($oBgImageValueList->getSeparator() === ',') {
+      if ($oBgImageValueList->getSeparator() === ',') {
         $iNumLayers = count($oBgImageValueList);
       }
     }
-    if($iNumLayers === 1) {
+    if ($iNumLayers === 1) {
       $aProperties[] = 'background-color';
       $this->_createShorthandProperties($aProperties, 'background', true);
       return;
     }
     $bCanProceed = $this->_safeCleanup($aProperties, 'background');
-    if(!$bCanProceed) return;
+    if (!$bCanProceed) return;
     // Now we collapse the rules
     $aNewValues = array('normal' => array(), 'important' => array());
     $aOldProperties = array('normal' => array(), 'important' => array());
-    foreach($aProperties as $sProperty) {
+    foreach ($aProperties as $sProperty) {
       $oProperty = $this->styleDeclaration->getAppliedProperty($sProperty);
-      if(!$oProperty) continue;
+      if (!$oProperty) continue;
       $sDest = $oProperty->getIsImportant() ? 'important' : 'normal';
       $oValueList = $oProperty->getValueList();
-      if($oValueList->getSeparator() === ',') {
+      if ($oValueList->getSeparator() === ',') {
         $aPropertyLayers = $oValueList->getItems();
       } else {
         $aPropertyLayers = array($oValueList->getItems());
       }
       $aOldProperties[$sDest][] = $oProperty;
       // compute missing layers
-      while(count($aPropertyLayers) < $iNumLayers) {
+      while (count($aPropertyLayers) < $iNumLayers) {
         $aPropertyLayers = array_merge($aPropertyLayers, Object::getClone($aPropertyLayers));
       }
       // drop extra layers
       $aPropertyLayers = array_slice($aPropertyLayers, 0, $iNumLayers);
       //
-      foreach($aPropertyLayers as $i => $mValue) {
+      foreach ($aPropertyLayers as $i => $mValue) {
         $aNewValues[$sDest][$i][$sProperty] = Object::getClone($mValue);
       }
     }
-    if($oBgColorProperty) {
+    if ($oBgColorProperty) {
       $sDest = $oBgColorProperty->getIsImportant() ? 'important' : 'normal';
       $aOldProperties[$sDest][] = $oBgColorProperty;
       $aNewValues[$sDest][$iNumLayers-1]['background-color'] = Object::getClone(
@@ -109,9 +109,9 @@ class CreateShorthands
     $iImportantCount = count($aNewValues['important']);
     $iNormalCount = count($aNewValues['normal']);
     // Merge important values only if no normal values are present
-    if($iNormalCount) {
+    if ($iNormalCount) {
       $this->_mergeLayers('background', $aNewValues['normal'], $aOldProperties['normal'], false);
-    } else if($iImportantCount) {
+    } else if ($iImportantCount) {
       $this->_mergeLayers('background', $aNewValues['important'], $aOldProperties['important'], true);
     }
 	}
@@ -153,32 +153,32 @@ class CreateShorthands
     );
     $aProperties = $this->styleDeclaration->getProperties();
     $iImportantCount = 0;
-    foreach($aExpansions as $sProperty => $sExpanded) {
+    foreach ($aExpansions as $sProperty => $sExpanded) {
       $aFoldable = array();
-			foreach($aPositions as $sPosition) {
+			foreach ($aPositions as $sPosition) {
         $oProperty = $this->styleDeclaration->getAppliedProperty(
           sprintf($sExpanded, $sPosition)
         );
-        if(!$oProperty) continue;
-        if($oProperty->getIsImportant()) $iImportantCount++;
+        if (!$oProperty) continue;
+        if ($oProperty->getIsImportant()) $iImportantCount++;
 				$aFoldable[$oProperty->getName()] = $oProperty; 
 			}
       // All four dimensions must be present
-      if(count($aFoldable) !== 4) continue;
+      if (count($aFoldable) !== 4) continue;
       // All four dimensions must have same importance
-      if($iImportantCount && $iImportantCount !== 4) continue;
+      if ($iImportantCount && $iImportantCount !== 4) continue;
 
       $aValues = array();
-      foreach($aPositions as $sPosition) {
+      foreach ($aPositions as $sPosition) {
         $oProperty = $aFoldable[sprintf($sExpanded, $sPosition)];
         $aPropertyValues = $oProperty->getValueList()->getItems();
         $aValues[$sPosition] = Object::getClone($aPropertyValues[0]);
       }
       $oNewValueList = new PropertyValueList(array(), ' ');
       
-      if((string)$aValues['left'] === (string)$aValues['right']) {
-        if((string)$aValues['top'] === (string)$aValues['bottom']) {
-          if((string)$aValues['top'] === (string)$aValues['left']) {
+      if ((string)$aValues['left'] === (string)$aValues['right']) {
+        if ((string)$aValues['top'] === (string)$aValues['bottom']) {
+          if ((string)$aValues['top'] === (string)$aValues['left']) {
             // All 4 sides are equal
             $oNewValueList->append($aValues['top']);
           } else {
@@ -221,13 +221,13 @@ class CreateShorthands
     );
     $oFSProperty = $this->styleDeclaration->getAppliedProperty('font-size');
     $oFFProperty = $this->styleDeclaration->getAppliedProperty('font-family');
-    if(!$oFSProperty || !$oFFProperty) return;
+    if (!$oFSProperty || !$oFFProperty) return;
     $oNewValueList = new PropertyValueList(array(), ' ');
-    foreach(array('font-style', 'font-variant', 'font-weight') as $sProperty) {
+    foreach (array('font-style', 'font-variant', 'font-weight') as $sProperty) {
 			$oProperty = $this->styleDeclaration->getAppliedProperty($sProperty);
-			if(!$oProperty) continue;
+			if (!$oProperty) continue;
 			$aValues = $oProperty->getValueList()->getItems();
-			if($aValues[0] !== 'normal') {
+			if ($aValues[0] !== 'normal') {
 				$oNewValueList->append(Object::getClone($aValues[0]));
 			}
     }
@@ -235,9 +235,9 @@ class CreateShorthands
     $aFSValues = $oFSProperty->getValueList()->getItems();
     // But wait to know if we have line-height to add it
 		$oLHProperty = $this->styleDeclaration->getAppliedProperty('line-height');
-    if($oLHProperty) {
+    if ($oLHProperty) {
       $aLHValues = $oLHProperty->getValueList()->getItems();
-      if('normal' !== $aLHValues[0]) {
+      if ('normal' !== $aLHValues[0]) {
         $val = new PropertyValueList(
           array(
             Object::getClone($aFSValues[0]),
@@ -265,22 +265,22 @@ class CreateShorthands
 
   private function _createShorthandProperties(array $aProperties, $sShorthand, $bSafe=false)
   {
-    if($bSafe) {
+    if ($bSafe) {
       $bCanProceed = $this->_safeCleanup($aProperties, $sShorthand);
     } else {
       $bCanProceed = $this->_destructiveCleanup($aProperties, $sShorthand);
     }
-    if(!$bCanProceed) return;
+    if (!$bCanProceed) return;
     // Now we collapse the rules
     $aNewValues = array('normal' => array(), 'important' => array());
     $aOldProperties = array('normal' => array(), 'important' => array());
-    foreach($aProperties as $sProperty) {
+    foreach ($aProperties as $sProperty) {
       $aProperties = $this->styleDeclaration->getProperties($sProperty);
-      foreach($aProperties as $iPos => $oProperty) {
+      foreach ($aProperties as $iPos => $oProperty) {
         $aValues = $oProperty->getValueList()->getItems();
         $sDest = $oProperty->getIsImportant() ? 'important' : 'normal';
         $aOldProperties[$sDest][] = $iPos;
-        foreach($aValues as $mValue) {
+        foreach ($aValues as $mValue) {
           $aNewValues[$sDest][] = Object::getClone($mValue);
         }
       }
@@ -288,9 +288,9 @@ class CreateShorthands
     $iImportantCount = count($aNewValues['important']);
     $iNormalCount = count($aNewValues['normal']);
     // Merge important values only if no normal values are present
-    if($iNormalCount) {
+    if ($iNormalCount) {
       $this->_mergeValues($sShorthand, $aNewValues['normal'], $aOldProperties['normal'], false);
-    } else if($iImportantCount) {
+    } else if ($iImportantCount) {
       $this->_mergeValues($sShorthand, $aNewValues['important'], $aOldProperties['important'], true);
     }
   }
@@ -299,7 +299,7 @@ class CreateShorthands
   {
     $this->styleDeclaration->remove($aOldProperties);
     $oNewValueList = new PropertyValueList(array(), ',');
-    foreach($aLayers as $aValues) {
+    foreach ($aLayers as $aValues) {
       $oLayerValueList = new PropertyValueList($aValues, ' ');
       $oNewValueList->append($oLayerValueList);
     }
@@ -327,33 +327,33 @@ class CreateShorthands
   private function _destructiveCleanup(Array $aProperties, $sShorthand) {
     // first we check if a shorthand already exists, and keep only the relevant one.
     $aLastExistingShorthand = $this->styleDeclaration->getAppliedProperty($sShorthand, true);
-    if($aLastExistingShorthand) {
+    if ($aLastExistingShorthand) {
       list($iLastExistingShorthandPosition, $oLastExistingShorthand) = each($aLastExistingShorthand);
     }
-    foreach($this->styleDeclaration->getProperties($sShorthand) as $iPos => $oProperty) {
-      if($iPos !== $iLastExistingShorthandPosition) $this->styleDeclaration->remove($iPos);
+    foreach ($this->styleDeclaration->getProperties($sShorthand) as $iPos => $oProperty) {
+      if ($iPos !== $iLastExistingShorthandPosition) $this->styleDeclaration->remove($iPos);
     }
     // next we try to get rid of unused rules
-    foreach($aProperties as $sProperty) {
+    foreach ($aProperties as $sProperty) {
       $aRule = $this->styleDeclaration->getAppliedProperty($sProperty, true);
-      if(!$aRule) continue;
+      if (!$aRule) continue;
       list($iRulePosition, $oRule) = each($aRule);
-			foreach($this->styleDeclaration->getProperties($sProperty) as $iPos => $oProperty) {
-        if($iPos !== $iRulePosition) $this->styleDeclaration->remove($iPos);
+			foreach ($this->styleDeclaration->getProperties($sProperty) as $iPos => $oProperty) {
+        if ($iPos !== $iRulePosition) $this->styleDeclaration->remove($iPos);
       }
-      if($aLastExistingShorthand) {
+      if ($aLastExistingShorthand) {
         $bRuleIsImportant = $oRule->getIsImportant();
         $bShorthandIsImportant = $oLastExistingShorthand->getIsImportant();
         // IF property comes before shorthand AND they have the same importance,
         // OR IF shorthand is important AND property is not,
         // we can get rid of the property.
-        if(($iRulePosition < $iLastExistingShorthandPosition && $bRuleIsImportant === $bShorthandIsImportant)
+        if (($iRulePosition < $iLastExistingShorthandPosition && $bRuleIsImportant === $bShorthandIsImportant)
            || (!$bRuleIsImportant && $bShorthandIsImportant)) {
           $this->styleDeclaration->remove($iRulePosition);
         }
       }
     }
-    if($aLastExistingShorthand) {
+    if ($aLastExistingShorthand) {
       // Now that we made sure that there is no duplicate shorthand
       // we can expand the corresponding rule as expanding doesn't create duplicates.
       $sExpandMethod = 'expand'.str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))).'Shorthands';
@@ -386,25 +386,25 @@ class CreateShorthands
     $aExistingShorthands = $this->styleDeclaration->getProperties($sShorthand);
     $iNumShorthands = count($aExistingShorthands);
     // Don't create shorthands if more than one are already present,
-    if($iNumShorthands > 1) return false;
-    if($iNumShorthands === 1) {
+    if ($iNumShorthands > 1) return false;
+    if ($iNumShorthands === 1) {
       $iExistingShorthandPosition = key($aExistingShorthands);
     }
-    foreach($aProperties as $sProperty) {
+    foreach ($aProperties as $sProperty) {
       $aProperties = $this->styleDeclaration->getProperties($sProperty);
       // Don't merge anything if several identical rules are present.
-      if(count($aProperties) > 1) return false;
+      if (count($aProperties) > 1) return false;
       // Can't merge property if no value
-      if(count($aProperties) === 0) continue;
-			foreach($aProperties as $iPos => $oProperty) {
-        if($iNumShorthands && !$oProperty->getIsImportant() && $iPos < $iExistingShorthandPosition) {
+      if (count($aProperties) === 0) continue;
+			foreach ($aProperties as $iPos => $oProperty) {
+        if ($iNumShorthands && !$oProperty->getIsImportant() && $iPos < $iExistingShorthandPosition) {
           // If rule is not important and comes before a shorthand, we can safely remove it.
           $this->styleDeclaration->remove($iPos);
           continue;
 				}
       }
     }
-    if($iNumShorthands) {
+    if ($iNumShorthands) {
       // Now that we made sure that there is no duplicate shorthand
       // we can expand the corresponding property as expanding doesn't create duplicates.
       $sExpandMethod = 'expand'.str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))).'Shorthands';

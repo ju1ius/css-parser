@@ -46,7 +46,7 @@ class ElementSelector extends Selector
 
   public function getCssText($options=array())
   {
-    if($this->namespace === '*') {
+    if ($this->namespace === '*') {
       return $this->element === '*' ? '' : $this->element;
     }
     return sprintf('%s|%s', $this->namespace, $this->element);
@@ -57,7 +57,7 @@ class ElementSelector extends Selector
    */
   public function toXPath()
   {
-    if($this->namespace === '*') {
+    if ($this->namespace === '*') {
       $el = strtolower($this->element);
     } else {
       // FIXME: Should we lowercase here?

@@ -148,8 +148,8 @@ class Charset extends Encoding
         foreach (self::$CHARSET_DETECTION_MAP as $charset_map) {
             $pattern = $charset_map['pattern'];
             $matches = array();
-            if(preg_match('#^'.$pattern.'#U', $text, $matches)) {
-                if($charset_map['charset']) {
+            if (preg_match('#^'.$pattern.'#U', $text, $matches)) {
+                if ($charset_map['charset']) {
                     $charset = $charset_map['charset'];
                 } else {
                     $charset = $matches[1];

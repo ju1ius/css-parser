@@ -42,7 +42,7 @@ class FunctionSelector extends Selector
 
   public function getSpecificity()
   {
-    if($this->name === 'not') {
+    if ($this->name === 'not') {
       $spec = $this->expr->getSpecificity();
     } else {
       $spec = $this->type === ':' ? 10 : 1;
