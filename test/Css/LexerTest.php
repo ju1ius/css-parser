@@ -81,16 +81,14 @@ class LexerTest extends CssParser_TestCase
                 array(Lexer::T_DIMENSION, Lexer::T_PLUS, Lexer::T_NUMBER)
             ),
             array(
-                '.person:nth-child(2tons+1) {
-                    margin-left:0;
-                }',
+                '.person:nth-child(2tons+1) { margin-left:0; }',
                 array(
                     Lexer::T_DOT, Lexer::T_IDENT,
                     Lexer::T_COLON, Lexer::T_FUNCTION,
                     Lexer::T_DIMENSION, Lexer::T_PLUS, Lexer::T_NUMBER,
                     Lexer::T_RPAREN, Lexer::T_S, Lexer::T_LCURLY, Lexer::T_S,
                     Lexer::T_IDENT, Lexer::T_COLON, Lexer::T_NUMBER,
-                    Lexer::T_SEMICOLON, Lexer::T_RCURLY
+                    Lexer::T_SEMICOLON, Lexer::T_S, Lexer::T_RCURLY
                 )
             ),
         );

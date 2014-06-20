@@ -32,20 +32,22 @@ class StringTest extends CssParser_TestCase
             ),
             array(
                 'a[title="a not s\
-                o very long title"] {/*...*/}',
+o very long title"] {/*...*/}'
+                ,
                 'a[title="a not so very long title"]{  }'
             ),
             array(
                 'p[example="public class foo\
-                {\
-                    private int x;\
-                        \
-                            foo(int x) {\
-                                this.x = x;\
-                }\
-                    \
-                }"] { color: red }',
-                'p[example="public class foo{  private int x;  foo(int x) {    this.x = x;  }}"]{ color: rgb(255,0,0); }'
+{\
+    private int x;\
+\
+    foo(int x) {\
+        this.x = x;\
+    }\
+\
+}"] { color: red }'
+                ,
+                'p[example="public class foo{    private int x;    foo(int x) {        this.x = x;    }}"]{ color: rgb(255,0,0); }'
             )
         );
     }
