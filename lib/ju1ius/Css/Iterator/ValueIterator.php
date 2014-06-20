@@ -71,9 +71,12 @@ class ValueIterator implements \Iterator
             }
         }
         if ($type) {
-            return array_filter($values, function($item) use($type) {
-                return $item instanceof $type;
-            });
+            return array_filter(
+                $values,
+                function($item) use($type) {
+                    return $item instanceof $type;
+                }
+            );
         }
 
         return $values;

@@ -41,6 +41,7 @@ class StyleSheetList extends CssList
         $elements = $xpath->query('//link[@rel="stylesheet"]|//style');
 
         foreach ($elements as $element) {
+
             if ($element->tagName === "link") {
 
                 $href = $element->getAttribute('href');
@@ -58,6 +59,7 @@ class StyleSheetList extends CssList
                     $loader->loadString($element->textContent)
                 );
             }
+
         }
     }
 

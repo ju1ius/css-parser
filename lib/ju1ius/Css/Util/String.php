@@ -7,7 +7,9 @@ class String
     public static function in_array_ci($needle, array $haystack)
     {
         foreach ($haystack as $item) {
-            if (0 === strcasecmp($needle, $item)) return true;
+            if (0 === strcasecmp($needle, $item)) {
+                return true;
+            }
         }
 
         return false;

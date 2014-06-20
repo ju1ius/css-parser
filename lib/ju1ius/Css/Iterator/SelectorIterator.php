@@ -50,9 +50,12 @@ class SelectorIterator implements \Iterator
         }
 
         if ($type_filter) {
-            return array_filter($selectors, function($item) use($type_filter) {
-                return $item instanceof $type_filter;
-            });
+            return array_filter(
+                $selectors,
+                function($item) use($type_filter) {
+                    return $item instanceof $type_filter;
+                }
+            );
         }
 
         return $selectors;

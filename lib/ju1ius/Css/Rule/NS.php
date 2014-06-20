@@ -11,43 +11,44 @@ use ju1ius\Css\Value\Url;
  **/
 class NS extends Rule
 {
-  private $uri;
-  private $prefix;
+    private $uri;
+    private $prefix;
 
-  function __construct(Url $uri, $prefix=null)
-  {
-    $this->uri = $uri;
-    $this->prefix = $prefix;
-  }
+    function __construct(Url $uri, $prefix=null)
+    {
+        $this->uri = $uri;
+        $this->prefix = $prefix;
+    }
 
-  public function getUri()
-  {
-    return $this->uri;
-  }
-  public function setUri(Url $uri)
-  {
-    $this->uri = $uri;
-  }
+    public function getUri()
+    {
+        return $this->uri;
+    }
+    public function setUri(Url $uri)
+    {
+        $this->uri = $uri;
+    }
 
-  public function getPrefix()
-  {
-    return $this->prefix;
-  }
-  public function setPrefix($prefix)
-  {
-    $this->prefix = $prefix;
-  }
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+    }
 
-  public function getCssText($options=array())
-  {
-		return "@namespace "
-			. ($this->prefix ? $this->prefix . ' ' : '')
-			. $this->uri->getCssText($options)
-			. ';';
-  }
+    public function getCssText($options=array())
+    {
+        return "@namespace "
+            . ($this->prefix ? $this->prefix . ' ' : '')
+            . $this->uri->getCssText($options)
+            . ';'
+        ;
+    }
 
-  public function __clone()
-  {
-    $this->uri = clone $this->uri;
-  }
+    public function __clone()
+    {
+        $this->uri = clone $this->uri;
+    }
 }

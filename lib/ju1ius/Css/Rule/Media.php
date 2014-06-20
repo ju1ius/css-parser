@@ -55,18 +55,18 @@ class Media extends Rule
         return $indent . '@media ' . $this->media_list->getCssText()
             . '{' . $nl
             . $this->rule_list->getCssText($options)
-            . $nl . $indent . '}';
+            . $nl . $indent . '}'
+        ;
     }
 
-  /*
-  public function __call($method, $args)
-  {
-    if (method_exists($this->rule_list, $method))
+    /*
+    public function __call($method, $args)
     {
-      return call_user_func_array(array($this->rule_list, $method), $args);
+        if (method_exists($this->rule_list, $method)) {
+            return call_user_func_array(array($this->rule_list, $method), $args);
+        }
     }
-  }
-   */
+    */
 
     public function __clone() {
         $this->media_list = clone $this->media_list;

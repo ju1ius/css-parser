@@ -191,15 +191,15 @@ class Lexer extends BaseLexer
     public function nextToken()
     {/*{{{*/
         while (true) {
-            if ($this->charpos === -1) $this->consumeCharacters();
-
+            if ($this->charpos === -1) {
+                $this->consumeCharacters();
+            }
             while ($this->lookahead !== null) {
 
                 $charpos = $this->charpos;
                 $bytepos = $this->bytepos;
 
                 switch ($this->lookahead) {
-
                     case '':
                         // EOL
                         break 2;
@@ -381,7 +381,9 @@ class Lexer extends BaseLexer
                 } // end switch
             } // end while
             // EOL
-            if (!$this->nextLine()) break;
+            if (!$this->nextLine()) {
+                break;
+            }
             //if ($this->lineno < $this->numlines-1) {
                 //$this->nextLine();
             //} else {
@@ -476,26 +478,28 @@ class Lexer extends BaseLexer
                 $this->handleWhitespace();
                 if ($this->lookahead === ')') {
                     $this->consumeCharacters();
+
                     return new Token($type, $uri, $this->lineno, $charpos);
                 }
+
                 return new Token(self::T_BADURI, $uri, $this->lineno, $charpos);
             } else {
                 return new Token(self::T_FUNCTION, $ident, $this->lineno, $charpos);
             }
         } else {
             switch($ident) {
-            case 'and':
-                return new Token(self::T_AND, $ident, $this->lineno, $charpos);
-            case 'not':
-                return new Token(self::T_NOT, $ident, $this->lineno, $charpos);
-            case 'only':
-                return new Token(self::T_ONLY, $ident, $this->lineno, $charpos);
-            case 'from':
-                return new Token(self::T_FROM, $ident, $this->lineno, $charpos);
-            case 'to':
-                return new Token(self::T_TO, $ident, $this->lineno, $charpos);
-            default:
-                return new Token(self::T_IDENT, $str, $this->lineno, $charpos);
+                case 'and':
+                    return new Token(self::T_AND, $ident, $this->lineno, $charpos);
+                case 'not':
+                    return new Token(self::T_NOT, $ident, $this->lineno, $charpos);
+                case 'only':
+                    return new Token(self::T_ONLY, $ident, $this->lineno, $charpos);
+                case 'from':
+                    return new Token(self::T_FROM, $ident, $this->lineno, $charpos);
+                case 'to':
+                    return new Token(self::T_TO, $ident, $this->lineno, $charpos);
+                default:
+                    return new Token(self::T_IDENT, $str, $this->lineno, $charpos);
             }
         }
     }/*}}}*/
@@ -508,81 +512,81 @@ class Lexer extends BaseLexer
         $this->consumeString($matches[0]);
         $ident = $this->cleanupIdent($matches[1], true);
         switch($ident) {
-        case 'charset':
-            return new Token(self::T_CHARSET_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'import':
-            return new Token(self::T_IMPORT_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'namespace':
-            return new Token(self::T_NAMESPACE_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'media':
-            return new Token(self::T_MEDIA_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'font-face':
-            return new Token(self::T_FONT_FACE_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'keyframes':
-            return new Token(self::T_KEYFRAMES_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'keyframe':
-            return new Token(self::T_KEYFRAME_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'page':
-            return new Token(self::T_PAGE_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'top-left-corner':
-            return new Token(self::T_TOPLEFTCORNER_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'top-left':
-            return new Token(self::T_TOPLEFT_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'top-center':
-            return new Token(self::T_TOPCENTER_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'top-right':
-            return new Token(self::T_TOPRIGHT_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'top-right-corner':
-            return new Token(self::T_TOPRIGHTCORNER_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'bottom-left-corner':
-            return new Token(self::T_BOTTOMLEFTCORNER_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'bottom-left':
-            return new Token(self::T_BOTTOMLEFT_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'bottom-center':
-            return new Token(self::T_BOTTOMCENTER_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'bottom-right':
-            return new Token(self::T_BOTTOMRIGHT_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'bottom-right-corner':
-            return new Token(self::T_BOTTOMRIGHTCORNER_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'left-top':
-            return new Token(self::T_LEFTTOP_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'left-middle':
-            return new Token(self::T_LEFTMIDDLE_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'right-bottom':
-            return new Token(self::T_RIGHTBOTTOM_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'right-top':
-            return new Token(self::T_RIGHTTOP_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'right-middle':
-            return new Token(self::T_RIGHTMIDDLE_SYM, $ident, $this->lineno, $charpos);
-            break;
-        case 'right-bottom':
-            return new Token(self::T_RIGHTBOTTOM_SYM, $iddent, $this->lineno, $charpos);
-            break;
-        default:
-            return new Token(self::T_ATKEYWORD, $ident, $this->lineno, $charpos);
-            break;
+            case 'charset':
+                return new Token(self::T_CHARSET_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'import':
+                return new Token(self::T_IMPORT_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'namespace':
+                return new Token(self::T_NAMESPACE_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'media':
+                return new Token(self::T_MEDIA_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'font-face':
+                return new Token(self::T_FONT_FACE_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'keyframes':
+                return new Token(self::T_KEYFRAMES_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'keyframe':
+                return new Token(self::T_KEYFRAME_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'page':
+                return new Token(self::T_PAGE_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'top-left-corner':
+                return new Token(self::T_TOPLEFTCORNER_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'top-left':
+                return new Token(self::T_TOPLEFT_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'top-center':
+                return new Token(self::T_TOPCENTER_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'top-right':
+                return new Token(self::T_TOPRIGHT_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'top-right-corner':
+                return new Token(self::T_TOPRIGHTCORNER_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'bottom-left-corner':
+                return new Token(self::T_BOTTOMLEFTCORNER_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'bottom-left':
+                return new Token(self::T_BOTTOMLEFT_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'bottom-center':
+                return new Token(self::T_BOTTOMCENTER_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'bottom-right':
+                return new Token(self::T_BOTTOMRIGHT_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'bottom-right-corner':
+                return new Token(self::T_BOTTOMRIGHTCORNER_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'left-top':
+                return new Token(self::T_LEFTTOP_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'left-middle':
+                return new Token(self::T_LEFTMIDDLE_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'right-bottom':
+                return new Token(self::T_RIGHTBOTTOM_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'right-top':
+                return new Token(self::T_RIGHTTOP_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'right-middle':
+                return new Token(self::T_RIGHTMIDDLE_SYM, $ident, $this->lineno, $charpos);
+                break;
+            case 'right-bottom':
+                return new Token(self::T_RIGHTBOTTOM_SYM, $iddent, $this->lineno, $charpos);
+                break;
+            default:
+                return new Token(self::T_ATKEYWORD, $ident, $this->lineno, $charpos);
+                break;
         }
     }/*}}}*/
 
@@ -599,6 +603,7 @@ class Lexer extends BaseLexer
             //if ($matches = $this->match(self::$regex['string'.$pattern_id])) {
             $this->consumeString($matches[0]);
             $value = $matches[1];
+
             return new Token(self::T_STRING, $value, $this->lineno, $charpos);
             //} else if ($matches = $this->match(self::$regex['badstring'.$pattern_id])) {
         } else if (preg_match('/\G'.self::$regex['badstring'.$pattern_id].'/iu', $this->text, $matches, 0, $this->bytepos)) {
@@ -629,6 +634,7 @@ class Lexer extends BaseLexer
                 // we found the end of string
                 $start_str .= $matches[1];
                 $this->consumeString($matches[0]);
+
                 return new Token(
                     self::T_STRING,
                     $start_str,
@@ -653,6 +659,7 @@ class Lexer extends BaseLexer
                 'numerator' => $matches[1],
                 'denominator' => $matches[2]
             );
+
             return new Token(self::T_RATIO, $value, $this->lineno, $charpos);
         }
 
@@ -662,6 +669,7 @@ class Lexer extends BaseLexer
 
         if ($this->lookahead === '%') {
             $this->consumeCharacters();
+
             return new Token(self::T_PERCENTAGE, $value, $this->lineno, $charpos);
         } else if (!ctype_alpha($this->lookahead)) {
             return new Token(self::T_NUMBER, $value, $this->lineno, $charpos);
@@ -722,6 +730,7 @@ class Lexer extends BaseLexer
         //if ($matches = $this->match('#('.self::$regex['name'].')')) {
         if (preg_match(self::$regex['M-hash'], $this->text, $matches, 0, $this->bytepos)) {
             $this->consumeString($matches[0]);
+
             return new Token(self::T_HASH, $this->cleanupIdent($matches[1]), $this->lineno, $charpos);
         }
     }/*}}}*/
@@ -733,6 +742,7 @@ class Lexer extends BaseLexer
         if (preg_match(self::$regex['M-important'], $this->text, $matches, 0, $this->bytepos)) {
             $value = $matches[0];
             $this->consumeString($matches[0]);
+
             return new Token(self::T_IMPORTANT_SYM, 'important', $this->lineno, $charpos);
         }   
     }/*}}}*/
@@ -743,6 +753,7 @@ class Lexer extends BaseLexer
         //$matches = $this->match('U\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)');
         preg_match('/\GU\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)/iu', $this->text, $matches, 0, $this->bytepos);
         $this->consumeString($matches[0]);
+
         return new Token(self::T_UNICODERANGE, $matches[1], $this->lineno, $charpos);
     }/*}}}*/
 
@@ -752,6 +763,7 @@ class Lexer extends BaseLexer
         //$matches = $this->match(self::$regex['negation']);
         preg_match(self::$regex['M-negation'], $this->text, $matches, 0, $this->bytepos);
         $this->consumeString($matches[0]);
+
         return new Token(self::T_NEGATION, ':not(', $this->lineno, $charpos);
     }/*}}}*/
 

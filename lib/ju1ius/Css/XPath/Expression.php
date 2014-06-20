@@ -4,6 +4,7 @@ namespace ju1ius\Css\XPath;
 
 use ju1ius\Css\Value;
 use ju1ius\Css\Selector\ElementSelector;
+
 /**
  * Represents an XPath expression.
  *
@@ -228,7 +229,6 @@ class Expression
         $parts = array();
 
         while (true) {
-
             if (false !== $pos = strpos($string, "'")) {
                 $parts[] = sprintf("'%s'", substr($string, 0, $pos));
                 $parts[] = "\"'\"";
@@ -237,7 +237,6 @@ class Expression
                 $parts[] = "'$string'";
                 break;
             }
-
         }
 
         return sprintf('concat(%s)', implode($parts, ', '));

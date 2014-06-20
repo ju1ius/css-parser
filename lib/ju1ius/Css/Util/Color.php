@@ -168,6 +168,7 @@ class Color
         }
         if (isset(self::$X11_COLORS_MAP[$color])) {
             $rgb = self::$X11_COLORS_MAP[$color];
+
             return $rgb;
         }
 
@@ -194,8 +195,12 @@ class Color
      **/
     static function rgbToX11($r, $g, $b, $a=1)
     {
-        if ($a !== 1) return null;
-        if ($a == 0) return 'transparent';
+        if ($a !== 1) {
+            return null;
+        }
+        if ($a == 0) {
+            return 'transparent';
+        }
         $result = array_search(
             array('r' => $r, 'g' => $g, 'b' => $b),
             self::$X11_COLORS_MAP
@@ -206,8 +211,12 @@ class Color
 
     static function hslToX11($h, $s, $l, $a=1)
     {
-        if ($a !== 1) return null;
-        if ($a == 0) return 'transparent';
+        if ($a !== 1) {
+            return null;
+        }
+        if ($a === 0) {
+            return 'transparent';
+        }
         $rgb = self::hslToRgb($h, $s, $l);
 
         return self::rgbToX11($rgb['r'], $rgb['g'], $rgb['b']);
@@ -222,13 +231,16 @@ class Color
      **/
     static function hexToRgb($value)
     {
-        if ($value[0] == '#') $value = substr($value, 1);
-        if (strlen($value) == 3) {
+        if ($value[0] === '#') {
+            $value = substr($value, 1);
+        }
+        if (strlen($value) === 3) {
             $value = $value[0].$value[0].$value[1].$value[1].$value[2].$value[2]; 
         }
         //If a proper hex code, convert using bitwise operation. No overhead... faster
-        if (strlen($value) == 6) {
+        if (strlen($value) === 6) {
             $decimal = hexdec($value);
+
             return array(
                 'r' => 0xFF & ($decimal >> 0x10),
                 'g' => 0xFF & ($decimal >> 0x8),
@@ -275,17 +287,21 @@ class Color
         $l = self::normalizeFraction($l);
         $a = self::constrainValue($a, 0, 1);
 
-        if ($l == 1) {
+        if ($l === 1) {
             // white
             $aRGB = array('r' => 255, 'g' => 255, 'b' => 255);
-            if ($a < 1) $aRGB['a'] = $a;
+            if ($a < 1) {
+                $aRGB['a'] = $a;
+            }
 
             return $aRGB;
         }
-        if ($l == 0) {
+        if ($l === 0) {
             // black
             $aRGB = array('r' => 0, 'g' => 0, 'b' => 0);
-            if ($a < 1) $aRGB['a'] = $a;
+            if ($a < 1) {
+                $aRGB['a'] = $a;
+            }
 
             return $aRGB;
         }
@@ -293,7 +309,9 @@ class Color
             // Grayscale: we don't need no fancy calculation !
             $v = round(255 * $l);
             $aRGB = array('r' => $v, 'g' => $v, 'b' => $v);
-            if ($a < 1) $aRGB['a'] = $a;
+            if ($a < 1) {
+                $aRGB['a'] = $a;
+            }
 
             return $aRGB;
         }
@@ -302,8 +320,11 @@ class Color
         // then to float between 0..1
         $h /= 360;
 
-        if ($l < 0.5) $m2 = $l * ($s +1);
-        else $m2 = ($l + $s) - ($l * $s);
+        if ($l < 0.5) {
+            $m2 = $l * ($s +1);
+        } else {
+            $m2 = ($l + $s) - ($l * $s);
+        }
         $m1 = $l * 2 - $m2;
 
         $aRGB = array(
@@ -311,18 +332,30 @@ class Color
             'g' => round(255 * self::hueToRgb($m1, $m2, $h)),
             'b' => round(255 * self::hueToRgb($m1, $m2, $h - (1/3)))
         );
-        if ($a < 1) $aRGB['a'] = $a;
+        if ($a < 1) {
+            $aRGB['a'] = $a;
+        }
 
         return $aRGB;
     }
 
     static private function hueToRgb($m1, $m2, $h)
     {
-        if ($h < 0) $h++;
-        if ($h > 1) $h--;
-        if (($h * 6) < 1) return $m1 + ($m2 - $m1) * $h * 6;
-        if (($h * 2) < 1) return $m2;
-        if (($h * 3) < 2) return $m1 + ($m2 - $m1) * (2/3 - $h) * 6;
+        if ($h < 0) {
+            $h++;
+        }
+        if ($h > 1) {
+            $h--;
+        }
+        if (($h * 6) < 1) {
+            return $m1 + ($m2 - $m1) * $h * 6;
+        }
+        if (($h * 2) < 1) {
+            return $m2;
+        }
+        if (($h * 3) < 2) {
+            return $m1 + ($m2 - $m1) * (2/3 - $h) * 6;
+        }
 
         return $m1;
     }
@@ -351,7 +384,7 @@ class Color
 
         $l = ($max + $min) / 2;
 
-        if ($delta_max == 0) {
+        if ($delta_max === 0) {
             // This is a gray, no chroma...
             // HSL results from 0 to 1
             $h = 0;
@@ -368,22 +401,28 @@ class Color
             $delta_g = ((($max - $g) / 6) + ($delta_max / 2)) / $delta_max;
             $delta_b = ((($max - $b) / 6) + ($delta_max / 2)) / $delta_max;
 
-            if ($r == $max) {
+            if ($r === $max) {
                 $h = $delta_b - $delta_g;
-            } else if ($g == $max) {
+            } else if ($g === $max) {
                 $h = (1/3) + $delta_r - $delta_b;
-            } else if ($b == $max) {
+            } else if ($b === $max) {
                 $h = (2/3) + $delta_g - $delta_r;
             }
-            if ($h < 0) $h++;
-            if ($h > 1) $h--;
+            if ($h < 0) {
+                $h++;
+            }
+            if ($h > 1) {
+                $h--;
+            }
         }
         $aHSL = array(
             'h' => round($h * 360),
             's' => round($s * 100) . '%',
             'l' => round($l * 100) . '%'
         );
-        if ($a < 1) $aHSL['a'] = $a;
+        if ($a < 1) {
+            $aHSL['a'] = $a;
+        }
 
         return $aHSL;
     }
@@ -421,6 +460,7 @@ class Color
         if ($i !== false) {
             $value = substr($value, 0, $i);
             $value = self::constrainValue($value, 0, 100);
+
             return round($value * 255 / 100);
         }
 

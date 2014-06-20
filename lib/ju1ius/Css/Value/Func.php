@@ -32,6 +32,7 @@ class Func extends ValueList
 	public function getCssText($options=array())
 	{
 		$args = parent::getCssText($options);
+
 		return $this->name.'('.$args.')';
 	}
 

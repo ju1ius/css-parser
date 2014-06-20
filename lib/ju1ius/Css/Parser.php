@@ -119,10 +119,14 @@ class Parser extends LLk
 
         try { 
             $charset = $this->_charset();
-            if ($charset) $rule_list->append($charset);
+            if ($charset) {
+                $rule_list->append($charset);
+            }
             $this->_ws();
         } catch (ParseException $e) {
-            if ($this->strict) throw $e;
+            if ($this->strict) {
+                throw $e;
+            }
             $this->skipAtRule();
         }
 
@@ -131,7 +135,9 @@ class Parser extends LLk
                 $rule_list->append($this->_import());
                 $this->_ws();
             } catch (ParseException $e) {
-                if ($this->strict) throw $e;
+                if ($this->strict) {
+                    throw $e;
+                }
                 $this->skipAtRule();
             }
         }
@@ -141,7 +147,9 @@ class Parser extends LLk
                 $rule_list->append($this->_namespace());
                 $this->_ws();
             } catch (ParseException $e) {
-                if ($this->strict) throw $e;
+                if ($this->strict) {
+                    throw $e;
+                }
                 $this->skipAtRule();
             }
         }
@@ -157,9 +165,13 @@ class Parser extends LLk
                 case Lexer::T_MEDIA_SYM:
                     try {
                         $rule = $this->_media();
-                        if ($rule) $rule_list->append($rule);
+                        if ($rule) {
+                            $rule_list->append($rule);
+                        }
                     } catch (ParseException $e) {
-                        if ($this->strict) throw $e;
+                        if ($this->strict) {
+                            throw $e;
+                        }
                         $this->skipRuleset();
                     }
                     break;
@@ -167,9 +179,13 @@ class Parser extends LLk
                 case Lexer::T_PAGE_SYM:
                     try {
                         $rule = $this->_page();
-                        if ($rule) $rule_list->append($rule);
+                        if ($rule) {
+                            $rule_list->append($rule);
+                        }
                     } catch (ParseException $e) {
-                        if ($this->strict) throw $e;
+                        if ($this->strict) {
+                            throw $e;
+                        }
                         $this->skipRuleset();
                     }
                     break;
@@ -177,9 +193,13 @@ class Parser extends LLk
                 case Lexer::T_FONT_FACE_SYM:
                     try {
                         $rule = $this->_font_face();
-                        if ($rule) $rule_list->append($rule);
+                        if ($rule) {
+                            $rule_list->append($rule);
+                        }
                     } catch (ParseException $e) {
-                        if ($this->strict) throw $e;
+                        if ($this->strict) {
+                            throw $e;
+                        }
                         $this->skipRuleset();
                     }
                     break;
@@ -187,9 +207,13 @@ class Parser extends LLk
                 case Lexer::T_KEYFRAMES_SYM:
                     try {
                         $rule = $this->_keyframes();
-                        if ($rule) $rule_list->append($rule);
+                        if ($rule) {
+                            $rule_list->append($rule);
+                        }
                     } catch (ParseException $e) {
-                        if ($this->strict) throw $e;
+                        if ($this->strict) {
+                            throw $e;
+                        }
                         $this->skipRuleset();
                     }
                     break;
@@ -324,18 +348,24 @@ class Parser extends LLk
         try {
             $selector_list = $this->_selectors_group();
         } catch(ParseException $e) {
-            if ($this->strict) throw $e;
+            if ($this->strict) {
+                throw $e;
+            }
             $this->skipRuleset();
             return;
         }
         try {
             $style_declaration = $this->_parseDeclarations(true, false);
         } catch (ParseException $e) {
-            if ($this->strict) throw $e;
+            if ($this->strict) {
+                throw $e;
+            }
             $this->skipRuleset();
             return;
         }
-        if (null === $style_declaration) return;
+        if (null === $style_declaration) {
+            return;
+        }
 
         return new Rule\StyleRule($selector_list, $style_declaration);
     }/*}}}*/
@@ -349,8 +379,9 @@ class Parser extends LLk
     protected function _declaration()
     {/*{{{*/
         $property = $this->_property();
-        if (null === $property) return;
-
+        if (null === $property) {
+            return;
+        }
         $this->match(Lexer::T_COLON);
         $this->_ws();
 
@@ -430,7 +461,9 @@ class Parser extends LLk
         do {
             $operator = $this->_operator();
             $value = $this->_term();
-            if (null === $value) break;
+            if (null === $value) {
+                break;
+            }
             // whitespace is the default separator
             $values[] = $operator ?: ' ';
             $values[] = $value;
@@ -597,7 +630,9 @@ class Parser extends LLk
                 'g' => $args[2],
                 'b' => $args[4],
             );
-            if (isset($args[6])) $channels['a'] = $args[6];
+            if (isset($args[6])) {
+                $channels['a'] = $args[6];
+            }
 
             return new Value\Color($channels);
         } else if (preg_match('/^hsla?$/i', $name)) {
@@ -607,7 +642,9 @@ class Parser extends LLk
                 's' => $args[2],
                 'l' => $args[4],
             );
-            if (isset($args[6])) $channels['a'] = $args[6];
+            if (isset($args[6])) {
+                $channels['a'] = $args[6];
+            }
 
             return new Value\Color($channels);
         }
@@ -765,7 +802,9 @@ class Parser extends LLk
                     try {
                         $rule_list->append($this->_page());
                     } catch (ParseException $e) {
-                        if ($this->strict) throw $e;
+                        if ($this->strict) {
+                            throw $e;
+                        }
                         $this->skipRuleset(true);
                     }
                     break;
@@ -774,7 +813,9 @@ class Parser extends LLk
                     try {
                         $rule_list->append($this->_font_face());
                     } catch (ParseException $e) {
-                        if ($this->strict) throw $e;
+                        if ($this->strict) {
+                            throw $e;
+                        }
                         $this->skipRuleset(true);
                     }
                     break;
@@ -783,7 +824,9 @@ class Parser extends LLk
                     try {
                         $rule_list->append($this->_keyframes());
                     } catch (ParseException $e) {
-                        if ($this->strict) throw $e;
+                        if ($this->strict) {
+                            throw $e;
+                        }
                         $this->skipRuleset(true);
                     }
                     break;
@@ -919,6 +962,7 @@ class Parser extends LLk
         $this->ensure(Lexer::T_IDENT);
         $value = $this->LT()->value;
         $this->consume();
+
         return $value;
     }/*}}}*/
 
@@ -1076,7 +1120,9 @@ class Parser extends LLk
                 case Lexer::T_TILDE:
                 case Lexer::T_S:
                     $combinator = $this->_combinator();
-                    if (null === $combinator) break 2;
+                    if (null === $combinator) {
+                        break 2;
+                    }
                     $next_selector = $this->_simple_selector_sequence();
                     $selector = new Selector\CombinedSelector($selector, $combinator, $next_selector);
                     break;
@@ -1117,7 +1163,9 @@ class Parser extends LLk
                 case Lexer::T_HASH:
                     //if ($has_hash) $this->_parseException("Two hashes", $this->current);
                     $id = $this->_id($selector);
-                    if (!$has_hash) $selector = $id; // there can't be two hashes
+                    if (!$has_hash) {
+                        $selector = $id; // there can't be two hashes
+                    }
                     $has_hash = true;
                     break;
 
@@ -1534,7 +1582,9 @@ class Parser extends LLk
             try {
                 $property = $this->_declaration();
             } catch (ParseException $e) {
-                if ($this->strict) throw $e;
+                if ($this->strict) {
+                    throw $e;
+                }
                 $this->skipDeclaration();
                 continue;
             }
@@ -1561,7 +1611,9 @@ class Parser extends LLk
                 try {
                     $margin_rules->append($this->_margin());
                 } catch (ParseException $e) {
-                    if ($this->strict) throw $e;
+                    if ($this->strict) {
+                        throw $e;
+                    }
                     $this->skipRuleset(true);
                 }
             } else {
@@ -1576,7 +1628,8 @@ class Parser extends LLk
 
         return $margins
             ? array('style_declaration' => $style_declaration, 'rule_list' => $margin_rules)
-            : $style_declaration;
+            : $style_declaration
+        ;
     }/*}}}*/
 
     protected function _ws()
@@ -1610,7 +1663,9 @@ class Parser extends LLk
             while (false !== $start = array_search($delim, $values, true)) {
                 $length = 2; //Number of elements to be joined
                 for ($i = $start + 2; $i < count($values); $i += 2) {
-                    if ($delim !== $values[$i]) break;
+                    if ($delim !== $values[$i]) {
+                        break;
+                    }
                     $length++;
                 }
                 $value_list = new PropertyValueList(array(), $delim);
@@ -1637,11 +1692,15 @@ class Parser extends LLk
 
     protected static function fixBackgroundShorthand(PropertyValueList $value_list)
     {/*{{{*/
-        if (count($value_list) < 2) return;
+        if (count($value_list) < 2) {
+            return;
+        }
         if ($value_list->getSeparator() === ',') {
             // we have multiple layers
             foreach ($value_list->getItems() as $layer) {
-                if ($layer instanceof PropertyValueList) self::fixBackgroundLayer($layer);
+                if ($layer instanceof PropertyValueList) {
+                    self::fixBackgroundLayer($layer);
+                }
             }
         } else {
             // we have only one value or a space separated list of values
@@ -1882,8 +1941,9 @@ class Parser extends LLk
 
             if ($t === $stack->top()) {
                 $stack->pop();
-                if ($stack->isEmpty()) break;
-
+                if ($stack->isEmpty()) {
+                    break;
+                }
                 // Just handle out-of-memory by parsing incorrectly.
                 // It's highly unlikely we're dealing with a legitimate stylesheet anyway.
             } else if ($t === Lexer::T_LCURLY) {
@@ -1904,8 +1964,12 @@ class Parser extends LLk
         while (true) {
 
             $t = $this->LT()->type;
-            if ($t === Lexer::T_EOF) break;
-            if (in_array($t, $types)) break;
+            if ($t === Lexer::T_EOF) {
+                break;
+            }
+            if (in_array($t, $types)) {
+                break;
+            }
 
             switch ($t) {
 

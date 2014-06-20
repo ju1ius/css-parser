@@ -8,12 +8,12 @@ interface XPathable
      *
      * @return string The string representation
      */
-    function __toString();
+    public function __toString();
 
     /**
      * @return XPath\Expression The XPath expression
      *
      * @throws ParseException When unknown operator is found
      */
-    function toXPath(); 
+    public function toXPath(); 
 }

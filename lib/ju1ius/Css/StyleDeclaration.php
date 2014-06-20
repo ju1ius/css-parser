@@ -29,7 +29,9 @@ class StyleDeclaration implements Serializable
             return in_array($property, $this->properties, true);
         }
         foreach ($this->properties as $p) {
-            if ($property === $p->getName()) return true;
+            if ($property === $p->getName()) {
+                return true;
+            }
         }
 
         return false;
@@ -73,7 +75,9 @@ class StyleDeclaration implements Serializable
      **/
     public function insertAfter($newProp, Property $oldProp)
     {
-        if (!is_array($newProp)) $newProp = array($newProp);
+        if (!is_array($newProp)) {
+            $newProp = array($newProp);
+        }
         $index = array_search($oldProp, $this->properties);
         array_splice($this->properties, $index, 0, $newProp);
 
@@ -90,7 +94,9 @@ class StyleDeclaration implements Serializable
      **/
     public function insertBefore($newProp, Property $oldProp)
     {
-        if (!is_array($newProp)) $newProp = array($newProp);
+        if (!is_array($newProp)) {
+            $newProp = array($newProp);
+        }
         $index = array_search($oldProp, $this->properties);
         array_splice($this->properties, $index-1, 0, $newProp);
 
@@ -107,7 +113,9 @@ class StyleDeclaration implements Serializable
      **/
     public function replace(Property $oldProp, $newProp)
     {
-        if (!is_array($newProp)) $newProp = array($newProp);
+        if (!is_array($newProp)) {
+            $newProp = array($newProp);
+        }
         $index = array_search($oldProp, $this->properties);
         array_splice($this->properties, $index, 1, $newProp);
 
@@ -126,7 +134,9 @@ class StyleDeclaration implements Serializable
      **/
     public function remove($search, $wildcard=false)
     {
-        if (!is_array($search)) $search = array($search);
+        if (!is_array($search)) {
+            $search = array($search);
+        }
         foreach ($search as $property) {
             if (is_int($property)) {
                 unset($this->properties[$property]);
@@ -136,9 +146,13 @@ class StyleDeclaration implements Serializable
             } else {
                 foreach ($this->properties as $pos => $prop) {
                     if ($wildcard) {
-                        if (strpos($prop->getName(), $property) === 0) unset($this->properties[$pos]);
+                        if (strpos($prop->getName(), $property) === 0) {
+                            unset($this->properties[$pos]);
+                        }
                     } else {
-                        if ($prop->getName() === $property) unset($this->properties[$pos]);
+                        if ($prop->getName() === $property) {
+                            unset($this->properties[$pos]);
+                        }
                     }
                 }
             }
@@ -173,14 +187,22 @@ class StyleDeclaration implements Serializable
      **/
     public function getProperties($property = null, $wildcard=false)
     {
-        if (!$property) return $this->properties;
-        if ($property instanceof Property) $property = $property->getName();
+        if (!$property) {
+            return $this->properties;
+        }
+        if ($property instanceof Property) {
+            $property = $property->getName();
+        }
         $result = array();
         foreach ($this->properties as $pos => $prop) {
             if ($wildcard) {
-                if (strpos($prop->getName(), $property) === 0) $result[$pos] = $prop;
+                if (strpos($prop->getName(), $property) === 0) {
+                    $result[$pos] = $prop;
+                }
             } else {
-                if ($prop->getName() === $property) $result[$pos] = $prop;
+                if ($prop->getName() === $property) {
+                    $result[$pos] = $prop;
+                }
             }
         }
 
@@ -196,9 +218,13 @@ class StyleDeclaration implements Serializable
      **/
     public function getFirst($property=null)
     {
-        if (!$property && isset($this->properties[0])) return $this->properties[0];
+        if (!$property && isset($this->properties[0])) {
+            return $this->properties[0];
+        }
         foreach ($this->properties as $prop) {
-            if ($prop->getName() === $property) return $prop;
+            if ($prop->getName() === $property) {
+                return $prop;
+            }
         }
     }
 
@@ -210,9 +236,13 @@ class StyleDeclaration implements Serializable
      * @return ju1ius\Css\Property
      **/
     public function getLast($property=null) {
-        if (!$property && count($this->properties)) return $this->properties[count($this->properties)-1];
+        if (!$property && count($this->properties)) {
+            return $this->properties[count($this->properties)-1];
+        }
         foreach (array_reverse($this->properties) as $prop) {
-            if ($prop->getName() === $property) return $prop;
+            if ($prop->getName() === $property) {
+                return $prop;
+            }
         }
     }
 
@@ -225,6 +255,7 @@ class StyleDeclaration implements Serializable
         foreach ($aProperties as $name => $dummy) {
             $aProperties[$name] = $this->getAppliedProperty($name);
         }
+
         return $aProperties;
     }
 
@@ -256,11 +287,13 @@ class StyleDeclaration implements Serializable
         if ($lastImportantProp) {
             return $withPosition
                 ? array($lastImportantProp['position'] => $lastImportantProp['property'])
-                : $lastImportantProp['property'];
+                : $lastImportantProp['property']
+            ;
         } else if ($lastProp) {
             return $withPosition
                 ? array($lastProp['position'] => $lastProp['property'])
-                : $lastProp['property'];
+                : $lastProp['property']
+            ;
         }
     }
 
@@ -276,10 +309,14 @@ class StyleDeclaration implements Serializable
         $applied_properties = $this->getAppliedProperties();
         foreach ($applied_properties as $applied_property) {
             $name = $applied_property->getName();
-            if (in_array($name, $excludes)) continue;
+            if (in_array($name, $excludes)) {
+                continue;
+            }
             $properties = $this->getProperties($name);
             foreach ($properties as $property) {
-                if ($property === $applied_property) continue;
+                if ($property === $applied_property) {
+                    continue;
+                }
                 $this->remove($property);
             }
         }
@@ -467,7 +504,7 @@ class StyleDeclaration implements Serializable
         }
 
         return implode($nl, array_map(function($property) use($indent, $options) {
-                return $indent . $property->getCssText($options);
+            return $indent . $property->getCssText($options);
         }, $this->properties));
     }
 
