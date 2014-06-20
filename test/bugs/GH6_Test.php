@@ -11,6 +11,7 @@ class GH6_Test extends CssParser_TestCase
         $stylesheet = $this->parseStyleSheet($input);
         $this->assertEquals($expected, $stylesheet->getCssText());
     }
+
     public function testRgbaColorProvider()
     {
         return array(
