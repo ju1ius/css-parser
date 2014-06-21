@@ -102,14 +102,64 @@ class Lexer extends BaseLexer
     protected static $regex_cache = array();
 
     protected static $units = array(
-        'em','rem','ex','px','cm','mm','in','pt','pc',
-        'deg','rad','grad','ms','s','Hz','kHz','dpi','dpcm',
-        'vw','vh','vmin'
+        'em'    => self::T_LENGTH,
+        'rem'   => self::T_LENGTH,
+        'ex'    => self::T_LENGTH,
+        'ch'    => self::T_LENGTH,
+        'vw'    => self::T_LENGTH,
+        'vh'    => self::T_LENGTH,
+        'vmin'  => self::T_LENGTH,
+        'cm'    => self::T_LENGTH,
+        'mm'    => self::T_LENGTH,
+        'in'    => self::T_LENGTH,
+        'px'    => self::T_LENGTH,
+        'pt'    => self::T_LENGTH,
+        'pc'    => self::T_LENGTH,
+        'deg'   => self::T_ANGLE,
+        'rad'   => self::T_ANGLE,
+        'grad'  => self::T_ANGLE,
+        'turn'  => self::T_ANGLE,
+        's'     => self::T_TIME,
+        'ms'    => self::T_TIME,
+        'hz'    => self::T_FREQ,
+        'khz'   => self::T_FREQ,
+        'dpi'   => self::T_RESOLUTION,
+        'dpcm'  => self::T_RESOLUTION,
+        'dppx'  => self::T_RESOLUTION,
     );
     protected static $atkeywords = array(
-        'namespace', 'import', 'media', 'page', 'keyframes', 'keyframe'
+        'charset'               => self::T_CHARSET_SYM,
+        'import'                => self::T_IMPORT_SYM,
+        'namespace'             => self::T_NAMESPACE_SYM,
+        'media'                 => self::T_MEDIA_SYM,
+        'font-face'             => self::T_FONT_FACE_SYM,
+        'keyframes'             => self::T_KEYFRAMES_SYM,
+        'keyframe'              => self::T_KEYFRAME_SYM,
+        'page'                  => self::T_PAGE_SYM,
+        'top-left-corner'       => self::T_TOPLEFTCORNER_SYM,
+        'top-left'              => self::T_TOPLEFT_SYM,
+        'top-center'            => self::T_TOPCENTER_SYM,
+        'top-right'             => self::T_TOPRIGHT_SYM,
+        'top-right-corner'      => self::T_TOPRIGHTCORNER_SYM,
+        'bottom-left-corner'    => self::T_BOTTOMLEFTCORNER_SYM,
+        'bottom-left'           => self::T_BOTTOMLEFT_SYM,
+        'bottom-center'         => self::T_BOTTOMCENTER_SYM,
+        'bottom-right'          => self::T_BOTTOMRIGHT_SYM,
+        'bottom-right-corner'   => self::T_BOTTOMRIGHTCORNER_SYM,
+        'left-top'              => self::T_LEFTTOP_SYM,
+        'left-middle'           => self::T_LEFTMIDDLE_SYM,
+        'left-bottom'           => self::T_LEFTBOTTOM_SYM,
+        'right-bottom'          => self::T_RIGHTBOTTOM_SYM,
+        'right-top'             => self::T_RIGHTTOP_SYM,
+        'right-middle'          => self::T_RIGHTMIDDLE_SYM,
     );
-
+    protected static $special_idents = array(
+        'and'   => self::T_AND,
+        'not'   => self::T_NOT,
+        'only'  => self::T_ONLY,
+        'from'  => self::T_FROM_SYM,
+        'to'    => self::T_TO_SYM
+    );
 
     public function __construct(Source\String $source=null, $unicode=false)
     {/*{{{*/
@@ -157,7 +207,7 @@ class Lexer extends BaseLexer
             self::$regex['negation']   = '(?::'.self::getPatternForIdentifier('not').'\()';
 
             $units = array();
-            foreach (self::$units as $unit) {
+            foreach (self::$units as $unit => $type) {
                 $pattern = self::getPatternForIdentifier($unit);
                 //self::$regex[$unit] = $pattern;
                 $units[] = '(?:'.$pattern.')';
@@ -165,12 +215,12 @@ class Lexer extends BaseLexer
             //self::$regex['units'] = implode('|', $units);
             self::$regex['units'] = '(?>'.implode('|', $units).')(?!'.self::$regex['nmchar'].')';
 
-            $at_pattern = 'charset';
-            foreach (self::$atkeywords as $keyword) {
+            $at_patterns = array();
+            foreach (self::$atkeywords as $keyword => $type) {
                 $pattern = self::getPatternForIdentifier($keyword);
-                $at_pattern .= '|(?:'.$pattern.')';
+                $at_patterns[] = '(?:'.$pattern.')';
             }
-            self::$regex['atkeyword'] = '(?>'.$at_pattern .')(?!'.self::$regex['nmchar'].')';
+            self::$regex['atkeyword'] = '(?>'.implode('|', $at_patterns).')(?!'.self::$regex['nmchar'].')';
 
             // Finally, we generate patterns for matching
             // micro-optimization: avoids concatenating patterns over and over
@@ -406,19 +456,18 @@ class Lexer extends BaseLexer
     protected function handleComment()
     {/*{{{*/
         if (preg_match('@\G/\*[^*]*\*+(?:[^/][^*]*\*+)*/@', $this->text, $matches, 0, $this->bytepos)) {
-            //if ($matches = $this->match('/\*[^*]*\*+(?:[^/][^*]*\*+)*/')) {
             $token = new Token(self::T_COMMENT, $matches[0], $this->lineno, $this->charpos);
             $this->consumeString($matches[0]);
+
             return $token;
         } else if (preg_match('@\G(?:/\*[^*]*\*+(?:[^/*][^*]*\*+)*)|(?:/\*[^*]*(\*+[^/*][^*]*)*)@', $this->text, $matches, 0, $this->bytepos)) {
-            //} else if ($matches = $this->match('(?:/\*[^*]*\*+(?:[^/*][^*]*\*+)*)|(?:/\*[^*]*(\*+[^/*][^*]*)*)')) {
             // Multiline comment
             $line = $this->lineno;
             $charpos = $this->charpos;
             $start_str = $matches[0]."\n";
             while (true) {
                 // EOL
-                if ($this->lineno < $this->numlines-1) {
+                if ($this->lineno < $this->numlines - 1) {
                     $this->nextLine();
                     $this->charpos = 0;
                     $this->bytepos = 0;
@@ -430,6 +479,7 @@ class Lexer extends BaseLexer
                     // end of comment found
                     $start_str .= $submatches[0];
                     $this->consumeString($submatches[0]);
+
                     return new Token(self::T_COMMENT, $start_str, $line, $charpos);
                 } else {
                     $start_str .= $this->text;
@@ -487,20 +537,11 @@ class Lexer extends BaseLexer
                 return new Token(self::T_FUNCTION, $ident, $this->lineno, $charpos);
             }
         } else {
-            switch ($ident) {
-                case 'and':
-                    return new Token(self::T_AND, $ident, $this->lineno, $charpos);
-                case 'not':
-                    return new Token(self::T_NOT, $ident, $this->lineno, $charpos);
-                case 'only':
-                    return new Token(self::T_ONLY, $ident, $this->lineno, $charpos);
-                case 'from':
-                    return new Token(self::T_FROM, $ident, $this->lineno, $charpos);
-                case 'to':
-                    return new Token(self::T_TO, $ident, $this->lineno, $charpos);
-                default:
-                    return new Token(self::T_IDENT, $str, $this->lineno, $charpos);
+            if (isset(self::$special_idents[$ident])) {
+                return new Token(self::$special_idents[$ident], $ident, $this->lineno, $charpos);
             }
+
+            return new Token(self::T_IDENT, $str, $this->lineno, $charpos);
         }
     }/*}}}*/
 
@@ -511,83 +552,12 @@ class Lexer extends BaseLexer
         $charpos = $this->charpos;
         $this->consumeString($matches[0]);
         $ident = $this->cleanupIdent($matches[1], true);
-        switch ($ident) {
-            case 'charset':
-                return new Token(self::T_CHARSET_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'import':
-                return new Token(self::T_IMPORT_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'namespace':
-                return new Token(self::T_NAMESPACE_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'media':
-                return new Token(self::T_MEDIA_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'font-face':
-                return new Token(self::T_FONT_FACE_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'keyframes':
-                return new Token(self::T_KEYFRAMES_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'keyframe':
-                return new Token(self::T_KEYFRAME_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'page':
-                return new Token(self::T_PAGE_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'top-left-corner':
-                return new Token(self::T_TOPLEFTCORNER_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'top-left':
-                return new Token(self::T_TOPLEFT_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'top-center':
-                return new Token(self::T_TOPCENTER_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'top-right':
-                return new Token(self::T_TOPRIGHT_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'top-right-corner':
-                return new Token(self::T_TOPRIGHTCORNER_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'bottom-left-corner':
-                return new Token(self::T_BOTTOMLEFTCORNER_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'bottom-left':
-                return new Token(self::T_BOTTOMLEFT_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'bottom-center':
-                return new Token(self::T_BOTTOMCENTER_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'bottom-right':
-                return new Token(self::T_BOTTOMRIGHT_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'bottom-right-corner':
-                return new Token(self::T_BOTTOMRIGHTCORNER_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'left-top':
-                return new Token(self::T_LEFTTOP_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'left-middle':
-                return new Token(self::T_LEFTMIDDLE_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'right-bottom':
-                return new Token(self::T_RIGHTBOTTOM_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'right-top':
-                return new Token(self::T_RIGHTTOP_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'right-middle':
-                return new Token(self::T_RIGHTMIDDLE_SYM, $ident, $this->lineno, $charpos);
-                break;
-            case 'right-bottom':
-                return new Token(self::T_RIGHTBOTTOM_SYM, $iddent, $this->lineno, $charpos);
-                break;
-            default:
-                return new Token(self::T_ATKEYWORD, $ident, $this->lineno, $charpos);
-                break;
+
+        if (isset(self::$atkeywords[$ident])) {
+            return new Token(self::$atkeywords[$ident], $ident, $this->lineno, $charpos);
         }
+
+        return new Token(self::T_ATKEYWORD, $ident, $this->lineno, $charpos);
     }/*}}}*/
 
     protected function handleString()
@@ -600,12 +570,10 @@ class Lexer extends BaseLexer
             $pattern_id = '2';
         }
         if (preg_match('/\G'.self::$regex['string'.$pattern_id].'/iu', $this->text, $matches, 0, $this->bytepos)) {
-            //if ($matches = $this->match(self::$regex['string'.$pattern_id])) {
             $this->consumeString($matches[0]);
             $value = $matches[1];
 
             return new Token(self::T_STRING, $value, $this->lineno, $charpos);
-            //} else if ($matches = $this->match(self::$regex['badstring'.$pattern_id])) {
         } else if (preg_match('/\G'.self::$regex['badstring'.$pattern_id].'/iu', $this->text, $matches, 0, $this->bytepos)) {
             $this->consumeString($matches[0]);
             if (preg_match('/\\\\$/u', $matches[1])) {
@@ -629,7 +597,6 @@ class Lexer extends BaseLexer
             } else {
                 return new Token(self::T_BADSTRING, $start_str, $line, $charpos);
             }
-            //if ($matches = $this->match($pattern)) {
             if (preg_match('/\G'.$pattern.'/iu', $this->text, $matches, 0, $this->bytepos)) {
                 // we found the end of string
                 $start_str .= $matches[1];
@@ -680,46 +647,13 @@ class Lexer extends BaseLexer
             $unit = $this->cleanupIdent($matches[0], true);
             $this->consumeString($matches[0]);
             $result = array('value' => $value, 'unit' => $unit);
-            switch ($unit) {
-                case 'em':
-                case 'rem':
-                case 'ex':
-                case 'ch':
-                case 'vw':
-                case 'vh':
-                case 'vmin':
-                case 'cm':
-                case 'mm':
-                case 'in':
-                case 'px':
-                case 'pt':
-                case 'pc':
-                    return new Token(self::T_LENGTH, $result, $this->lineno, $charpos);
-                    break;
-                case 'deg':
-                case 'rad':
-                case 'grad':
-                case 'turn':
-                    return new Token(self::T_ANGLE, $result, $this->lineno, $charpos);
-                    break;
-                case 's':
-                case 'ms':
-                    return new Token(self::T_TIME, $result, $this->lineno, $charpos);
-                    break;
-                case 'hz':
-                case 'khz':
-                    return new Token(self::T_FREQ, $result, $this->lineno, $charpos);
-                    break;
-                case 'dpi':
-                case 'dpcm':
-                case 'dppx':
-                    return new Token(self::T_RESOLUTION, $result, $this->lineno, $charpos);
-                    break;
-            }
+
+            return new Token(self::$units[$unit], $result, $this->lineno, $charpos);
         } else if (preg_match(self::$regex['M-ident'], $this->text, $matches, 0, $this->bytepos)) {
             $ident = $this->cleanupIdent($matches[0], true);
             $this->consumeString($matches[0]);
             $result = array('value' => $value, 'unit' => $ident);
+
             return new Token(self::T_DIMENSION, $result, $this->lineno, $charpos);
         }
     }/*}}}*/
@@ -727,7 +661,6 @@ class Lexer extends BaseLexer
     protected function handleHash()
     {/*{{{*/
         $charpos = $this->charpos;
-        //if ($matches = $this->match('#('.self::$regex['name'].')')) {
         if (preg_match(self::$regex['M-hash'], $this->text, $matches, 0, $this->bytepos)) {
             $this->consumeString($matches[0]);
 
@@ -738,7 +671,6 @@ class Lexer extends BaseLexer
     protected function handleImportant()
     {/*{{{*/
         $charpos = $this->charpos;
-        //if ($matches = $this->match('!\s*'.$pattern)) {
         if (preg_match(self::$regex['M-important'], $this->text, $matches, 0, $this->bytepos)) {
             $value = $matches[0];
             $this->consumeString($matches[0]);
@@ -750,7 +682,6 @@ class Lexer extends BaseLexer
     protected function handleUnicodeRange()
     {/*{{{*/
         $charpos = $this->charpos;
-        //$matches = $this->match('U\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)');
         preg_match('/\GU\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)/iu', $this->text, $matches, 0, $this->bytepos);
         $this->consumeString($matches[0]);
 
@@ -760,7 +691,6 @@ class Lexer extends BaseLexer
     protected function handleNegation()
     {/*{{{*/
         $charpos = $this->charpos;
-        //$matches = $this->match(self::$regex['negation']);
         preg_match(self::$regex['M-negation'], $this->text, $matches, 0, $this->bytepos);
         $this->consumeString($matches[0]);
 
@@ -791,27 +721,6 @@ class Lexer extends BaseLexer
         }
 
         return $ident;
-        /**
-        mb_ereg_search_init($ident, '\\\\(?>([g-z])|([0-9a-f]{6})|([0-9a-f]{1,5})\s?)', 'msi');
-        while (false !== $matches = mb_ereg_search_regs()) {
-            $search = preg_quote($matches[0]);
-            if ($matches[1]) {
-                $replace = $matches[1];
-            } else {
-                $codepoint = $matches[2] ?: $matches[3];
-                $unicode_byte = intval($codepoint, 16);
-                if ($unicode_byte > 127) {
-                    // Not an Ascii char, return a normalized unicode escape
-                    $replace = "\\" . str_pad($codepoint, 6, "0", STR_PAD_LEFT);
-                } else {
-                    $replace = chr($unicode_byte);
-                }
-            }
-            $replace = mb_convert_encoding($replace, $this->encoding, 'ascii');
-            $ident = mb_ereg_replace($search, $replace, $ident);
-        }
-        return $ident;
-        **/
     }/*}}}*/
 
     protected static function getPatternForIdentifier($ident)
@@ -822,7 +731,10 @@ class Lexer extends BaseLexer
         $ident = strtoupper($ident);
         $pattern = '';
         foreach (str_split($ident) as $char) {
-            $pattern .= '(?>'.self::$regex[$char].')';
+            if (ctype_alpha($char)) {
+                $char = self::$regex[$char];
+            }
+            $pattern .= '(?>' . $char . ')';
         }
         self::$regex_cache[$ident] = $pattern;
 
