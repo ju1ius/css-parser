@@ -2,8 +2,10 @@
 
 namespace ju1ius\Tests\Css\Rule;
 
+use ju1ius\Css\Rule\StyleRule;
 
-class StyleRuleTest extends ju1ius\Tests\CssParserTestCase
+
+class StyleRuleTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testMergeProvider
@@ -15,7 +17,7 @@ class StyleRuleTest extends ju1ius\Tests\CssParserTestCase
             $styleSheet = $this->parseStyleSheet($input);
             $rules[] = $styleSheet->getFirstRule();
         }
-        $merged = ju1ius\Css\Rule\StyleRule::merge($rules);
+        $merged = StyleRule::merge($rules);
         $this->assertEquals($expected, $merged->getCssText());
     }
     public function testMergeProvider()

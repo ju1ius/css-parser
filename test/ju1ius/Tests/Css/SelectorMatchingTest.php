@@ -5,7 +5,7 @@ namespace ju1ius\Tests\Css;
 use ju1ius\Css;
 
 
-class SelectorMatchingTest extends ju1ius\Tests\CssParserTestCase
+class SelectorMatchingTest extends \ju1ius\Tests\CssParserTestCase
 {
     private static $_XML = <<<EOS
 <html id="root">

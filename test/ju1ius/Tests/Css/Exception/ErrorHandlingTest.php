@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css\Exception;
 
 
-class ErrorHandlingTest extends ju1ius\Tests\CssParserTestCase
+class ErrorHandlingTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testMalformedPropertyProvider

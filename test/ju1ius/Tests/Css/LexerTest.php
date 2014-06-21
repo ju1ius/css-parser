@@ -5,7 +5,7 @@ namespace ju1ius\Tests\Css;
 use ju1ius\Css\Lexer;
 
 
-class LexerTest extends ju1ius\Tests\CssParserTestCase
+class LexerTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testTokenizationProvider

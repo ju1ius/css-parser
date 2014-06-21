@@ -7,7 +7,7 @@ use ju1ius\Css\Resolver\ImportResolver;
 use ju1ius\Css\StyleSheetLoader;
 use ju1ius\Css\Value;
 
-class ImportResolverTest extends ju1ius\Tests\CssParserTestCase
+class ImportResolverTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testImportsProvider

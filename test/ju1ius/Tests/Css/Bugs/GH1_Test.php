@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__.'/../CssParser_TestCase.php';
 
-class GH1_Test extends CssParser_TestCase
+namespace ju1ius\Tests\Css\Bugs;
+
+
+class GH1_Test extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testCommentsHandlingProvider

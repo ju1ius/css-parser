@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css\StyleDeclaration;
 
 
-class ExpandShorthandsTest extends ju1ius\Tests\CssParserTestCase
+class ExpandShorthandsTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testExpandBorderShorthandsProvider

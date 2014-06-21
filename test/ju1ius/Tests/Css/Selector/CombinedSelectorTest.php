@@ -5,7 +5,7 @@ namespace ju1ius\Tests\Css\Selector;
 use ju1ius\Css;
 
 
-class CombinedSelectorTest extends ju1ius\Tests\CssParserTestCase
+class CombinedSelectorTest extends \ju1ius\Tests\CssParserTestCase
 {
 
     /**

@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css;
 
 
-class FileTest extends ju1ius\Tests\CssParserTestCase
+class FileTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testFileProvider

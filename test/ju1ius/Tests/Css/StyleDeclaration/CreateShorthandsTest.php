@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css\StyleDeclaration;
 
 
-class CreateShorthandsTest extends ju1ius\Tests\CssParserTestCase
+class CreateShorthandsTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testCreateBackgroundShorthandProvider

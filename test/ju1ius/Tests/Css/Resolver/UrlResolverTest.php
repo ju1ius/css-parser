@@ -5,7 +5,7 @@ namespace ju1ius\Tests\Css\Resolver;
 use ju1ius\Css\Resolver\UrlResolver;
 use ju1ius\Css\Value;
 
-class UrlResolverTest extends ju1ius\Tests\CssParserTestCase
+class UrlResolverTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testResolveUrlsProvider

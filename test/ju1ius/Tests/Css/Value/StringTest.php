@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css\Value;
 
 
-class StringTest extends ju1ius\Tests\CssParserTestCase
+class StringTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testOutputProvider

@@ -2,7 +2,7 @@
 
 namespace ju1ius\Tests\Css\Rule;
 
-class CharsetTest extends ju1ius\Tests\CssParserTestCase
+class CharsetTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testOutputProvider

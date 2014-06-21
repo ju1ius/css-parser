@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css;
 
 
-class StyleDeclarationTest extends ju1ius\Tests\CssParserTestCase
+class StyleDeclarationTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testGetAppliedPropertyProvider

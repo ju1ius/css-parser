@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css\Rule;
 
 
-class FontFaceTest extends ju1ius\Tests\CssParserTestCase
+class FontFaceTest extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testOutputProvider

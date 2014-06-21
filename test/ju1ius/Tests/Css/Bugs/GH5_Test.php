@@ -3,7 +3,7 @@
 namespace ju1ius\Tests\Css\Bugs;
 
 
-class GH5_Test extends ju1ius\Tests\CssParserTestCase
+class GH5_Test extends \ju1ius\Tests\CssParserTestCase
 {
     /**
      * @dataProvider testDuplicatePropertiesProvider
