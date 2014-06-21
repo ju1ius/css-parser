@@ -5,22 +5,22 @@
     "keywords": ["css", "parser"],
     "homepage": "https://github.com/ju1ius/css-parser",
     "license": "LGPLv2",
+    "version": "0.1",
     "authors": [
         {
             "name": "ju1ius",
-            "homepage": "https://github.com/ju1ius"
+            "homepage": "https://github.com/ju1ius",
+            "role": "Developer"
         }
     ],
-    "require": {
-        "php": ">=5.3.2",
-        "ju1ius/libphp": "dev-master"
-    },
     "autoload": {
         "psr-0": { "ju1ius": "lib/" }
     },
-    "config": {
-        "vendor-dir": "lib/vendor",
-        "bin-dir": "lib/vendor/bin"
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
     },
     "extra": {
         "branch-alias": {
