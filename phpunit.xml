@@ -1,6 +1,10 @@
 <phpunit colors="true" verbose="true"
          bootstrap="./test/bootstrap.php">
     <testsuites>
+        <testsuite name="ju1ius\Text tests">
+            <file>test/ju1ius/Tests/Text/EncodingTest.php</file>
+            <file>test/ju1ius/Tests/Text/Source/StringTest.php</file>
+        </testsuite>
         <testsuite name="CSSParser Tests">
             <file>test/ju1ius/Tests/Css/LexerTest.php</file>
             <file>test/ju1ius/Tests/Css/Rule/CharsetTest.php</file>
