@@ -5,4 +5,4 @@ if (!is_file(dirname(__DIR__).'/vendor/autoload.php')) {
 }
 
 $loader = require dirname(__DIR__).'/vendor/autoload.php';
-$loader->add('ju1ius\Test', __DIR__);
+$loader->add('ju1ius\Tests', __DIR__);
