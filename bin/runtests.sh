@@ -1,7 +1,7 @@
-#! /bin/bash
+#!/bin/bash
 
-__DIR__=$(dirname $(readlink -f $0))
+__FILE__=$(readlink -f "$0")
+__DIR__=$(dirname "$__FILE__")
 
-pushd $__DIR__/../test >/dev/null
-phpunit --configuration testsuite.xml
-popd >/dev/null
+
+$__DIR__/../vendor/bin/phpunit "$@"
