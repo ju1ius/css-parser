@@ -168,4 +168,3 @@ class Charset extends Encoding
     }
 
 }
-
