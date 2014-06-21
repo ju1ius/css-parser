@@ -2,24 +2,24 @@
          bootstrap="./test/bootstrap.php">
     <testsuites>
         <testsuite name="CSSParser Tests">
-            <file>test/ju1ius/Css/LexerTest.php</file>
-            <file>test/ju1ius/Css/Rule/CharsetTest.php</file>
-            <file>test/ju1ius/Css/Rule/NSTest.php</file>
-            <file>test/ju1ius/Css/Rule/ImportTest.php</file>
-            <file>test/ju1ius/Css/Rule/FontFaceTest.php</file>
-            <file>test/ju1ius/Css/StyleDeclarationTest.php</file>
-            <file>test/ju1ius/Css/StyleDeclaration/ExpandShorthandsTest.php</file>
-            <file>test/ju1ius/Css/StyleDeclaration/CreateShorthandsTest.php</file>
-            <file>test/ju1ius/Css/Rule/StyleRuleTest.php</file>
-            <file>test/ju1ius/Css/Rule/PageTest.php</file>
-            <file>test/ju1ius/Css/Value/StringTest.php</file>
-            <file>test/ju1ius/Css/Iterator/ValueIteratorTest.php</file>
-            <file>test/ju1ius/Css/Resolver/UrlResolverTest.php</file>
-            <file>test/ju1ius/Css/Resolver/ImportResolverTest.php</file>
-            <file>test/ju1ius/Css/Exception/ErrorHandlingTest.php</file>
-            <file>test/ju1ius/Css/Selector/CombinedSelectorTest.php</file>
-            <file>test/ju1ius/Css/Selector/FunctionSelectorTest.php</file>
-            <file>test/ju1ius/Css/SelectorMatchingTest.php</file>
+            <file>test/ju1ius/Tests/Css/LexerTest.php</file>
+            <file>test/ju1ius/Tests/Css/Rule/CharsetTest.php</file>
+            <file>test/ju1ius/Tests/Css/Rule/NSTest.php</file>
+            <file>test/ju1ius/Tests/Css/Rule/ImportTest.php</file>
+            <file>test/ju1ius/Tests/Css/Rule/FontFaceTest.php</file>
+            <file>test/ju1ius/Tests/Css/StyleDeclarationTest.php</file>
+            <file>test/ju1ius/Tests/Css/StyleDeclaration/ExpandShorthandsTest.php</file>
+            <file>test/ju1ius/Tests/Css/StyleDeclaration/CreateShorthandsTest.php</file>
+            <file>test/ju1ius/Tests/Css/Rule/StyleRuleTest.php</file>
+            <file>test/ju1ius/Tests/Css/Rule/PageTest.php</file>
+            <file>test/ju1ius/Tests/Css/Value/StringTest.php</file>
+            <file>test/ju1ius/Tests/Css/Iterator/ValueIteratorTest.php</file>
+            <file>test/ju1ius/Tests/Css/Resolver/UrlResolverTest.php</file>
+            <file>test/ju1ius/Tests/Css/Resolver/ImportResolverTest.php</file>
+            <file>test/ju1ius/Tests/Css/Exception/ErrorHandlingTest.php</file>
+            <file>test/ju1ius/Tests/Css/Selector/CombinedSelectorTest.php</file>
+            <file>test/ju1ius/Tests/Css/Selector/FunctionSelectorTest.php</file>
+            <file>test/ju1ius/Tests/Css/SelectorMatchingTest.php</file>
         </testsuite>
         <testsuite name="CSSParser Bugs">
             <directory>test/ju1ius/Tests/Css/Bugs</directory>
