@@ -77,7 +77,7 @@ EOS;
             return false;
         }
         $aliases = $map[$first];
-        
+
         return in_array($second, $aliases, true);
     }
 
@@ -98,14 +98,14 @@ EOS;
             }
             self::$ENCODINGS_MAP = $map;
         }
-        
+
         return self::$ENCODINGS_MAP;
     }
 
     public static function isAsciiCompatible($encoding)
     {
         $compatible_encodings = self::getAsciiCompatibleEncodings();
-        
+
         return in_array(strtolower($encoding), $compatible_encodings, true);
     }
 
@@ -128,7 +128,7 @@ EOS;
             }
             self::$ASCII_COMPATIBLE_ENCODINGS = $compatible_encodings;
         }
-        
+
         return self::$ASCII_COMPATIBLE_ENCODINGS;
     }
 
@@ -145,29 +145,29 @@ EOS;
         if (false === $encoding || 'binary' == strtolower($encoding)) {
             return false;
         }
-        
+
         return $encoding;
     }
 
     public static function detectFile($filename)
     {
         $encoding = false;
-        if(JU1IUS_HAS_FILEINFO) {
+        if (JU1IUS_HAS_FILEINFO) {
             $encoding = finfo_file($filename, FILEINFO_MIME_ENCODING);
         }
-        if(false === $encoding || 'binary' == strtolower($encoding)) {
+        if (false === $encoding || 'binary' == strtolower($encoding)) {
             return static::detect(file_get_contents($filename));
         }
-        
+
         return $encoding;
     }
 
     public static function convert($str, $to="utf-8", $from=false)
     {
-        if(!$from) {
+        if (!$from) {
             $from = static::detect($str);
         }
-        if(JU1IUS_HAS_MBSTRING) {
+        if (JU1IUS_HAS_MBSTRING) {
             if (false === $from) {
                 $from = mb_internal_encoding();
             }
@@ -178,7 +178,7 @@ EOS;
             }
             return iconv($from, $to.'//TRANSLIT', $str);
         }
-        
+
         return false;
     }
 
