@@ -94,7 +94,7 @@ class String implements SourceInterface
     private static function splitLines($string, $encoding, $linesep)
     {
         mb_regex_encoding($encoding);
-        return mb_split($linesep, $string);
+        return \SplFixedArray::fromArray(mb_split($linesep, $string));
     }
 
     // ---------- SPL Interfaces implementation ---------- //
@@ -109,9 +109,15 @@ class String implements SourceInterface
         return isset($this->lines[$offset]) ? $this->lines[$offset] : null;
     }
 
-    public function offsetSet($offset, $value){}
+    public function offsetSet($offset, $value)
+    {
+        throw new RuntimeException('A source string is an immutable object');
+    }
 
-    public function offsetUnset($offset){}
+    public function offsetUnset($offset)
+    {
+        throw new RuntimeException('A source string is an immutable object');
+    }
 
     public function rewind()
     {
