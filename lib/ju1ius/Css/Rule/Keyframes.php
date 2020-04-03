@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
@@ -15,7 +16,7 @@ class Keyframes extends Rule
         $name,
         $vendor_prefix = '';
 
-    public function __construct(String $name, RuleList $rule_list=null)
+    public function __construct(String $name, RuleList $rule_list = null)
     {
         if ($rule_list === null) {
             $rule_list = new RuleList();
@@ -54,7 +55,7 @@ class Keyframes extends Rule
         $this->rule_list = $rule_list;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = ' ';
@@ -63,12 +64,11 @@ class Keyframes extends Rule
             $options['indent_level']++;
             $nl = "\n";
         }
-        $prefix = $this->vendor_prefix ? $this->vendor_prefix.'-' : '';
+        $prefix = $this->vendor_prefix ? $this->vendor_prefix . '-' : '';
         return '@' . $prefix . 'keyframes ' . $this->name->getCssText()
             . '{' . $nl
             . $indent . $this->rule_list->getCssText($options)
-            . $nl . $indent . '}'
-        ;
+            . $nl . $indent . '}';
     }
 
     /*

@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
@@ -18,14 +19,15 @@ class Charset extends Rule
     {
         return $this->encoding;
     }
+
     public function setEncoding(String $encoding)
     {
         $this->encoding = $encoding;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        return '@charset '.$this->encoding->getCssText().';';
+        return '@charset ' . $this->encoding->getCssText() . ';';
     }
 
     public function __clone()

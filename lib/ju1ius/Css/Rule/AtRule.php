@@ -1,5 +1,7 @@
 <?php
+
 namespace ju1ius\Css\Rule;
+
 use ju1ius\Css\Rule;
 use ju1ius\Css\StyleDeclaration;
 
@@ -14,7 +16,7 @@ class AtRule extends Rule
         $style_declaration,
         $vendor_prefix;
 
-    public function __construct($name, StyleDeclaration $style_declaration=null)
+    public function __construct($name, StyleDeclaration $style_declaration = null)
     {
         $this->name = $name;
         $this->style_declaration = $style_declaration;
@@ -29,6 +31,7 @@ class AtRule extends Rule
     {
         return $this->style_declaration;
     }
+
     public function setStyleDeclaration(StyleDeclaration $style_declaration)
     {
         $this->style_declaration = $style_declaration;
@@ -38,12 +41,13 @@ class AtRule extends Rule
     {
         return $this->vendor_prefix;
     }
+
     public function setVendorPrefix($vendor_prefix)
     {
         $this->vendor_prefix = $vendor_prefix;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = ' ';

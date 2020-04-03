@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Value;
 
 use ju1ius\Css\Util;
@@ -6,9 +7,9 @@ use ju1ius\Css\Util;
 class Color extends PrimitiveValue
 {
     private
-        $channels = array(
-            'r' => 0, 'g' => 0, 'b' => 0 
-        ),
+        $channels = [
+        'r' => 0, 'g' => 0, 'b' => 0,
+    ],
         $mode;
 
     /**
@@ -17,7 +18,7 @@ class Color extends PrimitiveValue
      *
      * @example $c = new Color(array('h' => 120, 's' => '50%', 'l' => '50%', 'a' => 0.8));
      **/
-    public function __construct($color=null)
+    public function __construct($color = null)
     {
         if (is_array($color)) {
             if (isset($color['r'], $color['g'], $color['b'])) {
@@ -105,7 +106,7 @@ class Color extends PrimitiveValue
             isset($channels['a']) ? $channels['a']->getValue() : 1
         );
 
-        $this->channels = array();
+        $this->channels = [];
         foreach ($rgb as $key => $val) {
             $this->channels[$key] = new Dimension($val);
         }
@@ -137,7 +138,7 @@ class Color extends PrimitiveValue
             $channels['b']->getValue(),
             isset($channels['a']) ? $channels['a']->getValue() : 1
         );
-        $this->channels = array();
+        $this->channels = [];
         $this->channels['h'] = new Dimension($hsl['h']);
         $this->channels['s'] = new Percentage($hsl['s']);
         $this->channels['l'] = new Percentage($hsl['l']);
@@ -192,7 +193,7 @@ class Color extends PrimitiveValue
         }
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         if (isset($options['color_mode'])) {
             switch ($options['color_mode']) {
@@ -216,7 +217,7 @@ class Color extends PrimitiveValue
                     break;
             }
         }
-        return $this->mode.'('.implode(',', $this->channels).')';
+        return $this->mode . '(' . implode(',', $this->channels) . ')';
     }
 
     public function __clone()

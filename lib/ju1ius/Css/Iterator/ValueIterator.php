@@ -2,18 +2,19 @@
 
 namespace ju1ius\Css\Iterator;
 
+use Iterator;
 use ju1ius\Css;
 use ju1ius\Css\Rule;
 
 /**
  * Iterates over all values of a Css object (stylesheet, media rule...)
  */
-class ValueIterator implements \Iterator
+class ValueIterator implements Iterator
 {
     private
-        $values = array();
+        $values = [];
 
-    public function __construct($object, $type_filter=null, $returnFuncArgs=false)
+    public function __construct($object, $type_filter = null, $returnFuncArgs = false)
     {
         $this->object = $object;
         $this->values = self::getValuesForObject($object, $type_filter, $returnFuncArgs);
@@ -23,14 +24,15 @@ class ValueIterator implements \Iterator
     {
         return $this->values;
     }
+
     public function getObject()
     {
         return $this->object;
     }
 
-    private static function getValuesForObject($obj, $type=null, $returnFuncArgs=false)
+    private static function getValuesForObject($obj, $type = null, $returnFuncArgs = false)
     {
-        $values = array();
+        $values = [];
         if ($obj instanceof Css\Value\Func) {
             if ($returnFuncArgs) {
                 $values = $obj->getArguments();
@@ -73,7 +75,7 @@ class ValueIterator implements \Iterator
         if ($type) {
             return array_filter(
                 $values,
-                function($item) use($type) {
+                function($item) use ($type) {
                     return $item instanceof $type;
                 }
             );

@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\MediaQueryList;
@@ -15,7 +16,7 @@ class Import extends Rule
     private $media_list;
     private $styleSheet;
 
-    public function __construct(Url $href, MediaQueryList $media_list=null)
+    public function __construct(Url $href, MediaQueryList $media_list = null)
     {
         $this->href = $href;
         $this->media_list = $media_list;
@@ -25,6 +26,7 @@ class Import extends Rule
     {
         return $this->href;
     }
+
     public function setHref(Url $url)
     {
         $this->href = $url;
@@ -34,25 +36,24 @@ class Import extends Rule
     {
         return $this->media_list;
     }
+
     public function setMediaQueryList(MediaQueryList $media_list)
     {
         $this->media_list = $media_list;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $mediaText = $this->media_list->getCssText();
         return "@import "
             . $this->href->getCssText()
-            . ($mediaText ? ' '.$mediaText : '')
-            . ';'
-        ;
+            . ($mediaText ? ' ' . $mediaText : '')
+            . ';';
     }
 
     public function getStyleSheet()
     {
-        if ($this->styleSheet === null)
-        {
+        if ($this->styleSheet === null) {
             $this->styleSheet = $this->loadStyleSheet();
         }
         return $this->styleSheet;

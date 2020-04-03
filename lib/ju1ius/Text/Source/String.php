@@ -3,6 +3,7 @@
 namespace ju1ius\Text\Source;
 
 use ju1ius\Text\SourceInterface;
+use SplFixedArray;
 
 
 /**
@@ -23,7 +24,7 @@ class String implements SourceInterface
      * @param string $encoding
      * @param string $linesep A regex pattern in the mb_ereg syntax
      **/
-    public function __construct($contents, $encoding="utf-8", $linesep='\r\n|\n')
+    public function __construct($contents, $encoding = "utf-8", $linesep = '\r\n|\n')
     {
         $this->encoding = $encoding;
         $this->length = mb_strlen($contents, $encoding);
@@ -40,15 +41,17 @@ class String implements SourceInterface
     {
         return implode(PHP_EOL, $this->lines->toArray());
     }
+
     /**
      * Returns the source lines
      *
-     * @return \SplFixedArray
+     * @return SplFixedArray
      **/
     public function getLines()
     {
         return $this->lines;
     }
+
     /**
      * Returns the line at given index.
      * The index is zero-based, so the first line is at index 0.
@@ -59,6 +62,7 @@ class String implements SourceInterface
     {
         return $this->lines[$lineno];
     }
+
     /**
      * Returns the number of lines in the source string.
      *
@@ -68,10 +72,12 @@ class String implements SourceInterface
     {
         return $this->numlines;
     }
+
     public function __toString()
     {
         return $this->getContents();
     }
+
     /**
      * Returns the source encoding
      *
@@ -81,6 +87,7 @@ class String implements SourceInterface
     {
         return $this->encoding;
     }
+
     /**
      * Returns the source length (in characters).
      *
@@ -88,13 +95,13 @@ class String implements SourceInterface
      **/
     public function getLength()
     {
-        return $this->length;  
+        return $this->length;
     }
 
     private static function splitLines($string, $encoding, $linesep)
     {
         mb_regex_encoding($encoding);
-        return \SplFixedArray::fromArray(mb_split($linesep, $string));
+        return SplFixedArray::fromArray(mb_split($linesep, $string));
     }
 
     // ---------- SPL Interfaces implementation ---------- //
@@ -142,7 +149,7 @@ class String implements SourceInterface
     public function valid()
     {
         return false !== current($this->lines);
-    }   
+    }
 
     public function count()
     {

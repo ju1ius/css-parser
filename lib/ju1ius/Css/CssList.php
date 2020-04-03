@@ -1,5 +1,8 @@
 <?php
+
 namespace ju1ius\Css;
+
+use InvalidArgumentException;
 
 /**
  * General purpose list class
@@ -8,7 +11,7 @@ class CssList implements ListInterface
 {
     protected $items;
 
-    public function __construct($items=array())
+    public function __construct($items = [])
     {
         $this->items = $items;
     }
@@ -22,6 +25,7 @@ class CssList implements ListInterface
     {
         return $this->items;
     }
+
     public function setItems($items)
     {
         if ($items instanceof ListInterface) {
@@ -29,7 +33,7 @@ class CssList implements ListInterface
         } else if (is_array($items)) {
             $this->items = $items;
         } else {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Parameter must be an array or an instance of ListInterface"
             );
         }
@@ -39,6 +43,7 @@ class CssList implements ListInterface
     {
         return isset($this->items[0]) ? $this->items[0] : null;
     }
+
     public function getLast()
     {
         $index = count($this->items) - 1;
@@ -80,14 +85,14 @@ class CssList implements ListInterface
 
     public function insertItemAt($items, $index)
     {
-        if (!is_array($items)) $items = array($items);
+        if (!is_array($items)) $items = [$items];
         array_splice($this->items, $index, 0, $items);
     }
 
     /**
      * Replace an item by another or by every item in an array
      *
-     * @param mixed $oldItem  The index or item to replace
+     * @param mixed $oldItem The index or item to replace
      * @param mixed $newItems An item or array of items to insert starting the old item position
      **/
     public function replace($oldItem, $newItems)
@@ -100,7 +105,7 @@ class CssList implements ListInterface
         //$newItems = $newItems->getItems();
         /*} else */
         if (!is_array($newItems)) {
-            $newItems = array($newItems);
+            $newItems = [$newItems];
         }
         array_splice($this->items, $oldItem, 1, $newItems);
     }
@@ -170,7 +175,7 @@ class CssList implements ListInterface
     public function valid()
     {
         return false !== $this->current();
-    }   
+    }
 
     public function count()
     {

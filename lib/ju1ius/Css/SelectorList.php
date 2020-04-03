@@ -2,6 +2,7 @@
 
 namespace ju1ius\Css;
 
+use InvalidArgumentException;
 use ju1ius\Css\XPath;
 
 /**
@@ -10,22 +11,22 @@ use ju1ius\Css\XPath;
 class SelectorList extends CssList implements Serializable, XPathable
 {
 
-    public function __construct($selectors=array())
+    public function __construct($selectors = [])
     {
         if ($selectors instanceof SelectorList) {
             $this->items = $selectors->getItems();
         } else if ($selectors instanceof Selector) {
-            $this->items = array($selectors);
+            $this->items = [$selectors];
         } else if (is_array($selectors)) {
             $this->items = $selectors;
         } else {
-            throw new \InvalidArgumentException();
+            throw new InvalidArgumentException();
         }
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        return implode(', ', array_map(function($selector) use($options) {
+        return implode(', ', array_map(function($selector) use ($options) {
             return $selector->getCssText($options);
         }, $this->items));
     }
@@ -40,7 +41,7 @@ class SelectorList extends CssList implements Serializable, XPathable
      */
     public function toXPath()
     {
-        $paths = array();
+        $paths = [];
         foreach ($this->items as $item) {
             $paths[] = $item->toXPath();
         }

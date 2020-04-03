@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
@@ -14,7 +15,7 @@ class NS extends Rule
     private $uri;
     private $prefix;
 
-    function __construct(Url $uri, $prefix=null)
+    function __construct(Url $uri, $prefix = null)
     {
         $this->uri = $uri;
         $this->prefix = $prefix;
@@ -24,6 +25,7 @@ class NS extends Rule
     {
         return $this->uri;
     }
+
     public function setUri(Url $uri)
     {
         $this->uri = $uri;
@@ -33,18 +35,18 @@ class NS extends Rule
     {
         return $this->prefix;
     }
+
     public function setPrefix($prefix)
     {
         $this->prefix = $prefix;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         return "@namespace "
             . ($this->prefix ? $this->prefix . ' ' : '')
             . $this->uri->getCssText($options)
-            . ';'
-        ;
+            . ';';
     }
 
     public function __clone()

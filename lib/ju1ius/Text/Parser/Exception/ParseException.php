@@ -2,7 +2,9 @@
 
 namespace ju1ius\Text\Parser\Exception;
 
-class ParseException extends \RuntimeException
+use RuntimeException;
+
+class ParseException extends RuntimeException
 {
 
 }

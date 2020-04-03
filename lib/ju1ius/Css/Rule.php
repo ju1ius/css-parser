@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 /**
@@ -10,7 +11,8 @@ abstract class Rule implements Serializable
     private $parentRule;
 
     abstract public function __clone();
-    abstract public function getCssText($options=array());
+
+    abstract public function getCssText($options = []);
 
     public function getParentStyleSheet()
     {
@@ -24,7 +26,7 @@ abstract class Rule implements Serializable
 
     public function getParentRule()
     {
-        return $this->parentRule;  
+        return $this->parentRule;
     }
 
     public function setParentRule(Rule $parentRule)

@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 /**
@@ -6,7 +7,7 @@ namespace ju1ius\Css;
  **/
 class PropertyValueList extends ValueList
 {
-    public function __construct($items=array(), $separator=',')
+    public function __construct($items = [], $separator = ',')
     {
         return parent::__construct($items, $separator);
     }

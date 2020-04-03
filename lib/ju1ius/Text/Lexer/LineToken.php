@@ -49,7 +49,7 @@ class LineToken implements TokenInterface
             return implode('', $this->value);
         }
 
-        return (string) $this->value;
+        return (string)$this->value;
     }
 
 }

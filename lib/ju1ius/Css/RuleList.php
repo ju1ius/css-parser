@@ -1,5 +1,8 @@
 <?php
+
 namespace ju1ius\Css;
+
+use InvalidArgumentException;
 
 /**
  * Manages a list of ju1ius\Css\Rule objects
@@ -10,7 +13,7 @@ class RuleList extends CssList implements Serializable
     public function prepend($rule)
     {
         if (!$rule instanceof Rule) {
-            throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
+            throw new InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
         }
         parent::prepend($rule);
     }
@@ -18,7 +21,7 @@ class RuleList extends CssList implements Serializable
     public function append($rule)
     {
         if (!$rule instanceof Rule) {
-            throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
+            throw new InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
         }
         parent::append($rule);
     }
@@ -26,7 +29,7 @@ class RuleList extends CssList implements Serializable
     public function remove($rule)
     {
         if (!$rule instanceof Rule) {
-            throw new \InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
+            throw new InvalidArgumentException("Parameter must be an instance of ju1ius\Css\Rule");
         }
         parent::remove($rule);
     }
@@ -53,7 +56,7 @@ class RuleList extends CssList implements Serializable
      **/
     public function getAllRules()
     {
-        $rules = array();
+        $rules = [];
         foreach ($this->getRules() as $rule) {
             $rules[] = $rule;
             if (method_exists($rule, 'getRuleList')) {
@@ -72,7 +75,7 @@ class RuleList extends CssList implements Serializable
      **/
     public function getAllStyleRules()
     {
-        $rules = array();
+        $rules = [];
         foreach ($this->getRules() as $rule) {
             if ($rule instanceof Rule\StyleRule) {
                 $rules[] = $rule;
@@ -93,7 +96,7 @@ class RuleList extends CssList implements Serializable
      **/
     public function getAllStyleDeclarations()
     {
-        $rules = array();
+        $rules = [];
         foreach ($this->getRules() as $rule) {
             if (method_exists($rule, 'getStyleDeclaration')) {
                 $rules[] = $rule->getStyleDeclaration();
@@ -109,14 +112,14 @@ class RuleList extends CssList implements Serializable
     /**
      * Returns all Css values recursively
      *
-     * @param string $searchString              Restrict search to given property name
-     * @param bool   $searchInFunctionArguments Whether to return values used as arguments of Css functions
+     * @param string $searchString Restrict search to given property name
+     * @param bool $searchInFunctionArguments Whether to return values used as arguments of Css functions
      *
      * @return array
      **/
-    public function getAllValues($searchString=null, $searchInFunctionArguments=false)
+    public function getAllValues($searchString = null, $searchInFunctionArguments = false)
     {
-        $values = array();
+        $values = [];
         foreach ($this->getRules() as $rule) {
             self::_findAllValues($rule, $values, $searchString, $searchInFunctionArguments);
         }
@@ -126,13 +129,13 @@ class RuleList extends CssList implements Serializable
     /**
      * Recursively finds all css values in a given object
      *
-     * @param mixed  $element      The object to search in
-     * @param array  &$result      The array to store values in
+     * @param mixed $element The object to search in
+     * @param array  &$result The array to store values in
      * @param string $searchString { @link ju1ius\Css\RuleList::getAllValues() }
      * @param string $searchInFunctionArguments { @link ju1ius\Css\RuleList::getAllValues() }
      *
      **/
-    private static function _findAllValues($element, &$result, $searchString=null, $searchInFunctionArguments=false)
+    private static function _findAllValues($element, &$result, $searchString = null, $searchInFunctionArguments = false)
     {
         if ($element instanceof Rule) {
             if (method_exists($element, 'getRuleList')) {
@@ -166,7 +169,7 @@ class RuleList extends CssList implements Serializable
      * ------------ ju1ius\Css\Serializable interface implementation
      **/
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = '';
@@ -174,7 +177,7 @@ class RuleList extends CssList implements Serializable
             $indent = str_repeat($options['indent_char'], $options['indent_level']);
             $nl = "\n";
         }
-        return implode($nl, array_map(function($rule) use($indent, $options) {
+        return implode($nl, array_map(function($rule) use ($indent, $options) {
             return $indent . $rule->getCssText($options);
         }, $this->items));
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 use ju1ius\Css\Exception\StyleSheetNotFoundException;
@@ -20,10 +21,10 @@ class Loader
      *
      * @param string|ju1ius\Uri $url
      *
-     * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
-     *
      * @return Source\File
-     **/
+     **@throws StyleSheetNotFoundException if file doesn't exist or is not readable
+     *
+     */
     public static function load($url)
     {/*{{{*/
         $uri = Uri::parse($url);
@@ -40,10 +41,10 @@ class Loader
      *
      * @param string|ju1ius\Uri $url The path to the file
      *
-     * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
-     *
      * @return Source\File
-     **/
+     **@throws StyleSheetNotFoundException if file doesn't exist or is not readable
+     *
+     */
     public static function loadFile($url)
     {/*{{{*/
         $uri = Uri::parse($url);
@@ -70,10 +71,10 @@ class Loader
      *
      * @param string|ju1ius\Uri $url The url of the file
      *
-     * @throws StyleSheetNotFoundException if file doesn't exist or is not readable
-     *
      * @return Source\File
-     **/
+     **@throws StyleSheetNotFoundException if file doesn't exist or is not readable
+     *
+     */
     public static function loadUrl($url)
     {/*{{{*/
         $uri = Uri::parse($url);
@@ -93,11 +94,11 @@ class Loader
     /**
      * Loads a CSS string into a Source\String object.
      *
-     * @param string $str  The CSS string
+     * @param string $str The CSS string
      *
      * @return Source\String
      **/
-    public static function loadString($str, $encoding=null)
+    public static function loadString($str, $encoding = null)
     {/*{{{*/
         $infos = self::_loadString($str);
 
@@ -123,10 +124,10 @@ class Loader
 
         $str = self::normalizeLineLength($str);
 
-        return array(
+        return [
             'contents' => $str,
-            'charset' => $charset
-        );
+            'charset' => $charset,
+        ];
     }/*}}}*/
 
     private static function _loadUrl(Uri $url)
@@ -147,17 +148,17 @@ class Loader
 
         curl_close($curl);
 
-        $results = array(
+        $results = [
             'charset' => null,
-            'body' => $response  
-        );
+            'body' => $response,
+        ];
         if ($infos['content_type']) {
             if (preg_match('/charset=([a-zA-Z0-9-]*)/', $infos['content_type'], $matches)) {
                 $results['charset'] = $matches[0];
+            }
         }
-    }
 
-    return $results;
+        return $results;
     }/*}}}*/
 
     private static function normalizeLineLength($input)
@@ -172,14 +173,14 @@ class Loader
         // finds position of all '}' not inside a string literal
         $patterns = Lexer::getPatterns();
         $pos = 0;
-        $tokens = array();
+        $tokens = [];
         while ($pos < $len) {
             $chr = $input[$pos];
             if ('"' === $chr || "'" === $chr) {
-                if (preg_match('/\G'.$patterns['string'].'/iu', $input, $matches, 0, $pos)) {
+                if (preg_match('/\G' . $patterns['string'] . '/iu', $input, $matches, 0, $pos)) {
                     $pos += strlen($matches[0]);
                 } else {
-                    preg_match('/\G'.$patterns['badstring'].'/iu', $input, $matches, 0, $pos);
+                    preg_match('/\G' . $patterns['badstring'] . '/iu', $input, $matches, 0, $pos);
                     $pos += strlen($matches[0]);
                 }
             } else if ('}' === $chr) {

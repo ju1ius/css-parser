@@ -3,6 +3,8 @@
 namespace ju1ius\Text;
 
 use ju1ius\Text\Lexer\TokenInterface;
+use ReflectionClass;
+use SplFixedArray;
 
 
 abstract class Lexer implements LexerInterface
@@ -19,7 +21,7 @@ abstract class Lexer implements LexerInterface
     protected $source;
 
     /**
-     * @var \SplFixedArray The lines of the source object
+     * @var SplFixedArray The lines of the source object
      **/
     protected $lines;
 
@@ -96,12 +98,12 @@ abstract class Lexer implements LexerInterface
      * @param SourceInterface $source
      * @param boolean $unicode
      **/
-    public function __construct(SourceInterface $source=null, $unicode=false)
+    public function __construct(SourceInterface $source = null, $unicode = false)
     {/*{{{*/
         $this->state = new Lexer\State();
         $this->unicode = $unicode;
         $this->getTokenNames();
-        if($source) $this->setSource($source);
+        if ($source) $this->setSource($source);
     }/*}}}*/
 
     abstract public function nextToken();
@@ -131,7 +133,7 @@ abstract class Lexer implements LexerInterface
 
     public function getEncoding()
     {/*{{{*/
-        return $this->encoding;  
+        return $this->encoding;
     }/*}}}*/
 
     /**
@@ -155,7 +157,7 @@ abstract class Lexer implements LexerInterface
         $this->charpos = -1;
         $this->bytepos = -1;
         $this->lookahead = null;
-        
+
         return true;
     }/*}}}*/
 
@@ -172,7 +174,7 @@ abstract class Lexer implements LexerInterface
         $this->charpos = -1;
         $this->bytepos = -1;
         $this->lookahead = null;
-        
+
         return true;
     }/*}}}*/
 
@@ -188,7 +190,7 @@ abstract class Lexer implements LexerInterface
     public static function getLiteral(TokenInterface $token)
     {/*{{{*/
         $name = static::$TOKEN_NAMES[$token->type];
-        
+
         return sprintf(
             "%s (%s) on line %s, column %s.",
             $name, $token, $token->line, $token->column
@@ -199,15 +201,15 @@ abstract class Lexer implements LexerInterface
     {/*{{{*/
         if (null === static::$TOKEN_NAMES) {
             $className = get_class($this);
-            $reflClass = new \ReflectionClass($className);
+            $reflClass = new ReflectionClass($className);
             $constants = $reflClass->getConstants();
-            static::$TOKEN_NAMES = array_flip($constants); 
+            static::$TOKEN_NAMES = array_flip($constants);
         }
-        
+
         return static::$TOKEN_NAMES;
     }/*}}}*/
 
-    protected function consumeCharacters($length=1)
+    protected function consumeCharacters($length = 1)
     {/*{{{*/
         $this->charpos += $length;
         $this->bytepos += $length;
@@ -220,7 +222,7 @@ abstract class Lexer implements LexerInterface
         }
     }/*}}}*/
 
-    protected function consume($length=1)
+    protected function consume($length = 1)
     {/*{{{*/
         $this->charpos += $length;
         if ($this->charpos >= $this->length) {
@@ -252,7 +254,7 @@ abstract class Lexer implements LexerInterface
         }
     }/*}}}*/
 
-    protected function peek($length=1, $offset=0)
+    protected function peek($length = 1, $offset = 0)
     {/*{{{*/
         return $this->multibyte
             ? mb_substr($this->text, $this->charpos + $offset + 1, $length, $this->encoding)
@@ -284,13 +286,13 @@ abstract class Lexer implements LexerInterface
             return false;
         }
         //return preg_match('/\G'.$pattern.'/iu', $this->text, $matches, 0, $this->bytepos);
-        mb_ereg_search_init($this->text, '\G'.$pattern, $options);
+        mb_ereg_search_init($this->text, '\G' . $pattern, $options);
         mb_ereg_search_setpos($this->bytepos);
-        
+
         return mb_ereg_search();
     }/*}}}*/
 
-    protected function match($pattern, $charpos=null, $options='msi')
+    protected function match($pattern, $charpos = null, $options = 'msi')
     {/*{{{*/
         if (null === $charpos) {
             $charpos = $this->bytepos;
@@ -298,7 +300,7 @@ abstract class Lexer implements LexerInterface
         if ($this->charpos >= $this->length) {
             return false;
         }
-        mb_ereg_search_init($this->text, '\G'.$pattern, $options);
+        mb_ereg_search_init($this->text, '\G' . $pattern, $options);
         mb_ereg_search_setpos($charpos);
         return mb_ereg_search_regs();
     }/*}}}*/

@@ -6,6 +6,7 @@ use ju1ius\Text\Parser\Exception\ParseException;
 use ju1ius\Text\Parser\Exception\UnexpectedTokenException;
 use ju1ius\Text\Parser\LLk;
 use ju1ius\Text\Source;
+use SplStack;
 
 /**
  * Css parser
@@ -15,9 +16,9 @@ class Parser extends LLk
 
     protected $strict;
 
-    public $errors=array();
+    public $errors = [];
 
-    public function __construct(Lexer $lexer, $strict=true)
+    public function __construct(Lexer $lexer, $strict = true)
     {/*{{{*/
         $this->strict = $strict;
         parent::__construct($lexer, 2);
@@ -31,7 +32,7 @@ class Parser extends LLk
      *
      * @param boolean $strict
      **/
-    public function setStrict($strict=true)
+    public function setStrict($strict = true)
     {/*{{{*/
         $this->strict = (bool)$strict;
     }/*}}}*/
@@ -117,7 +118,7 @@ class Parser extends LLk
         $stylesheet = new StyleSheet(null, $this->lexer->getEncoding());
         $rule_list = $stylesheet->getRuleList();
 
-        try { 
+        try {
             $charset = $this->_charset();
             if ($charset) {
                 $rule_list->append($charset);
@@ -234,12 +235,12 @@ class Parser extends LLk
 
                 default:
                     if ($this->strict) {
-                        $this->_unexpectedToken($this->LT(), array(
+                        $this->_unexpectedToken($this->LT(), [
                             Lexer::T_MEDIA_SYM, Lexer::T_PAGE_SYM, Lexer::T_FONT_FACE_SYM, Lexer::T_KEYFRAMES_SYM,
                             Lexer::T_IDENT, Lexer::T_STAR, Lexer::T_PIPE, Lexer::T_DOT,
                             Lexer::T_HASH, Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
-                            Lexer::T_S
-                        ));
+                            Lexer::T_S,
+                        ]);
                     }
                     $this->skipRuleset();
                     break;
@@ -271,12 +272,12 @@ class Parser extends LLk
      *  : IMPORT_SYM S*
      *    [STRING|URI] S* media_query_list? ';' S*
      *  ;
-     **/ 
+     **/
     protected function _import()
     {/*{{{*/
         $this->match(Lexer::T_IMPORT_SYM);
         $this->_ws();
-        $this->ensure(array(Lexer::T_STRING, Lexer::T_URI));
+        $this->ensure([Lexer::T_STRING, Lexer::T_URI]);
         $url = new Value\Url(
             new Value\String($this->LT()->value)
         );
@@ -306,7 +307,7 @@ class Parser extends LLk
             $this->consume();
             $this->_ws();
         }
-        $this->ensure(array(Lexer::T_STRING, Lexer::T_URI));
+        $this->ensure([Lexer::T_STRING, Lexer::T_URI]);
         $uri = $this->LT()->value;
         $this->consume();
         $this->_ws();
@@ -328,7 +329,7 @@ class Parser extends LLk
         $this->match(Lexer::T_FONT_FACE_SYM);
         $style_declaration = $this->_parseDeclarations(true, false);
 
-        return new Rule\FontFace($style_declaration);  
+        return new Rule\FontFace($style_declaration);
     }/*}}}*/
 
     /**
@@ -336,7 +337,7 @@ class Parser extends LLk
      *   : selectors_group
      *     '{' S* declaration? [ ';' S* declaration? ]* '}' S*
      *   ;
-     */ 
+     */
     protected function _ruleset()
     {/*{{{*/
         $style_declaration = null;
@@ -347,7 +348,7 @@ class Parser extends LLk
          **/
         try {
             $selector_list = $this->_selectors_group();
-        } catch(ParseException $e) {
+        } catch (ParseException $e) {
             if ($this->strict) {
                 throw $e;
             }
@@ -375,7 +376,7 @@ class Parser extends LLk
      *   : property ':' S* expr prio?
      *   | /( empty )/
      *   ;
-     */ 
+     */
     protected function _declaration()
     {/*{{{*/
         $property = $this->_property();
@@ -439,7 +440,7 @@ class Parser extends LLk
      **/
     protected function _prio()
     {/*{{{*/
-        $this->match(Lexer::T_IMPORTANT_SYM); 
+        $this->match(Lexer::T_IMPORTANT_SYM);
         $this->_ws();
     }/*}}}*/
 
@@ -450,7 +451,7 @@ class Parser extends LLk
      **/
     protected function _expr()
     {/*{{{*/
-        $values = array();
+        $values = [];
         $value = $this->_term();
 
         if (null === $value) {
@@ -574,14 +575,14 @@ class Parser extends LLk
             case Lexer::T_BADSTRING:
             case Lexer::T_BADURI:
             case Lexer::T_EOF:
-                $this->_unexpectedToken($token, array(
+                $this->_unexpectedToken($token, [
                     Lexer::T_HASH, Lexer::T_FUNCTION, Lexer::T_UNICODERANGE,
                     Lexer::T_URI, Lexer::T_IDENT, Lexer::T_STRING,
                     Lexer::T_FREQ, Lexer::T_TIME, Lexer::T_ANGLE, Lexer::T_LENGTH,
                     Lexer::T_PERCENTAGE, Lexer::T_RATIO, Lexer::T_DIMENSION,
                     Lexer::T_FROM_SYM, Lexer::T_TO_SYM,
-                    Lexer::T_NUMBER
-                ));
+                    Lexer::T_NUMBER,
+                ]);
                 break;
 
             default:
@@ -592,7 +593,7 @@ class Parser extends LLk
     /**
      * hexcolor
      *   : HASH S*
-     *   ; 
+     *   ;
      **/
     protected function _hexcolor()
     {/*{{{*/
@@ -625,11 +626,11 @@ class Parser extends LLk
         $this->_ws();
 
         if (preg_match('/^rgba?$/i', $name)) {
-            $channels = array(
+            $channels = [
                 'r' => $args[0],
                 'g' => $args[2],
                 'b' => $args[4],
-            );
+            ];
             if (isset($args[6])) {
                 $channels['a'] = $args[6];
             }
@@ -637,11 +638,11 @@ class Parser extends LLk
             return new Value\Color($channels);
         } else if (preg_match('/^hsla?$/i', $name)) {
 
-            $channels = array(
+            $channels = [
                 'h' => $args[0],
                 's' => $args[2],
                 'l' => $args[4],
-            );
+            ];
             if (isset($args[6])) {
                 $channels['a'] = $args[6];
             }
@@ -649,7 +650,7 @@ class Parser extends LLk
             return new Value\Color($channels);
         }
 
-        return new Value\Func($name, self::reduceValueList($args, array(',', ' ')));
+        return new Value\Func($name, self::reduceValueList($args, [',', ' ']));
     }/*}}}*/
 
     /**
@@ -664,7 +665,7 @@ class Parser extends LLk
             $this->consume();
             $this->_ws();
             return $t->value;
-        } 
+        }
     }/*}}}*/
 
     /**
@@ -675,9 +676,9 @@ class Parser extends LLk
 
     /**
      * page
-     *   : PAGE_SYM S* IDENT? pseudo_page? S* 
+     *   : PAGE_SYM S* IDENT? pseudo_page? S*
      *     '{' S* [ declaration | margin ]? [ ';' S* [ declaration | margin ]? ]* '}' S*
-     *   ; 
+     *   ;
      **/
     protected function _page()
     {/*{{{*/
@@ -743,13 +744,13 @@ class Parser extends LLk
      *   : TOPLEFTCORNER_SYM | TOPLEFT_SYM | TOPCENTER_SYM | TOPRIGHT_SYM | TOPRIGHTCORNER_SYM |
      *     BOTTOMLEFTCORNER_SYM | BOTTOMLEFT_SYM | BOTTOMCENTER_SYM | BOTTOMRIGHT_SYM | BOTTOMRIGHTCORNER_SYM |
      *     LEFTTOP_SYM | LEFTMIDDLE_SYM | LEFTBOTTOM_SYM |
-     *     RIGHTTOP_SYM | RIGHTMIDDLE_SYM | RIGHTBOTTOM_SYM 
+     *     RIGHTTOP_SYM | RIGHTMIDDLE_SYM | RIGHTBOTTOM_SYM
      *   ;
      **/
     protected function _margin_sym()
     {/*{{{*/
-        $this->ensure(array(
-            Lexer::T_TOPLEFTCORNER_SYM, 
+        $this->ensure([
+            Lexer::T_TOPLEFTCORNER_SYM,
             Lexer::T_TOPLEFT_SYM,
             Lexer::T_TOPCENTER_SYM,
             Lexer::T_TOPRIGHT_SYM,
@@ -764,8 +765,8 @@ class Parser extends LLk
             Lexer::T_LEFTBOTTOM_SYM,
             Lexer::T_RIGHTTOP_SYM,
             Lexer::T_RIGHTMIDDLE_SYM,
-            Lexer::T_RIGHTBOTTOM_SYM
-        ));
+            Lexer::T_RIGHTBOTTOM_SYM,
+        ]);
         $value = $this->LT()->value;
         $this->consume();
 
@@ -853,12 +854,12 @@ class Parser extends LLk
 
                 default:
                     if ($this->strict) {
-                        $this->_unexpectedToken($this->LT(), array(
+                        $this->_unexpectedToken($this->LT(), [
                             Lexer::T_PAGE_SYM, Lexer::T_FONT_FACE_SYM, Lexer::T_KEYFRAMES_SYM,
                             Lexer::T_IDENT, Lexer::T_STAR, Lexer::T_PIPE, Lexer::T_DOT,
                             Lexer::T_HASH, Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
-                            Lexer::T_S, Lexer::T_RCURLY
-                        ));
+                            Lexer::T_S, Lexer::T_RCURLY,
+                        ]);
                     }
                     $this->skipRuleset(true);
                     break;
@@ -914,7 +915,7 @@ class Parser extends LLk
     {/*{{{*/
         $restrictor = '';
         $media_type = '';
-        $expressions = array();
+        $expressions = [];
         $this->_ws();
 
         // Alternative #1
@@ -931,13 +932,14 @@ class Parser extends LLk
             $expressions[] = $this->_media_expression();
         }
 
-        if (!$media_type) {}
+        if (!$media_type) {
+        }
 
-            while ($this->LT()->type === Lexer::T_AND) {
-                $this->consume();
-                $this->_ws();
-                $expressions[] = $this->_media_expression();
-            }
+        while ($this->LT()->type === Lexer::T_AND) {
+            $this->consume();
+            $this->_ws();
+            $expressions[] = $this->_media_expression();
+        }
 
         return new MediaQuery($restrictor, $media_type, $expressions);
     }/*}}}*/
@@ -997,14 +999,14 @@ class Parser extends LLk
 
     /**
      * ----------- CSS3 Animation ----------
-     * http://www.w3.org/TR/css3-animations/ 
+     * http://www.w3.org/TR/css3-animations/
      **/
     /*{{{*/
 
     /**
      * keyframes_rule
      *   : KEYFRAMES_SYM S+ IDENT S* '{' S* keyframes_blocks '}' S*
-     *   ; 
+     *   ;
      **/
     protected function _keyframes()
     {/*{{{*/
@@ -1036,7 +1038,7 @@ class Parser extends LLk
     {/*{{{*/
         $rule_list = new RuleList();
         while (true) {
-            if (!in_array($this->LT()->type, array(Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE))) {
+            if (!in_array($this->LT()->type, [Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE])) {
                 break;
             }
             $selectors = $this->_keyframes_selector();
@@ -1055,8 +1057,8 @@ class Parser extends LLk
      **/
     protected function _keyframes_selector()
     {/*{{{*/
-        $selectors = array();
-        $selector_tokens = array(Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE);
+        $selectors = [];
+        $selector_tokens = [Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE];
 
         $this->ensure($selector_tokens);
         $selectors[] = $this->LT()->value;
@@ -1084,10 +1086,10 @@ class Parser extends LLk
      * selectors_group
      *   : selector [ COMMA S* selector ]*
      *   ;
-     */ 
+     */
     protected function _selectors_group()
     {/*{{{*/
-        $selectors = array();
+        $selectors = [];
         $selectors[] = $this->_selector();
 
         while ($this->LT()->type === Lexer::T_COMMA) {
@@ -1095,7 +1097,7 @@ class Parser extends LLk
             $this->_ws();
             $selector = $this->_selector();
 
-            if (!$selector){
+            if (!$selector) {
                 throw new UnexpectedTokenException($this->current);
             }
             $selectors[] = $selector;
@@ -1133,9 +1135,9 @@ class Parser extends LLk
                     break 2;
 
                 default:
-                    $this->_unexpectedToken($this->LT(), array(
+                    $this->_unexpectedToken($this->LT(), [
                         Lexer::T_PLUS, Lexer::T_GREATER, Lexer::T_TILDE, Lexer::T_S,
-                    ));
+                    ]);
                     break;
 
             }
@@ -1185,7 +1187,7 @@ class Parser extends LLk
                     $selector = $this->_pseudo($selector);
                     break;
 
-                    // Combinators
+                // Combinators
                 case Lexer::T_S:
                 case Lexer::T_PLUS:
                 case Lexer::T_GREATER:
@@ -1198,10 +1200,10 @@ class Parser extends LLk
                     break 2;
 
                 default:
-                    $this->_unexpectedToken($this->LT(), array(
+                    $this->_unexpectedToken($this->LT(), [
                         Lexer::T_HASH, Lexer::T_DOT,
-                        Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION
-                    ));
+                        Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
+                    ]);
                     break 2;
 
             }
@@ -1215,7 +1217,7 @@ class Parser extends LLk
      * combinator
      *   : PLUS S* | GREATER S* | TILDE S* | S+
      *   ;
-     **/ 
+     **/
     protected function _combinator()
     {/*{{{*/
         $token = $this->LT();
@@ -1281,7 +1283,7 @@ class Parser extends LLk
      * class
      *   : '.' IDENT
      *   ;
-     */ 
+     */
     protected function _class($selector)
     {/*{{{*/
         $this->match(Lexer::T_DOT);
@@ -1296,7 +1298,7 @@ class Parser extends LLk
      * element_name
      *   : IDENT
      *   ;
-     */ 
+     */
     protected function _element_name()
     {/*{{{*/
         $element = '*';
@@ -1383,7 +1385,7 @@ class Parser extends LLk
             $operator = $t->value;
             $this->consume();
             $this->_ws();
-            $this->ensure(array(Lexer::T_IDENT, Lexer::T_STRING));
+            $this->ensure([Lexer::T_IDENT, Lexer::T_STRING]);
 
             $token = $this->LT();
             if ($token->type === Lexer::T_STRING) {
@@ -1404,7 +1406,7 @@ class Parser extends LLk
      * pseudo
      *   : ':' ':'? [ IDENT | functional_pseudo ]
      *   ;
-     */ 
+     */
     protected function _pseudo($selector)
     {/*{{{*/
         $this->match(Lexer::T_COLON);
@@ -1415,7 +1417,7 @@ class Parser extends LLk
             $this->consume();
         }
 
-        $this->ensure(array(Lexer::T_IDENT, Lexer::T_FUNCTION));
+        $this->ensure([Lexer::T_IDENT, Lexer::T_FUNCTION]);
 
         $token = $this->LT();
         $ident = $token->value;
@@ -1433,7 +1435,7 @@ class Parser extends LLk
      * functional_pseudo
      *   : FUNCTION S* expression ')'
      *   ;
-     **/ 
+     **/
     protected function _functional_pseudo()
     {/*{{{*/
         $this->match(Lexer::T_FUNCTION);
@@ -1529,10 +1531,10 @@ class Parser extends LLk
                 break;
 
             default:
-                $this->_unexpectedToken($this->LT(), array(
+                $this->_unexpectedToken($this->LT(), [
                     Lexer::T_HASH, Lexer::T_DOT, Lexer::T_LBRACK, Lexer::T_COLON,
-                    Lexer::T_RPAREN
-                ));
+                    Lexer::T_RPAREN,
+                ]);
                 break;
 
         }
@@ -1598,16 +1600,16 @@ class Parser extends LLk
                 } else {
                     break;
                 }
-            } else if ($margins && in_array($this->LT()->type, array(
-                Lexer::T_TOPLEFTCORNER_SYM, Lexer::T_TOPLEFT_SYM,
-                Lexer::T_TOPCENTER_SYM,
-                Lexer::T_TOPRIGHT_SYM, Lexer::T_TOPRIGHTCORNER_SYM,
-                Lexer::T_BOTTOMLEFTCORNER_SYM, Lexer::T_BOTTOMLEFT_SYM,
-                Lexer::T_BOTTOMCENTER_SYM,
-                Lexer::T_BOTTOMRIGHT_SYM, Lexer::T_BOTTOMRIGHTCORNER_SYM,
-                Lexer::T_LEFTTOP_SYM, Lexer::T_LEFTMIDDLE_SYM, Lexer::T_LEFTBOTTOM_SYM,
-                Lexer::T_RIGHTTOP_SYM, Lexer::T_RIGHTMIDDLE_SYM, Lexer::T_RIGHTBOTTOM_SYM
-            ))) {
+            } else if ($margins && in_array($this->LT()->type, [
+                    Lexer::T_TOPLEFTCORNER_SYM, Lexer::T_TOPLEFT_SYM,
+                    Lexer::T_TOPCENTER_SYM,
+                    Lexer::T_TOPRIGHT_SYM, Lexer::T_TOPRIGHTCORNER_SYM,
+                    Lexer::T_BOTTOMLEFTCORNER_SYM, Lexer::T_BOTTOMLEFT_SYM,
+                    Lexer::T_BOTTOMCENTER_SYM,
+                    Lexer::T_BOTTOMRIGHT_SYM, Lexer::T_BOTTOMRIGHTCORNER_SYM,
+                    Lexer::T_LEFTTOP_SYM, Lexer::T_LEFTMIDDLE_SYM, Lexer::T_LEFTBOTTOM_SYM,
+                    Lexer::T_RIGHTTOP_SYM, Lexer::T_RIGHTMIDDLE_SYM, Lexer::T_RIGHTBOTTOM_SYM,
+                ])) {
                 try {
                     $margin_rules->append($this->_margin());
                 } catch (ParseException $e) {
@@ -1627,9 +1629,8 @@ class Parser extends LLk
         $this->_ws();
 
         return $margins
-            ? array('style_declaration' => $style_declaration, 'rule_list' => $margin_rules)
-            : $style_declaration
-        ;
+            ? ['style_declaration' => $style_declaration, 'rule_list' => $margin_rules]
+            : $style_declaration;
     }/*}}}*/
 
     protected function _ws()
@@ -1654,7 +1655,7 @@ class Parser extends LLk
      * @param array $values a list of values
      * @param array $delimiters a list of delimiters by order of precedence
      **/
-    protected static function reduceValueList(array $values, $delimiters=array(' ', ',', '/'))
+    protected static function reduceValueList(array $values, $delimiters = [' ', ',', '/'])
     {/*{{{*/
         if (count($values) === 1) return $values[0];
 
@@ -1668,11 +1669,11 @@ class Parser extends LLk
                     }
                     $length++;
                 }
-                $value_list = new PropertyValueList(array(), $delim);
-                for ($i = $start - 1; $i - $start + 1 < $length * 2 ; $i += 2) {
+                $value_list = new PropertyValueList([], $delim);
+                for ($i = $start - 1; $i - $start + 1 < $length * 2; $i += 2) {
                     $value_list->append($values[$i]);
                 }
-                array_splice($values, $start - 1, $length * 2 - 1, array($value_list));
+                array_splice($values, $start - 1, $length * 2 - 1, [$value_list]);
             }
         }
 
@@ -1682,12 +1683,12 @@ class Parser extends LLk
     protected static function _listDelimiterForProperty($name)
     {/*{{{*/
         if (0 === strcasecmp('background', $name)) {
-            return array('/', ' ', ',');
+            return ['/', ' ', ','];
         } else if (preg_match('/^font(?:-family)?$/iu', $name)) {
-            return array(',', '/', ' ');
+            return [',', '/', ' '];
         }
 
-        return array(' ', ',', '/');
+        return [' ', ',', '/'];
     }/*}}}*/
 
     protected static function fixBackgroundShorthand(PropertyValueList $value_list)
@@ -1712,25 +1713,25 @@ class Parser extends LLk
     {/*{{{*/
         foreach ($value_list->getItems() as $i => $value) {
             if ($value instanceof PropertyValueList && $value->getSeparator() === '/') {
-                $before = $value_list[$i-1];
-                if ($before && (in_array($before, array('left','center','right','top','bottom')) || $before instanceof Value\Dimension)) {
+                $before = $value_list[$i - 1];
+                if ($before && (in_array($before, ['left', 'center', 'right', 'top', 'bottom']) || $before instanceof Value\Dimension)) {
                     $left_list = new PropertyValueList(
-                        array($before, $value->getFirst()),
+                        [$before, $value->getFirst()],
                         ' '
                     );
                     $value->replace(0, $left_list);
                     //$value_list->remove($before);
-                    unset($value_list[$i-1]);
+                    unset($value_list[$i - 1]);
                 }
-                $after = $value_list[$i+1];
-                if ($after && (in_array($after, array('auto','cover','contain')) || $after instanceof Value\Dimension)) {
+                $after = $value_list[$i + 1];
+                if ($after && (in_array($after, ['auto', 'cover', 'contain']) || $after instanceof Value\Dimension)) {
                     $right_list = new PropertyValueList(
-                        array($value->getLast(), $after),
+                        [$value->getLast(), $after],
                         ' '
                     );
                     $value->replace(1, $right_list);
                     //$value_list->remove($after);
-                    unset($value_list[$i+1]);
+                    unset($value_list[$i + 1]);
                 }
             }
         }
@@ -1741,12 +1742,12 @@ class Parser extends LLk
      * Error recovery methods
      **/
 
-    protected function skipRuleset($inside_braces=false)
+    protected function skipRuleset($inside_braces = false)
     {/*{{{*/
-        $trace = array(
+        $trace = [
             'start' => $this->LT(),
-            'end' => null
-        );
+            'end' => null,
+        ];
 
         while (true) {
             switch ($this->LT()->type) {
@@ -1799,12 +1800,12 @@ class Parser extends LLk
         $this->errors[] = $trace;
     }/*}}}*/
 
-    protected function skipDeclaration($check_braces=true)
+    protected function skipDeclaration($check_braces = true)
     {/*{{{*/
-        $trace = array(
+        $trace = [
             'start' => $this->LT(),
-            'end' => null
-        );
+            'end' => null,
+        ];
         while (true) {
 
             switch ($this->LT()->type) {
@@ -1862,12 +1863,12 @@ class Parser extends LLk
         $this->errors[] = $trace;
     }/*}}}*/
 
-    protected function skipAtRule($inside_block=false)
+    protected function skipAtRule($inside_block = false)
     {/*{{{*/
-        $trace = array(
+        $trace = [
             'start' => $this->LT(),
-            'end' => null
-        );
+            'end' => null,
+        ];
         while (true) {
 
             switch ($this->LT()->type) {
@@ -1926,7 +1927,7 @@ class Parser extends LLk
 
     protected function skipUntil($type)
     {/*{{{*/
-        $stack = new \SplStack();
+        $stack = new SplStack();
         $stack->push($type);
 
         while (true) {

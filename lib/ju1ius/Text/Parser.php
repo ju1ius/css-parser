@@ -17,7 +17,7 @@ abstract class Parser implements ParserInterface
     protected $lexer;
 
     /**
-     * @var array lookahead buffer 
+     * @var array lookahead buffer
      **/
     protected $lookaheads;
 
@@ -31,14 +31,14 @@ abstract class Parser implements ParserInterface
      **/
     protected $debug;
 
-    public function __construct(LexerInterface $lexer=null)
+    public function __construct(LexerInterface $lexer = null)
     {
-        if($lexer) $this->setLexer($lexer);
+        if ($lexer) $this->setLexer($lexer);
     }
 
     public function setDebug($debug)
     {
-        $this->debug = (bool) $debug;
+        $this->debug = (bool)$debug;
     }
 
     public function setLexer(LexerInterface $lexer)
@@ -55,11 +55,13 @@ abstract class Parser implements ParserInterface
     }
 
     abstract protected function consume();
-    abstract protected function LA($offset=1);
-    abstract protected function LT($offset=1);
+
+    abstract protected function LA($offset = 1);
+
+    abstract protected function LT($offset = 1);
 
 
-    protected function match($type, $return=false)
+    protected function match($type, $return = false)
     {
         $token = null;
         $this->ensure($type);
@@ -67,7 +69,7 @@ abstract class Parser implements ParserInterface
             $token = $this->LT();
         }
         $this->consume();
-        
+
         return $token;
     }
 
@@ -117,10 +119,10 @@ abstract class Parser implements ParserInterface
             $file = $source instanceof Source\File ? $source->getUrl() : 'internal_string';
 
             $name = $this->lexer->getTokenName($actual->type);
-            $name .= ' ('.print_r($actual->value, true).')';
+            $name .= ' (' . print_r($actual->value, true) . ')';
 
             if (is_array($expected)) {
-                $types = array();
+                $types = [];
                 foreach ($expected as $type) {
                     $types[] = $this->lexer->getTokenName($type);
                 }

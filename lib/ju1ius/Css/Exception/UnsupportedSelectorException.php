@@ -2,4 +2,8 @@
 
 namespace ju1ius\Css\Exception;
 
-class UnsupportedSelectorException extends \Exception {}
+use Exception;
+
+class UnsupportedSelectorException extends Exception
+{
+}

@@ -1,5 +1,7 @@
 <?php
+
 namespace ju1ius\Css\Value;
+
 use ju1ius\Css\ValueList;
 
 /**
@@ -7,33 +9,34 @@ use ju1ius\Css\ValueList;
  **/
 class Func extends ValueList
 {
-	private $name;
+    private $name;
 
-	public function __construct($name, $args=array())
-	{
-		$this->name = $name;
-		parent::__construct($args, ',');
-	}
+    public function __construct($name, $args = [])
+    {
+        $this->name = $name;
+        parent::__construct($args, ',');
+    }
 
-	public function getName()
-	{
-		return $this->name;
-	}
-	public function setName($name)
-	{
-		$this->name = $name;
-	}
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	public function getArguments()
-	{
-		return $this->items;
-	}
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
-	public function getCssText($options=array())
-	{
-		$args = parent::getCssText($options);
+    public function getArguments()
+    {
+        return $this->items;
+    }
 
-		return $this->name.'('.$args.')';
-	}
+    public function getCssText($options = [])
+    {
+        $args = parent::getCssText($options);
+
+        return $this->name . '(' . $args . ')';
+    }
 
 }

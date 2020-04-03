@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
@@ -11,7 +12,7 @@ class FontFace extends Rule
 {
     private $styleDeclaration;
 
-    public function __construct(StyleDeclaration $styleDeclaration=null)
+    public function __construct(StyleDeclaration $styleDeclaration = null)
     {
         $this->styleDeclaration = $styleDeclaration;
     }
@@ -20,12 +21,13 @@ class FontFace extends Rule
     {
         return $this->styleDeclaration;
     }
+
     public function setStyleDeclaration(StyleDeclaration $styleDeclaration)
     {
         $this->styleDeclaration = $styleDeclaration;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = ' ';

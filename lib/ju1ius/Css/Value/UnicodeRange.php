@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Value;
 
 class UnicodeRange extends PrimitiveValue
@@ -14,13 +15,14 @@ class UnicodeRange extends PrimitiveValue
     {
         return $this->value;
     }
+
     public function setValue($value)
     {
         $this->value = $value;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        return 'U+'.$this->value;
+        return 'U+' . $this->value;
     }
 }

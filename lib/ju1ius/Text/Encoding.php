@@ -4,7 +4,7 @@ namespace ju1ius\Text;
 
 define('JU1IUS_HAS_FILEINFO', extension_loaded('file_info'));
 define('JU1IUS_HAS_MBSTRING', extension_loaded('mbstring'));
-define('JU1IUS_HAS_ICONV',    extension_loaded('iconv'));
+define('JU1IUS_HAS_ICONV', extension_loaded('iconv'));
 
 
 class Encoding
@@ -55,6 +55,7 @@ EOS;
 
         return self::$DEFAULT_ENCODING;
     }
+
     public static function setDefault($charset)
     {
         self::$DEFAULT_ENCODING = $charset;
@@ -162,7 +163,7 @@ EOS;
         return $encoding;
     }
 
-    public static function convert($str, $to="utf-8", $from=false)
+    public static function convert($str, $to = "utf-8", $from = false)
     {
         if (!$from) {
             $from = static::detect($str);
@@ -176,7 +177,7 @@ EOS;
             if (false === $from) {
                 $from = iconv_get_encoding('internal_encoding');
             }
-            return iconv($from, $to.'//TRANSLIT', $str);
+            return iconv($from, $to . '//TRANSLIT', $str);
         }
 
         return false;
@@ -195,12 +196,12 @@ EOS;
     }
 
     /**
-    * Detects a string encoding according to it's BOM if present
-    *
-    * @param string $text
-    *
-    * @return string
-    **/
+     * Detects a string encoding according to it's BOM if present
+     *
+     * @param string $text
+     *
+     * @return string
+     **/
     public static function checkForBOM($text)
     {
         if (!preg_match(self::BOM_RX, $text, $matches)) {

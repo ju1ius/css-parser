@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 /**
@@ -10,7 +11,7 @@ class Property implements Serializable
     private $valueList;
     private $isImportant;
 
-    public function __construct($name, PropertyValueList $valueList=null)
+    public function __construct($name, PropertyValueList $valueList = null)
     {
         $this->name = $name;
         if (null === $valueList) {
@@ -23,6 +24,7 @@ class Property implements Serializable
     {
         return $this->name;
     }
+
     public function setName($name)
     {
         $this->name = $name;
@@ -32,6 +34,7 @@ class Property implements Serializable
     {
         return $this->valueList;
     }
+
     public function setValueList(PropertyValueList $valueList)
     {
         $this->valueList = $valueList;
@@ -41,6 +44,7 @@ class Property implements Serializable
     {
         return $this->isImportant;
     }
+
     public function setIsImportant($isImportant)
     {
         $this->isImportant = $isImportant;
@@ -55,7 +59,7 @@ class Property implements Serializable
     {
         //$this->value->append($value);
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
         if (!$this->valueList instanceof PropertyValueList || $this->valueList->getSeparator() !== $type) {
             $currentValue = $this->valueList;
@@ -69,13 +73,14 @@ class Property implements Serializable
         }
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         return $this->name . ': '
             . $this->valueList->getCssText($options)
             . ($this->isImportant ? ' !important' : '')
             . ';';
     }
+
     public function __toString()
     {
         return $this->getCssText();

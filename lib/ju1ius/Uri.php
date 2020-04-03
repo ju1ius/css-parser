@@ -2,17 +2,19 @@
 
 namespace ju1ius;
 
+use InvalidArgumentException;
+
 define('OS_WIN32', defined('OS_WINDOWS') ? OS_WINDOWS : !strncasecmp(PHP_OS, 'win', 3));
 
 /**
- * 
+ *
  */
 class Uri
 {
     private static $COMPONENTS = [
         'scheme', 'host', 'port',
         'user', 'pass',
-        'path', 'query', 'fragment'
+        'path', 'query', 'fragment',
     ];
 
     private
@@ -28,8 +30,8 @@ class Uri
     public function __construct($uri)
     {
         $parts = parse_url($uri);
-        foreach(self::$COMPONENTS as $key) {
-            if(isset($parts[$key])) {
+        foreach (self::$COMPONENTS as $key) {
+            if (isset($parts[$key])) {
                 $this->$key = $parts[$key];
             }
         }
@@ -37,12 +39,12 @@ class Uri
 
     static public function parse($uri)
     {
-        if($uri instanceof self) {
+        if ($uri instanceof self) {
             return $uri;
-        } else if(is_string($uri)) {
+        } else if (is_string($uri)) {
             return new self($uri);
         }
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             "Argument passed to ju1ius\Uri::parse must be a string or ju1ius\Uri instance"
         );
     }
@@ -51,6 +53,7 @@ class Uri
     {
         return $this->scheme;
     }
+
     public function setScheme($scheme)
     {
         $this->scheme = $scheme;
@@ -61,6 +64,7 @@ class Uri
     {
         return $this->host;
     }
+
     public function setHost($host)
     {
         $this->host = $host;
@@ -71,6 +75,7 @@ class Uri
     {
         return $this->port;
     }
+
     public function setPort($port)
     {
         $this->port = $port;
@@ -81,6 +86,7 @@ class Uri
     {
         return $this->user;
     }
+
     public function setUser($user)
     {
         $this->user = $user;
@@ -91,6 +97,7 @@ class Uri
     {
         return $this->pass;
     }
+
     public function setPassword($pass)
     {
         $this->pass = $pass;
@@ -101,6 +108,7 @@ class Uri
     {
         return $this->path;
     }
+
     public function setPath($path)
     {
         $this->path = $path;
@@ -111,10 +119,11 @@ class Uri
     {
         return $this->query;
     }
+
     public function setQuery($query)
     {
-        if(is_array($query)) {
-            $this->query = http_build_query($query); 
+        if (is_array($query)) {
+            $this->query = http_build_query($query);
         } else {
             $this->query = $query;
         }
@@ -125,6 +134,7 @@ class Uri
     {
         return $this->fragment;
     }
+
     public function setFragment($fragment)
     {
         $this->fragment = $fragment;
@@ -134,26 +144,26 @@ class Uri
     public function getUri()
     {
         $url = '';
-        if($this->isWindowsDrive()) {
+        if ($this->isWindowsDrive()) {
             $url .= $this->scheme . ':\\';
-        } else if($this->scheme) {
+        } else if ($this->scheme) {
             $url .= $this->scheme . '://';
         }
-        if($this->user) {
+        if ($this->user) {
             $url .= $this->user;
-            if($this->pass) {
+            if ($this->pass) {
                 $url .= ':' . $this->pass;
             }
             $url .= '@';
         }
-        if($this->host) {
+        if ($this->host) {
             $url .= $this->host;
         }
-        if($this->port) {
+        if ($this->port) {
             $url .= ':' . $this->port;
         }
-        if($this->path) {
-            if(!$this->isWindowsDrive()
+        if ($this->path) {
+            if (!$this->isWindowsDrive()
                 && $this->scheme
                 && strpos($this->path, '/') !== 0
             ) {
@@ -161,10 +171,10 @@ class Uri
             }
             $url .= $this->path;
         }
-        if($this->query) {
+        if ($this->query) {
             $url .= '?' . $this->query;
         }
-        if($this->fragment) {
+        if ($this->fragment) {
             $url .= '#' . $this->fragment;
         }
         return $url;
@@ -202,7 +212,7 @@ class Uri
      *
      * @return $this
      */
-    public function setQueryVariables(array $array, $separator="&")
+    public function setQueryVariables(array $array, $separator = "&")
     {
         if (empty($array)) {
             $this->query = null;
@@ -223,7 +233,7 @@ class Uri
      *
      * @return array|string
      **/
-    public function getQueryVariable($path, $separator='.')
+    public function getQueryVariable($path, $separator = '.')
     {
         if (!$path) {
             return;
@@ -232,15 +242,15 @@ class Uri
         $segs = explode($separator, $path);
         $target = $this->getQueryVariables();
 
-        for ($i = 0; $i < count($segs) - 1; $i++) { 
-            if (isset($target[$segs[$i]]) && is_array($target[$segs[$i]])) { 
-                $target = $target[$segs[$i]]; 
+        for ($i = 0; $i < count($segs) - 1; $i++) {
+            if (isset($target[$segs[$i]]) && is_array($target[$segs[$i]])) {
+                $target = $target[$segs[$i]];
             } else {
-                return; 
-            } 
+                return;
+            }
         }
-        if (isset($target[$segs[count($segs)-1]])) { 
-            return $target[$segs[count($segs)-1]]; 
+        if (isset($target[$segs[count($segs) - 1]])) {
+            return $target[$segs[count($segs) - 1]];
         }
         return;
     }
@@ -250,35 +260,35 @@ class Uri
      *
      * @param array|string $path the object path to the variable, or an array of paths
      * @param array|string $value variable value
-     * @param string       $separator The object path separator (default = '.')
+     * @param string $separator The object path separator (default = '.')
      *
      * @return $this
      */
-    public function setQueryVariable($path, $value, $separator='.')
+    public function setQueryVariable($path, $value, $separator = '.')
     {
-        if (is_array($path)) { 
-            foreach ($path as $p => $v) { 
-                $this->setQueryVariable($p, $v); 
-            } 
+        if (is_array($path)) {
+            foreach ($path as $p => $v) {
+                $this->setQueryVariable($p, $v);
+            }
         } else {
-            $segs = explode($separator, $path); 
+            $segs = explode($separator, $path);
 
             $vars = $this->getQueryVariables();
             $target =& $vars;
             for ($i = 0; $i < count($segs) - 1; $i++) {
-                if(!isset($target[$segs[$i]])) {
-                    $target[$segs[$i]] = []; 
-                } 
-                $target =& $target[$segs[$i]]; 
-            } 
-            if ($segs[count($segs)-1] === '*') {
+                if (!isset($target[$segs[$i]])) {
+                    $target[$segs[$i]] = [];
+                }
+                $target =& $target[$segs[$i]];
+            }
+            if ($segs[count($segs) - 1] === '*') {
                 foreach ($target as $key => $value) {
-                    $target[$key]; 
-                } 
-            } elseif ($value === null && isset($target[$segs[count($segs)-1]])) {
-                unset($target[$segs[count($segs)-1]]); 
+                    $target[$key];
+                }
+            } elseif ($value === null && isset($target[$segs[count($segs) - 1]])) {
+                unset($target[$segs[count($segs) - 1]]);
             } else {
-                $target[$segs[count($segs)-1]] = $value; 
+                $target[$segs[count($segs) - 1]] = $value;
             }
             $this->setQueryVariables($vars);
         }
@@ -327,7 +337,7 @@ class Uri
         $uri = clone $this;
         if ($this->path) {
             $path = dirname($this->path);
-            if($path === '/') {
+            if ($path === '/') {
                 $path = null;
             }
             $uri->setPath($path);
@@ -376,9 +386,9 @@ class Uri
                 $uri->setPort(null);
             }
             // Normalize case of %XX percentage-encodings (RFC 3986, section 6.2.2.1)
-            foreach (['user','pass','host','path'] as $part) {
+            foreach (['user', 'pass', 'host', 'path'] as $part) {
                 if ($this->$part) {
-                    $value = preg_replace_callback('/%[0-9a-f]{2}/iS', function ($matches) {
+                    $value = preg_replace_callback('/%[0-9a-f]{2}/iS', function($matches) {
                         return strtoupper($matches[0]);
                     }, $this->$part);
                     $method = 'set' . ucfirst($part);
@@ -420,8 +430,8 @@ class Uri
                 $path = '/' . substr($path, 3);
             } elseif (substr($path, 0, 4) == '/../' || $path == '/..') {
                 // Step 2.C
-                $path   = '/' . substr($path, 4);
-                $i      = strrpos($output, '/');
+                $path = '/' . substr($path, 4);
+                $i = strrpos($output, '/');
                 $output = $i === false ? '' : substr($output, 0, $i);
             } elseif ($path == '.' || $path == '..') {
                 // Step 2.D

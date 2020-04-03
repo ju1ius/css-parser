@@ -9,10 +9,10 @@ class ValueList extends CssList implements Serializable
 {
     protected $separator;
 
-    public function __construct($items=array(), $separator=',')
+    public function __construct($items = [], $separator = ',')
     {
         if (!is_array($items)) {
-            $items = array($items);
+            $items = [$items];
         }
         $this->items = $items;
         $this->separator = $separator;
@@ -28,13 +28,13 @@ class ValueList extends CssList implements Serializable
         $this->separator = $separator;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        return implode($this->separator, array_map(function($item) use($options) {
+        return implode($this->separator, array_map(function($item) use ($options) {
             if ($item instanceof Serializable) {
                 return $item->getCssText($options);
             } else {
-                return (string) $item;
+                return (string)$item;
             }
         }, $this->items));
     }

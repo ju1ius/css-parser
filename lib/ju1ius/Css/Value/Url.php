@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Value;
 
 class Url extends PrimitiveValue
@@ -14,14 +15,15 @@ class Url extends PrimitiveValue
     {
         return $this->url;
     }
+
     public function setUrl(String $url)
     {
         $this->url = $url;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        return 'url('.$this->url->getCssText().')';
+        return 'url(' . $this->url->getCssText() . ')';
     }
 
     public function __clone()

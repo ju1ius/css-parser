@@ -4,6 +4,7 @@ namespace ju1ius\Text\Parser;
 
 use ju1ius\Text\LexerInterface;
 use ju1ius\Text\Parser;
+use SplFixedArray;
 
 
 abstract class LLk extends Parser
@@ -14,14 +15,14 @@ abstract class LLk extends Parser
     protected $_K;
 
     /**
-     * @var array lookahead buffer 
+     * @var array lookahead buffer
      **/
     protected $lookaheads;
 
     protected $current;
 
 
-    public function __construct(LexerInterface $lexer=null, $k=2)
+    public function __construct(LexerInterface $lexer = null, $k = 2)
     {
         $this->setLexer($lexer);
         $this->_K = $k;
@@ -30,7 +31,7 @@ abstract class LLk extends Parser
     public function reset()
     {
         parent::reset();
-        $this->lookaheads = new \SplFixedArray($this->_K);
+        $this->lookaheads = new SplFixedArray($this->_K);
         for ($i = 1; $i <= $this->_K; $i++) {
             $this->consume();
         }
@@ -62,12 +63,12 @@ abstract class LLk extends Parser
         return $this->lookaheads[$this->position];
     }
 
-    protected function LA($offset=1)
+    protected function LA($offset = 1)
     {
         return $this->LT($offset)->type;
     }
 
-    protected function LT($offset=1)
+    protected function LT($offset = 1)
     {
         // circular fetch
         return $this->lookaheads[($this->position + $offset - 1) % $this->_K];

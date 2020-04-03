@@ -28,6 +28,7 @@ class Ratio extends PrimitiveValue
     {
         return $this->numerator;
     }
+
     public function setNumerator($numerator)
     {
         $this->numerator = intval($numerator);
@@ -40,13 +41,14 @@ class Ratio extends PrimitiveValue
     {
         return $this->denominator;
     }
+
     public function setDenominator($denominator)
     {
         $this->denominator = intval($denominator);
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        return $this->numerator . '/' .$this->denominator;
+        return $this->numerator . '/' . $this->denominator;
     }
 }

@@ -2,19 +2,21 @@
 
 namespace ju1ius\Css\Iterator;
 
+use Iterator;
+
 /**
  * Iterates over all selectors of a Css object (stylesheet, media rule...)
  */
-class SelectorIterator implements \Iterator
+class SelectorIterator implements Iterator
 {
     private
-        $selectors = array();
+        $selectors = [];
 
     /**
      * @param Serializable $object A css serializable object
-     * @param string|null  $type_filter A fully qualified classname to filter the selectors
+     * @param string|null $type_filter A fully qualified classname to filter the selectors
      **/
-    public function __construct($object, $type_filter=null)
+    public function __construct($object, $type_filter = null)
     {
         $this->object = $object;
         $this->selectors = self::getSelectorsForObject($object, $type_filter);
@@ -30,9 +32,9 @@ class SelectorIterator implements \Iterator
         return $this->object;
     }
 
-    private static function getSelectorsForObject($object, $type_filter=null)
+    private static function getSelectorsForObject($object, $type_filter = null)
     {
-        $selectors = array();
+        $selectors = [];
 
         if (method_exists($object, 'getSelectorList')) {
             foreach ($object->getSelectorList()->getItems() as $selector) {
@@ -50,7 +52,7 @@ class SelectorIterator implements \Iterator
         if ($type_filter) {
             return array_filter(
                 $selectors,
-                function($item) use($type_filter) {
+                function($item) use ($type_filter) {
                     return $item instanceof $type_filter;
                 }
             );

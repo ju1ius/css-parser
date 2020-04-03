@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\PageSelector;
@@ -17,10 +18,11 @@ class Page extends Rule
         $style_declaration;
 
     public function __construct(
-        PageSelector $selector=null,
-        RuleList $margin_rules=null,
-        StyleDeclaration $style_declaration=null
-    ) {
+        PageSelector $selector = null,
+        RuleList $margin_rules = null,
+        StyleDeclaration $style_declaration = null
+    )
+    {
         $this->selector = $selector;
         $this->margin_rules = $margin_rules;
         if ($style_declaration) {
@@ -66,7 +68,7 @@ class Page extends Rule
         $this->style_declaration = $style_declaration;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = $nl = '';
         if (isset($options['indent_level'])) {
@@ -78,12 +80,11 @@ class Page extends Rule
         $rules = $this->margin_rules ? $this->margin_rules->getCssText($options) : '';
         $declarations = $this->style_declaration ? $this->style_declaration->getCssText($options) : '';
 
-        return $indent . '@page '. $this->getSelectorText()
+        return $indent . '@page ' . $this->getSelectorText()
             . '{' . $nl
             . $rules
             . $declarations
-            . $nl . $indent . '}'
-        ;
+            . $nl . $indent . '}';
     }
 
     public function getSelectorText()

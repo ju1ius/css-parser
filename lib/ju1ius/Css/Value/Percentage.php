@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Value;
 
 class Percentage extends Dimension
@@ -8,15 +9,17 @@ class Percentage extends Dimension
         parent::__construct($value, '%');
     }
 
-    public function setUnit($unit) {
+    public function setUnit($unit)
+    {
         return;
     }
+
     public function getUnit()
     {
-        return null;  
+        return null;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         return $this->getValue() . '%';
     }

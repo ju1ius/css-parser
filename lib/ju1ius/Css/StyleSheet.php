@@ -13,10 +13,10 @@ class StyleSheet implements Serializable
         $rule_list,
         $charset;
 
-    public function __construct(RuleList $rule_list=null, $charset="utf-8")
+    public function __construct(RuleList $rule_list = null, $charset = "utf-8")
     {
         if ($rule_list === null) {
-            $this->rule_list = new RuleList(); 
+            $this->rule_list = new RuleList();
         }
         $this->charset = $charset;
     }
@@ -50,12 +50,13 @@ class StyleSheet implements Serializable
     {
         return $this->rule_list;
     }
+
     public function setRuleList(RuleList $rule_list)
     {
         $this->rule_list = $rule_list;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         return $this->rule_list->getCssText($options);
     }
@@ -75,15 +76,15 @@ class StyleSheet implements Serializable
         return $this->rule_list->getLast();
     }
 
-  /*
-  public function __call($method, $args)
-  {
-    if (method_exists($this->rule_list, $method))
+    /*
+    public function __call($method, $args)
     {
-      return call_user_func_array(array($this->rule_list, $method), $args);
+      if (method_exists($this->rule_list, $method))
+      {
+        return call_user_func_array(array($this->rule_list, $method), $args);
+      }
     }
-  }
-   */
+     */
 
     public function __clone()
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Selector;
 
 use ju1ius\Css\Exception\ParseException;
@@ -15,110 +16,110 @@ use ju1ius\Css\Selector;
  **/
 class CombinedSelector extends Selector
 {
-  static protected $methodMapping = array(
-    ' ' => 'descendant',
-    '>' => 'child',
-    '+' => 'direct_adjacent',
-    '~' => 'indirect_adjacent',
-  );
-  protected $selector;
-  protected $combinator;
-  protected $subselector;
+    static protected $methodMapping = [
+        ' ' => 'descendant',
+        '>' => 'child',
+        '+' => 'direct_adjacent',
+        '~' => 'indirect_adjacent',
+    ];
+    protected $selector;
+    protected $combinator;
+    protected $subselector;
 
-  /**
-   * The constructor.
-   *
-   * @param Selector $selector The XPath selector
-   * @param string   $combinator The combinator
-   * @param Selector $subselector The sub XPath selector
-   */
-  public function __construct($selector, $combinator, $subselector)
-  {
-    $this->selector = $selector;
-    $this->combinator = $combinator;
-    $this->subselector = $subselector;
-  }
-
-  public function getSpecificity()
-  {
-    return $this->selector->getSpecificity() + $this->subselector->getSpecificity();  
-  }
-
-  public function getCssText($options=array())
-  {
-    $comb = $this->combinator === ' ' ? ' ' : ' '.$this->combinator.' ';
-    return $this->selector->getCssText() . $comb . $this->subselector->getCssText();
-  }
-
-  /**
-   * {@inheritDoc}
-   * @throws ParseException When unknown combinator is found
-   */
-  public function toXPath()
-  {
-    if (!isset(self::$methodMapping[$this->combinator])) {
-      throw new ParseException(sprintf('Unknown combinator: %s', $this->combinator));
+    /**
+     * The constructor.
+     *
+     * @param Selector $selector The XPath selector
+     * @param string $combinator The combinator
+     * @param Selector $subselector The sub XPath selector
+     */
+    public function __construct($selector, $combinator, $subselector)
+    {
+        $this->selector = $selector;
+        $this->combinator = $combinator;
+        $this->subselector = $subselector;
     }
-    $method = 'xpath_'.self::$methodMapping[$this->combinator];
-    $path = $this->selector->toXPath();
 
-    return $this->$method($path, $this->subselector);
-  }
+    public function getSpecificity()
+    {
+        return $this->selector->getSpecificity() + $this->subselector->getSpecificity();
+    }
 
-  /**
-   * Joins a Selector into the XPath of this object.
-   *
-   * @param XPath\Expression $xpath The XPath expression for this object
-   * @param Selector $sub The Selector object to add
-   */
-  protected function xpath_descendant($xpath, $sub)
-  {
-    // when sub is a descendant in any way of xpath
-    $xpath->join('//', $sub->toXPath());
+    public function getCssText($options = [])
+    {
+        $comb = $this->combinator === ' ' ? ' ' : ' ' . $this->combinator . ' ';
+        return $this->selector->getCssText() . $comb . $this->subselector->getCssText();
+    }
 
-    return $xpath;
-  }
+    /**
+     * {@inheritDoc}
+     * @throws ParseException When unknown combinator is found
+     */
+    public function toXPath()
+    {
+        if (!isset(self::$methodMapping[$this->combinator])) {
+            throw new ParseException(sprintf('Unknown combinator: %s', $this->combinator));
+        }
+        $method = 'xpath_' . self::$methodMapping[$this->combinator];
+        $path = $this->selector->toXPath();
 
-  /**
-   * Joins a Selector as a child of this object.
-   *
-   * @param XPath\Expression $xpath The parent XPath expression
-   * @param Selector $sub The Selector object to add
-   */
-  protected function xpath_child($xpath, $sub)
-  {
-    // when sub is an immediate child of xpath
-    $xpath->join('/', $sub->toXPath());
+        return $this->$method($path, $this->subselector);
+    }
 
-    return $xpath;
-  }
+    /**
+     * Joins a Selector into the XPath of this object.
+     *
+     * @param XPath\Expression $xpath The XPath expression for this object
+     * @param Selector $sub The Selector object to add
+     */
+    protected function xpath_descendant($xpath, $sub)
+    {
+        // when sub is a descendant in any way of xpath
+        $xpath->join('//', $sub->toXPath());
 
-  /**
-   * Joins an XPath expression as an adjacent of another.
-   *
-   * @param XPath\Expression $xpath The parent XPath expression
-   * @param Selector $sub The adjacent XPath expression
-   */
-  protected function xpath_direct_adjacent($xpath, $sub)
-  {
-    // when sub immediately follows xpath
-    $xpath->join('/following-sibling::*[1]/self::', $sub->toXPath());
-    //$xpath->addNameTest();
+        return $xpath;
+    }
 
-    return $xpath;
-  }
+    /**
+     * Joins a Selector as a child of this object.
+     *
+     * @param XPath\Expression $xpath The parent XPath expression
+     * @param Selector $sub The Selector object to add
+     */
+    protected function xpath_child($xpath, $sub)
+    {
+        // when sub is an immediate child of xpath
+        $xpath->join('/', $sub->toXPath());
 
-  /**
-   * Joins an XPath expression as an indirect adjacent of another.
-   *
-   * @param XPath\Expression $xpath The parent XPath expression
-   * @param Selector $sub The indirect adjacent Selector object
-   */
-  protected function xpath_indirect_adjacent($xpath, $sub)
-  {
-    // when sub comes somewhere after xpath as a sibling
-    $xpath->join('/following-sibling::', $sub->toXPath());
+        return $xpath;
+    }
 
-    return $xpath;
-  }
+    /**
+     * Joins an XPath expression as an adjacent of another.
+     *
+     * @param XPath\Expression $xpath The parent XPath expression
+     * @param Selector $sub The adjacent XPath expression
+     */
+    protected function xpath_direct_adjacent($xpath, $sub)
+    {
+        // when sub immediately follows xpath
+        $xpath->join('/following-sibling::*[1]/self::', $sub->toXPath());
+        //$xpath->addNameTest();
+
+        return $xpath;
+    }
+
+    /**
+     * Joins an XPath expression as an indirect adjacent of another.
+     *
+     * @param XPath\Expression $xpath The parent XPath expression
+     * @param Selector $sub The indirect adjacent Selector object
+     */
+    protected function xpath_indirect_adjacent($xpath, $sub)
+    {
+        // when sub comes somewhere after xpath as a sibling
+        $xpath->join('/following-sibling::', $sub->toXPath());
+
+        return $xpath;
+    }
 }

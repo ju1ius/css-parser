@@ -19,13 +19,13 @@ class ImportResolver
     private
         $stylesheet;
 
-    public function __construct(StyleSheet $stylesheet, $base_url=null)
+    public function __construct(StyleSheet $stylesheet, $base_url = null)
     {
         $this->stylesheet = $stylesheet;
         $this->base_url = $base_url;
     }
 
-    public function resolve($imported_files=array())
+    public function resolve($imported_files = [])
     {
         if (empty($imported_files)) {
             $imported_files[] = $this->stylesheet->getHref();
@@ -47,7 +47,7 @@ class ImportResolver
                 }
                 try {
                     $source = Loader::load($url, $encoding);
-                } catch(StyleSheetNotFoundException $e) {
+                } catch (StyleSheetNotFoundException $e) {
                     // FIXME: should we remove the rule ?
                     continue;
                 }
@@ -83,7 +83,7 @@ class ImportResolver
                         $rule_list->getItems()
                     );
                 }
-            } 
+            }
         }
     }
 }

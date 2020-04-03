@@ -7,7 +7,7 @@ namespace ju1ius\Css;
  **/
 abstract class Value implements Serializable
 {
-    abstract public function getCssText($options=array());
+    abstract public function getCssText($options = []);
 
     public function __toString()
     {

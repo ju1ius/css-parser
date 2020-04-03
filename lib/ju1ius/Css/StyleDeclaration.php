@@ -11,7 +11,7 @@ class StyleDeclaration implements Serializable
     private $properties;
     private $parentRule;
 
-    public function __construct($properties=array())
+    public function __construct($properties = [])
     {
         $this->properties = $properties;
     }
@@ -69,14 +69,14 @@ class StyleDeclaration implements Serializable
      * Inserts a property or an array of properties after the specified property.
      *
      * @param ju1ius\Css\Property|array $newProp The property or array of properties to insert
-     * @param ju1ius\Css\Property       $oldProp The ju1ius\Css\Property after which properties will be added.
+     * @param ju1ius\Css\Property $oldProp The ju1ius\Css\Property after which properties will be added.
      *
      * @return ju1ius\Css\StyleDeclaration The current ju1ius\Css\StyleDeclaration instance
      **/
     public function insertAfter($newProp, Property $oldProp)
     {
         if (!is_array($newProp)) {
-            $newProp = array($newProp);
+            $newProp = [$newProp];
         }
         $index = array_search($oldProp, $this->properties);
         array_splice($this->properties, $index, 0, $newProp);
@@ -87,18 +87,18 @@ class StyleDeclaration implements Serializable
     /**
      * Inserts a property or an array of rules before the specified property.
      *
-     * @param ju1ius\Css\Property|array $newProp  The property or array of rules to insert
-     * @param ju1ius\Css\Property       $oldProp  The ju1ius\Css\Property before which rules will be added.
+     * @param ju1ius\Css\Property|array $newProp The property or array of rules to insert
+     * @param ju1ius\Css\Property $oldProp The ju1ius\Css\Property before which rules will be added.
      *
      * @return ju1ius\Css\StyleDeclaration The current ju1ius\Css\StyleDeclaration instance
      **/
     public function insertBefore($newProp, Property $oldProp)
     {
         if (!is_array($newProp)) {
-            $newProp = array($newProp);
+            $newProp = [$newProp];
         }
         $index = array_search($oldProp, $this->properties);
-        array_splice($this->properties, $index-1, 0, $newProp);
+        array_splice($this->properties, $index - 1, 0, $newProp);
 
         return $this;
     }
@@ -106,15 +106,15 @@ class StyleDeclaration implements Serializable
     /**
      * Replaces a property by another property or an array of properties.
      *
-     * @param ju1ius\Css\Property       $oldProp  The ju1ius\Css\Property to replace
-     * @param ju1ius\Css\Property|array $newProp  A ju1ius\Css\Property or an array of rules to add
+     * @param ju1ius\Css\Property $oldProp The ju1ius\Css\Property to replace
+     * @param ju1ius\Css\Property|array $newProp A ju1ius\Css\Property or an array of rules to add
      *
      * @return ju1ius\Css\StyleDeclaration The current ju1ius\Css\StyleDeclaration instance
      **/
     public function replace(Property $oldProp, $newProp)
     {
         if (!is_array($newProp)) {
-            $newProp = array($newProp);
+            $newProp = [$newProp];
         }
         $index = array_search($oldProp, $this->properties);
         array_splice($this->properties, $index, 1, $newProp);
@@ -132,10 +132,10 @@ class StyleDeclaration implements Serializable
      * @param boolean $wildcard If true, all properties starting with the pattern are returned.
      *                           If false only properties wich strictly match the pattern.
      **/
-    public function remove($search, $wildcard=false)
+    public function remove($search, $wildcard = false)
     {
         if (!is_array($search)) {
-            $search = array($search);
+            $search = [$search];
         }
         foreach ($search as $property) {
             if (is_int($property)) {
@@ -164,7 +164,7 @@ class StyleDeclaration implements Serializable
      * Get the position of a property in the property set.
      * @param ju1ius\Css\Property $property The ju1ius\Css\Property to search for.
      *
-     * @return int The position of the property or false if it is not found; 
+     * @return int The position of the property or false if it is not found;
      **/
     public function getPropertyIndex(Property $property)
     {
@@ -185,7 +185,7 @@ class StyleDeclaration implements Serializable
      * @example $styleDeclaration->getProperties('font', true) //returns an array of all rules beginning with font.
      * @example $styleDeclaration->getProperties('font') //returns array([index] => $property) or empty array().
      **/
-    public function getProperties($property = null, $wildcard=false)
+    public function getProperties($property = null, $wildcard = false)
     {
         if (!$property) {
             return $this->properties;
@@ -193,7 +193,7 @@ class StyleDeclaration implements Serializable
         if ($property instanceof Property) {
             $property = $property->getName();
         }
-        $result = array();
+        $result = [];
         foreach ($this->properties as $pos => $prop) {
             if ($wildcard) {
                 if (strpos($prop->getName(), $property) === 0) {
@@ -216,7 +216,7 @@ class StyleDeclaration implements Serializable
      *
      * @return ju1ius\Css\Property
      **/
-    public function getFirst($property=null)
+    public function getFirst($property = null)
     {
         if (!$property && isset($this->properties[0])) {
             return $this->properties[0];
@@ -235,9 +235,10 @@ class StyleDeclaration implements Serializable
      *
      * @return ju1ius\Css\Property
      **/
-    public function getLast($property=null) {
+    public function getLast($property = null)
+    {
         if (!$property && count($this->properties)) {
-            return $this->properties[count($this->properties)-1];
+            return $this->properties[count($this->properties) - 1];
         }
         foreach (array_reverse($this->properties) as $prop) {
             if ($prop->getName() === $property) {
@@ -248,7 +249,7 @@ class StyleDeclaration implements Serializable
 
     public function getAppliedProperties()
     {
-        $aProperties = array();
+        $aProperties = [];
         foreach ($this->properties as $property) {
             $aProperties[$property->getName()] = null;
         }
@@ -262,17 +263,17 @@ class StyleDeclaration implements Serializable
     /**
      * Returns the last property matching name, taking !important declaration into account.
      *
-     * @param string  $property         A property name
-     * @param bool    $withPosition If true return an associative array containing
+     * @param string $property A property name
+     * @param bool $withPosition If true return an associative array containing
      *                               the property object and its position.
      *                               If false return the matched property.
      *
      * @return null|ju1ius\Css\Property|array
      **/
-    public function getAppliedProperty($property, $withPosition=false)
+    public function getAppliedProperty($property, $withPosition = false)
     {
-        $lastImportantProp = array();
-        $lastProp = array();
+        $lastImportantProp = [];
+        $lastProp = [];
         foreach ($this->properties as $pos => $prop) {
             if ($prop->getName() == $property) {
                 if ($prop->getIsImportant()) {
@@ -286,14 +287,12 @@ class StyleDeclaration implements Serializable
         }
         if ($lastImportantProp) {
             return $withPosition
-                ? array($lastImportantProp['position'] => $lastImportantProp['property'])
-                : $lastImportantProp['property']
-            ;
+                ? [$lastImportantProp['position'] => $lastImportantProp['property']]
+                : $lastImportantProp['property'];
         } else if ($lastProp) {
             return $withPosition
-                ? array($lastProp['position'] => $lastProp['property'])
-                : $lastProp['property']
-            ;
+                ? [$lastProp['position'] => $lastProp['property']]
+                : $lastProp['property'];
         }
     }
 
@@ -304,7 +303,7 @@ class StyleDeclaration implements Serializable
      *
      * @return $this
      **/
-    public function removeUnusedProperties(array $excludes=array())
+    public function removeUnusedProperties(array $excludes = [])
     {
         $applied_properties = $this->getAppliedProperties();
         foreach ($applied_properties as $applied_property) {
@@ -466,7 +465,7 @@ class StyleDeclaration implements Serializable
 
     /**
      * Looks for long format Css dimensional properties
-     * (margin, padding, border-color, border-style and border-width) 
+     * (margin, padding, border-color, border-style and border-width)
      * and converts them into shorthand Css properties.
      *
      * @return $this
@@ -480,8 +479,8 @@ class StyleDeclaration implements Serializable
     }
 
     /**
-     * Looks for long format Css font properties (e.g. <tt>font-weight</tt>) and 
-     * tries to convert them into a shorthand Css <tt>font</tt> property. 
+     * Looks for long format Css font properties (e.g. <tt>font-weight</tt>) and
+     * tries to convert them into a shorthand Css <tt>font</tt> property.
      * At least font-size AND font-family must be present in order to create a shorthand declaration.
      *
      * @return $this
@@ -494,7 +493,7 @@ class StyleDeclaration implements Serializable
         return $this;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = ' ';
@@ -503,7 +502,7 @@ class StyleDeclaration implements Serializable
             $nl = "\n";
         }
 
-        return implode($nl, array_map(function($property) use($indent, $options) {
+        return implode($nl, array_map(function($property) use ($indent, $options) {
             return $indent . $property->getCssText($options);
         }, $this->properties));
     }

@@ -11,19 +11,19 @@ class MediaQuery implements Serializable
     private
         $restrictor,
         $media_type,
-        $expressions = array();
+        $expressions = [];
 
     private static
-        $RESTRICTORS = array(
-            'not', 'only', ''
-        );
+        $RESTRICTORS = [
+        'not', 'only', '',
+    ];
 
     /**
      * @param string $restrictor The MediaQuery restrictor ("not", "only" or "")
      * @param string $media_type The MediaQuery media type (eg screen, print, handheld...)
-     * @param array  $expressions An array of MediaQueryExpression objects
+     * @param array $expressions An array of MediaQueryExpression objects
      **/
-    public function __construct($restrictor='', $media_type='all', $expressions=array())
+    public function __construct($restrictor = '', $media_type = 'all', $expressions = [])
     {
         $this->restrictor = $restrictor;
         $this->media_type = $media_type;
@@ -34,6 +34,7 @@ class MediaQuery implements Serializable
     {
         return $this->restrictor;
     }
+
     public function setRestrictor($restrictor)
     {
         $this->restrictor = $restrictor;
@@ -43,6 +44,7 @@ class MediaQuery implements Serializable
     {
         return $this->media_type;
     }
+
     public function setMediaType($media_type)
     {
         $this->media_type = $media_type;
@@ -52,6 +54,7 @@ class MediaQuery implements Serializable
     {
         return $this->expressions;
     }
+
     public function setExpressions(array $expressions)
     {
         $this->expressions = $expressions;
@@ -66,13 +69,14 @@ class MediaQuery implements Serializable
     {
         $this->expressions[] = $expr;
     }
+
     /**
      * Removes a MediaQuery\Expression from the MediaQuery expressions list
      *
      * @param MediaQueryExpression $expr
      * @param bool $reset_keys True to reorder the array keys after removal
      **/
-    public function remove(MediaQuery\Expression $expr, $reset_keys=false)
+    public function remove(MediaQuery\Expression $expr, $reset_keys = false)
     {
         $idx = array_search($expr, $this->expressions);
         if (false !== $idx) {
@@ -81,12 +85,12 @@ class MediaQuery implements Serializable
         }
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        $restrictor = $this->restrictor ? $this->restrictor . ' ' : ''; 
+        $restrictor = $this->restrictor ? $this->restrictor . ' ' : '';
         $media_type = (empty($this->media_type) || $this->media_type === 'all') ? '' : $this->media_type;
 
-        $expressions = array();
+        $expressions = [];
         foreach ($this->expressions as $expr) {
             $expr_text = $expr->getCssText();
             if ($expr_text) $expressions[] = $expr_text;

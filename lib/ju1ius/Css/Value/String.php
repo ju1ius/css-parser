@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Value;
 
 class String extends PrimitiveValue
@@ -15,25 +16,26 @@ class String extends PrimitiveValue
     {
         return $this->string;
     }
+
     public function setString($string)
     {
         $this->string = self::escapeQuotes($string);
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         return '"' . $this->string . '"';
     }
 
-    public static function escapeQuotes($string, $double_quotes=true)
+    public static function escapeQuotes($string, $double_quotes = true)
     {
         $quotechar = $double_quotes ? '"' : "'";
         $alt_quote = $double_quotes ? "'" : '"';
         // Replaces an even number of backslashes followed by a double-quote
         // by this number of backslashes and an escaped double-quote
         $string = preg_replace(
-            '@(?<!\\\\)((?:\\\\\\\\)*)'.$quotechar.'@u',
-            '$1\\'.$quotechar,
+            '@(?<!\\\\)((?:\\\\\\\\)*)' . $quotechar . '@u',
+            '$1\\' . $quotechar,
             //'@(?<!\\\\)((?:\\\\\\\\)*)"@u',
             //'$1\"',
             $string
@@ -41,8 +43,8 @@ class String extends PrimitiveValue
         // Replaces an odd number of backslashes followed by a single-quote
         // by this number of backslashes minus one and an escaped single-quote
         $string = preg_replace(
-            "@(?<!\\\\)\\\\((?:\\\\\\\\)*)".$alt_quote."@u",
-            '$1'.$alt_quote,
+            "@(?<!\\\\)\\\\((?:\\\\\\\\)*)" . $alt_quote . "@u",
+            '$1' . $alt_quote,
             //"@(?<!\\\\)\\\\((?:\\\\\\\\)*)'@u",
             //'$1\'',
             $string

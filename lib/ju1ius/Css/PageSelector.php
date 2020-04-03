@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 class PageSelector implements Serializable
@@ -7,7 +8,7 @@ class PageSelector implements Serializable
         $page_name,
         $pseudo_class;
 
-    public function __construct($name=null, $pseudo=null)
+    public function __construct($name = null, $pseudo = null)
     {
         $this->page_name = $name;
         $this->pseudo_class = $pseudo;
@@ -17,6 +18,7 @@ class PageSelector implements Serializable
     {
         return $this->page_name;
     }
+
     public function setPageName($page_name)
     {
         $this->page_name = $page_name;
@@ -26,6 +28,7 @@ class PageSelector implements Serializable
     {
         return $this->pseudo_class;
     }
+
     public function setPseudoClass($pseudo_class)
     {
         $this->pseudo_class = $pseudo_class;
@@ -49,12 +52,13 @@ class PageSelector implements Serializable
         return $specificity;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
-        $name = $this->page_name ? : '';
+        $name = $this->page_name ?: '';
         $pseudo = $this->pseudo_class ? ':' . $this->pseudo_class : '';
         return $name . $pseudo;
     }
+
     public function __toString()
     {
         return $this->getCssText();

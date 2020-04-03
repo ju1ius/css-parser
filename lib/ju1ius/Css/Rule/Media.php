@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\MediaQueryList;
@@ -14,7 +15,7 @@ class Media extends Rule
     private $rule_list;
     private $parentStyleSheet;
 
-    public function __construct(MediaQueryList $media_list, RuleList $rule_list=null)
+    public function __construct(MediaQueryList $media_list, RuleList $rule_list = null)
     {
         if ($rule_list === null) {
             $rule_list = new RuleList();
@@ -43,7 +44,7 @@ class Media extends Rule
         $this->rule_list = $rule_list;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = ' ';
@@ -55,8 +56,7 @@ class Media extends Rule
         return $indent . '@media ' . $this->media_list->getCssText()
             . '{' . $nl
             . $this->rule_list->getCssText($options)
-            . $nl . $indent . '}'
-        ;
+            . $nl . $indent . '}';
     }
 
     /*
@@ -68,7 +68,8 @@ class Media extends Rule
     }
     */
 
-    public function __clone() {
+    public function __clone()
+    {
         $this->media_list = clone $this->media_list;
         $this->rule_list = clone $this->rule_list;
     }

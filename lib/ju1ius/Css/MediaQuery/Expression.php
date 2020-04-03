@@ -14,7 +14,7 @@ class Expression implements Serializable
         $media_feature,
         $value;
 
-    public function __construct($media_feature, $value=null)
+    public function __construct($media_feature, $value = null)
     {
         $this->media_feature = $media_feature;
         $this->value = $value;
@@ -24,6 +24,7 @@ class Expression implements Serializable
     {
         return $this->media_feature;
     }
+
     public function setMediaFeature($media_feature)
     {
         $this->media_feature = $media_feature;
@@ -39,13 +40,14 @@ class Expression implements Serializable
         $this->value = $value;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $value = ($this->value instanceof Serializable) ? $this->value->getCssText() : $this->value;
         $value = $value ? ': ' . $value : '';
 
         return '(' . $this->media_feature . $value . ')';
     }
+
     public function __toString()
     {
         return $this->getCssText();

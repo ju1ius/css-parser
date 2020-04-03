@@ -1,6 +1,8 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
+use InvalidArgumentException;
 use ju1ius\Css\Rule;
 use ju1ius\Css\SelectorList;
 use ju1ius\Css\StyleDeclaration;
@@ -15,7 +17,7 @@ class StyleRule extends Rule
     private $selectorList;
     private $styleDeclaration;
 
-    public function __construct(SelectorList $selectorList, StyleDeclaration $styleDeclaration=null)
+    public function __construct(SelectorList $selectorList, StyleDeclaration $styleDeclaration = null)
     {
         $this->selectorList = $selectorList;
         if ($styleDeclaration) {
@@ -52,37 +54,37 @@ class StyleRule extends Rule
     }
 
     /**
-     * Merge multiple Css RuleSets by cascading according to the Css 3 cascading rules 
+     * Merge multiple Css RuleSets by cascading according to the Css 3 cascading rules
      * (http://www.w3.org/TR/REC-CSS2/cascade.html#cascading-order).
-     * 
-     * Cascading:
-     * If a Css\StyleRule object has its +specificity+ defined, that specificity is 
-     * used in the cascade calculations.  
-     * 
-     * If no specificity is explicitly set and the Css\StyleRule has *one* selector, 
-     * the specificity is calculated using that selector.
-     * 
-     * If no selectors or multiple selectors are present, the specificity is 
-     * treated as 0.
-     * 
      *
-     * @param  array $rules An array of Css\StyleRule objects
+     * Cascading:
+     * If a Css\StyleRule object has its +specificity+ defined, that specificity is
+     * used in the cascade calculations.
+     *
+     * If no specificity is explicitly set and the Css\StyleRule has *one* selector,
+     * the specificity is calculated using that selector.
+     *
+     * If no selectors or multiple selectors are present, the specificity is
+     * treated as 0.
+     *
+     *
+     * @param array $rules An array of Css\StyleRule objects
      * @return ju1ius\Css\StyleRule The merged ju1ius\Css\StyleRule
-     * 
+     *
      **/
     public static function merge(Array $rules)
     {
         if (1 === count($rules)) {
             if (!$rules[0] instanceof StyleRule) {
-                throw new \InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
+                throw new InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
             }
             return clone $rules[0];
         }
         // Internal storage of Css properties that we will keep
-        $aProperties = array();
+        $aProperties = [];
         foreach ($rules as $rule) {
             if (!$rule instanceof StyleRule) {
-                throw new \InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
+                throw new InvalidArgumentException('You must provide an array of ju1ius\Css\StyleRule objects');
             }
             $styleDeclaration = $rule->getStyleDeclaration();
             $selectorList = $rule->getSelectorList();
@@ -112,10 +114,10 @@ class StyleRule extends Rule
                     $override = true;
                 }
                 if ($override) {
-                    $aProperties[$name] = array(
+                    $aProperties[$name] = [
                         'property' => Object::getClone($property),
-                        'specificity' => $specificity
-                    );
+                        'specificity' => $specificity,
+                    ];
                 }
             }
         }
@@ -131,7 +133,7 @@ class StyleRule extends Rule
         );
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = ' ';
@@ -143,8 +145,7 @@ class StyleRule extends Rule
         $declarations = $this->styleDeclaration ? $this->styleDeclaration->getCssText($options) : '';
         return $indent . $this->selectorList->getCssText($options) . '{' . $nl
             . $declarations . $nl
-            . $indent . '}'
-        ;
+            . $indent . '}';
     }
 
     public function getSelectorText()

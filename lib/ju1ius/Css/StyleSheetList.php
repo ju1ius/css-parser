@@ -2,6 +2,9 @@
 
 namespace ju1ius\Css;
 
+use DOMDocument;
+use DOMXPath;
+
 /**
  * @TODO: find a use for this and implement it...
  */
@@ -11,7 +14,7 @@ class StyleSheetList extends CssList
         $dom,
         $xpath;
 
-    public function __construct(\DOMDocument $dom, $stylesheets=array())
+    public function __construct(DOMDocument $dom, $stylesheets = [])
     {
         $this->attach($dom);
         $this->items = $stylesheets;
@@ -20,12 +23,12 @@ class StyleSheetList extends CssList
     /**
      * Attaches this StyleSheetList to a DOMDocument instance
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      **/
-    public function attach(\DOMDocument $dom)
+    public function attach(DOMDocument $dom)
     {
         $this->dom = $dom;
-        $this->xpath = new \DOMXPath($dom);
+        $this->xpath = new DOMXPath($dom);
     }
 
     /**
@@ -37,7 +40,7 @@ class StyleSheetList extends CssList
     {
         $loader = new StyleSheetLoader();
         $parser = new Parser();
-        $xpath = new \DOMXPath($this->dom);
+        $xpath = new DOMXPath($this->dom);
         $elements = $xpath->query('//link[@rel="stylesheet"]|//style');
 
         foreach ($elements as $element) {
@@ -66,9 +69,9 @@ class StyleSheetList extends CssList
     /**
      * Merges all stylesheets and returns the resulting stylesheet
      *
-     * @todo handle charsets
      * @return StyleSheet
-     **/
+     **@todo handle charsets
+     */
     public function merge()
     {
         $result = new StyleSheet();

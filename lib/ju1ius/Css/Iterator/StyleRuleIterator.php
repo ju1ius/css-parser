@@ -2,20 +2,21 @@
 
 namespace ju1ius\Css\Iterator;
 
+use Iterator;
 use ju1ius\Css\Rule\StyleRule;
 
 /**
  * Iterates over all style rules of a Css object (stylesheet, media rule...)
  */
-class StyleRuleIterator implements \Iterator
+class StyleRuleIterator implements Iterator
 {
-    private $rules = array();
+    private $rules = [];
 
     /**
      * @param Serializable $object A css serializable object
-     * @param string|null  $filter A css selector to filter the style rule list.
+     * @param string|null $filter A css selector to filter the style rule list.
      **/
-    public function __construct($object, $filter=null)
+    public function __construct($object, $filter = null)
     {
         $this->object = $object;
         $this->rules = self::getStyleRulesForObject($object, $filter);
@@ -23,16 +24,17 @@ class StyleRuleIterator implements \Iterator
 
     public function getStyleRules()
     {
-        return $this->rules;  
-    }
-    public function getObject()
-    {
-        return $this->object;  
+        return $this->rules;
     }
 
-    private static function getStyleRulesForObject($object, $filter=null)
+    public function getObject()
     {
-        $rules = array();
+        return $this->object;
+    }
+
+    private static function getStyleRulesForObject($object, $filter = null)
+    {
+        $rules = [];
 
         if ($object instanceof StyleRule) {
             if ($filter) {

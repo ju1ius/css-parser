@@ -17,7 +17,7 @@ class OrExpression extends Expression
     /**
      * Constructor.
      *
-     * @param array  $items  The items in the expression.
+     * @param array $items The items in the expression.
      * @param string $prefix Optional prefix for the expression.
      */
     public function __construct($items, $prefix = null)
@@ -34,7 +34,7 @@ class OrExpression extends Expression
     public function __toString()
     {
         $prefix = $this->prefix;
-        $tmp = array();
+        $tmp = [];
         foreach ($this->items as $i) {
             $tmp[] = sprintf('%s%s', $prefix, $i);
         }

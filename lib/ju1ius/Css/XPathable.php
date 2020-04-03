@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css;
 
 interface XPathable
@@ -15,5 +16,5 @@ interface XPathable
      *
      * @throws ParseException When unknown operator is found
      */
-    public function toXPath(); 
+    public function toXPath();
 }

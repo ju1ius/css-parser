@@ -16,7 +16,7 @@ class File extends String
      * @param string $contents
      * @param string $encoding
      **/
-    public function __construct($url, $contents, $encoding="utf-8")
+    public function __construct($url, $contents, $encoding = "utf-8")
     {
         $this->url = $url;
         parent::__construct($contents, $encoding);
@@ -29,6 +29,6 @@ class File extends String
      **/
     public function getUrl()
     {
-        return $this->url; 
+        return $this->url;
     }
 }

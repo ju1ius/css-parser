@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
@@ -12,7 +13,7 @@ class Keyframe extends Rule
     private $selectors;
     private $styleDeclaration;
 
-    public function __construct($selectors, StyleDeclaration $styleDeclaration=null)
+    public function __construct($selectors, StyleDeclaration $styleDeclaration = null)
     {
         $this->selectors = $selectors;
         $this->styleDeclaration = $styleDeclaration;
@@ -42,7 +43,7 @@ class Keyframe extends Rule
         $this->styleDeclaration = $styleDeclaration;
     }
 
-    public function getCssText($options=array())
+    public function getCssText($options = [])
     {
         $indent = '';
         $nl = ' ';
@@ -56,8 +57,7 @@ class Keyframe extends Rule
         }, $this->selectors));
         return $selectorsText . '{' . $nl
             . $this->styleDeclaration->getCssText($options)
-            . $nl . $indent . '}'
-        ;
+            . $nl . $indent . '}';
     }
 
     public function __clone()

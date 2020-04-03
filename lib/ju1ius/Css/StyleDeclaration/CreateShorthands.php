@@ -1,4 +1,5 @@
 <?php
+
 namespace ju1ius\Css\StyleDeclaration;
 
 use ju1ius\Css\Property;
@@ -45,13 +46,13 @@ class CreateShorthands
      **/
     public function createBackgroundShorthand()
     {
-        $aProperties = array(
+        $aProperties = [
             'background-image', 'background-position',
             // <bg-position> [ / <bg-size> ]? syntax not yet supported as of Firefox 7
             /* 'background-size', */
             'background-repeat', 'background-attachment',
-            'background-origin', 'background-clip'
-        );
+            'background-origin', 'background-clip',
+        ];
         $oBgImageProperty = $this->styleDeclaration->getAppliedProperty('background-image');
         $oBgColorProperty = $this->styleDeclaration->getAppliedProperty('background-color');
         // we need at least a background-image or a background-color
@@ -74,8 +75,8 @@ class CreateShorthands
             return;
         }
         // Now we collapse the rules
-        $aNewValues = array('normal' => array(), 'important' => array());
-        $aOldProperties = array('normal' => array(), 'important' => array());
+        $aNewValues = ['normal' => [], 'important' => []];
+        $aOldProperties = ['normal' => [], 'important' => []];
         foreach ($aProperties as $sProperty) {
             $oProperty = $this->styleDeclaration->getAppliedProperty($sProperty);
             if (!$oProperty) {
@@ -86,7 +87,7 @@ class CreateShorthands
             if ($oValueList->getSeparator() === ',') {
                 $aPropertyLayers = $oValueList->getItems();
             } else {
-                $aPropertyLayers = array($oValueList->getItems());
+                $aPropertyLayers = [$oValueList->getItems()];
             }
             $aOldProperties[$sDest][] = $oProperty;
             // compute missing layers
@@ -103,7 +104,7 @@ class CreateShorthands
         if ($oBgColorProperty) {
             $sDest = $oBgColorProperty->getIsImportant() ? 'important' : 'normal';
             $aOldProperties[$sDest][] = $oBgColorProperty;
-            $aNewValues[$sDest][$iNumLayers-1]['background-color'] = Object::getClone(
+            $aNewValues[$sDest][$iNumLayers - 1]['background-color'] = Object::getClone(
                 $oBgColorProperty->getValueList()->getFirst()
             );
 
@@ -120,9 +121,9 @@ class CreateShorthands
 
     public function createListStyleShorthand()
     {
-        $aProperties = array(
-            'list-style-type', 'list-style-position', 'list-style-image'
-        );
+        $aProperties = [
+            'list-style-type', 'list-style-position', 'list-style-image',
+        ];
         $this->_createShorthandProperties($aProperties, 'list-style');
     }
 
@@ -132,51 +133,51 @@ class CreateShorthands
      **/
     public function createBorderShorthand()
     {
-        $aProperties = array(
-            'border-width', 'border-style', 'border-color' 
-        );
+        $aProperties = [
+            'border-width', 'border-style', 'border-color',
+        ];
         $this->_createShorthandProperties($aProperties, 'border');
     }
 
     /**
      * Looks for long format Css dimensional properties
-     * (margin, padding, border-color, border-style and border-width) 
+     * (margin, padding, border-color, border-style and border-width)
      * and converts them into shorthand Css properties.
      **/
     public function createDimensionsShorthands()
     {
-        $aPositions = array('top', 'right', 'bottom', 'left');
-        $aExpansions = array(
-            'margin'       => 'margin-%s',
-            'padding'      => 'padding-%s',
-            'border-color' => 'border-%s-color', 
-            'border-style' => 'border-%s-style', 
-            'border-width' => 'border-%s-width'
-        );
+        $aPositions = ['top', 'right', 'bottom', 'left'];
+        $aExpansions = [
+            'margin' => 'margin-%s',
+            'padding' => 'padding-%s',
+            'border-color' => 'border-%s-color',
+            'border-style' => 'border-%s-style',
+            'border-width' => 'border-%s-width',
+        ];
         $aProperties = $this->styleDeclaration->getProperties();
         $iImportantCount = 0;
         foreach ($aExpansions as $sProperty => $sExpanded) {
-            $aFoldable = array();
+            $aFoldable = [];
             foreach ($aPositions as $sPosition) {
                 $oProperty = $this->styleDeclaration->getAppliedProperty(
                     sprintf($sExpanded, $sPosition)
                 );
                 if (!$oProperty) continue;
                 if ($oProperty->getIsImportant()) $iImportantCount++;
-                $aFoldable[$oProperty->getName()] = $oProperty; 
+                $aFoldable[$oProperty->getName()] = $oProperty;
             }
             // All four dimensions must be present
             if (count($aFoldable) !== 4) continue;
             // All four dimensions must have same importance
             if ($iImportantCount && $iImportantCount !== 4) continue;
 
-            $aValues = array();
+            $aValues = [];
             foreach ($aPositions as $sPosition) {
                 $oProperty = $aFoldable[sprintf($sExpanded, $sPosition)];
                 $aPropertyValues = $oProperty->getValueList()->getItems();
                 $aValues[$sPosition] = Object::getClone($aPropertyValues[0]);
             }
-            $oNewValueList = new PropertyValueList(array(), ' ');
+            $oNewValueList = new PropertyValueList([], ' ');
 
             if ((string)$aValues['left'] === (string)$aValues['right']) {
                 if ((string)$aValues['top'] === (string)$aValues['bottom']) {
@@ -211,23 +212,23 @@ class CreateShorthands
     }
 
     /**
-     * Looks for long format Css font properties (e.g. <tt>font-weight</tt>) and 
-     * tries to convert them into a shorthand Css <tt>font</tt> property. 
+     * Looks for long format Css font properties (e.g. <tt>font-weight</tt>) and
+     * tries to convert them into a shorthand Css <tt>font</tt> property.
      * At least font-size AND font-family must be present in order to create a shorthand declaration.
      **/
     public function createFontShorthand()
     {
-        $aFontProperties = array(
+        $aFontProperties = [
             'font-style', 'font-variant', 'font-weight',
-            'font-size', 'line-height', 'font-family'
-        );
+            'font-size', 'line-height', 'font-family',
+        ];
         $oFSProperty = $this->styleDeclaration->getAppliedProperty('font-size');
         $oFFProperty = $this->styleDeclaration->getAppliedProperty('font-family');
         if (!$oFSProperty || !$oFFProperty) {
             return;
         }
-        $oNewValueList = new PropertyValueList(array(), ' ');
-        foreach (array('font-style', 'font-variant', 'font-weight') as $sProperty) {
+        $oNewValueList = new PropertyValueList([], ' ');
+        foreach (['font-style', 'font-variant', 'font-weight'] as $sProperty) {
             $oProperty = $this->styleDeclaration->getAppliedProperty($sProperty);
             if (!$oProperty) {
                 continue;
@@ -245,10 +246,10 @@ class CreateShorthands
             $aLHValues = $oLHProperty->getValueList()->getItems();
             if ('normal' !== $aLHValues[0]) {
                 $val = new PropertyValueList(
-                    array(
+                    [
                         Object::getClone($aFSValues[0]),
-                        Object::getClone($aLHValues[0])
-                    ),
+                        Object::getClone($aLHValues[0]),
+                    ],
                     '/'
                 );
                 $oNewValueList->append($val);
@@ -269,7 +270,7 @@ class CreateShorthands
         $this->styleDeclaration->remove($aFontProperties);
     }
 
-    private function _createShorthandProperties(array $aProperties, $sShorthand, $bSafe=false)
+    private function _createShorthandProperties(array $aProperties, $sShorthand, $bSafe = false)
     {
         if ($bSafe) {
             $bCanProceed = $this->_safeCleanup($aProperties, $sShorthand);
@@ -278,8 +279,8 @@ class CreateShorthands
         }
         if (!$bCanProceed) return;
         // Now we collapse the rules
-        $aNewValues = array('normal' => array(), 'important' => array());
-        $aOldProperties = array('normal' => array(), 'important' => array());
+        $aNewValues = ['normal' => [], 'important' => []];
+        $aOldProperties = ['normal' => [], 'important' => []];
         foreach ($aProperties as $sProperty) {
             $aProperties = $this->styleDeclaration->getProperties($sProperty);
             foreach ($aProperties as $iPos => $oProperty) {
@@ -304,7 +305,7 @@ class CreateShorthands
     private function _mergeLayers($sShorthand, $aLayers, $aOldProperties, $bImportant)
     {
         $this->styleDeclaration->remove($aOldProperties);
-        $oNewValueList = new PropertyValueList(array(), ',');
+        $oNewValueList = new PropertyValueList([], ',');
         foreach ($aLayers as $aValues) {
             $oLayerValueList = new PropertyValueList($aValues, ' ');
             $oNewValueList->append($oLayerValueList);
@@ -330,7 +331,8 @@ class CreateShorthands
      * This is the method we want to use in most cases.
      *
      **/
-    private function _destructiveCleanup(Array $aProperties, $sShorthand) {
+    private function _destructiveCleanup(Array $aProperties, $sShorthand)
+    {
         // first we check if a shorthand already exists, and keep only the relevant one.
         $aLastExistingShorthand = $this->styleDeclaration->getAppliedProperty($sShorthand, true);
         if ($aLastExistingShorthand) {
@@ -365,7 +367,7 @@ class CreateShorthands
         if ($aLastExistingShorthand) {
             // Now that we made sure that there is no duplicate shorthand
             // we can expand the corresponding rule as expanding doesn't create duplicates.
-            $sExpandMethod = 'expand'.str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))).'Shorthands';
+            $sExpandMethod = 'expand' . str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))) . 'Shorthands';
             $this->styleDeclaration->$sExpandMethod();
         }
         return true;
@@ -423,7 +425,7 @@ class CreateShorthands
         if ($iNumShorthands) {
             // Now that we made sure that there is no duplicate shorthand
             // we can expand the corresponding property as expanding doesn't create duplicates.
-            $sExpandMethod = 'expand'.str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))).'Shorthands';
+            $sExpandMethod = 'expand' . str_replace(' ', '', ucwords(str_replace('-', ' ', $sShorthand))) . 'Shorthands';
             $this->styleDeclaration->$sExpandMethod();
         }
         return true;
