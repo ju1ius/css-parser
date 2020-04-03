@@ -17,9 +17,17 @@
         "psr-0": { "ju1ius": "lib/" }
     },
     "require": {
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "ext-ctype": "*",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-fileinfo": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
+    },
+    "suggest": {
+        "ext-iconv": "*"
     },
     "extra": {
         "branch-alias": {
