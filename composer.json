@@ -17,10 +17,9 @@
         "psr-0": { "ju1ius": "lib/" }
     },
     "require": {
-        "php": ">=5.3.2"
+        "php": ">=7.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*"
     },
     "extra": {
         "branch-alias": {

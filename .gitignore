@@ -1,6 +1,11 @@
+/.idea
+
+/composer.lock
 /vendor
+
+/tools
 /doc
 /benchmark
+
 /test/quicktest.php
 /test/valuelist.php
-/composer.lock

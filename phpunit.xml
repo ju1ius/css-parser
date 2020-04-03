@@ -1,5 +1,5 @@
 <phpunit colors="true" verbose="true"
-         bootstrap="./test/bootstrap.php">
+         bootstrap="vendor/autoload.php">
     <testsuites>
         <testsuite name="ju1ius\Text tests">
             <file>test/ju1ius/Tests/Text/EncodingTest.php</file>
