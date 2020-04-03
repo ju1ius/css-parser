@@ -2,12 +2,9 @@
 
 namespace ju1ius\Text;
 
-use ju1ius\Text;
-use ju1ius\Text\ParserInterface;
-use ju1ius\Text\LexerInterface;
-use ju1ius\Text\Lexer\TokenInterface;
-use ju1ius\Text\Lexer\SimpleToken;
 use ju1ius\Text\Lexer\LineToken;
+use ju1ius\Text\Lexer\SimpleToken;
+use ju1ius\Text\Lexer\TokenInterface;
 use ju1ius\Text\Parser\Exception\ParseException;
 use ju1ius\Text\Parser\Exception\UnexpectedTokenException;
 

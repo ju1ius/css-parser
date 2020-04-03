@@ -2,8 +2,8 @@
 
 namespace ju1ius\Css\XPath;
 
-use ju1ius\Css\Value;
 use ju1ius\Css\Selector\ElementSelector;
+use ju1ius\Css\Value;
 
 /**
  * Represents an XPath expression.

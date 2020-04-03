@@ -1,8 +1,6 @@
 <?php
 namespace ju1ius\Css;
 
-use ju1ius\Css\Value\String;
-
 /**
  * Represents a list of media queries
  **/

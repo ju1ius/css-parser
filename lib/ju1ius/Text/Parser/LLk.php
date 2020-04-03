@@ -2,8 +2,8 @@
 
 namespace ju1ius\Text\Parser;
 
-use ju1ius\Text\Parser;
 use ju1ius\Text\LexerInterface;
+use ju1ius\Text\Parser;
 
 
 abstract class LLk extends Parser

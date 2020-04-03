@@ -2,11 +2,10 @@
 
 namespace ju1ius\Css\Resolver;
 
-use ju1ius\Uri;
-use ju1ius\Css\StyleSheet;
 use ju1ius\Css\Iterator\ValueIterator;
-use ju1ius\Css\Util;
+use ju1ius\Css\StyleSheet;
 use ju1ius\Css\Value;
+use ju1ius\Uri;
 
 /**
  * Resolves relative urls in a stylesheet,

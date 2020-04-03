@@ -2,8 +2,6 @@
 
 namespace ju1ius\Text;
 
-use ju1ius\Text\LexerInterface;
-
 
 interface ParserInterface
 {

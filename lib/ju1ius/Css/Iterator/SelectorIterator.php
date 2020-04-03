@@ -2,8 +2,6 @@
 
 namespace ju1ius\Css\Iterator;
 
-use ju1ius\Css;
-
 /**
  * Iterates over all selectors of a Css object (stylesheet, media rule...)
  */

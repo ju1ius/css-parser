@@ -1,9 +1,9 @@
 <?php
 namespace ju1ius\Css\Selector;
 
-use ju1ius\Css\Selector;
 use ju1ius\Css\Exception\ParseException;
 use ju1ius\Css\Exception\UnsupportedSelectorException;
+use ju1ius\Css\Selector;
 use ju1ius\Css\XPath;
 
 /**

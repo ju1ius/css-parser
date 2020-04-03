@@ -2,8 +2,6 @@
 
 namespace ju1ius\Css;
 
-use ju1ius\Css\MediaQuery;
-
 /**
  * Represents a single Css MediaQuery
  *

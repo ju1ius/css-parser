@@ -1,11 +1,9 @@
 <?php
 namespace ju1ius\Css;
 
-use ju1ius\Uri;
-use ju1ius\Text\Source;
-
 use ju1ius\Css\Exception\StyleSheetNotFoundException;
-use ju1ius\Css\Lexer;
+use ju1ius\Text\Source;
+use ju1ius\Uri;
 
 /**
  * Handles loading of stylesheets.

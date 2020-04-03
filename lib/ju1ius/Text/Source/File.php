@@ -2,8 +2,6 @@
 
 namespace ju1ius\Text\Source;
 
-use ju1ius\Text\Source\String;
-
 
 /**
  * A source file

@@ -2,8 +2,6 @@
 
 namespace ju1ius\Text;
 
-use ju1ius\Text\LexerInterface;
-use ju1ius\Text\SourceInterface;
 use ju1ius\Text\Lexer\TokenInterface;
 
 

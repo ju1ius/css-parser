@@ -2,17 +2,12 @@
 
 namespace ju1ius\Css\Resolver;
 
-use ju1ius\Uri;
-use ju1ius\Text\Source;
-
-use ju1ius\Css\Loader;
-use ju1ius\Css\Lexer;
-use ju1ius\Css\Parser;
-use ju1ius\Css\StyleSheet;
-use ju1ius\Css\Rule;
-use ju1ius\Css\Util;
-
 use ju1ius\Css\Exception\StyleSheetNotFoundException;
+use ju1ius\Css\Lexer;
+use ju1ius\Css\Loader;
+use ju1ius\Css\Parser;
+use ju1ius\Css\Rule;
+use ju1ius\Css\StyleSheet;
 
 /**
  * Recursively resolve @import rules

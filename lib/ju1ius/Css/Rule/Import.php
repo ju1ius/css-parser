@@ -1,10 +1,10 @@
 <?php
 namespace ju1ius\Css\Rule;
 
-use ju1ius\Css\Rule;
-use ju1ius\Css\Value\Url;
 use ju1ius\Css\MediaQueryList;
+use ju1ius\Css\Rule;
 use ju1ius\Css\StyleSheet;
+use ju1ius\Css\Value\Url;
 
 /**
  * Represents an @import rule

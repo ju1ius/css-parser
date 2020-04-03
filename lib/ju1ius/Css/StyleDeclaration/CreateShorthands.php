@@ -1,12 +1,10 @@
 <?php
 namespace ju1ius\Css\StyleDeclaration;
 
-use ju1ius\Css\Serializable;
-use ju1ius\Css\Util\Object;
-use ju1ius\Css\StyleDeclaration;
-use ju1ius\Css\PropertyValueList;
 use ju1ius\Css\Property;
-use ju1ius\Css\Value;
+use ju1ius\Css\PropertyValueList;
+use ju1ius\Css\StyleDeclaration;
+use ju1ius\Css\Util\Object;
 
 
 /**

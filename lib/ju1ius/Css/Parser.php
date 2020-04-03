@@ -2,10 +2,10 @@
 
 namespace ju1ius\Css;
 
-use ju1ius\Text\Source;
-use ju1ius\Text\Parser\LLk;
-use ju1ius\Text\Parser\Exception\UnexpectedTokenException;
 use ju1ius\Text\Parser\Exception\ParseException;
+use ju1ius\Text\Parser\Exception\UnexpectedTokenException;
+use ju1ius\Text\Parser\LLk;
+use ju1ius\Text\Source;
 
 /**
  * Css parser

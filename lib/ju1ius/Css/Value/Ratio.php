@@ -2,8 +2,6 @@
 
 namespace ju1ius\Css\Value;
 
-use ju1ius\Css\Serializable;
-
 /**
  * Represents a ratio value in the form x/y (used only in media queries)
  */

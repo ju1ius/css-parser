@@ -1,9 +1,9 @@
 <?php
 namespace ju1ius\Css\Rule;
 
+use ju1ius\Css\MediaQueryList;
 use ju1ius\Css\Rule;
 use ju1ius\Css\RuleList;
-use ju1ius\Css\MediaQueryList;
 
 /**
  * Represents an @media rule

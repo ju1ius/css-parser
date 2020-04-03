@@ -2,7 +2,6 @@
 
 namespace ju1ius\Css\Iterator;
 
-use ju1ius\Css;
 use ju1ius\Css\Rule\StyleRule;
 
 /**

@@ -3,7 +3,6 @@ namespace ju1ius\Css\Rule;
 
 use ju1ius\Css\Rule;
 use ju1ius\Css\StyleDeclaration;
-use ju1ius\Css\Value\Percentage;
 
 /**
  * Represents an @keyframe rule

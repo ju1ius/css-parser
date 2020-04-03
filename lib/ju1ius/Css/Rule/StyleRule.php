@@ -4,7 +4,6 @@ namespace ju1ius\Css\Rule;
 use ju1ius\Css\Rule;
 use ju1ius\Css\SelectorList;
 use ju1ius\Css\StyleDeclaration;
-use ju1ius\Css\Property;
 use ju1ius\Css\Util\Object;
 
 /**

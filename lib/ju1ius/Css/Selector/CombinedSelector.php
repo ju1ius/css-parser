@@ -1,8 +1,8 @@
 <?php
 namespace ju1ius\Css\Selector;
 
-use ju1ius\Css\Selector;
 use ju1ius\Css\Exception\ParseException;
+use ju1ius\Css\Selector;
 
 /**
  * Represents a combined selector
