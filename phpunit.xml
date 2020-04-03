@@ -1,33 +1,44 @@
-<phpunit colors="true" verbose="true"
-         bootstrap="vendor/autoload.php">
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.5/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    backupGlobals="false"
+    cacheResultFile="tools/.phpunit.result.cache"
+    colors="true"
+>
     <testsuites>
         <testsuite name="ju1ius\Text tests">
-            <file>test/ju1ius/Tests/Text/EncodingTest.php</file>
-            <file>test/ju1ius/Tests/Text/Source/StringTest.php</file>
+            <file>tests/Text/EncodingTest.php</file>
+            <file>tests/Text/Source/StringTest.php</file>
         </testsuite>
         <testsuite name="CSSParser Tests">
-            <file>test/ju1ius/Tests/Css/LexerTest.php</file>
-            <file>test/ju1ius/Tests/Css/Rule/CharsetTest.php</file>
-            <file>test/ju1ius/Tests/Css/Rule/NSTest.php</file>
-            <file>test/ju1ius/Tests/Css/Rule/ImportTest.php</file>
-            <file>test/ju1ius/Tests/Css/Rule/FontFaceTest.php</file>
-            <file>test/ju1ius/Tests/Css/StyleDeclarationTest.php</file>
-            <file>test/ju1ius/Tests/Css/StyleDeclaration/ExpandShorthandsTest.php</file>
-            <file>test/ju1ius/Tests/Css/StyleDeclaration/CreateShorthandsTest.php</file>
-            <file>test/ju1ius/Tests/Css/Rule/StyleRuleTest.php</file>
-            <file>test/ju1ius/Tests/Css/Rule/PageTest.php</file>
-            <file>test/ju1ius/Tests/Css/Value/StringTest.php</file>
-            <file>test/ju1ius/Tests/Css/Iterator/ValueIteratorTest.php</file>
-            <file>test/ju1ius/Tests/Css/Resolver/UrlResolverTest.php</file>
-            <file>test/ju1ius/Tests/Css/Resolver/ImportResolverTest.php</file>
-            <file>test/ju1ius/Tests/Css/Exception/ErrorHandlingTest.php</file>
-            <file>test/ju1ius/Tests/Css/Selector/CombinedSelectorTest.php</file>
-            <file>test/ju1ius/Tests/Css/Selector/FunctionSelectorTest.php</file>
-            <file>test/ju1ius/Tests/Css/SelectorMatchingTest.php</file>
+            <file>tests/Css/LexerTest.php</file>
+            <file>tests/Css/Rule/CharsetTest.php</file>
+            <file>tests/Css/Rule/NSTest.php</file>
+            <file>tests/Css/Rule/ImportTest.php</file>
+            <file>tests/Css/Rule/FontFaceTest.php</file>
+            <file>tests/Css/StyleDeclarationTest.php</file>
+            <file>tests/Css/StyleDeclaration/ExpandShorthandsTest.php</file>
+            <file>tests/Css/StyleDeclaration/CreateShorthandsTest.php</file>
+            <file>tests/Css/Rule/StyleRuleTest.php</file>
+            <file>tests/Css/Rule/PageTest.php</file>
+            <file>tests/Css/Value/StringTest.php</file>
+            <file>tests/Css/Iterator/ValueIteratorTest.php</file>
+            <file>tests/Css/Resolver/UrlResolverTest.php</file>
+            <file>tests/Css/Resolver/ImportResolverTest.php</file>
+            <file>tests/Css/Exception/ErrorHandlingTest.php</file>
+            <file>tests/Css/Selector/CombinedSelectorTest.php</file>
+            <file>tests/Css/Selector/FunctionSelectorTest.php</file>
+            <file>tests/Css/SelectorMatchingTest.php</file>
         </testsuite>
         <testsuite name="CSSParser Bugs">
-            <directory>test/ju1ius/Tests/Css/Bugs</directory>
+            <directory>tests/Css/Bugs</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
 </phpunit>
-

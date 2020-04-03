@@ -1,7 +1,0 @@
-@charset "utf-8";
-
-@import "sub/002_imported.css" screen,print;
-
-p{
-  color: red;
-}

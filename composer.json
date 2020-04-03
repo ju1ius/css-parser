@@ -14,7 +14,12 @@
         }
     ],
     "autoload": {
-        "psr-0": { "ju1ius": "lib/" }
+        "psr-4": { "ju1ius\\": "lib" }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ju1ius\\Tests\\": "tests"
+        }
     },
     "require": {
         "php": ">=7.4",

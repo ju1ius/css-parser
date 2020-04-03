@@ -6,6 +6,4 @@
 /tools
 /doc
 /benchmark
-
-/test/quicktest.php
-/test/valuelist.php
+/tmp

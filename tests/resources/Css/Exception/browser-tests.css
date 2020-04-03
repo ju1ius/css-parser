@@ -1,0 +1,45 @@
+]
+@import
+@bar ; foo {
+           padding: 1em
+       }
+
+)
+(
+{
+}
+)
+p {
+    color: red
+}
+
+p {
+    margin: 0
+}
+
+}
+}
+{
+{
+    -}
+}
+h1 {
+    padding: 2em
+}
+
+}
+}
+p.bar {
+    color: blue
+}
+
+}
+@media screen {
+    p.blah {
+        color: green;
+    }
+}
+
+p.baz {
+    color: blue
+}
