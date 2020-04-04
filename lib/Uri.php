@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace ju1ius;
 
@@ -6,12 +6,9 @@ use InvalidArgumentException;
 
 define('OS_WIN32', defined('OS_WINDOWS') ? OS_WINDOWS : !strncasecmp(PHP_OS, 'win', 3));
 
-/**
- *
- */
-class Uri
+final class Uri
 {
-    private static $COMPONENTS = [
+    private const COMPONENTS = [
         'scheme', 'host', 'port',
         'user', 'pass',
         'path', 'query', 'fragment',
@@ -30,7 +27,7 @@ class Uri
     public function __construct($uri)
     {
         $parts = parse_url($uri);
-        foreach (self::$COMPONENTS as $key) {
+        foreach (self::COMPONENTS as $key) {
             if (isset($parts[$key])) {
                 $this->$key = $parts[$key];
             }
