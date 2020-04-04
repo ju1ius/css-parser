@@ -14,26 +14,26 @@ final class Uri
         'path', 'query', 'fragment',
     ];
 
-    private $scheme;
-    private $host;
-    private $port;
-    private $user;
-    private $pass;
-    private $path;
-    private $query;
-    private $fragment;
+    private ?string $scheme = null;
+    private ?string $host = null;
+    private ?string $port = null;
+    private ?string $user = null;
+    private ?string $pass = null;
+    private ?string $path = null;
+    private ?string $query = null;
+    private ?string $fragment = null;
 
-    public function __construct($uri)
+    public function __construct(string $uri)
     {
         $parts = parse_url($uri);
         foreach (self::COMPONENTS as $key) {
             if (isset($parts[$key])) {
-                $this->$key = $parts[$key];
+                $this->{$key} = $parts[$key];
             }
         }
     }
 
-    public static function parse($uri)
+    public static function parse($uri): self
     {
         if ($uri instanceof self) {
             return $uri;
@@ -45,78 +45,78 @@ final class Uri
         );
     }
 
-    public function getScheme()
+    public function getScheme(): ?string
     {
         return $this->scheme;
     }
 
-    public function setScheme($scheme)
+    public function setScheme(?string $scheme)
     {
         $this->scheme = $scheme;
         return $this;
     }
 
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
 
-    public function setHost($host)
+    public function setHost(?string $host)
     {
         $this->host = $host;
         return $this;
     }
 
-    public function getPort()
+    public function getPort(): ?string
     {
         return $this->port;
     }
 
-    public function setPort($port)
+    public function setPort(?string $port)
     {
         $this->port = $port;
         return $this;
     }
 
-    public function getUser()
+    public function getUser(): ?string
     {
         return $this->user;
     }
 
-    public function setUser($user)
+    public function setUser(?string $user)
     {
         $this->user = $user;
         return $this;
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->pass;
     }
 
-    public function setPassword($pass)
+    public function setPassword(?string $pass)
     {
         $this->pass = $pass;
         return $this;
     }
 
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
-    public function setPath($path)
+    public function setPath(?string $path)
     {
         $this->path = $path;
         return $this;
     }
 
-    public function getQuery()
+    public function getQuery(): ?string
     {
         return $this->query;
     }
 
-    public function setQuery($query)
+    public function setQuery(?string $query)
     {
         if (is_array($query)) {
             $this->query = http_build_query($query);
@@ -126,18 +126,18 @@ final class Uri
         return $this;
     }
 
-    public function getFragment()
+    public function getFragment(): ?string
     {
         return $this->fragment;
     }
 
-    public function setFragment($fragment)
+    public function setFragment(?string $fragment)
     {
         $this->fragment = $fragment;
         return $this;
     }
 
-    public function getUri()
+    public function getUri(): string
     {
         $url = '';
         if ($this->isWindowsDrive()) {
@@ -181,7 +181,7 @@ final class Uri
         return $this->getUri();
     }
 
-    public function getRootUrl()
+    public function getRootUrl(): self
     {
         $uri = clone $this;
         $uri->setPath(null)
@@ -206,9 +206,10 @@ final class Uri
      *
      * @param array $array (name => value) array
      *
+     * @param string $separator
      * @return $this
      */
-    public function setQueryVariables(array $array, $separator = "&")
+    public function setQueryVariables(array $array, string $separator = "&")
     {
         if (empty($array)) {
             $this->query = null;
@@ -227,12 +228,12 @@ final class Uri
      * @param string $path The object path to the variable
      * @param string $separator The object path separator (default = '.')
      *
-     * @return array|string
+     * @return array|string|null
      **/
-    public function getQueryVariable($path, $separator = '.')
+    public function getQueryVariable(string $path, string $separator = '.')
     {
         if (!$path) {
-            return;
+            return null;
         }
 
         $segs = explode($separator, $path);
@@ -242,13 +243,13 @@ final class Uri
             if (isset($target[$segs[$i]]) && is_array($target[$segs[$i]])) {
                 $target = $target[$segs[$i]];
             } else {
-                return;
+                return null;
             }
         }
         if (isset($target[$segs[count($segs) - 1]])) {
             return $target[$segs[count($segs) - 1]];
         }
-        return;
+        return null;
     }
 
     /**
@@ -260,7 +261,7 @@ final class Uri
      *
      * @return $this
      */
-    public function setQueryVariable($path, $value, $separator = '.')
+    public function setQueryVariable($path, $value, string $separator = '.')
     {
         if (is_array($path)) {
             foreach ($path as $p => $v) {
@@ -291,14 +292,14 @@ final class Uri
         return $this;
     }
 
-    public function isAbsoluteUrl()
+    public function isAbsoluteUrl(): bool
     {
         return $this->scheme
             && $this->scheme !== 'file'
             && !$this->isWindowsDrive();
     }
 
-    public function isAbsolutePath()
+    public function isAbsolutePath(): bool
     {
         if (!$this->path) {
             return false;
@@ -316,7 +317,7 @@ final class Uri
         return $this->path[0] === '/' || $this->path[0] === '~';
     }
 
-    public function isWindowsDrive()
+    public function isWindowsDrive(): bool
     {
         if (!$this->scheme || !$this->path) {
             return false;
@@ -328,7 +329,7 @@ final class Uri
             && ($this->path[0] === '/' || $this->path[0] === '\\');
     }
 
-    public function dirname()
+    public function dirname(): self
     {
         $uri = clone $this;
         if ($this->path) {
@@ -341,7 +342,7 @@ final class Uri
         return $uri;
     }
 
-    public function join()
+    public function join(): self
     {
         $uri = clone $this;
         $components = [rtrim($this->path, '/')];
@@ -362,7 +363,7 @@ final class Uri
      *
      * @return ju1ius\Uri
      **/
-    public function normalize()
+    public function normalize(): self
     {
         $uri = clone $this;
         if ($this->isAbsoluteUrl()) {
@@ -408,7 +409,7 @@ final class Uri
      *
      * @return string a path
      */
-    public static function removeDotSegments($path)
+    public static function removeDotSegments(string $path): string
     {
         $output = '';
         // Make sure not to be trapped in an infinite loop
