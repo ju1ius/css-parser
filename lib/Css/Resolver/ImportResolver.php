@@ -16,8 +16,7 @@ use ju1ius\Css\StyleSheet;
  **/
 class ImportResolver
 {
-    private
-        $stylesheet;
+    private $stylesheet;
 
     public function __construct(StyleSheet $stylesheet, $base_url = null)
     {

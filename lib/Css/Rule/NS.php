@@ -15,7 +15,7 @@ class NS extends Rule
     private $uri;
     private $prefix;
 
-    function __construct(Url $uri, $prefix = null)
+    public function __construct(Url $uri, $prefix = null)
     {
         $this->uri = $uri;
         $this->prefix = $prefix;

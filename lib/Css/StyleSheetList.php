@@ -10,9 +10,8 @@ use DOMXPath;
  */
 class StyleSheetList extends CssList
 {
-    private
-        $dom,
-        $xpath;
+    private $dom;
+    private $xpath;
 
     public function __construct(DOMDocument $dom, $stylesheets = [])
     {
@@ -44,9 +43,7 @@ class StyleSheetList extends CssList
         $elements = $xpath->query('//link[@rel="stylesheet"]|//style');
 
         foreach ($elements as $element) {
-
             if ($element->tagName === "link") {
-
                 $href = $element->getAttribute('href');
                 $stylesheet = $parser->parse($loader->load($href));
 
@@ -56,13 +53,11 @@ class StyleSheetList extends CssList
                     $stylesheet->setMediaQueryList($media_list);
                 }
                 $this->stylesheets[] = $stylesheet;
-
-            } else if ($element->tagName === "style") {
+            } elseif ($element->tagName === "style") {
                 $this->stylesheets[] = $parser->parse(
                     $loader->loadString($element->textContent)
                 );
             }
-
         }
     }
 

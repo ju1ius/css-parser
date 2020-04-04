@@ -9,7 +9,6 @@ use InvalidArgumentException;
  **/
 class RuleList extends CssList implements Serializable
 {
-
     public function prepend($rule)
     {
         if (!$rule instanceof Rule) {
@@ -79,7 +78,7 @@ class RuleList extends CssList implements Serializable
         foreach ($this->getRules() as $rule) {
             if ($rule instanceof Rule\StyleRule) {
                 $rules[] = $rule;
-            } else if (method_exists($rule, 'getRuleList')) {
+            } elseif (method_exists($rule, 'getRuleList')) {
                 foreach ($rule->getRuleList()->getAllStyleRules() as $deep_rule) {
                     $rules[] = $deep_rule;
                 }
@@ -100,7 +99,7 @@ class RuleList extends CssList implements Serializable
         foreach ($this->getRules() as $rule) {
             if (method_exists($rule, 'getStyleDeclaration')) {
                 $rules[] = $rule->getStyleDeclaration();
-            } else if (method_exists($rule, 'getRuleList')) {
+            } elseif (method_exists($rule, 'getRuleList')) {
                 foreach ($rule->getRuleList()->getAllStyleDeclarations() as $deep_rule) {
                     $rules[] = $deep_rule;
                 }
@@ -142,17 +141,17 @@ class RuleList extends CssList implements Serializable
                 foreach ($element->getRuleList()->getRules() as $rule) {
                     self::_findAllValues($rule, $result, $searchString, $searchInFunctionArguments);
                 }
-            } else if (method_exists($element, 'getStyleDeclaration')) {
+            } elseif (method_exists($element, 'getStyleDeclaration')) {
                 $properties = $element->getStyleDeclaration()->getProperties($searchString);
                 foreach ($properties as $property) {
                     self::_findAllValues($property->getValueList(), $result, null, $searchInFunctionArguments);
                 }
             }
-        } else if ($element instanceof PropertyValueList) {
+        } elseif ($element instanceof PropertyValueList) {
             foreach ($element->getComponents() as $component) {
                 self::_findAllValues($component, $result, null, $searchInFunctionArguments);
             }
-        } else if ($element instanceof Value) {
+        } elseif ($element instanceof Value) {
             if ($searchInFunctionArguments && $element instanceof Value\CssFunction) {
                 foreach ($element->getArguments() as $arg) {
                     self::_findAllValues($arg, $result, null, $searchInFunctionArguments);
@@ -177,7 +176,7 @@ class RuleList extends CssList implements Serializable
             $indent = str_repeat($options['indent_char'], $options['indent_level']);
             $nl = "\n";
         }
-        return implode($nl, array_map(function($rule) use ($indent, $options) {
+        return implode($nl, array_map(function ($rule) use ($indent, $options) {
             return $indent . $rule->getCssText($options);
         }, $this->items));
     }
@@ -186,5 +185,4 @@ class RuleList extends CssList implements Serializable
     {
         return $this->getCssText();
     }
-
 }

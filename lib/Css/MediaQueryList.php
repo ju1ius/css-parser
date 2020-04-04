@@ -47,7 +47,7 @@ class MediaQueryList extends ValueList
 
     public function getCssText($options = [])
     {
-        return implode($this->separator, array_map(function($media_query) {
+        return implode($this->separator, array_map(function ($media_query) {
             return $media_query->getCssText();
         }, $this->items));
     }

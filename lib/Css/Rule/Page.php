@@ -12,17 +12,15 @@ use ju1ius\Css\StyleDeclaration;
  **/
 class Page extends Rule
 {
-    private
-        $selector,
-        $margin_rules,
-        $style_declaration;
+    private $selector;
+    private $margin_rules;
+    private $style_declaration;
 
     public function __construct(
         PageSelector $selector = null,
         RuleList $margin_rules = null,
         StyleDeclaration $style_declaration = null
-    )
-    {
+    ) {
         $this->selector = $selector;
         $this->margin_rules = $margin_rules;
         if ($style_declaration) {

@@ -13,7 +13,6 @@ use SplStack;
  **/
 class Parser extends LLk
 {
-
     protected $strict;
 
     public $errors = [];
@@ -55,7 +54,9 @@ class Parser extends LLk
         $this->reset();
         $source = $this->lexer->getSource();
         $stylesheet = $this->_stylesheet();
-        if ($source instanceof Source\File) $stylesheet->setHref($source->getUrl());
+        if ($source instanceof Source\File) {
+            $stylesheet->setHref($source->getUrl());
+        }
 
         return $stylesheet;
     }/*}}}*/
@@ -156,7 +157,6 @@ class Parser extends LLk
         }
 
         while ($this->LT()->type !== Lexer::T_EOF) {
-
             switch ($this->LT()->type) {
 
                 case Lexer::T_S:
@@ -246,7 +246,6 @@ class Parser extends LLk
                     break;
 
             }
-
         }
 
         return $stylesheet;
@@ -636,8 +635,7 @@ class Parser extends LLk
             }
 
             return new Value\Color($channels);
-        } else if (preg_match('/^hsla?$/i', $name)) {
-
+        } elseif (preg_match('/^hsla?$/i', $name)) {
             $channels = [
                 'h' => $args[0],
                 's' => $args[2],
@@ -708,7 +706,6 @@ class Parser extends LLk
             $results['rule_list'],
             $results['style_declaration']
         );
-
     }/*}}}*/
 
     /**
@@ -928,7 +925,7 @@ class Parser extends LLk
         if ($this->LT()->type === Lexer::T_IDENT) {
             $media_type = $this->_media_type();
             $this->_ws();
-        } else if ($this->LT()->type === Lexer::T_LPAREN) {
+        } elseif ($this->LT()->type === Lexer::T_LPAREN) {
             $expressions[] = $this->_media_expression();
         }
 
@@ -1159,7 +1156,6 @@ class Parser extends LLk
         $has_hash = false;
 
         while (true) {
-
             switch ($this->LT()->type) {
 
                 case Lexer::T_HASH:
@@ -1207,7 +1203,6 @@ class Parser extends LLk
                     break 2;
 
             }
-
         }
 
         return $selector;
@@ -1239,7 +1234,7 @@ class Parser extends LLk
                     || $next === Lexer::T_EOF
                 ) {
                     return null;
-                } else if ($next === Lexer::T_PLUS
+                } elseif ($next === Lexer::T_PLUS
                     || $next === Lexer::T_GREATER
                     || $next === Lexer::T_TILDE
                 ) {
@@ -1569,7 +1564,9 @@ class Parser extends LLk
          * or margin afterwards.
          **/
         $style_declaration = new StyleDeclaration();
-        if ($margins) $margin_rules = new RuleList();
+        if ($margins) {
+            $margin_rules = new RuleList();
+        }
 
         $this->_ws();
 
@@ -1580,7 +1577,6 @@ class Parser extends LLk
         $this->_ws();
 
         while (true) {
-
             try {
                 $property = $this->_declaration();
             } catch (ParseException $e) {
@@ -1600,7 +1596,7 @@ class Parser extends LLk
                 } else {
                     break;
                 }
-            } else if ($margins && in_array($this->LT()->type, [
+            } elseif ($margins && in_array($this->LT()->type, [
                     Lexer::T_TOPLEFTCORNER_SYM, Lexer::T_TOPLEFT_SYM,
                     Lexer::T_TOPCENTER_SYM,
                     Lexer::T_TOPRIGHT_SYM, Lexer::T_TOPRIGHTCORNER_SYM,
@@ -1621,7 +1617,6 @@ class Parser extends LLk
             } else {
                 break;
             }
-
         }
         if ($check_start) {
             $this->match(Lexer::T_RCURLY);
@@ -1657,7 +1652,9 @@ class Parser extends LLk
      **/
     protected static function reduceValueList(array $values, $delimiters = [' ', ',', '/'])
     {/*{{{*/
-        if (count($values) === 1) return $values[0];
+        if (count($values) === 1) {
+            return $values[0];
+        }
 
         foreach ($delimiters as $delim) {
             $start = null;
@@ -1684,7 +1681,7 @@ class Parser extends LLk
     {/*{{{*/
         if (0 === strcasecmp('background', $name)) {
             return ['/', ' ', ','];
-        } else if (preg_match('/^font(?:-family)?$/iu', $name)) {
+        } elseif (preg_match('/^font(?:-family)?$/iu', $name)) {
             return [',', '/', ' '];
         }
 
@@ -1807,7 +1804,6 @@ class Parser extends LLk
             'end' => null,
         ];
         while (true) {
-
             switch ($this->LT()->type) {
 
                 case Lexer::T_LCURLY:
@@ -1870,7 +1866,6 @@ class Parser extends LLk
             'end' => null,
         ];
         while (true) {
-
             switch ($this->LT()->type) {
 
                 case Lexer::T_LCURLY:
@@ -1931,12 +1926,11 @@ class Parser extends LLk
         $stack->push($type);
 
         while (true) {
-
             $t = $this->LT()->type;
 
             if ($t === Lexer::T_EOF) {
                 break;
-            } else if ($t === Lexer::T_FUNCTION || $t === Lexer::T_BADURI) {
+            } elseif ($t === Lexer::T_FUNCTION || $t === Lexer::T_BADURI) {
                 $stack->push(Lexer::T_RPAREN);
             }
 
@@ -1947,23 +1941,21 @@ class Parser extends LLk
                 }
                 // Just handle out-of-memory by parsing incorrectly.
                 // It's highly unlikely we're dealing with a legitimate stylesheet anyway.
-            } else if ($t === Lexer::T_LCURLY) {
+            } elseif ($t === Lexer::T_LCURLY) {
                 $stack->push(Lexer::T_RCURLY);
-            } else if ($t === Lexer::T_LBRACK) {
+            } elseif ($t === Lexer::T_LBRACK) {
                 $stack->push(Lexer::T_RBRACK);
-            } else if ($t === Lexer::T_LPAREN) {
+            } elseif ($t === Lexer::T_LPAREN) {
                 $stack->push(Lexer::T_RPAREN);
             }
 
             $this->consume();
-
         }
     }/*}}}*/
 
     protected function skipUntilOneOf(array $types)
     {/*{{{*/
         while (true) {
-
             $t = $this->LT()->type;
             if ($t === Lexer::T_EOF) {
                 break;

@@ -51,5 +51,4 @@ class LineToken implements TokenInterface
 
         return (string)$this->value;
     }
-
 }

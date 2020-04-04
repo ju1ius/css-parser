@@ -14,8 +14,7 @@ use RuntimeException;
  **/
 class UrlResolver
 {
-    private
-        $stylesheet;
+    private $stylesheet;
 
     public function __construct(StyleSheet $stylesheet, $base_url = null)
     {
@@ -24,13 +23,13 @@ class UrlResolver
             throw new RuntimeException(
                 "The provided stylesheet has no href, you must provide a base url"
             );
-        } else if (!$base_url) {
+        } elseif (!$base_url) {
             $href = new Uri($this->stylesheet->getHref());
             $this->base_url = $href->dirname();
             if (!$this->base_url) {
                 throw new RuntimeException("You must provide a valid base url");
             }
-        } else if ($base_url instanceof Uri) {
+        } elseif ($base_url instanceof Uri) {
             $this->base_url = $base_url;
         } else {
             $this->base_url = new Uri($base_url);
@@ -50,7 +49,7 @@ class UrlResolver
                 // $url is not absolute url or absolute path
                 $url = $this->base_url->join($url);
                 $value->setUrl(new Value\CssString((string)$url));
-            } else if ($isAbsPath && $bIsAbsBaseUrl) {
+            } elseif ($isAbsPath && $bIsAbsBaseUrl) {
                 // $url is absolute path and base url is absolute
                 // get the base domain from url
                 $base_url = $this->base_url->getRootUrl();

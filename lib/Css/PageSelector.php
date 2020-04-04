@@ -4,9 +4,8 @@ namespace ju1ius\Css;
 
 class PageSelector implements Serializable
 {
-    private
-        $page_name,
-        $pseudo_class;
+    private $page_name;
+    private $pseudo_class;
 
     public function __construct($name = null, $pseudo = null)
     {
@@ -37,7 +36,9 @@ class PageSelector implements Serializable
     public function getSpecificity()
     {
         $specificity = 0;
-        if ($this->page_name) $specificity += 100;
+        if ($this->page_name) {
+            $specificity += 100;
+        }
         switch ($this->pseudo_class) {
             case 'first':
                 $specificity += 10;

@@ -8,7 +8,6 @@ use ju1ius\Text\Lexer\TokenInterface;
 use ju1ius\Text\Parser\Exception\ParseException;
 use ju1ius\Text\Parser\Exception\UnexpectedTokenException;
 
-
 abstract class Parser implements ParserInterface
 {
     /**
@@ -33,7 +32,9 @@ abstract class Parser implements ParserInterface
 
     public function __construct(LexerInterface $lexer = null)
     {
-        if ($lexer) $this->setLexer($lexer);
+        if ($lexer) {
+            $this->setLexer($lexer);
+        }
     }
 
     public function setDebug($debug)
@@ -87,7 +88,6 @@ abstract class Parser implements ParserInterface
         if (!$match) {
             $this->_unexpectedToken($token, $type);
         }
-
     }
 
     protected function _parseException($msg, TokenInterface $token)
@@ -98,12 +98,17 @@ abstract class Parser implements ParserInterface
             if ($token instanceof LineToken) {
                 $msg = sprintf(
                     "%s in %s on line %s, column %s",
-                    $msg, $file, $token->line, $token->column
+                    $msg,
+                    $file,
+                    $token->line,
+                    $token->column
                 );
             } else {
                 $msg = sprintf(
                     "%s in %s at position %s",
-                    $msg, $file, $token->position
+                    $msg,
+                    $file,
+                    $token->position
                 );
             }
         }
@@ -135,18 +140,21 @@ abstract class Parser implements ParserInterface
             if ($actual instanceof LineToken) {
                 $msg = sprintf(
                     "%s in %s on line %s, column %s",
-                    $msg, $file, $actual->line, $actual->column
+                    $msg,
+                    $file,
+                    $actual->line,
+                    $actual->column
                 );
             } else {
                 $msg = sprintf(
                     "%s in %s at position %s",
-                    $msg, $file, $actual->position
+                    $msg,
+                    $file,
+                    $actual->position
                 );
             }
-
         }
 
         throw new UnexpectedTokenException($msg);
     }/*}}}*/
-
 }

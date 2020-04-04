@@ -16,7 +16,7 @@ use ju1ius\Css\Selector;
  **/
 class CombinedSelector extends Selector
 {
-    static protected $methodMapping = [
+    protected static $methodMapping = [
         ' ' => 'descendant',
         '>' => 'child',
         '+' => 'direct_adjacent',

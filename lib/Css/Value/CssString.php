@@ -4,8 +4,7 @@ namespace ju1ius\Css\Value;
 
 class CssString extends PrimitiveValue
 {
-    private
-        $string;
+    private $string;
 
     public function __construct($string)
     {

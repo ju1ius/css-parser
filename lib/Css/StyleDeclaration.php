@@ -140,7 +140,7 @@ class StyleDeclaration implements Serializable
         foreach ($search as $property) {
             if (is_int($property)) {
                 unset($this->properties[$property]);
-            } else if ($property instanceof Property) {
+            } elseif ($property instanceof Property) {
                 $index = array_search($property, $this->properties);
                 unset($this->properties[$index]);
             } else {
@@ -289,7 +289,7 @@ class StyleDeclaration implements Serializable
             return $withPosition
                 ? [$lastImportantProp['position'] => $lastImportantProp['property']]
                 : $lastImportantProp['property'];
-        } else if ($lastProp) {
+        } elseif ($lastProp) {
             return $withPosition
                 ? [$lastProp['position'] => $lastProp['property']]
                 : $lastProp['property'];
@@ -502,7 +502,7 @@ class StyleDeclaration implements Serializable
             $nl = "\n";
         }
 
-        return implode($nl, array_map(function($property) use ($indent, $options) {
+        return implode($nl, array_map(function ($property) use ($indent, $options) {
             return $indent . $property->getCssText($options);
         }, $this->properties));
     }
@@ -514,9 +514,8 @@ class StyleDeclaration implements Serializable
 
     public function __clone()
     {
-        $this->properties = array_map(function($item) {
+        $this->properties = array_map(function ($item) {
             return clone($item);
         }, $this->properties);
     }
-
 }

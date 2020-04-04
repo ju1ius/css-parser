@@ -6,7 +6,6 @@ use ju1ius\Text\LexerInterface;
 use ju1ius\Text\Parser;
 use SplFixedArray;
 
-
 abstract class LLk extends Parser
 {
     /**

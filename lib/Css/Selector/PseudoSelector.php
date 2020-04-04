@@ -18,7 +18,7 @@ use ju1ius\Css\XPath;
  **/
 class PseudoSelector extends Selector
 {
-    static protected $unsupported = [
+    protected static $unsupported = [
         'indeterminate', 'first-line', 'first-letter',
         'selection', 'before', 'after',
         'visited', 'active', 'focus', 'hover', 'target',
@@ -41,7 +41,8 @@ class PseudoSelector extends Selector
         $this->element = $element;
         if (':' !== $type && '::' !== $type) {
             throw new ParseException(sprintf(
-                'The PseudoSelector type can only be : or :: (%s given).', $type
+                'The PseudoSelector type can only be : or :: (%s given).',
+                $type
             ));
         }
         $this->type = $type;
@@ -71,7 +72,8 @@ class PseudoSelector extends Selector
         if (in_array($this->ident, self::$unsupported)) {
             return $this->xpath_never_matches($xpath);
             throw new UnsupportedSelectorException(sprintf(
-                'The pseudo-class %s is unsupported', $this->ident
+                'The pseudo-class %s is unsupported',
+                $this->ident
             ));
         }
         $method = 'xpath_' . str_replace('-', '_', $this->ident);
@@ -91,7 +93,8 @@ class PseudoSelector extends Selector
     protected function xpath_checked(XPath\Expression $xpath)
     {
         // FIXME: is this really all the elements?
-        $xpath->addCondition(<<<EOS
+        $xpath->addCondition(
+            <<<EOS
 (@selected and name(.) = 'option')
 or (
   @checked
@@ -116,7 +119,8 @@ EOS
     protected function xpath_disabled(XPath\Expression $xpath)
     {
         //$xpath->addCondition("@disabled or ancestor::fieldset[@disabled]");
-        $xpath->addCondition(<<<EOS
+        $xpath->addCondition(
+            <<<EOS
 (
   @disabled and (
     (name(.) = 'input' and (@type != 'hidden' or not(@type))) or
@@ -146,7 +150,8 @@ EOS
     protected function xpath_enabled(XPath\Expression $xpath)
     {
         //$xpath->addCondition("not(@disabled) and not(ancestor::fieldset[@disabled] or ancestor::optgroup[@disabled])");
-        $xpath->addCondition(<<<EOS
+        $xpath->addCondition(
+            <<<EOS
 (
   @href and (
     name(.) = 'a' or

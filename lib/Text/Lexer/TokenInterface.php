@@ -2,7 +2,6 @@
 
 namespace ju1ius\Text\Lexer;
 
-
 /**
  * Empty interface for polymorphism.
  **/

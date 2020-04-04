@@ -11,8 +11,7 @@ use ju1ius\Css\Rule;
  */
 class ValueIterator implements Iterator
 {
-    private
-        $values = [];
+    private $values = [];
 
     public function __construct($object, $type_filter = null, $returnFuncArgs = false)
     {
@@ -39,22 +38,22 @@ class ValueIterator implements Iterator
             } else {
                 $values[] = $obj;
             }
-        } else if ($obj instanceof Css\Value) {
+        } elseif ($obj instanceof Css\Value) {
             $values[] = $obj;
-        } else if ($obj instanceof Css\ValueList) {
+        } elseif ($obj instanceof Css\ValueList) {
             foreach ($obj->getItems() as $item) {
                 $values = array_merge(
                     $values,
                     self::getValuesForObject($item, $type, $returnFuncArgs)
                 );
             }
-        } else if ($obj instanceof Rule\Charset) {
+        } elseif ($obj instanceof Rule\Charset) {
             $values[] = $obj->getEncoding();
-        } else if ($obj instanceof Rule\Import) {
+        } elseif ($obj instanceof Rule\Import) {
             $values[] = $obj->getHref();
-        } else if ($obj instanceof Rule\NS) {
+        } elseif ($obj instanceof Rule\NS) {
             $values[] = $obj->getUri();
-        } else if (method_exists($obj, 'getStyleDeclaration')) {
+        } elseif (method_exists($obj, 'getStyleDeclaration')) {
             // Rule\StyleRule, Rule\AtRule, Rule\FontFace, Rule\KeyFrame, Rule\Page
             $decl = $obj->getStyleDeclaration();
             foreach ($decl->getProperties() as $prop) {
@@ -63,7 +62,7 @@ class ValueIterator implements Iterator
                     self::getValuesForObject($prop->getValueList(), $type, $returnFuncArgs)
                 );
             }
-        } else if (method_exists($obj, 'getRuleList')) {
+        } elseif (method_exists($obj, 'getRuleList')) {
             // StyleSheet, Rule\Media, Rule\Keyframes
             foreach ($obj->getRuleList()->getRules() as $rule) {
                 $values = array_merge(
@@ -75,7 +74,7 @@ class ValueIterator implements Iterator
         if ($type) {
             return array_filter(
                 $values,
-                function($item) use ($type) {
+                function ($item) use ($type) {
                     return $item instanceof $type;
                 }
             );
@@ -112,5 +111,4 @@ class ValueIterator implements Iterator
 
         return $key !== null && $key !== false;
     }
-
 }

@@ -4,7 +4,7 @@ namespace ju1ius\Css\Util;
 
 class Color
 {
-    static $X11_COLORS_MAP = [
+    public static $X11_COLORS_MAP = [
         'aliceblue' => ['r' => 240, 'g' => 248, 'b' => 255],
         'antiquewhite' => ['r' => 250, 'g' => 235, 'b' => 215],
         'aqua' => ['r' => 0, 'g' => 255, 'b' => 255],
@@ -160,7 +160,7 @@ class Color
      * @param string $color An X11 color name.
      * @return array         An array of RGB channels
      **/
-    static function x11ToRgb($color)
+    public static function x11ToRgb($color)
     {
         $color = strtolower($color);
         if ($color === 'transparent') {
@@ -175,7 +175,7 @@ class Color
         return null;
     }
 
-    static function x11ToHsl($color)
+    public static function x11ToHsl($color)
     {
         $rgb = self::x11ToRgb($color);
         if ($rgb) {
@@ -193,7 +193,7 @@ class Color
      *
      * @return string       An X11 color name
      **/
-    static function rgbToX11($r, $g, $b, $a = 1)
+    public static function rgbToX11($r, $g, $b, $a = 1)
     {
         if ($a !== 1) {
             return null;
@@ -209,7 +209,7 @@ class Color
         return $result === false ? null : $result;
     }
 
-    static function hslToX11($h, $s, $l, $a = 1)
+    public static function hslToX11($h, $s, $l, $a = 1)
     {
         if ($a !== 1) {
             return null;
@@ -229,7 +229,7 @@ class Color
      *
      * @return array        An array of RGB channels
      **/
-    static function hexToRgb($value)
+    public static function hexToRgb($value)
     {
         if ($value[0] === '#') {
             $value = substr($value, 1);
@@ -261,7 +261,7 @@ class Color
      *
      * @return string|int
      **/
-    static function rgbToHex($r, $g, $b, $asString = true)
+    public static function rgbToHex($r, $g, $b, $asString = true)
     {
         $r = self::normalizeRgbValue($r);
         $g = self::normalizeRgbValue($g);
@@ -280,7 +280,7 @@ class Color
      * @param string $l The lightness value. A percentage
      * @param float $a The alpha channel value. A float in range 0..1
      **/
-    static function hslToRgb($h, $s, $l, $a = 1)
+    public static function hslToRgb($h, $s, $l, $a = 1)
     {
         // normalize to float between 0..1
         $s = self::normalizeFraction($s);
@@ -339,7 +339,7 @@ class Color
         return $aRGB;
     }
 
-    static private function hueToRgb($m1, $m2, $h)
+    private static function hueToRgb($m1, $m2, $h)
     {
         if ($h < 0) {
             $h++;
@@ -370,7 +370,7 @@ class Color
      *
      * @return array
      **/
-    static function rgbToHsl($r, $g, $b, $a = 1)
+    public static function rgbToHsl($r, $g, $b, $a = 1)
     {
         // normalize to float between 0..1
         $r = self::normalizeRgbValue($r) / 255;
@@ -403,9 +403,9 @@ class Color
 
             if ($r === $max) {
                 $h = $delta_b - $delta_g;
-            } else if ($g === $max) {
+            } elseif ($g === $max) {
                 $h = (1 / 3) + $delta_r - $delta_b;
-            } else if ($b === $max) {
+            } elseif ($b === $max) {
                 $h = (2 / 3) + $delta_g - $delta_r;
             }
             if ($h < 0) {
@@ -434,7 +434,7 @@ class Color
      * @param int $max The divisor of the fraction.
      * @return float            A float in range 0..1
      **/
-    static function normalizeFraction($value, $max = 100)
+    public static function normalizeFraction($value, $max = 100)
     {
         $i = strpos($value, '%');
         if ($i !== false) {
@@ -453,7 +453,7 @@ class Color
      *
      * @returns int             An integer in range 0..255
      **/
-    static function normalizeRgbValue($value)
+    public static function normalizeRgbValue($value)
     {
         $i = strpos($value, '%');
         // percentage value
@@ -477,9 +477,8 @@ class Color
      *
      * @return int
      **/
-    static function constrainValue($value, $min, $max)
+    public static function constrainValue($value, $min, $max)
     {
         return max($min, min($value, $max));
     }
-
 }

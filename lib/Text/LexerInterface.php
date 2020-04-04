@@ -2,7 +2,6 @@
 
 namespace ju1ius\Text;
 
-
 interface LexerInterface
 {
     public function nextToken();

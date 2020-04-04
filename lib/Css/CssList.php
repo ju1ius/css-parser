@@ -30,7 +30,7 @@ class CssList implements ListInterface
     {
         if ($items instanceof ListInterface) {
             $this->items = $items->getItems();
-        } else if (is_array($items)) {
+        } elseif (is_array($items)) {
             $this->items = $items;
         } else {
             throw new InvalidArgumentException(
@@ -75,7 +75,9 @@ class CssList implements ListInterface
     public function remove($item)
     {
         $index = array_search($item, $this->items);
-        if ($index !== false) unset($this->items[$index]);
+        if ($index !== false) {
+            unset($this->items[$index]);
+        }
     }
 
     public function removeItemAt($index)
@@ -85,7 +87,9 @@ class CssList implements ListInterface
 
     public function insertItemAt($items, $index)
     {
-        if (!is_array($items)) $items = [$items];
+        if (!is_array($items)) {
+            $items = [$items];
+        }
         array_splice($this->items, $index, 0, $items);
     }
 
@@ -99,7 +103,9 @@ class CssList implements ListInterface
     {
         if (!is_int($oldItem)) {
             $oldItem = array_search($oldItem, $this->items);
-            if ($oldItem === false) return;
+            if ($oldItem === false) {
+                return;
+            }
         }
         //if ($newItems instanceof CssList) {
         //$newItems = $newItems->getItems();
@@ -121,7 +127,7 @@ class CssList implements ListInterface
 
     public function __clone()
     {
-        $this->items = array_map(function($item) {
+        $this->items = array_map(function ($item) {
             return Util\Cloner::clone($item);
         }, $this->items);
     }
@@ -181,5 +187,4 @@ class CssList implements ListInterface
     {
         return count($this->items);
     }
-
 }

@@ -14,15 +14,14 @@ final class Uri
         'path', 'query', 'fragment',
     ];
 
-    private
-        $scheme,
-        $host,
-        $port,
-        $user,
-        $pass,
-        $path,
-        $query,
-        $fragment;
+    private $scheme;
+    private $host;
+    private $port;
+    private $user;
+    private $pass;
+    private $path;
+    private $query;
+    private $fragment;
 
     public function __construct($uri)
     {
@@ -34,11 +33,11 @@ final class Uri
         }
     }
 
-    static public function parse($uri)
+    public static function parse($uri)
     {
         if ($uri instanceof self) {
             return $uri;
-        } else if (is_string($uri)) {
+        } elseif (is_string($uri)) {
             return new self($uri);
         }
         throw new InvalidArgumentException(
@@ -143,7 +142,7 @@ final class Uri
         $url = '';
         if ($this->isWindowsDrive()) {
             $url .= $this->scheme . ':\\';
-        } else if ($this->scheme) {
+        } elseif ($this->scheme) {
             $url .= $this->scheme . '://';
         }
         if ($this->user) {
@@ -385,7 +384,7 @@ final class Uri
             // Normalize case of %XX percentage-encodings (RFC 3986, section 6.2.2.1)
             foreach (['user', 'pass', 'host', 'path'] as $part) {
                 if ($this->$part) {
-                    $value = preg_replace_callback('/%[0-9a-f]{2}/iS', function($matches) {
+                    $value = preg_replace_callback('/%[0-9a-f]{2}/iS', function ($matches) {
                         return strtoupper($matches[0]);
                     }, $this->$part);
                     $method = 'set' . ucfirst($part);

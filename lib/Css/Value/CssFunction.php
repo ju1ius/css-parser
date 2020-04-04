@@ -38,5 +38,4 @@ class CssFunction extends ValueList
 
         return $this->name . '(' . $args . ')';
     }
-
 }

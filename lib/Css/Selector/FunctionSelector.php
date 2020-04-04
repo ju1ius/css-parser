@@ -18,7 +18,7 @@ use ju1ius\Css\XPath;
  **/
 class FunctionSelector extends Selector
 {
-    static protected $unsupported = ['lang'];
+    protected static $unsupported = ['lang'];
 
     protected $selector;
     protected $type;
@@ -138,12 +138,15 @@ class FunctionSelector extends Selector
 
         $xpath->addCondition(sprintf(
             "(%s %s %s) and (((%s - %s) mod %s) = 0)",
-            $position, $compare, $b,
-            $position, $b, abs($a)
+            $position,
+            $compare,
+            $b,
+            $position,
+            $b,
+            abs($a)
         ));
 
         return $xpath;
-
     }
 
     /**

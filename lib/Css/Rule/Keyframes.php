@@ -11,10 +11,9 @@ use ju1ius\Css\Value\CssString;
  **/
 class Keyframes extends Rule
 {
-    private
-        $rule_list,
-        $name,
-        $vendor_prefix = '';
+    private $rule_list;
+    private $name;
+    private $vendor_prefix = '';
 
     public function __construct(CssString $name, RuleList $rule_list = null)
     {
@@ -84,5 +83,4 @@ class Keyframes extends Rule
     {
         $this->rule_list = clone $this->rule_list;
     }
-
 }

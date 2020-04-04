@@ -167,7 +167,9 @@ class Loader
         $len = strlen($input);
         $numlines = substr_count($input, "\n") + 1;
         $avg_line_length = round($len / $numlines);
-        if ($avg_line_length < self::MAX_AVG_LINE_LENGTH) return $input;
+        if ($avg_line_length < self::MAX_AVG_LINE_LENGTH) {
+            return $input;
+        }
 
         // quick & dirty tokenizer:
         // finds position of all '}' not inside a string literal
@@ -183,7 +185,7 @@ class Loader
                     preg_match('/\G' . $patterns['badstring'] . '/iu', $input, $matches, 0, $pos);
                     $pos += strlen($matches[0]);
                 }
-            } else if ('}' === $chr) {
+            } elseif ('}' === $chr) {
                 $pos++;
                 $tokens[] = $pos;
                 $pos++;

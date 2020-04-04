@@ -7,9 +7,8 @@ namespace ju1ius\Css\Value;
  */
 class Ratio extends PrimitiveValue
 {
-    private
-        $numerator,
-        $denominator;
+    private $numerator;
+    private $denominator;
 
     /**
      * @param number|CssString $numerator

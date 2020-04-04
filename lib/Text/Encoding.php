@@ -28,11 +28,10 @@ class Encoding
 /x
 EOS;
 
-    private static
-        $DEFAULT_ENCODING,
-        $ENCODINGS_MAP,
-        $ASCII_COMPATIBLE_ENCODINGS,
-        $IDENTITY_CACHE;
+    private static $DEFAULT_ENCODING;
+    private static $ENCODINGS_MAP;
+    private static $ASCII_COMPATIBLE_ENCODINGS;
+    private static $IDENTITY_CACHE;
 
     /**
      * A global pointer to the default charset used for String manipulations.
@@ -48,7 +47,7 @@ EOS;
         if (!self::$DEFAULT_ENCODING) {
             if (JU1IUS_HAS_MBSTRING) {
                 self::$DEFAULT_ENCODING = mb_internal_encoding();
-            } else if (JU1IUS_HAS_ICONV) {
+            } elseif (JU1IUS_HAS_ICONV) {
                 self::$DEFAULT_ENCODING = iconv_get_encoding('internal_encoding');
             }
         }
@@ -239,7 +238,7 @@ EOS;
      */
     public static function toByteString($string)
     {
-        return implode(' ', array_map(function($byte) {
+        return implode(' ', array_map(function ($byte) {
             return sprintf('0x%02x', $byte);
         }, unpack('C*', $string)));
     }

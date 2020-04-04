@@ -206,12 +206,12 @@ class Expression
      *
      * @return string
      */
-    static public function xpathLiteral($s)
+    public static function xpathLiteral($s)
     {
         if ($s instanceof ElementSelector) {
             // This is probably a symbol that looks like an expression...
             $s = $s->getCssText();
-        } else if ($s instanceof Value\CssString) {
+        } elseif ($s instanceof Value\CssString) {
             $s = $s->getString();
         } else {
             $s = (string)$s;
@@ -242,4 +242,3 @@ class Expression
         return sprintf('concat(%s)', implode($parts, ', '));
     }
 }
-

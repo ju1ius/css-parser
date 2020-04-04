@@ -10,9 +10,8 @@ use ju1ius\Css\Serializable;
  */
 class Expression implements Serializable
 {
-    private
-        $media_feature,
-        $value;
+    private $media_feature;
+    private $value;
 
     public function __construct($media_feature, $value = null)
     {

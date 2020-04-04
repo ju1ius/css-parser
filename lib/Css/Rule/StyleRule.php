@@ -72,7 +72,7 @@ class StyleRule extends Rule
      * @return ju1ius\Css\StyleRule The merged ju1ius\Css\StyleRule
      *
      **/
-    public static function merge(Array $rules)
+    public static function merge(array $rules)
     {
         if (1 === count($rules)) {
             if (!$rules[0] instanceof StyleRule) {
@@ -107,7 +107,7 @@ class StyleRule extends Rule
                         if ($specificity >= $oldProp['specificity']) {
                             $override = true;
                         }
-                    } else if ($isImportant) {
+                    } elseif ($isImportant) {
                         $override = true;
                     }
                 } else {

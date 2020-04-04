@@ -45,14 +45,13 @@ class StyleRuleIterator implements Iterator
             } else {
                 $rules[] = $object;
             }
-        } else if (method_exists($object, 'getRuleList')) {
+        } elseif (method_exists($object, 'getRuleList')) {
             foreach ($object->getRuleList()->getRules() as $rule) {
                 $rules = array_merge(
                     $rules,
                     self::getStyleRulesForObject($rule, $filter)
                 );
             }
-
         }
 
         return $rules;

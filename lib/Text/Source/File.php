@@ -2,14 +2,12 @@
 
 namespace ju1ius\Text\Source;
 
-
 /**
  * A source file
  */
 class File extends Bytes
 {
-    protected
-        $url;
+    protected $url;
 
     /**
      * @param Bytes $url

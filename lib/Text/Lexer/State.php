@@ -2,7 +2,6 @@
 
 namespace ju1ius\Text\Lexer;
 
-
 class State
 {
     const INITIAL = 0x0;
@@ -81,5 +80,4 @@ class State
     {
         $this->state &= ~$state;
     }
-
 }

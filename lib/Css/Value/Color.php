@@ -6,11 +6,10 @@ use ju1ius\Css\Util;
 
 class Color extends PrimitiveValue
 {
-    private
-        $channels = [
+    private $channels = [
         'r' => 0, 'g' => 0, 'b' => 0,
-    ],
-        $mode;
+    ];
+    private $mode;
 
     /**
      * @param mixed $color Can be an hex color string, an x11 color name,
@@ -23,13 +22,13 @@ class Color extends PrimitiveValue
         if (is_array($color)) {
             if (isset($color['r'], $color['g'], $color['b'])) {
                 $this->fromRgb($color);
-            } else if (isset($color['h'], $color['s'], $color['l'])) {
+            } elseif (isset($color['h'], $color['s'], $color['l'])) {
                 $this->fromHsl($color);
             }
-        } else if (is_string($color)) {
+        } elseif (is_string($color)) {
             if ($rgb = Util\Color::x11ToRgb($color)) {
                 $this->fromRgb($rgb);
-            } else if ($rgb = Util\Color::hexToRgb($color)) {
+            } elseif ($rgb = Util\Color::hexToRgb($color)) {
                 $this->fromRgb($rgb);
             }
         }
@@ -40,7 +39,7 @@ class Color extends PrimitiveValue
         return $this->mode;
     }
 
-    public function fromRgb(Array $rgb)
+    public function fromRgb(array $rgb)
     {
         $mode = 'rgb';
         foreach ($rgb as $channel => $value) {
@@ -59,7 +58,7 @@ class Color extends PrimitiveValue
         return $this;
     }
 
-    public function fromHsl(Array $hsl)
+    public function fromHsl(array $hsl)
     {
         $rgb = Util\Color::hslToRgb(
             (string)$hsl['h'],
@@ -163,7 +162,7 @@ class Color extends PrimitiveValue
                 $channels['g']->getValue(),
                 $channels['b']->getValue()
             );
-        } else if ($this->mode == 'hsl') {
+        } elseif ($this->mode == 'hsl') {
             return Util\Color::hslToX11(
                 $channels['h']->getValue(),
                 $channels['s']->getValue(),
@@ -184,7 +183,7 @@ class Color extends PrimitiveValue
                 $channels['g']->getValue(),
                 $channels['b']->getValue()
             );
-        } else if ($this->mode === 'hsl') {
+        } elseif ($this->mode === 'hsl') {
             return Util\Color::hslToX11(
                 $channels['h']->getValue(),
                 $channels['s']->getValue(),

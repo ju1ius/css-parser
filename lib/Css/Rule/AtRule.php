@@ -11,10 +11,9 @@ use ju1ius\Css\StyleDeclaration;
  **/
 class AtRule extends Rule
 {
-    protected
-        $name,
-        $style_declaration,
-        $vendor_prefix;
+    protected $name;
+    protected $style_declaration;
+    protected $vendor_prefix;
 
     public function __construct($name, StyleDeclaration $style_declaration = null)
     {

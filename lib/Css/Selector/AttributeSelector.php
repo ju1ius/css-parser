@@ -64,7 +64,8 @@ class AttributeSelector extends Selector
             case '=':
                 $xpath->addCondition(sprintf(
                     '%s = %s',
-                    $attrib, XPath\Expression::xpathLiteral($value)
+                    $attrib,
+                    XPath\Expression::xpathLiteral($value)
                 ));
                 break;
 
@@ -73,12 +74,15 @@ class AttributeSelector extends Selector
                 if ($value) {
                     $xpath->addCondition(sprintf(
                         'not(%s) or %s != %s',
-                        $attrib, $attrib, XPath\Expression::xpathLiteral($value)
+                        $attrib,
+                        $attrib,
+                        XPath\Expression::xpathLiteral($value)
                     ));
                 } else {
                     $xpath->addCondition(sprintf(
                         '%s != %s',
-                        $attrib, XPath\Expression::xpathLiteral($value)
+                        $attrib,
+                        XPath\Expression::xpathLiteral($value)
                     ));
                 }
                 break;
@@ -86,7 +90,8 @@ class AttributeSelector extends Selector
             case '^=':
                 $xpath->addCondition(sprintf(
                     'starts-with(%s, %s)',
-                    $attrib, XPath\Expression::xpathLiteral($value)
+                    $attrib,
+                    XPath\Expression::xpathLiteral($value)
                 ));
                 break;
 
@@ -94,7 +99,8 @@ class AttributeSelector extends Selector
                 // FIXME: case sensitive?
                 $xpath->addCondition(sprintf(
                     'contains(%s, %s)',
-                    $attrib, XPath\Expression::xpathLiteral($value)
+                    $attrib,
+                    XPath\Expression::xpathLiteral($value)
                 ));
                 break;
 
@@ -103,7 +109,11 @@ class AttributeSelector extends Selector
                 $value = XPath\Expression::xpathLiteral($value);
                 $xpath->addCondition(sprintf(
                     'substring(%s, string-length(%s) - string-length(%s) + 1, string-length(%s)) = %s',
-                    $attrib, $attrib, $value, $value, $value
+                    $attrib,
+                    $attrib,
+                    $value,
+                    $value,
+                    $value
                 ));
                 break;
 
@@ -112,14 +122,18 @@ class AttributeSelector extends Selector
                 $value = XPath\Expression::xpathLiteral($value);
                 $xpath->addCondition(sprintf(
                     '%s = %s or starts-with(%s, concat(%s, "-"))',
-                    $attrib, $value, $attrib, $value
+                    $attrib,
+                    $value,
+                    $attrib,
+                    $value
                 ));
                 break;
 
             case '~=':
                 $xpath->addCondition(sprintf(
                     "contains(concat(' ', normalize-space(%s), ' '), concat(' ', %s, ' '))",
-                    $attrib, XPath\Expression::xpathLiteral($value)
+                    $attrib,
+                    XPath\Expression::xpathLiteral($value)
                 ));
                 break;
 

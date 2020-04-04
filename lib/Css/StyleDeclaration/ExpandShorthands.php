@@ -62,7 +62,9 @@ class ExpandShorthands
     public function expandFontShorthands()
     {/*{{{*/
         $aProperties = $this->styleDeclaration->getProperties('font');
-        if (empty($aProperties)) return;
+        if (empty($aProperties)) {
+            return;
+        }
         foreach ($aProperties as $iPos => $oProperty) {
             // reset properties to 'normal' per http://www.w3.org/TR/CSS21/fonts.html#font-shorthand
             $aFontProperties = [
@@ -81,21 +83,21 @@ class ExpandShorthands
                             $aFontProperties[$sProperty] = $mValue;
                         }
                     }
-                } else if (in_array($mValue, ['italic', 'oblique'])) {
+                } elseif (in_array($mValue, ['italic', 'oblique'])) {
                     $aFontProperties['font-style'] = $mValue;
-                } else if ($mValue == 'small-caps') {
+                } elseif ($mValue == 'small-caps') {
                     $aFontProperties['font-variant'] = $mValue;
-                } else if (
+                } elseif (
                     in_array($mValue, ['bold', 'bolder', 'lighter'])
                     || ($mValue instanceof Value\Dimension
                         && in_array($mValue->getValue(), range(100, 900, 100)))
                 ) {
                     $aFontProperties['font-weight'] = $mValue;
-                } else if ($mValue instanceof PropertyValueList && $mValue->getSeparator() === '/') {
+                } elseif ($mValue instanceof PropertyValueList && $mValue->getSeparator() === '/') {
                     list($oSize, $oHeight) = $mValue->getItems();
                     $aFontProperties['font-size'] = $oSize;
                     $aFontProperties['line-height'] = $oHeight;
-                } else if (
+                } elseif (
                     ($mValue instanceof Value\Dimension && $mValue->getUnit() !== null)
                     || in_array($mValue, ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large', 'larger', 'smaller'])
                 ) {
@@ -126,19 +128,21 @@ class ExpandShorthands
         ];
         foreach ($aBorderProperties as $sBorderProperty) {
             $aProperties = $this->styleDeclaration->getProperties($sBorderProperty);
-            if (empty($aProperties)) continue;
+            if (empty($aProperties)) {
+                continue;
+            }
             foreach ($aProperties as $iPos => $oProperty) {
                 $aValues = $oProperty->getValueList()->getItems();
                 foreach ($aValues as $mValue) {
                     $mValue = Cloner::clone($mValue);
                     if ($mValue instanceof Value\Dimension) {
                         $sNewPropertyName = $sBorderProperty . "-width";
-                    } else if ($mValue instanceof Value\Color) {
+                    } elseif ($mValue instanceof Value\Color) {
                         $sNewPropertyName = $sBorderProperty . "-color";
                     } else {
                         if (in_array($mValue, $aBorderSizes)) {
                             $sNewPropertyName = $sBorderProperty . "-width";
-                        } else/* if (in_array($mValue, $aBorderStyles))*/ {
+                        } else /* if (in_array($mValue, $aBorderStyles))*/ {
                             $sNewPropertyName = $sBorderProperty . "-style";
                         }
                     }
@@ -240,7 +244,9 @@ class ExpandShorthands
             if (count($aValues) === 1 && $aValues[0] === 'inherit') {
                 foreach ($aListProperties as $sProperty => $mValue) {
                     $this->_addPropertyExpansion($iPos, $oProperty, $sProperty, 'inherit');
-                    if ($cleanup) $this->_cleanupProperty($sNewPropertyName);
+                    if ($cleanup) {
+                        $this->_cleanupProperty($sNewPropertyName);
+                    }
                 }
                 $this->styleDeclaration->remove($iPos);
                 return;
@@ -249,9 +255,9 @@ class ExpandShorthands
                 $mValue = Cloner::clone($mValue);
                 if ($mValue instanceof Value\Url) {
                     $aListProperties['list-style-image'] = $mValue;
-                } else if (in_array($mValue, $aListStyleTypes)) {
+                } elseif (in_array($mValue, $aListStyleTypes)) {
                     $aListProperties['list-style-type'] = $mValue;
-                } else if (in_array($mValue, $aListStylePositions)) {
+                } elseif (in_array($mValue, $aListStylePositions)) {
                     $aListProperties['list-style-position'] = $mValue;
                 }
             }
@@ -323,7 +329,7 @@ class ExpandShorthands
             // if we have multiple layers, get the values for this layer
             if ($aValues instanceof PropertyValueList) {
                 $aValues = $aValues->getItems();
-            } else if (!is_array($aValues)) {
+            } elseif (!is_array($aValues)) {
                 $aValues = [$aValues];
             }
 
@@ -331,11 +337,10 @@ class ExpandShorthands
             $iNumBgPos = 0;
             $iNumBoxValues = 0;
             foreach ($aValues as $mValue) {
-
                 $mValue = Cloner::clone($mValue);
                 if ($mValue instanceof Value\Url || $mValue instanceof Value\CssFunction || $mValue == "none") {
                     $aBgProperties['background-image'] = $mValue;
-                } else if ($mValue instanceof PropertyValueList) {
+                } elseif ($mValue instanceof PropertyValueList) {
                     // bg-pos bg-pos? / bg-size bg-size?
                     $oBgPosValues = $mValue->getFirst();
                     if ($oBgPosValues instanceof PropertyValueList) {
@@ -366,8 +371,7 @@ class ExpandShorthands
                         $bgsize_valuelist->replace(1, $aBgSizeValues[1]);
                     }
                     $aBgProperties['background-size'] = $bgsize_valuelist;
-
-                } else if (in_array($mValue, ['left', 'center', 'right', 'top', 'bottom'])
+                } elseif (in_array($mValue, ['left', 'center', 'right', 'top', 'bottom'])
                     || $mValue instanceof Value\Dimension
                 ) {
                     //if ($mValue instanceof Value\Dimension) $mValue = clone $mValue;
@@ -380,11 +384,11 @@ class ExpandShorthands
                         $aBgProperties['background-position']->replace(1, $mValue);
                     }
                     $iNumBgPos++;
-                } else if (in_array($mValue, ['repeat', 'no-repeat', 'repeat-x', 'repeat-y', 'space', 'round'])) {
+                } elseif (in_array($mValue, ['repeat', 'no-repeat', 'repeat-x', 'repeat-y', 'space', 'round'])) {
                     $aBgProperties['background-repeat'] = $mValue;
-                } else if (in_array($mValue, ['scroll', 'fixed', 'local'])) {
+                } elseif (in_array($mValue, ['scroll', 'fixed', 'local'])) {
                     $aBgProperties['background-attachment'] = $mValue;
-                } else if (in_array($mValue, ['border-box', 'padding-box', 'content-box'])) {
+                } elseif (in_array($mValue, ['border-box', 'padding-box', 'content-box'])) {
                     if ($iNumBoxValues === 0) {
                         $aBgProperties['background-origin'] = $mValue;
                         $aBgProperties['background-clip'] = $mValue;
@@ -392,11 +396,13 @@ class ExpandShorthands
                         $aBgProperties['background-clip'] = $mValue;
                     }
                     $iNumBoxValues++;
-                } else if ($mValue instanceof Value\Color) {
+                } elseif ($mValue instanceof Value\Color) {
                     if ($iLayerIndex == $iNumLayers - 1) {
                         $color = $mValue;
                     } else {
-                        if (empty($aBgProperties)) $aBgProperties['background-image'] = "none";
+                        if (empty($aBgProperties)) {
+                            $aBgProperties['background-image'] = "none";
+                        }
                     }
                 }
             }
@@ -422,5 +428,4 @@ class ExpandShorthands
         }
         $this->styleDeclaration->remove($oProperty);
     }/*}}}*/
-
 }

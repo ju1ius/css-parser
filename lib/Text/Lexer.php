@@ -6,7 +6,6 @@ use ju1ius\Text\Lexer\TokenInterface;
 use ReflectionClass;
 use SplFixedArray;
 
-
 abstract class Lexer implements LexerInterface
 {
     const T_EOL = -2;
@@ -103,7 +102,9 @@ abstract class Lexer implements LexerInterface
         $this->state = new Lexer\State();
         $this->unicode = $unicode;
         $this->getTokenNames();
-        if ($source) $this->setSource($source);
+        if ($source) {
+            $this->setSource($source);
+        }
     }/*}}}*/
 
     abstract public function nextToken();
@@ -193,7 +194,10 @@ abstract class Lexer implements LexerInterface
 
         return sprintf(
             "%s (%s) on line %s, column %s.",
-            $name, $token, $token->line, $token->column
+            $name,
+            $token,
+            $token->line,
+            $token->column
         );
     }/*}}}*/
 
@@ -304,5 +308,4 @@ abstract class Lexer implements LexerInterface
         mb_ereg_search_setpos($charpos);
         return mb_ereg_search_regs();
     }/*}}}*/
-
 }

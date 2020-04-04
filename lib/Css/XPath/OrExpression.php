@@ -42,4 +42,3 @@ class OrExpression extends Expression
         return implode($tmp, ' | ');
     }
 }
-

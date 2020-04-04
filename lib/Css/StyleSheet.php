@@ -7,11 +7,10 @@ namespace ju1ius\Css;
  **/
 class StyleSheet implements Serializable
 {
-    private
-        $href,
-        $media_list,
-        $rule_list,
-        $charset;
+    private $href;
+    private $media_list;
+    private $rule_list;
+    private $charset;
 
     public function __construct(RuleList $rule_list = null, $charset = "utf-8")
     {
@@ -91,5 +90,4 @@ class StyleSheet implements Serializable
         $this->media_list = clone $this->media_list;
         $this->rule_list = clone $this->rule_list;
     }
-
 }

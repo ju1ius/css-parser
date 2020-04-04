@@ -166,5 +166,4 @@ class Charset extends Encoding
     {
         return self::detect(file_get_contents($filename));
     }
-
 }

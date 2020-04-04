@@ -9,8 +9,7 @@ use Iterator;
  */
 class SelectorIterator implements Iterator
 {
-    private
-        $selectors = [];
+    private $selectors = [];
 
     /**
      * @param Serializable $object A css serializable object
@@ -40,7 +39,7 @@ class SelectorIterator implements Iterator
             foreach ($object->getSelectorList()->getItems() as $selector) {
                 $selectors[] = $selector;
             }
-        } else if (method_exists($object, 'getRuleList')) {
+        } elseif (method_exists($object, 'getRuleList')) {
             foreach ($object->getRuleList()->getRules() as $rule) {
                 $selectors = array_merge(
                     $selectors,
@@ -52,7 +51,7 @@ class SelectorIterator implements Iterator
         if ($type_filter) {
             return array_filter(
                 $selectors,
-                function($item) use ($type_filter) {
+                function ($item) use ($type_filter) {
                     return $item instanceof $type_filter;
                 }
             );
@@ -89,5 +88,4 @@ class SelectorIterator implements Iterator
 
         return $key !== null && $key !== false;
     }
-
 }

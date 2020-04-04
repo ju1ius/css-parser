@@ -10,14 +10,13 @@ use ju1ius\Css\XPath;
  **/
 class SelectorList extends CssList implements Serializable, XPathable
 {
-
     public function __construct($selectors = [])
     {
         if ($selectors instanceof SelectorList) {
             $this->items = $selectors->getItems();
-        } else if ($selectors instanceof Selector) {
+        } elseif ($selectors instanceof Selector) {
             $this->items = [$selectors];
-        } else if (is_array($selectors)) {
+        } elseif (is_array($selectors)) {
             $this->items = $selectors;
         } else {
             throw new InvalidArgumentException();
@@ -26,7 +25,7 @@ class SelectorList extends CssList implements Serializable, XPathable
 
     public function getCssText($options = [])
     {
-        return implode(', ', array_map(function($selector) use ($options) {
+        return implode(', ', array_map(function ($selector) use ($options) {
             return $selector->getCssText($options);
         }, $this->items));
     }

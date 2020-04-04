@@ -10,9 +10,8 @@ use InvalidArgumentException;
  **/
 class Dimension extends PrimitiveValue
 {
-    private
-        $value,
-        $unit;
+    private $value;
+    private $unit;
 
     public static $VALID_UNITS = [];
 

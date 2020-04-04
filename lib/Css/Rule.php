@@ -38,5 +38,4 @@ abstract class Rule implements Serializable
     {
         return $this->getCssText();
     }
-
 }

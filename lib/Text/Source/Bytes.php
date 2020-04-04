@@ -5,19 +5,17 @@ namespace ju1ius\Text\Source;
 use ju1ius\Text\SourceInterface;
 use SplFixedArray;
 
-
 /**
  * A source string
  */
 class Bytes implements SourceInterface
 {
-    private
-        $encoding,
-        $linesep,
-        $length,
-        $lines,
-        $numlines,
-        $line_start_offsets;
+    private $encoding;
+    private $linesep;
+    private $length;
+    private $lines;
+    private $numlines;
+    private $line_start_offsets;
 
     /**
      * @param Bytes $contents

@@ -171,7 +171,6 @@ class Lexer extends BaseLexer
     public static function getPatterns()
     {/*{{{*/
         if (null === self::$regex) {
-
             self::$regex = [
                 'ws' => '[ \t\r\n\f]',
                 'nl' => '\n|\r\n|\r|\f',
@@ -246,7 +245,6 @@ class Lexer extends BaseLexer
                 $this->consumeCharacters();
             }
             while ($this->lookahead !== null) {
-
                 $charpos = $this->charpos;
                 $bytepos = $this->bytepos;
 
@@ -461,7 +459,7 @@ class Lexer extends BaseLexer
             $this->consumeString($matches[0]);
 
             return $token;
-        } else if (preg_match('@\G(?:/\*[^*]*\*+(?:[^/*][^*]*\*+)*)|(?:/\*[^*]*(\*+[^/*][^*]*)*)@', $this->text, $matches, 0, $this->bytepos)) {
+        } elseif (preg_match('@\G(?:/\*[^*]*\*+(?:[^/*][^*]*\*+)*)|(?:/\*[^*]*(\*+[^/*][^*]*)*)@', $this->text, $matches, 0, $this->bytepos)) {
             // Multiline comment
             $line = $this->lineno;
             $charpos = $this->charpos;
@@ -497,7 +495,9 @@ class Lexer extends BaseLexer
             } else {
                 throw new LogicException(sprintf(
                     'Unmatched ident for lookahead "%s" at position %s with pattern "%s"',
-                    $this->lookahead, $this->charpos, self::$regex['ident']
+                    $this->lookahead,
+                    $this->charpos,
+                    self::$regex['ident']
                 ));
             }
         }
@@ -519,7 +519,7 @@ class Lexer extends BaseLexer
                     } else {
                         $type = self::T_BADURI;
                     }
-                } else if (preg_match(self::$regex['M-url'], $this->text, $matches, 0, $this->bytepos)) {
+                } elseif (preg_match(self::$regex['M-url'], $this->text, $matches, 0, $this->bytepos)) {
                     $this->consumeString($matches[0]);
                     $uri = $matches[0];
                     $type = self::T_URI;
@@ -567,7 +567,7 @@ class Lexer extends BaseLexer
         $start_char = $this->lookahead;
         if ($start_char === '"') {
             $pattern_id = '1';
-        } else if ($start_char === "'") {
+        } elseif ($start_char === "'") {
             $pattern_id = '2';
         }
         if (preg_match('/\G' . self::$regex['string' . $pattern_id] . '/iu', $this->text, $matches, 0, $this->bytepos)) {
@@ -575,7 +575,7 @@ class Lexer extends BaseLexer
             $value = $matches[1];
 
             return new Token(self::T_STRING, $value, $this->lineno, $charpos);
-        } else if (preg_match('/\G' . self::$regex['badstring' . $pattern_id] . '/iu', $this->text, $matches, 0, $this->bytepos)) {
+        } elseif (preg_match('/\G' . self::$regex['badstring' . $pattern_id] . '/iu', $this->text, $matches, 0, $this->bytepos)) {
             $this->consumeString($matches[0]);
             if (preg_match('/\\\\$/u', $matches[1])) {
                 return $this->handleMultilineString($start_char, $matches[1], $this->lineno, $charpos);
@@ -606,9 +606,10 @@ class Lexer extends BaseLexer
                 return new Token(
                     self::T_STRING,
                     $start_str,
-                    $line, $charpos
+                    $line,
+                    $charpos
                 );
-            } else if (preg_match('/\\\\$/u', $this->text)) {
+            } elseif (preg_match('/\\\\$/u', $this->text)) {
                 // the string continues on the next'line
                 $start_str .= preg_replace('/\\\\$/u', '', $this->text);
             } else {
@@ -639,7 +640,7 @@ class Lexer extends BaseLexer
             $this->consumeCharacters();
 
             return new Token(self::T_PERCENTAGE, $value, $this->lineno, $charpos);
-        } else if (!ctype_alpha($this->lookahead)) {
+        } elseif (!ctype_alpha($this->lookahead)) {
             return new Token(self::T_NUMBER, $value, $this->lineno, $charpos);
         }
 
@@ -650,7 +651,7 @@ class Lexer extends BaseLexer
             $result = ['value' => $value, 'unit' => $unit];
 
             return new Token(self::$units[$unit], $result, $this->lineno, $charpos);
-        } else if (preg_match(self::$regex['M-ident'], $this->text, $matches, 0, $this->bytepos)) {
+        } elseif (preg_match(self::$regex['M-ident'], $this->text, $matches, 0, $this->bytepos)) {
             $ident = $this->cleanupIdent($matches[0], true);
             $this->consumeString($matches[0]);
             $result = ['value' => $value, 'unit' => $ident];
@@ -702,7 +703,7 @@ class Lexer extends BaseLexer
     {/*{{{*/
         $ident = preg_replace_callback(
             '/\\\\(?:([0-9a-f]{1,5})\s?|([0-9a-f]{6})|([g-z]))/iu',
-            function($matches) {
+            function ($matches) {
                 if (isset($matches[3])) {
                     return $matches[3];
                 }
@@ -741,5 +742,4 @@ class Lexer extends BaseLexer
 
         return $pattern;
     }/*}}}*/
-
 }

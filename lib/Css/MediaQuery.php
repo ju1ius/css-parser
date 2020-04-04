@@ -8,13 +8,11 @@ namespace ju1ius\Css;
  **/
 class MediaQuery implements Serializable
 {
-    private
-        $restrictor,
-        $media_type,
-        $expressions = [];
+    private $restrictor;
+    private $media_type;
+    private $expressions = [];
 
-    private static
-        $RESTRICTORS = [
+    private static $RESTRICTORS = [
         'not', 'only', '',
     ];
 
@@ -81,7 +79,9 @@ class MediaQuery implements Serializable
         $idx = array_search($expr, $this->expressions);
         if (false !== $idx) {
             unset($this->expressions[$idx]);
-            if ($reset_keys) $this->expressions = array_values($this->expressions);
+            if ($reset_keys) {
+                $this->expressions = array_values($this->expressions);
+            }
         }
     }
 
@@ -93,7 +93,9 @@ class MediaQuery implements Serializable
         $expressions = [];
         foreach ($this->expressions as $expr) {
             $expr_text = $expr->getCssText();
-            if ($expr_text) $expressions[] = $expr_text;
+            if ($expr_text) {
+                $expressions[] = $expr_text;
+            }
         }
         $expressions = empty($expressions) ? '' : implode(' and ', $expressions);
 
@@ -105,5 +107,4 @@ class MediaQuery implements Serializable
     {
         return $this->getCssText();
     }
-
 }

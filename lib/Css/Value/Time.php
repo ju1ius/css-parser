@@ -6,7 +6,7 @@ use InvalidArgumentException;
 
 class Time extends Dimension
 {
-    static $UNITS = [
+    public static $UNITS = [
         PrimitiveValue::UNIT_MS,
         PrimitiveValue::UNIT_S,
     ];
@@ -20,5 +20,4 @@ class Time extends Dimension
         }
         parent::__construct($value, $unit);
     }
-
 }

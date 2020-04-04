@@ -73,5 +73,4 @@ class Media extends Rule
         $this->media_list = clone $this->media_list;
         $this->rule_list = clone $this->rule_list;
     }
-
 }

@@ -24,7 +24,7 @@ class Keyframe extends Rule
         return $this->selectors;
     }
 
-    public function setSelectors(Array $selectors)
+    public function setSelectors(array $selectors)
     {
         $this->selectors = $selectors;
     }
@@ -52,7 +52,7 @@ class Keyframe extends Rule
             $options['indent_level']++;
             $nl = "\n";
         }
-        $selectorsText = implode(',', array_map(function($selector) {
+        $selectorsText = implode(',', array_map(function ($selector) {
             return $selector->getCssText();
         }, $this->selectors));
         return $selectorsText . '{' . $nl
