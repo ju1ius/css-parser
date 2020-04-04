@@ -7,3 +7,4 @@
 /doc
 /benchmark
 /tmp
+.php_cs.cache
