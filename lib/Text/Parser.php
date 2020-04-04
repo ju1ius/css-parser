@@ -91,7 +91,7 @@ abstract class Parser implements ParserInterface
     }
 
     protected function _parseException($msg, TokenInterface $token)
-    {/*{{{*/
+    {
         if ($this->debug) {
             $source = $this->lexer->getSource();
             $file = $source instanceof Source\File ? $source->getUrl() : 'internal_string';
@@ -113,11 +113,11 @@ abstract class Parser implements ParserInterface
             }
         }
         throw new ParseException($msg);
-    }/*}}}*/
+    }
 
     protected function _unexpectedToken(TokenInterface $actual, $expected)
-    {/*{{{*/
-        $msg = null;
+    {
+        $msg = '';
 
         if ($this->debug) {
             $source = $this->lexer->getSource();
@@ -156,5 +156,5 @@ abstract class Parser implements ParserInterface
         }
 
         throw new UnexpectedTokenException($msg);
-    }/*}}}*/
+    }
 }

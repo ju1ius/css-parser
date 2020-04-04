@@ -18,10 +18,10 @@ class Parser extends LLk
     public $errors = [];
 
     public function __construct(Lexer $lexer, $strict = true)
-    {/*{{{*/
+    {
         $this->strict = $strict;
         parent::__construct($lexer, 2);
-    }/*}}}*/
+    }
 
     /**
      * Toggles strict parsing mode.
@@ -32,17 +32,17 @@ class Parser extends LLk
      * @param boolean $strict
      **/
     public function setStrict($strict = true)
-    {/*{{{*/
+    {
         $this->strict = (bool)$strict;
-    }/*}}}*/
+    }
 
     /**
      * @see parseStyleSheet
      **/
     public function parse()
-    {/*{{{*/
+    {
         return $this->parseStyleSheet();
-    }/*}}}*/
+    }
 
     /**
      * Parses a Css stylesheet
@@ -50,7 +50,7 @@ class Parser extends LLk
      * @return StyleSheet
      **/
     public function parseStyleSheet()
-    {/*{{{*/
+    {
         $this->reset();
         $source = $this->lexer->getSource();
         $stylesheet = $this->_stylesheet();
@@ -59,7 +59,7 @@ class Parser extends LLk
         }
 
         return $stylesheet;
-    }/*}}}*/
+    }
 
     /**
      * Parses a single selector or a list of selectors
@@ -67,14 +67,14 @@ class Parser extends LLk
      * @return SelectorList
      **/
     public function parseSelector()
-    {/*{{{*/
+    {
         $this->reset();
         $selector_list = $this->_selectors_group();
         //if (count($selector_list) === 1) {
         //return $selector_list->getFirst();
         //}
         return $selector_list;
-    }/*}}}*/
+    }
 
     /**
      * Parses a Css style declaration, ie an Html style attribute.
@@ -82,11 +82,11 @@ class Parser extends LLk
      * @return StyleDeclaration
      **/
     public function parseStyleDeclaration()
-    {/*{{{*/
+    {
         $this->reset();
 
         return $this->_parseDeclarations(false, false);
-    }/*}}}*/
+    }
 
     /**
      * Parses a Css media query list, ie an Html media attribute.
@@ -94,11 +94,11 @@ class Parser extends LLk
      * @return MediaQueryList
      **/
     public function parseMediaQuery()
-    {/*{{{*/
+    {
         $this->reset();
 
         return $this->_media_query_list();
-    }/*}}}*/
+    }
 
 
     /*****************************************************************
@@ -115,7 +115,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _stylesheet()
-    {/*{{{*/
+    {
         $stylesheet = new StyleSheet(null, $this->lexer->getEncoding());
         $rule_list = $stylesheet->getRuleList();
 
@@ -249,10 +249,10 @@ class Parser extends LLk
         }
 
         return $stylesheet;
-    }/*}}}*/
+    }
 
     protected function _charset()
-    {/*{{{*/
+    {
         if ($this->LT()->type === Lexer::T_CHARSET_SYM) {
             $this->consume();
             $this->_ws();
@@ -264,7 +264,7 @@ class Parser extends LLk
 
             return new Rule\Charset(new Value\CssString($value));
         }
-    }/*}}}*/
+    }
 
     /**
      * import
@@ -273,7 +273,7 @@ class Parser extends LLk
      *  ;
      **/
     protected function _import()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_IMPORT_SYM);
         $this->_ws();
         $this->ensure([Lexer::T_STRING, Lexer::T_URI]);
@@ -285,7 +285,7 @@ class Parser extends LLk
         $this->match(Lexer::T_SEMICOLON);
 
         return new Rule\Import($url, $media_query_list);
-    }/*}}}*/
+    }
 
     /**
      * namespace
@@ -296,7 +296,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _namespace()
-    {/*{{{*/
+    {
         $prefix = null;
 
         $this->match(Lexer::T_NAMESPACE_SYM);
@@ -316,7 +316,7 @@ class Parser extends LLk
             new Value\Url(new Value\CssString($uri)),
             $prefix
         );
-    }/*}}}*/
+    }
 
     /**
      * font_face
@@ -324,12 +324,12 @@ class Parser extends LLk
      *   ;
      */
     protected function _font_face()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_FONT_FACE_SYM);
         $style_declaration = $this->_parseDeclarations(true, false);
 
         return new Rule\FontFace($style_declaration);
-    }/*}}}*/
+    }
 
     /**
      * ruleset
@@ -338,7 +338,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _ruleset()
-    {/*{{{*/
+    {
         $style_declaration = null;
         $selector_list = null;
         /**
@@ -368,7 +368,7 @@ class Parser extends LLk
         }
 
         return new Rule\StyleRule($selector_list, $style_declaration);
-    }/*}}}*/
+    }
 
     /**
      * declaration
@@ -377,7 +377,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _declaration()
-    {/*{{{*/
+    {
         $property = $this->_property();
         if (null === $property) {
             return;
@@ -404,7 +404,7 @@ class Parser extends LLk
         }
 
         return $property;
-    }/*}}}*/
+    }
 
     /**
      *  property
@@ -412,7 +412,7 @@ class Parser extends LLk
      *    ;
      **/
     protected function _property()
-    {/*{{{*/
+    {
         $token = $this->LT();
 
         switch ($token->type) {
@@ -430,7 +430,7 @@ class Parser extends LLk
         $this->_ws();
 
         return new Property($name);
-    }/*}}}*/
+    }
 
     /**
      * prio
@@ -438,10 +438,10 @@ class Parser extends LLk
      *   ;
      **/
     protected function _prio()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_IMPORTANT_SYM);
         $this->_ws();
-    }/*}}}*/
+    }
 
     /**
      * expr
@@ -449,7 +449,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _expr()
-    {/*{{{*/
+    {
         $values = [];
         $value = $this->_term();
 
@@ -470,7 +470,7 @@ class Parser extends LLk
         } while (true);
 
         return $values;
-    }/*}}}*/
+    }
 
     /**
      * term
@@ -481,7 +481,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _term()
-    {/*{{{*/
+    {
         $token = $this->LT();
         switch ($token->type) {
 
@@ -587,7 +587,7 @@ class Parser extends LLk
             default:
                 break;
         }
-    }/*}}}*/
+    }
 
     /**
      * hexcolor
@@ -595,7 +595,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _hexcolor()
-    {/*{{{*/
+    {
         $this->ensure(Lexer::T_HASH);
         $hex = $this->LT()->value;
         $this->consume();
@@ -605,7 +605,7 @@ class Parser extends LLk
         }
 
         return new Value\Color($hex);
-    }/*}}}*/
+    }
 
     /**
      * function
@@ -613,7 +613,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _function()
-    {/*{{{*/
+    {
         $this->ensure(Lexer::T_FUNCTION);
         $name = $this->LT()->value;
         $this->consume();
@@ -649,7 +649,7 @@ class Parser extends LLk
         }
 
         return new Value\CssFunction($name, self::reduceValueList($args, [',', ' ']));
-    }/*}}}*/
+    }
 
     /**
      * operator
@@ -657,20 +657,20 @@ class Parser extends LLk
      *   ;
      **/
     protected function _operator()
-    {/*{{{*/
+    {
         $t = $this->LT();
         if ($t->type === Lexer::T_COMMA || $t->type === Lexer::T_SLASH) {
             $this->consume();
             $this->_ws();
             return $t->value;
         }
-    }/*}}}*/
+    }
 
     /**
      * ------- CSS3 Paged Media ------
      * http://www.w3.org/TR/css3-page/
      **/
-    /*{{{*/
+
 
     /**
      * page
@@ -679,7 +679,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _page()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_PAGE_SYM);
         $this->_ws();
 
@@ -706,7 +706,7 @@ class Parser extends LLk
             $results['rule_list'],
             $results['style_declaration']
         );
-    }/*}}}*/
+    }
 
     /**
      * pseudo_page
@@ -714,14 +714,14 @@ class Parser extends LLk
      *   ;
      **/
     protected function _pseudo_page()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_COLON);
         $this->ensure(Lexer::T_IDENT);
         $value = $this->LT()->value;
         $this->consume();
 
         return $value;
-    }/*}}}*/
+    }
 
     /**
      * margin
@@ -729,12 +729,12 @@ class Parser extends LLk
      *   ;
      **/
     protected function _margin()
-    {/*{{{*/
+    {
         $margin_sym = $this->_margin_sym();
         $style_declaration = $this->_parseDeclarations(true, false);
 
         return new Rule\MarginBox($margin_sym, $style_declaration);
-    }/*}}}*/
+    }
 
     /**
      * margin_sym
@@ -745,7 +745,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _margin_sym()
-    {/*{{{*/
+    {
         $this->ensure([
             Lexer::T_TOPLEFTCORNER_SYM,
             Lexer::T_TOPLEFT_SYM,
@@ -768,15 +768,15 @@ class Parser extends LLk
         $this->consume();
 
         return $value;
-    }/*}}}*/
+    }
 
-    /*}}}*/
+
 
     /**
      * ------------- CSS3 Media Queries -------------
      * http://www.w3.org/TR/css3-mediaqueries/#syntax
      **/
-    /*{{{*/
+
 
     /**
      * media
@@ -784,7 +784,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _media()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_MEDIA_SYM);
         $this->_ws();
         $media_query_list = $this->_media_query_list();
@@ -872,7 +872,7 @@ class Parser extends LLk
         $this->match(Lexer::T_RCURLY);
 
         return new Rule\Media($media_query_list, $rule_list);
-    }/*}}}*/
+    }
 
     /**
      * media_query_list
@@ -880,7 +880,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _media_query_list()
-    {/*{{{*/
+    {
         $this->_ws();
         $media_list = new MediaQueryList();
         $t = $this->LT()->type;
@@ -900,7 +900,7 @@ class Parser extends LLk
         }
 
         return $media_list;
-    }/*}}}*/
+    }
 
     /**
      * media_query
@@ -909,7 +909,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _media_query()
-    {/*{{{*/
+    {
         $restrictor = '';
         $media_type = '';
         $expressions = [];
@@ -939,7 +939,7 @@ class Parser extends LLk
         }
 
         return new MediaQuery($restrictor, $media_type, $expressions);
-    }/*}}}*/
+    }
 
     /**
      * media_type
@@ -947,9 +947,9 @@ class Parser extends LLk
      *   ;
      **/
     protected function _media_type()
-    {/*{{{*/
+    {
         return $this->_media_feature();
-    }/*}}}*/
+    }
 
     /*
      * media_feature
@@ -957,13 +957,13 @@ class Parser extends LLk
      *   ;
      */
     protected function _media_feature()
-    {/*{{{*/
+    {
         $this->ensure(Lexer::T_IDENT);
         $value = $this->LT()->value;
         $this->consume();
 
         return $value;
-    }/*}}}*/
+    }
 
     /*
      * media_expression
@@ -971,7 +971,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _media_expression()
-    {/*{{{*/
+    {
         $feature = null;
         $values = null;
 
@@ -990,15 +990,15 @@ class Parser extends LLk
         $this->_ws();
 
         return new MediaQuery\Expression($media_feature, $values);
-    }/*}}}*/
+    }
 
-    /*}}}*/
+
 
     /**
      * ----------- CSS3 Animation ----------
      * http://www.w3.org/TR/css3-animations/
      **/
-    /*{{{*/
+
 
     /**
      * keyframes_rule
@@ -1006,7 +1006,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _keyframes()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_KEYFRAMES_SYM);
         $this->_ws();
 
@@ -1024,7 +1024,7 @@ class Parser extends LLk
         $this->_ws();
 
         return new Rule\Keyframes($name, $rule_list);
-    }/*}}}*/
+    }
 
     /**
      * keyframes_blocks
@@ -1032,7 +1032,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _keyframes_blocks()
-    {/*{{{*/
+    {
         $rule_list = new RuleList();
         while (true) {
             if (!in_array($this->LT()->type, [Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE])) {
@@ -1044,7 +1044,7 @@ class Parser extends LLk
         }
 
         return $rule_list;
-    }/*}}}*/
+    }
 
     /**
      * keyframe_selector
@@ -1053,7 +1053,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _keyframes_selector()
-    {/*{{{*/
+    {
         $selectors = [];
         $selector_tokens = [Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE];
 
@@ -1069,15 +1069,15 @@ class Parser extends LLk
         }
 
         return $selectors;
-    }/*}}}*/
+    }
 
-    /*}}}*/
+
 
     /**
      * ----------- CSS3 Selectors ----------
      *
      **/
-    /*{{{*/
+
 
     /*
      * selectors_group
@@ -1085,7 +1085,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _selectors_group()
-    {/*{{{*/
+    {
         $selectors = [];
         $selectors[] = $this->_selector();
 
@@ -1101,7 +1101,7 @@ class Parser extends LLk
         }
 
         return new SelectorList($selectors);
-    }/*}}}*/
+    }
 
     /*
      * selector
@@ -1109,7 +1109,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _selector()
-    {/*{{{*/
+    {
         $selector = $this->_simple_selector_sequence();
         while (true) {
             switch ($this->LT()->type) {
@@ -1141,7 +1141,7 @@ class Parser extends LLk
         }
 
         return $selector;
-    }/*}}}*/
+    }
 
     /*
      * simple_selector_sequence
@@ -1151,7 +1151,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _simple_selector_sequence()
-    {/*{{{*/
+    {
         $selector = $this->_type_selector();
         $has_hash = false;
 
@@ -1206,7 +1206,7 @@ class Parser extends LLk
         }
 
         return $selector;
-    }/*}}}*/
+    }
 
     /**
      * combinator
@@ -1214,7 +1214,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _combinator()
-    {/*{{{*/
+    {
         $token = $this->LT();
         switch ($token->type) {
 
@@ -1245,7 +1245,7 @@ class Parser extends LLk
             default:
                 return null;
         }
-    }/*}}}*/
+    }
 
     /*
      * type_selector
@@ -1253,12 +1253,12 @@ class Parser extends LLk
      *   ;
      */
     protected function _type_selector()
-    {/*{{{*/
+    {
         $namespace = $this->_namespace_prefix();
         $element = $this->_element_name();
 
         return new Selector\ElementSelector($namespace, $element);
-    }/*}}}*/
+    }
 
     /**
      * id
@@ -1266,13 +1266,13 @@ class Parser extends LLk
      *   ;
      **/
     protected function _id($selector)
-    {/*{{{*/
+    {
         $this->ensure(Lexer::T_HASH);
         $id = $this->LT()->value;
         $this->consume();
 
         return new Selector\IDSelector($selector, $id);
-    }/*}}}*/
+    }
 
     /*
      * class
@@ -1280,14 +1280,14 @@ class Parser extends LLk
      *   ;
      */
     protected function _class($selector)
-    {/*{{{*/
+    {
         $this->match(Lexer::T_DOT);
         $this->ensure(Lexer::T_IDENT);
         $class = $this->LT()->value;
         $this->consume();
 
         return new Selector\ClassSelector($selector, $class);
-    }/*}}}*/
+    }
 
     /*
      * element_name
@@ -1295,7 +1295,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _element_name()
-    {/*{{{*/
+    {
         $element = '*';
         $token = $this->LT();
         if ($token->type === Lexer::T_IDENT || $token->type === Lexer::T_STAR) {
@@ -1304,7 +1304,7 @@ class Parser extends LLk
         }
 
         return $element;
-    }/*}}}*/
+    }
 
     /**
      * namespace_prefix
@@ -1312,7 +1312,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _namespace_prefix()
-    {/*{{{*/
+    {
         $namespace = '*';
         $token = $this->LT();
 
@@ -1326,7 +1326,7 @@ class Parser extends LLk
 
         //return $namespace . '|';
         return $namespace;
-    }/*}}}*/
+    }
 
     /**
      * universal
@@ -1334,13 +1334,13 @@ class Parser extends LLk
      *   ;
      **/
     protected function _universal()
-    {/*{{{*/
+    {
         // not used here
         $namespace = $this->_namespace_prefix();
         $this->match(Lexer::T_STAR);
 
         return new Selector\ElementSelector($namespace, '*');
-    }/*}}}*/
+    }
 
     /**
      * attrib
@@ -1357,7 +1357,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _attrib($selector)
-    {/*{{{*/
+    {
         $this->match(Lexer::T_LBRACK);
         $this->_ws();
         $namespace = $this->_namespace_prefix();
@@ -1395,7 +1395,7 @@ class Parser extends LLk
         $this->match(Lexer::T_RBRACK);
 
         return new Selector\AttributeSelector($selector, $namespace, $attribute, $operator, $value);
-    }/*}}}*/
+    }
 
     /*
      * pseudo
@@ -1403,7 +1403,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _pseudo($selector)
-    {/*{{{*/
+    {
         $this->match(Lexer::T_COLON);
         $type = ':';
 
@@ -1424,7 +1424,7 @@ class Parser extends LLk
         $expr = $this->_functional_pseudo();
 
         return new Selector\FunctionSelector($selector, $type, $ident, $expr);
-    }/*}}}*/
+    }
 
     /**
      * functional_pseudo
@@ -1432,14 +1432,14 @@ class Parser extends LLk
      *   ;
      **/
     protected function _functional_pseudo()
-    {/*{{{*/
+    {
         $this->match(Lexer::T_FUNCTION);
         $this->_ws();
         $expr = $this->_expression();
         $this->match(Lexer::T_RPAREN);
 
         return $expr;
-    }/*}}}*/
+    }
 
     /**
      * expression
@@ -1447,7 +1447,7 @@ class Parser extends LLk
      *   ;
      **/
     protected function _expression()
-    {/*{{{*/
+    {
         $expr = '';
 
         while (true) {
@@ -1477,7 +1477,7 @@ class Parser extends LLk
         }
 
         return $expr;
-    }/*}}}*/
+    }
 
     /*
      * negation
@@ -1485,7 +1485,7 @@ class Parser extends LLk
      *   ;
      */
     protected function _negation($selector)
-    {/*{{{*/
+    {
         $this->match(Lexer::T_NEGATION);
         $this->_ws();
         $arg = $this->_negation_arg();
@@ -1493,7 +1493,7 @@ class Parser extends LLk
         $this->match(Lexer::T_RPAREN);
 
         return new Selector\FunctionSelector($selector, ':', 'not', $arg);
-    }/*}}}*/
+    }
 
     /**
      * negation_arg
@@ -1501,7 +1501,7 @@ class Parser extends LLk
      *  ;
      **/
     protected function _negation_arg()
-    {/*{{{*/
+    {
         $selector = $this->_type_selector();
 
         switch ($this->LT()->type) {
@@ -1535,9 +1535,9 @@ class Parser extends LLk
         }
 
         return $selector;
-    }/*}}}*/
+    }
 
-    /*}}}*/
+
 
 
     /*****************************************************************
@@ -1553,7 +1553,7 @@ class Parser extends LLk
      * @param boolean $margins Indicates if the rule should check for @margin-box tokens.
      **/
     protected function _parseDeclarations($check_start, $margins)
-    {/*{{{*/
+    {
         /**
          * Reads the pattern:
          *   S* '{' S* declaration [ ';' S* declaration ]* '}' S*
@@ -1626,10 +1626,10 @@ class Parser extends LLk
         return $margins
             ? ['style_declaration' => $style_declaration, 'rule_list' => $margin_rules]
             : $style_declaration;
-    }/*}}}*/
+    }
 
     protected function _ws()
-    {/*{{{*/
+    {
         while (true) {
             switch ($this->LT()->type) {
                 case Lexer::T_S:
@@ -1642,7 +1642,7 @@ class Parser extends LLk
                     break 2;
             }
         }
-    }/*}}}*/
+    }
 
     /**
      * Reduces a list of values into a PropertyValueList object
@@ -1651,7 +1651,7 @@ class Parser extends LLk
      * @param array $delimiters a list of delimiters by order of precedence
      **/
     protected static function reduceValueList(array $values, $delimiters = [' ', ',', '/'])
-    {/*{{{*/
+    {
         if (count($values) === 1) {
             return $values[0];
         }
@@ -1675,10 +1675,10 @@ class Parser extends LLk
         }
 
         return $values[0];
-    }/*}}}*/
+    }
 
     protected static function _listDelimiterForProperty($name)
-    {/*{{{*/
+    {
         if (0 === strcasecmp('background', $name)) {
             return ['/', ' ', ','];
         } elseif (preg_match('/^font(?:-family)?$/iu', $name)) {
@@ -1686,10 +1686,10 @@ class Parser extends LLk
         }
 
         return [' ', ',', '/'];
-    }/*}}}*/
+    }
 
     protected static function fixBackgroundShorthand(PropertyValueList $value_list)
-    {/*{{{*/
+    {
         if (count($value_list) < 2) {
             return;
         }
@@ -1704,10 +1704,10 @@ class Parser extends LLk
             // we have only one value or a space separated list of values
             self::fixBackgroundLayer($value_list);
         }
-    }/*}}}*/
+    }
 
     protected static function fixBackgroundLayer(PropertyValueList $value_list)
-    {/*{{{*/
+    {
         foreach ($value_list->getItems() as $i => $value) {
             if ($value instanceof PropertyValueList && $value->getSeparator() === '/') {
                 $before = $value_list[$i - 1];
@@ -1733,14 +1733,14 @@ class Parser extends LLk
             }
         }
         $value_list->resetKeys();
-    }/*}}}*/
+    }
 
     /**
      * Error recovery methods
      **/
 
     protected function skipRuleset($inside_braces = false)
-    {/*{{{*/
+    {
         $trace = [
             'start' => $this->LT(),
             'end' => null,
@@ -1795,10 +1795,10 @@ class Parser extends LLk
         }
         $this->_ws();
         $this->errors[] = $trace;
-    }/*}}}*/
+    }
 
     protected function skipDeclaration($check_braces = true)
-    {/*{{{*/
+    {
         $trace = [
             'start' => $this->LT(),
             'end' => null,
@@ -1857,10 +1857,10 @@ class Parser extends LLk
         }
         $this->_ws();
         $this->errors[] = $trace;
-    }/*}}}*/
+    }
 
     protected function skipAtRule($inside_block = false)
-    {/*{{{*/
+    {
         $trace = [
             'start' => $this->LT(),
             'end' => null,
@@ -1918,10 +1918,10 @@ class Parser extends LLk
         }
         $this->_ws();
         $this->errors[] = $trace;
-    }/*}}}*/
+    }
 
     protected function skipUntil($type)
-    {/*{{{*/
+    {
         $stack = new SplStack();
         $stack->push($type);
 
@@ -1951,10 +1951,10 @@ class Parser extends LLk
 
             $this->consume();
         }
-    }/*}}}*/
+    }
 
     protected function skipUntilOneOf(array $types)
-    {/*{{{*/
+    {
         while (true) {
             $t = $this->LT()->type;
             if ($t === Lexer::T_EOF) {
@@ -1986,5 +1986,5 @@ class Parser extends LLk
             }
             $this->consume();
         }
-    }/*}}}*/
+    }
 }

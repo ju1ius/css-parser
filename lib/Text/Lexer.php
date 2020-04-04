@@ -98,14 +98,14 @@ abstract class Lexer implements LexerInterface
      * @param boolean $unicode
      **/
     public function __construct(SourceInterface $source = null, $unicode = false)
-    {/*{{{*/
+    {
         $this->state = new Lexer\State();
         $this->unicode = $unicode;
         $this->getTokenNames();
         if ($source) {
             $this->setSource($source);
         }
-    }/*}}}*/
+    }
 
     abstract public function nextToken();
 
@@ -115,7 +115,7 @@ abstract class Lexer implements LexerInterface
      * @param SourceInterface $source The input to be tokenized.
      */
     public function setSource(SourceInterface $source)
-    {/*{{{*/
+    {
         $this->source = $source;
         $this->encoding = $source->getEncoding();
         $this->is_ascii = Encoding::isSameEncoding($this->encoding, 'ascii');
@@ -125,30 +125,30 @@ abstract class Lexer implements LexerInterface
         //$this->numlines = $source->getNumLines();
         $this->numlines = count($source);
         $this->reset();
-    }/*}}}*/
+    }
 
     public function getSource()
-    {/*{{{*/
+    {
         return $this->source;
-    }/*}}}*/
+    }
 
     public function getEncoding()
-    {/*{{{*/
+    {
         return $this->encoding;
-    }/*}}}*/
+    }
 
     /**
      * Resets the lexer.
      */
     public function reset()
-    {/*{{{*/
+    {
         $this->source->rewind();
         $this->setLine(0);
         $this->state->reset();
-    }/*}}}*/
+    }
 
     public function setLine($lineno)
-    {/*{{{*/
+    {
         if (!isset($this->source[$lineno])) {
             return false;
         }
@@ -160,10 +160,10 @@ abstract class Lexer implements LexerInterface
         $this->lookahead = null;
 
         return true;
-    }/*}}}*/
+    }
 
     public function nextLine()
-    {/*{{{*/
+    {
         $this->source->next();
         $line = $this->source->current();
         if (false === $line) {
@@ -177,19 +177,19 @@ abstract class Lexer implements LexerInterface
         $this->lookahead = null;
 
         return true;
-    }/*}}}*/
+    }
 
     public function getTokenName($type)
-    {/*{{{*/
+    {
         if (null === static::$TOKEN_NAMES) {
             $this->getTokenNames();
         }
 
         return static::$TOKEN_NAMES[$type];
-    }/*}}}*/
+    }
 
     public static function getLiteral(TokenInterface $token)
-    {/*{{{*/
+    {
         $name = static::$TOKEN_NAMES[$token->type];
 
         return sprintf(
@@ -199,10 +199,10 @@ abstract class Lexer implements LexerInterface
             $token->line,
             $token->column
         );
-    }/*}}}*/
+    }
 
     public function getTokenNames()
-    {/*{{{*/
+    {
         if (null === static::$TOKEN_NAMES) {
             $className = get_class($this);
             $reflClass = new ReflectionClass($className);
@@ -211,10 +211,10 @@ abstract class Lexer implements LexerInterface
         }
 
         return static::$TOKEN_NAMES;
-    }/*}}}*/
+    }
 
     protected function consumeCharacters($length = 1)
-    {/*{{{*/
+    {
         $this->charpos += $length;
         $this->bytepos += $length;
         if ($this->charpos >= $this->length) {
@@ -224,10 +224,10 @@ abstract class Lexer implements LexerInterface
                 ? mb_substr($this->text, $this->charpos, 1, $this->encoding)
                 : $this->text[$this->charpos]; //substr($this->text, $this->charpos, 1);
         }
-    }/*}}}*/
+    }
 
     protected function consume($length = 1)
-    {/*{{{*/
+    {
         $this->charpos += $length;
         if ($this->charpos >= $this->length) {
             $this->lookahead = null;
@@ -236,10 +236,10 @@ abstract class Lexer implements LexerInterface
                 ? $this->text[$this->charpos]
                 : substr($this->text, $this->charpos, $length);
         }
-    }/*}}}*/
+    }
 
     protected function consumeString($str)
-    {/*{{{*/
+    {
         if ($this->multibyte) {
             $this->charpos += mb_strlen($str, $this->encoding);
             $this->bytepos += strlen($str);
@@ -256,17 +256,17 @@ abstract class Lexer implements LexerInterface
                 ? mb_substr($this->text, $this->charpos, 1, $this->encoding)
                 : $this->text[$this->charpos]; //substr($this->text, $this->charpos, 1);
         }
-    }/*}}}*/
+    }
 
     protected function peek($length = 1, $offset = 0)
-    {/*{{{*/
+    {
         return $this->multibyte
             ? mb_substr($this->text, $this->charpos + $offset + 1, $length, $this->encoding)
             : substr($this->text, $this->charpos + $offset + 1, $length);
-    }/*}}}*/
+    }
 
     protected function comes($str)
-    {/*{{{*/
+    {
         if ($this->charpos >= $this->length) {
             return false;
         }
@@ -282,10 +282,10 @@ abstract class Lexer implements LexerInterface
 
             return mb_substr($this->text, $this->charpos, $length, $this->encoding) === $str;
         }
-    }/*}}}*/
+    }
 
     protected function comesExpression($pattern, $options = 'msi')
-    {/*{{{*/
+    {
         if ($this->charpos > $this->length) {
             return false;
         }
@@ -294,10 +294,10 @@ abstract class Lexer implements LexerInterface
         mb_ereg_search_setpos($this->bytepos);
 
         return mb_ereg_search();
-    }/*}}}*/
+    }
 
     protected function match($pattern, $charpos = null, $options = 'msi')
-    {/*{{{*/
+    {
         if (null === $charpos) {
             $charpos = $this->bytepos;
         }
@@ -307,5 +307,5 @@ abstract class Lexer implements LexerInterface
         mb_ereg_search_init($this->text, '\G' . $pattern, $options);
         mb_ereg_search_setpos($charpos);
         return mb_ereg_search_regs();
-    }/*}}}*/
+    }
 }

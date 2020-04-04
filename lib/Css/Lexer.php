@@ -163,13 +163,13 @@ class Lexer extends BaseLexer
     ];
 
     public function __construct(Source\Bytes $source = null, $unicode = false)
-    {/*{{{*/
+    {
         self::getPatterns();
         parent::__construct($source, $unicode);
-    }/*}}}*/
+    }
 
     public static function getPatterns()
-    {/*{{{*/
+    {
         if (null === self::$regex) {
             self::$regex = [
                 'ws' => '[ \t\r\n\f]',
@@ -236,10 +236,10 @@ class Lexer extends BaseLexer
         }
 
         return self::$regex;
-    }/*}}}*/
+    }
 
     public function nextToken()
-    {/*{{{*/
+    {
         while (true) {
             if ($this->charpos === -1) {
                 $this->consumeCharacters();
@@ -441,19 +441,19 @@ class Lexer extends BaseLexer
         } // end while
         // EOF
         return new Token(self::T_EOF, null, $this->lineno, $this->charpos);
-    }/*}}}*/
+    }
 
     protected function handleWhitespace()
-    {/*{{{*/
+    {
         $charpos = $this->charpos;
         if (preg_match('/\G\s+/u', $this->text, $matches, 0, $this->bytepos)) {
             $this->consumeString($matches[0]);
             return new Token(self::T_S, ' ', $this->lineno, $charpos);
         }
-    }/*}}}*/
+    }
 
     protected function handleComment()
-    {/*{{{*/
+    {
         if (preg_match('@\G/\*[^*]*\*+(?:[^/][^*]*\*+)*/@', $this->text, $matches, 0, $this->bytepos)) {
             $token = new Token(self::T_COMMENT, $matches[0], $this->lineno, $this->charpos);
             $this->consumeString($matches[0]);
@@ -485,10 +485,10 @@ class Lexer extends BaseLexer
                 }
             }
         }
-    }/*}}}*/
+    }
 
     protected function handleIdent($str = null)
-    {/*{{{*/
+    {
         if (null === $str) {
             if (preg_match(self::$regex['M-ident'], $this->text, $matches, 0, $this->bytepos)) {
                 $str = $matches[0];
@@ -544,10 +544,10 @@ class Lexer extends BaseLexer
 
             return new Token(self::T_IDENT, $str, $this->lineno, $charpos);
         }
-    }/*}}}*/
+    }
 
     protected function handleAtKeyword()
-    {/*{{{*/
+    {
         preg_match(self::$regex['M-atkeyword'], $this->text, $matches, 0, $this->bytepos);
         //$matches = $this->match('@((?:'.self::$regex['atkeyword'].')|(?:'.self::$regex['ident'].'))');
         $charpos = $this->charpos;
@@ -559,10 +559,10 @@ class Lexer extends BaseLexer
         }
 
         return new Token(self::T_ATKEYWORD, $ident, $this->lineno, $charpos);
-    }/*}}}*/
+    }
 
     protected function handleString()
-    {/*{{{*/
+    {
         $charpos = $this->charpos;
         $start_char = $this->lookahead;
         if ($start_char === '"') {
@@ -583,10 +583,10 @@ class Lexer extends BaseLexer
                 return new Token(self::T_BADSTRING, $matches[1], $this->lineno, $charpos);
             }
         }
-    }/*}}}*/
+    }
 
     protected function handleMultilineString($start_char, $start_str, $line, $charpos)
-    {/*{{{*/
+    {
         $pattern = '([^\\\\' . $start_char . ']*)' . $start_char;
         $start_str = preg_replace('/\\\\$/u', '', $start_str);
         while (true) {
@@ -617,10 +617,10 @@ class Lexer extends BaseLexer
                 return new Token(self::T_BADSTRING, $start_str, $line, $charpos);
             }
         }
-    }/*}}}*/
+    }
 
     protected function handleNumber()
-    {/*{{{*/
+    {
         $charpos = $this->charpos;
         if (preg_match('@\G([0-9]+)/([0-9]+)@u', $this->text, $matches, 0, $this->bytepos)) {
             $this->consumeString($matches[0]);
@@ -658,20 +658,20 @@ class Lexer extends BaseLexer
 
             return new Token(self::T_DIMENSION, $result, $this->lineno, $charpos);
         }
-    }/*}}}*/
+    }
 
     protected function handleHash()
-    {/*{{{*/
+    {
         $charpos = $this->charpos;
         if (preg_match(self::$regex['M-hash'], $this->text, $matches, 0, $this->bytepos)) {
             $this->consumeString($matches[0]);
 
             return new Token(self::T_HASH, $this->cleanupIdent($matches[1]), $this->lineno, $charpos);
         }
-    }/*}}}*/
+    }
 
     protected function handleImportant()
-    {/*{{{*/
+    {
         $charpos = $this->charpos;
         if (preg_match(self::$regex['M-important'], $this->text, $matches, 0, $this->bytepos)) {
             $value = $matches[0];
@@ -679,28 +679,28 @@ class Lexer extends BaseLexer
 
             return new Token(self::T_IMPORTANT_SYM, 'important', $this->lineno, $charpos);
         }
-    }/*}}}*/
+    }
 
     protected function handleUnicodeRange()
-    {/*{{{*/
+    {
         $charpos = $this->charpos;
         preg_match('/\GU\+([0-9a-f?]{1,6}(?:-[0-9a-f]{1,6})?)/iu', $this->text, $matches, 0, $this->bytepos);
         $this->consumeString($matches[0]);
 
         return new Token(self::T_UNICODERANGE, $matches[1], $this->lineno, $charpos);
-    }/*}}}*/
+    }
 
     protected function handleNegation()
-    {/*{{{*/
+    {
         $charpos = $this->charpos;
         preg_match(self::$regex['M-negation'], $this->text, $matches, 0, $this->bytepos);
         $this->consumeString($matches[0]);
 
         return new Token(self::T_NEGATION, ':not(', $this->lineno, $charpos);
-    }/*}}}*/
+    }
 
     protected function cleanupIdent($ident, $lowercase = false)
-    {/*{{{*/
+    {
         $ident = preg_replace_callback(
             '/\\\\(?:([0-9a-f]{1,5})\s?|([0-9a-f]{6})|([g-z]))/iu',
             function ($matches) {
@@ -723,10 +723,10 @@ class Lexer extends BaseLexer
         }
 
         return $ident;
-    }/*}}}*/
+    }
 
     protected static function getPatternForIdentifier($ident)
-    {/*{{{*/
+    {
         if (isset(self::$regex_cache[$ident])) {
             return self::$regex_cache[$ident];
         }
@@ -741,5 +741,5 @@ class Lexer extends BaseLexer
         self::$regex_cache[$ident] = $pattern;
 
         return $pattern;
-    }/*}}}*/
+    }
 }

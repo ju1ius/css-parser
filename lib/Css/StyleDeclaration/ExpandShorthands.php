@@ -60,7 +60,7 @@ class ExpandShorthands
      * into their constituent parts.
      **/
     public function expandFontShorthands()
-    {/*{{{*/
+    {
         $aProperties = $this->styleDeclaration->getProperties('font');
         if (empty($aProperties)) {
             return;
@@ -111,7 +111,7 @@ class ExpandShorthands
             }
             $this->styleDeclaration->remove($oProperty);
         }
-    }/*}}}*/
+    }
 
     /**
      * Split shorthand border declarations (e.g. <tt>border: 1px red;</tt>)
@@ -120,7 +120,7 @@ class ExpandShorthands
      **/
     public function expandBorderShorthands()
     {
-        $aBorderProperties = [/*{{{*/
+        $aBorderProperties = [
             'border', 'border-left', 'border-right', 'border-top', 'border-bottom',
         ];
         $aBorderSizes = [
@@ -151,7 +151,7 @@ class ExpandShorthands
                 $this->styleDeclaration->remove($oProperty);
             } // end foreach $oPropertys
         } // end foreach $aBorderProperties
-    }/*}}}*/
+    }
 
     /**
      * Split shorthand dimensional declarations (e.g. <tt>margin: 0px auto;</tt>)
@@ -160,7 +160,7 @@ class ExpandShorthands
      **/
     public function expandDimensionsShorthands()
     {
-        $aExpansions = [/*{{{*/
+        $aExpansions = [
             'margin' => 'margin-%s',
             'padding' => 'padding-%s',
             'border-color' => 'border-%s-color',
@@ -217,10 +217,10 @@ class ExpandShorthands
                 $this->styleDeclaration->remove($oProperty);
             }
         }
-    }/*}}}*/
+    }
 
     public function expandListStyleShorthands()
-    {/*{{{*/
+    {
         $aListStyleTypes = [
             'none', 'disc', 'circle', 'square', 'decimal-leading-zero', 'decimal',
             'lower-roman', 'upper-roman', 'lower-greek', 'lower-alpha', 'lower-latin',
@@ -266,10 +266,10 @@ class ExpandShorthands
             }
             $this->styleDeclaration->remove($oProperty);
         }
-    }/*}}}*/
+    }
 
     private function _addPropertyExpansion($iShorthandPosition, $oShorthandProperty, $sNewPropertyName, $mValue)
-    {/*{{{*/
+    {
         if (!$this->_canAddShorthandExpansion($oShorthandProperty, $sNewPropertyName/*, $iShorthandPosition*/)) {
             return;
         }
@@ -280,7 +280,7 @@ class ExpandShorthands
         );
         $oNewProperty->setIsImportant($oShorthandProperty->getIsImportant());
         $this->styleDeclaration->insertAfter($oNewProperty, $oShorthandProperty);
-    }/*}}}*/
+    }
 
     /**
      * Checks if we can add an expansion
@@ -288,7 +288,7 @@ class ExpandShorthands
      * unless the importance of the new one is superior
      **/
     private function _canAddShorthandExpansion($oShorthandProperty, $sNewPropertyName, $iShorthandPosition = null)
-    {/*{{{*/
+    {
         if ($iShorthandPosition === null) {
             $iShorthandPosition = $this->styleDeclaration->getPropertyIndex($oShorthandProperty);
         }
@@ -306,10 +306,10 @@ class ExpandShorthands
             }
         }
         return true;
-    }/*}}}*/
+    }
 
     private function _expandBackgroundShorthand($iPos, $oProperty)
-    {/*{{{*/
+    {
         $oValueList = $oProperty->getValueList();
         // Get a normalized array
         if ($oValueList->getSeparator() === ',' && count($oValueList) > 1) {
@@ -427,5 +427,5 @@ class ExpandShorthands
             }
         }
         $this->styleDeclaration->remove($oProperty);
-    }/*}}}*/
+    }
 }

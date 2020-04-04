@@ -26,7 +26,7 @@ class Loader
      *
      */
     public static function load($url)
-    {/*{{{*/
+    {
         $uri = Uri::parse($url);
 
         if ($uri->isAbsoluteUrl()) {
@@ -34,7 +34,7 @@ class Loader
         }
 
         return self::loadFile($uri);
-    }/*}}}*/
+    }
 
     /**
      * Loads a CSS file into a Source\File object.
@@ -46,7 +46,7 @@ class Loader
      *
      */
     public static function loadFile($url)
-    {/*{{{*/
+    {
         $uri = Uri::parse($url);
         $path = realpath($uri);
 
@@ -62,7 +62,7 @@ class Loader
         $infos = self::_loadString($content);
 
         return new Source\File($path, $infos['contents'], $infos['charset']);
-    }/*}}}*/
+    }
 
     /**
      * Loads a CSS file into a Source\File object.
@@ -76,7 +76,7 @@ class Loader
      *
      */
     public static function loadUrl($url)
-    {/*{{{*/
+    {
         $uri = Uri::parse($url);
         $response = self::_loadUrl($uri);
         $content = $response['body'];
@@ -89,7 +89,7 @@ class Loader
         }
         */
         return new Source\File($url, $infos['contents'], $infos['charset']);
-    }/*}}}*/
+    }
 
     /**
      * Loads a CSS string into a Source\String object.
@@ -99,14 +99,14 @@ class Loader
      * @return Source\Bytes
      **/
     public static function loadString($str, $encoding = null)
-    {/*{{{*/
+    {
         $infos = self::_loadString($str);
 
         return new Source\Bytes($infos['contents'], $infos['charset']);
-    }/*}}}*/
+    }
 
     private static function _loadString($str)
-    {/*{{{*/
+    {
         // detect charset from BOM and/or @charset rule
         $charset = Util\Charset::detect($str);
         // Or defaults to utf-8
@@ -128,10 +128,10 @@ class Loader
             'contents' => $str,
             'charset' => $charset,
         ];
-    }/*}}}*/
+    }
 
     private static function _loadUrl(Uri $url)
-    {/*{{{*/
+    {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         //curl_setopt($curl, CURLOPT_HEADER, true);
@@ -159,10 +159,10 @@ class Loader
         }
 
         return $results;
-    }/*}}}*/
+    }
 
     private static function normalizeLineLength($input)
-    {/*{{{*/
+    {
         // estimate average line length
         $len = strlen($input);
         $numlines = substr_count($input, "\n") + 1;
@@ -207,5 +207,5 @@ class Loader
         $output .= substr($input, $last, $len - $last);
 
         return $output;
-    }/*}}}*/
+    }
 }
