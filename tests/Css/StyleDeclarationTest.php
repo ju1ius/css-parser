@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class StyleDeclarationTest extends CssParserTestCase

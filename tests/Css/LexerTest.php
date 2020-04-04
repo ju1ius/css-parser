@@ -5,7 +5,6 @@ namespace ju1ius\Tests\Css;
 use ju1ius\Css\Lexer;
 use ju1ius\Tests\CssParserTestCase;
 
-
 class LexerTest extends CssParserTestCase
 {
     /**

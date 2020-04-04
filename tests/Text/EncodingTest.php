@@ -5,7 +5,6 @@ namespace ju1ius\Tests\Text;
 use ju1ius\Text\Encoding;
 use PHPUnit\Framework\TestCase;
 
-
 class EncodingTest extends TestCase
 {
     /**

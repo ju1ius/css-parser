@@ -13,9 +13,9 @@ use SplStack;
  **/
 class Parser extends LLk
 {
-    protected $strict;
+    protected bool $strict;
 
-    public $errors = [];
+    public array $errors = [];
 
     public function __construct(Lexer $lexer, $strict = true)
     {
@@ -31,9 +31,9 @@ class Parser extends LLk
      *
      * @param boolean $strict
      **/
-    public function setStrict($strict = true)
+    public function setStrict(bool $strict = true)
     {
-        $this->strict = (bool)$strict;
+        $this->strict = $strict;
     }
 
     /**
@@ -46,10 +46,8 @@ class Parser extends LLk
 
     /**
      * Parses a Css stylesheet
-     *
-     * @return StyleSheet
      **/
-    public function parseStyleSheet()
+    public function parseStyleSheet(): StyleSheet
     {
         $this->reset();
         $source = $this->lexer->getSource();
@@ -63,25 +61,18 @@ class Parser extends LLk
 
     /**
      * Parses a single selector or a list of selectors
-     *
-     * @return SelectorList
      **/
-    public function parseSelector()
+    public function parseSelector(): SelectorList
     {
         $this->reset();
         $selector_list = $this->_selectors_group();
-        //if (count($selector_list) === 1) {
-        //return $selector_list->getFirst();
-        //}
         return $selector_list;
     }
 
     /**
      * Parses a Css style declaration, ie an Html style attribute.
-     *
-     * @return StyleDeclaration
      **/
-    public function parseStyleDeclaration()
+    public function parseStyleDeclaration(): StyleDeclaration
     {
         $this->reset();
 
@@ -90,21 +81,17 @@ class Parser extends LLk
 
     /**
      * Parses a Css media query list, ie an Html media attribute.
-     *
-     * @return MediaQueryList
      **/
-    public function parseMediaQuery()
+    public function parseMediaQuery(): MediaQueryList
     {
         $this->reset();
 
         return $this->_media_query_list();
     }
 
-
     /*****************************************************************
      * ---------------------------- GRAMMAR ------------------------ *
      *****************************************************************/
-
 
     /**
      * stylesheet
@@ -132,7 +119,7 @@ class Parser extends LLk
             $this->skipAtRule();
         }
 
-        while ($this->LT()->type === Lexer::T_IMPORT_SYM) {
+        while ($this->lookahead()->type === Lexer::T_IMPORT_SYM) {
             try {
                 $rule_list->append($this->_import());
                 $this->_ws();
@@ -144,7 +131,7 @@ class Parser extends LLk
             }
         }
 
-        while ($this->LT()->type === Lexer::T_NAMESPACE_SYM) {
+        while ($this->lookahead()->type === Lexer::T_NAMESPACE_SYM) {
             try {
                 $rule_list->append($this->_namespace());
                 $this->_ws();
@@ -156,8 +143,8 @@ class Parser extends LLk
             }
         }
 
-        while ($this->LT()->type !== Lexer::T_EOF) {
-            switch ($this->LT()->type) {
+        while ($this->lookahead()->type !== Lexer::T_EOF) {
+            switch ($this->lookahead()->type) {
 
                 case Lexer::T_S:
                     $this->_ws();
@@ -235,7 +222,7 @@ class Parser extends LLk
 
                 default:
                     if ($this->strict) {
-                        $this->_unexpectedToken($this->LT(), [
+                        $this->_unexpectedToken($this->lookahead(), [
                             Lexer::T_MEDIA_SYM, Lexer::T_PAGE_SYM, Lexer::T_FONT_FACE_SYM, Lexer::T_KEYFRAMES_SYM,
                             Lexer::T_IDENT, Lexer::T_STAR, Lexer::T_PIPE, Lexer::T_DOT,
                             Lexer::T_HASH, Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
@@ -253,11 +240,11 @@ class Parser extends LLk
 
     protected function _charset()
     {
-        if ($this->LT()->type === Lexer::T_CHARSET_SYM) {
+        if ($this->lookahead()->type === Lexer::T_CHARSET_SYM) {
             $this->consume();
             $this->_ws();
             $this->ensure(Lexer::T_STRING);
-            $value = $this->LT()->value;
+            $value = $this->lookahead()->value;
             $this->consume();
             $this->_ws();
             $this->match(Lexer::T_SEMICOLON);
@@ -278,7 +265,7 @@ class Parser extends LLk
         $this->_ws();
         $this->ensure([Lexer::T_STRING, Lexer::T_URI]);
         $url = new Value\Url(
-            new Value\CssString($this->LT()->value)
+            new Value\CssString($this->lookahead()->value)
         );
         $this->consume();
         $media_query_list = $this->_media_query_list();
@@ -301,13 +288,13 @@ class Parser extends LLk
 
         $this->match(Lexer::T_NAMESPACE_SYM);
         $this->_ws();
-        if ($this->LT()->type === Lexer::T_IDENT) {
-            $prefix = $this->LT()->value;
+        if ($this->lookahead()->type === Lexer::T_IDENT) {
+            $prefix = $this->lookahead()->value;
             $this->consume();
             $this->_ws();
         }
         $this->ensure([Lexer::T_STRING, Lexer::T_URI]);
-        $uri = $this->LT()->value;
+        $uri = $this->lookahead()->value;
         $this->consume();
         $this->_ws();
         $this->match(Lexer::T_SEMICOLON);
@@ -398,7 +385,7 @@ class Parser extends LLk
 
         $property->setValueList($values);
 
-        if ($this->LT()->type === Lexer::T_IMPORTANT_SYM) {
+        if ($this->lookahead()->type === Lexer::T_IMPORTANT_SYM) {
             $this->_prio();
             $property->setIsImportant(true);
         }
@@ -413,7 +400,7 @@ class Parser extends LLk
      **/
     protected function _property()
     {
-        $token = $this->LT();
+        $token = $this->lookahead();
 
         switch ($token->type) {
             case Lexer::T_INVALID:
@@ -454,7 +441,7 @@ class Parser extends LLk
         $value = $this->_term();
 
         if (null === $value) {
-            $this->_parseException("Empty value", $this->LT());
+            $this->_parseException("Empty value", $this->lookahead());
         }
         $values[] = $value;
 
@@ -482,7 +469,7 @@ class Parser extends LLk
      **/
     protected function _term()
     {
-        $token = $this->LT();
+        $token = $this->lookahead();
         switch ($token->type) {
 
             case Lexer::T_NUMBER:
@@ -597,7 +584,7 @@ class Parser extends LLk
     protected function _hexcolor()
     {
         $this->ensure(Lexer::T_HASH);
-        $hex = $this->LT()->value;
+        $hex = $this->lookahead()->value;
         $this->consume();
         $this->_ws();
         if (!preg_match('/[0-9a-f]{6}|[0-9a-f]{3}/i', $hex)) {
@@ -615,7 +602,7 @@ class Parser extends LLk
     protected function _function()
     {
         $this->ensure(Lexer::T_FUNCTION);
-        $name = $this->LT()->value;
+        $name = $this->lookahead()->value;
         $this->consume();
         $this->_ws();
         // TODO: calc(), attr(), cycle(), image(), gradients ...
@@ -658,7 +645,7 @@ class Parser extends LLk
      **/
     protected function _operator()
     {
-        $t = $this->LT();
+        $t = $this->lookahead();
         if ($t->type === Lexer::T_COMMA || $t->type === Lexer::T_SLASH) {
             $this->consume();
             $this->_ws();
@@ -686,7 +673,7 @@ class Parser extends LLk
         $page_name = null;
         $pseudo_page = null;
 
-        $token = $this->LT();
+        $token = $this->lookahead();
         if ($token->type === Lexer::T_IDENT) {
             $page_name = $token->value;
             if ($page_name === 'auto') {
@@ -695,7 +682,7 @@ class Parser extends LLk
             $this->consume();
         }
 
-        if ($this->LT()->type === Lexer::T_COLON) {
+        if ($this->lookahead()->type === Lexer::T_COLON) {
             $pseudo_page = $this->_pseudo_page();
         }
 
@@ -717,7 +704,7 @@ class Parser extends LLk
     {
         $this->match(Lexer::T_COLON);
         $this->ensure(Lexer::T_IDENT);
-        $value = $this->LT()->value;
+        $value = $this->lookahead()->value;
         $this->consume();
 
         return $value;
@@ -764,7 +751,7 @@ class Parser extends LLk
             Lexer::T_RIGHTMIDDLE_SYM,
             Lexer::T_RIGHTBOTTOM_SYM,
         ]);
-        $value = $this->LT()->value;
+        $value = $this->lookahead()->value;
         $this->consume();
 
         return $value;
@@ -794,7 +781,7 @@ class Parser extends LLk
         $rule_list = new RuleList();
 
         while (true) {
-            switch ($this->LT()->type) {
+            switch ($this->lookahead()->type) {
 
                 case Lexer::T_PAGE_SYM:
                     try {
@@ -851,7 +838,7 @@ class Parser extends LLk
 
                 default:
                     if ($this->strict) {
-                        $this->_unexpectedToken($this->LT(), [
+                        $this->_unexpectedToken($this->lookahead(), [
                             Lexer::T_PAGE_SYM, Lexer::T_FONT_FACE_SYM, Lexer::T_KEYFRAMES_SYM,
                             Lexer::T_IDENT, Lexer::T_STAR, Lexer::T_PIPE, Lexer::T_DOT,
                             Lexer::T_HASH, Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
@@ -865,7 +852,7 @@ class Parser extends LLk
         $this->_ws();
 
         // Unexpected EOF
-        if (!$this->strict && $this->LT()->type === Lexer::T_EOF) {
+        if (!$this->strict && $this->lookahead()->type === Lexer::T_EOF) {
             return new Rule\Media($media_query_list, $rule_list);
         }
 
@@ -883,7 +870,7 @@ class Parser extends LLk
     {
         $this->_ws();
         $media_list = new MediaQueryList();
-        $t = $this->LT()->type;
+        $t = $this->lookahead()->type;
 
         if ($t === Lexer::T_ONLY ||
             $t === Lexer::T_NOT ||
@@ -893,7 +880,7 @@ class Parser extends LLk
             $media_list->append($this->_media_query());
         }
 
-        while ($this->LT()->type === Lexer::T_COMMA) {
+        while ($this->lookahead()->type === Lexer::T_COMMA) {
             $this->consume();
             $this->_ws();
             $media_list->append($this->_media_query());
@@ -916,23 +903,23 @@ class Parser extends LLk
         $this->_ws();
 
         // Alternative #1
-        $t = $this->LT();
+        $t = $this->lookahead();
         if ($t->type === Lexer::T_ONLY || $t->type === Lexer::T_NOT) {
             $restrictor = $t->value;
             $this->consume();
             $this->_ws();
         }
-        if ($this->LT()->type === Lexer::T_IDENT) {
+        if ($this->lookahead()->type === Lexer::T_IDENT) {
             $media_type = $this->_media_type();
             $this->_ws();
-        } elseif ($this->LT()->type === Lexer::T_LPAREN) {
+        } elseif ($this->lookahead()->type === Lexer::T_LPAREN) {
             $expressions[] = $this->_media_expression();
         }
 
         if (!$media_type) {
         }
 
-        while ($this->LT()->type === Lexer::T_AND) {
+        while ($this->lookahead()->type === Lexer::T_AND) {
             $this->consume();
             $this->_ws();
             $expressions[] = $this->_media_expression();
@@ -959,7 +946,7 @@ class Parser extends LLk
     protected function _media_feature()
     {
         $this->ensure(Lexer::T_IDENT);
-        $value = $this->LT()->value;
+        $value = $this->lookahead()->value;
         $this->consume();
 
         return $value;
@@ -979,7 +966,7 @@ class Parser extends LLk
         $this->_ws();
         $media_feature = $this->_media_feature();
         $this->_ws();
-        if ($this->LT()->type === Lexer::T_COLON) {
+        if ($this->lookahead()->type === Lexer::T_COLON) {
             //$expression = $this->_expression();
             $this->consume();
             $this->_ws();
@@ -1011,7 +998,7 @@ class Parser extends LLk
         $this->_ws();
 
         $this->ensure(Lexer::T_IDENT);
-        $name = $this->LT()->value;
+        $name = $this->lookahead()->value;
         $this->consume();
         $this->_ws();
 
@@ -1035,7 +1022,7 @@ class Parser extends LLk
     {
         $rule_list = new RuleList();
         while (true) {
-            if (!in_array($this->LT()->type, [Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE])) {
+            if (!in_array($this->lookahead()->type, [Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE])) {
                 break;
             }
             $selectors = $this->_keyframes_selector();
@@ -1058,13 +1045,13 @@ class Parser extends LLk
         $selector_tokens = [Lexer::T_FROM_SYM, Lexer::T_TO_SYM, Lexer::T_PERCENTAGE];
 
         $this->ensure($selector_tokens);
-        $selectors[] = $this->LT()->value;
+        $selectors[] = $this->lookahead()->value;
         $this->_ws();
 
-        while ($this->LT()->type === Lexer::T_COMMA) {
+        while ($this->lookahead()->type === Lexer::T_COMMA) {
             $this->_ws();
             $this->ensure($selector_tokens);
-            $selectors[] = $this->LT()->value;
+            $selectors[] = $this->lookahead()->value;
             $this->_ws();
         }
 
@@ -1089,7 +1076,7 @@ class Parser extends LLk
         $selectors = [];
         $selectors[] = $this->_selector();
 
-        while ($this->LT()->type === Lexer::T_COMMA) {
+        while ($this->lookahead()->type === Lexer::T_COMMA) {
             $this->consume();
             $this->_ws();
             $selector = $this->_selector();
@@ -1112,7 +1099,7 @@ class Parser extends LLk
     {
         $selector = $this->_simple_selector_sequence();
         while (true) {
-            switch ($this->LT()->type) {
+            switch ($this->lookahead()->type) {
 
                 case Lexer::T_PLUS:
                 case Lexer::T_GREATER:
@@ -1132,7 +1119,7 @@ class Parser extends LLk
                     break 2;
 
                 default:
-                    $this->_unexpectedToken($this->LT(), [
+                    $this->_unexpectedToken($this->lookahead(), [
                         Lexer::T_PLUS, Lexer::T_GREATER, Lexer::T_TILDE, Lexer::T_S,
                     ]);
                     break;
@@ -1156,7 +1143,7 @@ class Parser extends LLk
         $has_hash = false;
 
         while (true) {
-            switch ($this->LT()->type) {
+            switch ($this->lookahead()->type) {
 
                 case Lexer::T_HASH:
                     //if ($has_hash) $this->_parseException("Two hashes", $this->current);
@@ -1196,7 +1183,7 @@ class Parser extends LLk
                     break 2;
 
                 default:
-                    $this->_unexpectedToken($this->LT(), [
+                    $this->_unexpectedToken($this->lookahead(), [
                         Lexer::T_HASH, Lexer::T_DOT,
                         Lexer::T_LBRACK, Lexer::T_COLON, Lexer::T_NEGATION,
                     ]);
@@ -1215,7 +1202,7 @@ class Parser extends LLk
      **/
     protected function _combinator()
     {
-        $token = $this->LT();
+        $token = $this->lookahead();
         switch ($token->type) {
 
             case Lexer::T_PLUS:
@@ -1228,7 +1215,7 @@ class Parser extends LLk
 
             case Lexer::T_S:
                 $this->_ws();
-                $next = $this->LT()->type;
+                $next = $this->lookahead()->type;
                 if ($next === Lexer::T_COMMA
                     || $next === Lexer::T_LCURLY
                     || $next === Lexer::T_EOF
@@ -1268,7 +1255,7 @@ class Parser extends LLk
     protected function _id($selector)
     {
         $this->ensure(Lexer::T_HASH);
-        $id = $this->LT()->value;
+        $id = $this->lookahead()->value;
         $this->consume();
 
         return new Selector\IDSelector($selector, $id);
@@ -1283,7 +1270,7 @@ class Parser extends LLk
     {
         $this->match(Lexer::T_DOT);
         $this->ensure(Lexer::T_IDENT);
-        $class = $this->LT()->value;
+        $class = $this->lookahead()->value;
         $this->consume();
 
         return new Selector\ClassSelector($selector, $class);
@@ -1297,7 +1284,7 @@ class Parser extends LLk
     protected function _element_name()
     {
         $element = '*';
-        $token = $this->LT();
+        $token = $this->lookahead();
         if ($token->type === Lexer::T_IDENT || $token->type === Lexer::T_STAR) {
             $element = $token->value;
             $this->consume();
@@ -1314,9 +1301,9 @@ class Parser extends LLk
     protected function _namespace_prefix()
     {
         $namespace = '*';
-        $token = $this->LT();
+        $token = $this->lookahead();
 
-        if ($token->type === Lexer::T_PIPE || $this->LT(2)->type === Lexer::T_PIPE) {
+        if ($token->type === Lexer::T_PIPE || $this->lookahead(2)->type === Lexer::T_PIPE) {
             if ($token->type === Lexer::T_IDENT || $token->type === Lexer::T_STAR) {
                 $namespace = $token->value;
                 $this->consume();
@@ -1362,14 +1349,14 @@ class Parser extends LLk
         $this->_ws();
         $namespace = $this->_namespace_prefix();
         $this->ensure(Lexer::T_IDENT);
-        $attribute = $this->LT()->value;
+        $attribute = $this->lookahead()->value;
         $this->consume();
         $this->_ws();
 
         $operator = 'exists';
         $value = null;
 
-        $t = $this->LT();
+        $t = $this->lookahead();
         if ($t->type === Lexer::T_EQUALS
             || $t->type === Lexer::T_PREFIXMATCH
             || $t->type === Lexer::T_SUFFIXMATCH
@@ -1382,7 +1369,7 @@ class Parser extends LLk
             $this->_ws();
             $this->ensure([Lexer::T_IDENT, Lexer::T_STRING]);
 
-            $token = $this->LT();
+            $token = $this->lookahead();
             if ($token->type === Lexer::T_STRING) {
                 $value = new Value\CssString($token->value);
             } else {
@@ -1407,14 +1394,14 @@ class Parser extends LLk
         $this->match(Lexer::T_COLON);
         $type = ':';
 
-        if ($this->LT()->type === Lexer::T_COLON) {
+        if ($this->lookahead()->type === Lexer::T_COLON) {
             $type .= ':';
             $this->consume();
         }
 
         $this->ensure([Lexer::T_IDENT, Lexer::T_FUNCTION]);
 
-        $token = $this->LT();
+        $token = $this->lookahead();
         $ident = $token->value;
 
         if ($token->type === Lexer::T_IDENT) {
@@ -1451,7 +1438,7 @@ class Parser extends LLk
         $expr = '';
 
         while (true) {
-            $token = $this->LT();
+            $token = $this->lookahead();
             switch ($token->type) {
 
                 case Lexer::T_PLUS:
@@ -1504,7 +1491,7 @@ class Parser extends LLk
     {
         $selector = $this->_type_selector();
 
-        switch ($this->LT()->type) {
+        switch ($this->lookahead()->type) {
 
             case Lexer::T_HASH:
                 $selector = $this->_id($selector);
@@ -1526,7 +1513,7 @@ class Parser extends LLk
                 break;
 
             default:
-                $this->_unexpectedToken($this->LT(), [
+                $this->_unexpectedToken($this->lookahead(), [
                     Lexer::T_HASH, Lexer::T_DOT, Lexer::T_LBRACK, Lexer::T_COLON,
                     Lexer::T_RPAREN,
                 ]);
@@ -1589,14 +1576,14 @@ class Parser extends LLk
 
             if (null !== $property) {
                 $style_declaration->append($property);
-                if ($this->LT()->type === Lexer::T_SEMICOLON) {
+                if ($this->lookahead()->type === Lexer::T_SEMICOLON) {
                     $this->consume();
                     $this->_ws();
                     continue;
                 } else {
                     break;
                 }
-            } elseif ($margins && in_array($this->LT()->type, [
+            } elseif ($margins && in_array($this->lookahead()->type, [
                     Lexer::T_TOPLEFTCORNER_SYM, Lexer::T_TOPLEFT_SYM,
                     Lexer::T_TOPCENTER_SYM,
                     Lexer::T_TOPRIGHT_SYM, Lexer::T_TOPRIGHTCORNER_SYM,
@@ -1631,7 +1618,7 @@ class Parser extends LLk
     protected function _ws()
     {
         while (true) {
-            switch ($this->LT()->type) {
+            switch ($this->lookahead()->type) {
                 case Lexer::T_S:
                 case Lexer::T_COMMENT:
                 case Lexer::T_CDO:
@@ -1742,17 +1729,17 @@ class Parser extends LLk
     protected function skipRuleset($inside_braces = false)
     {
         $trace = [
-            'start' => $this->LT(),
+            'start' => $this->lookahead(),
             'end' => null,
         ];
 
         while (true) {
-            switch ($this->LT()->type) {
+            switch ($this->lookahead()->type) {
 
                 case Lexer::T_LCURLY:
                     $this->consume();
                     $this->skipUntil(Lexer::T_RCURLY);
-                    $trace['end'] = $this->LT();
+                    $trace['end'] = $this->lookahead();
                     $this->consume();
                     break 2;
 
@@ -1777,14 +1764,14 @@ class Parser extends LLk
 
                 case Lexer::T_RCURLY:
                     if ($inside_braces) {
-                        $trace['end'] = $this->LT();
+                        $trace['end'] = $this->lookahead();
                         break 2;
                     }
                     $this->consume();
                     break;
 
                 case Lexer::T_EOF:
-                    $trace['end'] = $this->LT();
+                    $trace['end'] = $this->lookahead();
                     break 2;
 
                 default:
@@ -1800,11 +1787,11 @@ class Parser extends LLk
     protected function skipDeclaration($check_braces = true)
     {
         $trace = [
-            'start' => $this->LT(),
+            'start' => $this->lookahead(),
             'end' => null,
         ];
         while (true) {
-            switch ($this->LT()->type) {
+            switch ($this->lookahead()->type) {
 
                 case Lexer::T_LCURLY:
                     $this->consume();
@@ -1833,7 +1820,7 @@ class Parser extends LLk
 
                 case Lexer::T_RCURLY:
                     if ($check_braces) {
-                        $trace['end'] = $this->LT();
+                        $trace['end'] = $this->lookahead();
                         //$this->consume();
                         break 2;
                     }
@@ -1841,12 +1828,12 @@ class Parser extends LLk
                     break;
 
                 case Lexer::T_SEMICOLON:
-                    $trace['end'] = $this->LT();
+                    $trace['end'] = $this->lookahead();
                     $this->consume();
                     break 2;
 
                 case Lexer::T_EOF:
-                    $trace['end'] = $this->LT();
+                    $trace['end'] = $this->lookahead();
                     break 2;
 
                 default:
@@ -1862,11 +1849,11 @@ class Parser extends LLk
     protected function skipAtRule($inside_block = false)
     {
         $trace = [
-            'start' => $this->LT(),
+            'start' => $this->lookahead(),
             'end' => null,
         ];
         while (true) {
-            switch ($this->LT()->type) {
+            switch ($this->lookahead()->type) {
 
                 case Lexer::T_LCURLY:
                     $this->consume();
@@ -1895,19 +1882,19 @@ class Parser extends LLk
 
                 case Lexer::T_RCURLY:
                     if ($inside_block) {
-                        $trace['end'] = $this->LT();
+                        $trace['end'] = $this->lookahead();
                         break 2;
                     }
                     $this->consume();
                     break;
 
                 case Lexer::T_SEMICOLON:
-                    $trace['end'] = $this->LT();
+                    $trace['end'] = $this->lookahead();
                     $this->consume();
                     break 2;
 
                 case Lexer::T_EOF:
-                    $trace['end'] = $this->LT();
+                    $trace['end'] = $this->lookahead();
                     break 2;
 
                 default:
@@ -1926,7 +1913,7 @@ class Parser extends LLk
         $stack->push($type);
 
         while (true) {
-            $t = $this->LT()->type;
+            $t = $this->lookahead()->type;
 
             if ($t === Lexer::T_EOF) {
                 break;
@@ -1956,7 +1943,7 @@ class Parser extends LLk
     protected function skipUntilOneOf(array $types)
     {
         while (true) {
-            $t = $this->LT()->type;
+            $t = $this->lookahead()->type;
             if ($t === Lexer::T_EOF) {
                 break;
             }

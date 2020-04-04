@@ -5,7 +5,6 @@ namespace ju1ius\Tests\Css\Rule;
 use ju1ius\Css\Rule\StyleRule;
 use ju1ius\Tests\CssParserTestCase;
 
-
 class StyleRuleTest extends CssParserTestCase
 {
     /**

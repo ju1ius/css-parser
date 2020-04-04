@@ -3,6 +3,7 @@
 namespace ju1ius\Text\Source;
 
 use ju1ius\Text\SourceInterface;
+use RuntimeException;
 use SplFixedArray;
 
 /**
@@ -10,19 +11,19 @@ use SplFixedArray;
  */
 class Bytes implements SourceInterface
 {
-    private $encoding;
-    private $linesep;
-    private $length;
-    private $lines;
-    private $numlines;
-    private $line_start_offsets;
+    private string $encoding;
+    private string $linesep;
+    private int $length;
+    private SplFixedArray $lines;
+    private int $numlines;
+    private array $line_start_offsets;
 
     /**
-     * @param Bytes $contents
-     * @param Bytes $encoding
-     * @param Bytes $linesep A regex pattern in the mb_ereg syntax
+     * @param string $contents
+     * @param string $encoding
+     * @param string $linesep A regex pattern in the mb_ereg syntax
      **/
-    public function __construct($contents, $encoding = "utf-8", $linesep = '\r\n|\n')
+    public function __construct(string $contents, string $encoding = "utf-8", string $linesep = '\r\n|\n')
     {
         $this->encoding = $encoding;
         $this->length = mb_strlen($contents, $encoding);
@@ -32,20 +33,16 @@ class Bytes implements SourceInterface
 
     /**
      * Returns the source string
-     *
-     * @return Bytes
      **/
-    public function getContents()
+    public function getContents(): string
     {
         return implode(PHP_EOL, $this->lines->toArray());
     }
 
     /**
      * Returns the source lines
-     *
-     * @return SplFixedArray
      **/
-    public function getLines()
+    public function getLines(): SplFixedArray
     {
         return $this->lines;
     }
@@ -53,12 +50,12 @@ class Bytes implements SourceInterface
     /**
      * Returns the line at given index.
      * The index is zero-based, so the first line is at index 0.
-     *
-     * @return Bytes
-     **/
-    public function getLine($lineno)
+     * @param int $lineno
+     * @return string|null
+     */
+    public function getLine(int $lineno): ?string
     {
-        return $this->lines[$lineno];
+        return $this->lines[$lineno] ?? null;
     }
 
     /**
@@ -66,7 +63,7 @@ class Bytes implements SourceInterface
      *
      * @return integer
      **/
-    public function getNumLines()
+    public function getNumLines(): int
     {
         return $this->numlines;
     }
@@ -78,28 +75,24 @@ class Bytes implements SourceInterface
 
     /**
      * Returns the source encoding
-     *
-     * @return Bytes
      **/
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->encoding;
     }
 
     /**
      * Returns the source length (in characters).
-     *
-     * @return integer
      **/
-    public function getLength()
+    public function getLength(): int
     {
         return $this->length;
     }
 
-    private static function splitLines($string, $encoding, $linesep)
+    private static function splitLines(string $bytes, string $encoding, string $linesep): SplFixedArray
     {
         mb_regex_encoding($encoding);
-        return SplFixedArray::fromArray(mb_split($linesep, $string));
+        return SplFixedArray::fromArray(mb_split($linesep, $bytes));
     }
 
     // ---------- SPL Interfaces implementation ---------- //

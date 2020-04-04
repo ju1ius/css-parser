@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\Exception;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class ErrorHandlingTest extends CssParserTestCase
@@ -52,22 +51,22 @@ class ErrorHandlingTest extends CssParserTestCase
                 'p { color:green; color }',
                 'p{ color: rgb(0,128,0); }',
             ],
-            //same with expected recovery 
+            //same with expected recovery
             [
                 'p { color:red; color; color:green }',
                 'p{ color: rgb(255,0,0); color: rgb(0,128,0); }',
             ],
-            //malformed declaration missing value 
+            //malformed declaration missing value
             [
                 'p { color:green; color: }',
                 'p{ color: rgb(0,128,0); }',
             ],
-            //same with expected recovery 
+            //same with expected recovery
             [
                 'p { color:red; color:; color:green }',
                 'p{ color: rgb(255,0,0); color: rgb(0,128,0); }',
             ],
-            //unexpected tokens { } 
+            //unexpected tokens { }
             [
                 'p { color:green; color{;color:maroon} }',
                 'p{ color: rgb(0,128,0); }',

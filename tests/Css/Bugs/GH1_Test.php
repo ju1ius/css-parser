@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\Bugs;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class GH1_Test extends CssParserTestCase

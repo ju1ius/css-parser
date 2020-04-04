@@ -8,30 +8,21 @@ use SplFixedArray;
 
 abstract class LLk extends Parser
 {
-    /**
-     * @var integer size of the lookahead buffer
-     **/
-    protected $_K;
-
-    /**
-     * @var array lookahead buffer
-     **/
-    protected $lookaheads;
-
+    protected int $lookaheadBufferSize;
+    protected SplFixedArray $lookaheadBuffer;
     protected $current;
-
 
     public function __construct(LexerInterface $lexer = null, $k = 2)
     {
-        $this->setLexer($lexer);
-        $this->_K = $k;
+        parent::__construct($lexer);
+        $this->lookaheadBufferSize = $k;
     }
 
     public function reset()
     {
         parent::reset();
-        $this->lookaheads = new SplFixedArray($this->_K);
-        for ($i = 1; $i <= $this->_K; $i++) {
+        $this->lookaheadBuffer = new SplFixedArray($this->lookaheadBufferSize);
+        for ($i = 1; $i <= $this->lookaheadBufferSize; $i++) {
             $this->consume();
         }
     }
@@ -39,19 +30,19 @@ abstract class LLk extends Parser
     protected function consume()
     {
         // fill next position with token
-        $this->lookaheads[$this->position] = $this->lexer->nextToken();
+        $this->lookaheadBuffer[$this->position] = $this->lexer->nextToken();
         // increment circular index
-        $this->position = ($this->position + 1) % $this->_K;
+        $this->position = ($this->position + 1) % $this->lookaheadBufferSize;
     }
 
     protected function consumeUntil($type)
     {
         if (is_array($type)) {
-            while (!in_array($this->LT()->type, $type)) {
+            while (!in_array($this->lookahead()->type, $type)) {
                 $this->consume();
             }
         } else {
-            while ($this->LT()->type !== $type) {
+            while ($this->lookahead()->type !== $type) {
                 $this->consume();
             }
         }
@@ -59,17 +50,17 @@ abstract class LLk extends Parser
 
     protected function current()
     {
-        return $this->lookaheads[$this->position];
+        return $this->lookaheadBuffer[$this->position];
     }
 
-    protected function LA($offset = 1)
+    protected function lookaheadType(int $offset = 1)
     {
-        return $this->LT($offset)->type;
+        return $this->lookahead($offset)->type;
     }
 
-    protected function LT($offset = 1)
+    protected function lookahead(int $offset = 1)
     {
         // circular fetch
-        return $this->lookaheads[($this->position + $offset - 1) % $this->_K];
+        return $this->lookaheadBuffer[($this->position + $offset - 1) % $this->lookaheadBufferSize];
     }
 }

@@ -10,25 +10,17 @@ use ju1ius\Text\Parser\Exception\UnexpectedTokenException;
 
 abstract class Parser implements ParserInterface
 {
+    protected LexerInterface $lexer;
+    protected \SplFixedArray $lookaheadBuffer;
     /**
-     * @var ju1ius\Text\Lexer
+     * The current position in the lookahead buffer
      **/
-    protected $lexer;
-
-    /**
-     * @var array lookahead buffer
-     **/
-    protected $lookaheads;
-
-    /**
-     * @var integer The current position in the lookahead buffer
-     **/
-    protected $position;
+    protected int $position;
 
     /**
      * @var boolean Whether to report debugging infos (like token type, line, etc...)
      **/
-    protected $debug;
+    protected bool $debug = false;
 
     public function __construct(LexerInterface $lexer = null)
     {
@@ -57,17 +49,16 @@ abstract class Parser implements ParserInterface
 
     abstract protected function consume();
 
-    abstract protected function LA($offset = 1);
+    abstract protected function lookaheadType(int $offset = 1);
 
-    abstract protected function LT($offset = 1);
+    abstract protected function lookahead(int $offset = 1);
 
-
-    protected function match($type, $return = false)
+    protected function match($type, bool $return = false)
     {
         $token = null;
         $this->ensure($type);
         if ($return) {
-            $token = $this->LT();
+            $token = $this->lookahead();
         }
         $this->consume();
 
@@ -76,7 +67,7 @@ abstract class Parser implements ParserInterface
 
     protected function ensure($type)
     {
-        $token = $this->LT();
+        $token = $this->lookahead();
         $match = false;
 
         if (is_array($type)) {

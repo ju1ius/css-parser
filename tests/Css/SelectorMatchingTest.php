@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css;
 
-
 use DOMDocument;
 use DOMXPath;
 use ju1ius\Tests\CssParserTestCase;
@@ -138,9 +137,8 @@ class SelectorMatchingTest extends CssParserTestCase
 </body></html>
 EOS;
 
-    private static
-        $_DOM = null,
-        $_XPATH = null;
+    private static $_DOM = null;
+    private static $_XPATH = null;
 
     public static function setUpBeforeClass(): void
     {
@@ -240,7 +238,6 @@ EOS;
             $results[] = trim($node->textContent);
         }
         $this->assertEquals($expected, $results);
-
     }
 
     public function combinatorsProvider()

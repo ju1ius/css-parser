@@ -2,6 +2,7 @@
 
 namespace ju1ius\Text;
 
+use ju1ius\Text\Lexer\State;
 use ju1ius\Text\Lexer\TokenInterface;
 use ReflectionClass;
 use SplFixedArray;
@@ -12,80 +13,80 @@ abstract class Lexer implements LexerInterface
     const T_EOF = -1;
     const T_INVALID = 0;
 
-    protected static $TOKEN_NAMES;
+    protected static array $TOKEN_NAMES;
 
     /**
-     * @var Source\Bytes the source object
+     * The source object
      **/
-    protected $source;
+    protected SourceInterface $source;
 
     /**
-     * @var SplFixedArray The lines of the source object
+     * The lines of the source object
      **/
-    protected $lines;
+    protected SplFixedArray $lines;
 
     /**
-     * @var integer The number of lines in the source
+     * The number of lines in the source
      **/
-    protected $numlines;
+    protected int $numlines;
 
     /**
-     * @var integer The current source line
+     * The current source line
      **/
-    protected $lineno;
+    protected int $lineno;
 
     /**
-     * @var string the current source line's text
+     * The current source line's text
      **/
-    protected $text;
+    protected string $text;
 
     /**
-     * @var integer the current source line's length
+     * The current source line's length
      **/
-    protected $length;
+    protected int $length;
 
     /**
-     * @var whether this lexer matches unicode chars
+     * Whether this lexer matches unicode chars
      * Set this to true only if you need to use non-ascii lookaheads
      **/
-    protected $unicode;
+    protected bool $unicode = false;
 
     /**
-     * @var whether to use the mbstring functions
+     * Whether to use the mbstring functions
      * True only if $unicode is true and $is_ascii is false
      **/
-    protected $multibyte;
+    protected bool $multibyte;
 
     /**
-     * @var integer Current lexer position in input string (in number of characters)
+     * Current lexer position in input string (in number of characters)
      * Differs from $bytepos only if $multibyte is true.
      */
-    protected $charpos = -1;
+    protected int $charpos = -1;
 
     /**
-     * @var integer Current lexer position in input string (in number of bytes)
+     * Current lexer position in input string (in number of bytes)
      */
-    protected $bytepos = -1;
+    protected int $bytepos = -1;
 
     /**
-     * @var array The next character in the input.
+     * The next character in the input.
      */
     protected $lookahead;
 
     /**
-     * @var string the source encoding
+     * The source encoding
      **/
-    protected $encoding;
+    protected string $encoding;
 
     /**
-     * @var boolean True if $encoding is US-ASCII
+     * True if $encoding is US-ASCII
      **/
-    protected $is_ascii;
+    protected bool $isAscii;
 
     /**
-     * @var Lexer\State state of the Lexer
+     * State of the Lexer
      **/
-    protected $state;
+    protected State $state;
 
     /**
      * Creates a new Css\Lexer
@@ -97,9 +98,9 @@ abstract class Lexer implements LexerInterface
      * @param SourceInterface $source
      * @param boolean $unicode
      **/
-    public function __construct(SourceInterface $source = null, $unicode = false)
+    public function __construct(SourceInterface $source = null, bool $unicode = false)
     {
-        $this->state = new Lexer\State();
+        $this->state = new State();
         $this->unicode = $unicode;
         $this->getTokenNames();
         if ($source) {
@@ -118,8 +119,8 @@ abstract class Lexer implements LexerInterface
     {
         $this->source = $source;
         $this->encoding = $source->getEncoding();
-        $this->is_ascii = Encoding::isSameEncoding($this->encoding, 'ascii');
-        $this->multibyte = $this->unicode && !$this->is_ascii;
+        $this->isAscii = Encoding::isSameEncoding($this->encoding, 'ascii');
+        $this->multibyte = $this->unicode && !$this->isAscii;
         mb_regex_encoding($this->encoding);
         //$this->lines = $source->getLines();
         //$this->numlines = $source->getNumLines();
@@ -127,12 +128,12 @@ abstract class Lexer implements LexerInterface
         $this->reset();
     }
 
-    public function getSource()
+    public function getSource(): SourceInterface
     {
         return $this->source;
     }
 
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->encoding;
     }
@@ -140,14 +141,14 @@ abstract class Lexer implements LexerInterface
     /**
      * Resets the lexer.
      */
-    public function reset()
+    public function reset(): void
     {
         $this->source->rewind();
         $this->setLine(0);
         $this->state->reset();
     }
 
-    public function setLine($lineno)
+    public function setLine(int $lineno): bool
     {
         if (!isset($this->source[$lineno])) {
             return false;
@@ -162,7 +163,7 @@ abstract class Lexer implements LexerInterface
         return true;
     }
 
-    public function nextLine()
+    public function nextLine(): bool
     {
         $this->source->next();
         $line = $this->source->current();
@@ -179,7 +180,7 @@ abstract class Lexer implements LexerInterface
         return true;
     }
 
-    public function getTokenName($type)
+    public function getTokenName($type): string
     {
         if (null === static::$TOKEN_NAMES) {
             $this->getTokenNames();
@@ -188,7 +189,7 @@ abstract class Lexer implements LexerInterface
         return static::$TOKEN_NAMES[$type];
     }
 
-    public static function getLiteral(TokenInterface $token)
+    public static function getLiteral(TokenInterface $token): string
     {
         $name = static::$TOKEN_NAMES[$token->type];
 
@@ -203,7 +204,7 @@ abstract class Lexer implements LexerInterface
 
     public function getTokenNames()
     {
-        if (null === static::$TOKEN_NAMES) {
+        if (!isset(static::$TOKEN_NAMES)) {
             $className = get_class($this);
             $reflClass = new ReflectionClass($className);
             $constants = $reflClass->getConstants();
@@ -213,7 +214,7 @@ abstract class Lexer implements LexerInterface
         return static::$TOKEN_NAMES;
     }
 
-    protected function consumeCharacters($length = 1)
+    protected function consumeCharacters(int $length = 1): void
     {
         $this->charpos += $length;
         $this->bytepos += $length;
@@ -226,7 +227,7 @@ abstract class Lexer implements LexerInterface
         }
     }
 
-    protected function consume($length = 1)
+    protected function consume(int $length = 1): void
     {
         $this->charpos += $length;
         if ($this->charpos >= $this->length) {
@@ -238,7 +239,7 @@ abstract class Lexer implements LexerInterface
         }
     }
 
-    protected function consumeString($str)
+    protected function consumeString(string $str): void
     {
         if ($this->multibyte) {
             $this->charpos += mb_strlen($str, $this->encoding);
@@ -258,33 +259,22 @@ abstract class Lexer implements LexerInterface
         }
     }
 
-    protected function peek($length = 1, $offset = 0)
+    protected function peek(int $length = 1, int $offset = 0): string
     {
         return $this->multibyte
             ? mb_substr($this->text, $this->charpos + $offset + 1, $length, $this->encoding)
             : substr($this->text, $this->charpos + $offset + 1, $length);
     }
 
-    protected function comes($str)
+    protected function comes(string $str)
     {
         if ($this->charpos >= $this->length) {
             return false;
         }
-        // FIXME: can the following produce false positives ?
-        return substr($this->text, $this->charpos, strlen($str)) === $str;
-
-        if ($this->is_ascii) {
-            $length = strlen($str);
-
-            return substr($this->text, $this->charpos, $length) === $str;
-        } else {
-            $length = mb_strlen($str, $this->encoding);
-
-            return mb_substr($this->text, $this->charpos, $length, $this->encoding) === $str;
-        }
+        return substr_compare($this->text, $str, $this->bytepos, strlen($str)) === 0;
     }
 
-    protected function comesExpression($pattern, $options = 'msi')
+    protected function comesExpression(string $pattern, string $options = 'msi')
     {
         if ($this->charpos > $this->length) {
             return false;
@@ -296,7 +286,7 @@ abstract class Lexer implements LexerInterface
         return mb_ereg_search();
     }
 
-    protected function match($pattern, $charpos = null, $options = 'msi')
+    protected function match(string $pattern, ?int $charpos = null, string $options = 'msi')
     {
         if (null === $charpos) {
             $charpos = $this->bytepos;

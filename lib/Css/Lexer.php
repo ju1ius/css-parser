@@ -719,7 +719,7 @@ class Lexer extends BaseLexer
         );
 
         if ($lowercase) {
-            $ident = $this->is_ascii ? strtolower($ident) : mb_strtolower($ident, $this->encoding);
+            $ident = $this->isAscii ? strtolower($ident) : mb_strtolower($ident, $this->encoding);
         }
 
         return $ident;

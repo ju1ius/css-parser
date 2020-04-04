@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\StyleDeclaration;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class ExpandShorthandsTest extends CssParserTestCase

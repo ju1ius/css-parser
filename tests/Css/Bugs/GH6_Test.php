@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\Bugs;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class GH6_Test extends CssParserTestCase
@@ -25,5 +24,4 @@ class GH6_Test extends CssParserTestCase
             ],
         ];
     }
-
 }

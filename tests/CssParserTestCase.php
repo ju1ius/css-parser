@@ -13,9 +13,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CssParserTestCase extends TestCase
 {
-    protected
-        $stylesheet_loader,
-        $css_parser;
+    protected $stylesheet_loader;
+    protected $css_parser;
 
     private $fixtures_dir;
 
@@ -30,13 +29,6 @@ class CssParserTestCase extends TestCase
     public function loadFile($file)
     {
         return file_get_contents($this->fixtures_dir . '/' . $file);
-    }
-
-    public function createParser($strict = true)
-    {
-        return new Parser([
-            'strict_parsing' => $strict,
-        ]);
     }
 
     public function parseFile($file)

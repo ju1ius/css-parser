@@ -342,17 +342,17 @@ final class Uri
         return $uri;
     }
 
-    public function join(): self
+    public function join(...$paths): self
     {
         $uri = clone $this;
-        $components = [rtrim($this->path, '/')];
+        $components = [rtrim($this->path ?? '', '/')];
 
-        foreach (func_get_args() as $arg) {
-            $component = $arg;
-            if ($arg instanceof Uri) {
-                $component = $arg->getPath();
+        foreach ($paths as $path) {
+            $component = $path;
+            if ($path instanceof Uri) {
+                $component = $path->getPath();
             }
-            $components[] = trim($component, '/');
+            $components[] = trim((string)$component, '/');
         }
         $uri->setPath(implode('/', $components));
         return $uri;

@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\Rule;
 
-
 use ju1ius\Tests\CssParserTestCase;
 use ju1ius\Text\Parser\Exception\ParseException;
 

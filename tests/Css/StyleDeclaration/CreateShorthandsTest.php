@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\StyleDeclaration;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class CreateShorthandsTest extends CssParserTestCase
@@ -178,7 +177,7 @@ class CreateShorthandsTest extends CssParserTestCase
             ['p{ border-style: none; }', 'p{ border: none; }'],
             ['p{ border-width: 1em; border-style: solid; }', 'p{ border: 1em solid; }'],
             ['p{ margin: 1em; }', 'p{ margin: 1em; }'],
-            // Test order & importance  
+            // Test order & importance
             [
                 'p{ border: 2px dotted rgb(0,0,255); border-style: solid}',
                 'p{ border: 2px solid rgb(0,0,255); }',

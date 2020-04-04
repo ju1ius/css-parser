@@ -5,11 +5,9 @@ namespace ju1ius\Tests\Text\Source;
 use ju1ius\Text\Source\Bytes;
 use PHPUnit\Framework\TestCase;
 
-
 class BytesTest extends TestCase
 {
-    private static
-        $test_input_1 = <<<'EOS'
+    private static $test_input_1 = <<<'EOS'
 Some text
 With
 fünnŷ chàrâctèrs

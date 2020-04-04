@@ -6,7 +6,6 @@ use ju1ius\Css\Iterator\ValueIterator;
 use ju1ius\Css\Value;
 use ju1ius\Tests\CssParserTestCase;
 
-
 class ValueIteratorTest extends CssParserTestCase
 {
     /**

@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\Selector;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class FunctionSelectorTest extends CssParserTestCase
@@ -61,5 +60,4 @@ class FunctionSelectorTest extends CssParserTestCase
             ['*:not(html|p)', "//*[not(name() = 'html:p')]"],
         ];
     }
-
 }

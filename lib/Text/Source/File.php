@@ -7,14 +7,14 @@ namespace ju1ius\Text\Source;
  */
 class File extends Bytes
 {
-    protected $url;
+    protected string $url;
 
     /**
-     * @param Bytes $url
-     * @param Bytes $contents
-     * @param Bytes $encoding
+     * @param string $url
+     * @param string $contents
+     * @param string $encoding
      **/
-    public function __construct($url, $contents, $encoding = "utf-8")
+    public function __construct(string $url, string $contents, string $encoding = "utf-8")
     {
         $this->url = $url;
         parent::__construct($contents, $encoding);
@@ -22,10 +22,8 @@ class File extends Bytes
 
     /**
      * Returns the url of the source file
-     *
-     * @return Bytes
      **/
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }

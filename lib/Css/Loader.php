@@ -48,7 +48,7 @@ class Loader
     public static function loadFile($url)
     {
         $uri = Uri::parse($url);
-        $path = realpath($uri);
+        $path = realpath((string)$uri);
 
         if (false === $path || !is_file($path) || !is_readable($path)) {
             throw new StyleSheetNotFoundException($path);

@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\Selector;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class CombinedSelectorTest extends CssParserTestCase
@@ -26,5 +25,4 @@ class CombinedSelectorTest extends CssParserTestCase
             ['div ~ p', '//div/following-sibling::p'],
         ];
     }
-
 }

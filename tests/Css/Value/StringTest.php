@@ -2,7 +2,6 @@
 
 namespace ju1ius\Tests\Css\Value;
 
-
 use ju1ius\Tests\CssParserTestCase;
 
 class StringTest extends CssParserTestCase
